@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, TouchableWithoutFeedback, TextInput } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
+//component
+import ThemeButton from '../components/ThemeButton';
+//svg
 import Back from '../../assets/svg/back.svg';
 import ThreeDot from '../../assets/svg/threeDot.svg';
 import CreateAlbum from '../../assets/svg/createAlbum.svg';
@@ -63,11 +66,10 @@ const PeopleTab = ({ navigation }) => {
             autoCorrect={false}
           />
 
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("CreateFolder")}>
-            <View style={styles.continueBtn}>
-              <Text style={styles.continueTxt} >Create Album </Text>
-            </View>
-          </TouchableWithoutFeedback>
+        <ThemeButton
+        text="Create Album"
+        onPress={() => navigation.navigate("CreateFolder")}
+      />
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -144,21 +146,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  continueBtn: {
-    backgroundColor: '#FDD32E',
-    paddingVertical: 21,
-    paddingHorizontal: 30,
-    borderRadius: 12,
-    alignItems: 'center',
-    width: "100%",
-    marginBlock: 21,
-  },
 
-  continueTxt: {
-    fontSize: 16,
-    color: '#000',
-    fontWeight: 600,
-  },
     /* Bottom overlay */
   bottomOverlay: {
     position: "absolute",

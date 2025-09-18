@@ -15,6 +15,10 @@ import MyTabs from "./MyTabs";
 import PhotoFolder from "./src/screen/PhotoFolder";
 import CreateAlbum from "./src/screen/CreateAlbum";
 import CreateFolder from "./src/screen/CreateFolder";
+import Folder from "./src/screen/Folder";
+import AddExpenseBlock from "./src/screen/AddExpenseBlock";
+import AddNote from "./src/screen/AddNote";
+import Join from "./src/screen/Join";
 const App = () => {
   return (
     <SafeAreaProvider>
@@ -28,6 +32,10 @@ const App = () => {
           <Stack.Screen name="PhotoFolder" component={PhotoFolder} options={{ headerShown: false }} />
           <Stack.Screen name="CreateAlbum" component={CreateAlbum} options={{ headerShown: false }} />
           <Stack.Screen name="CreateFolder" component={CreateFolder} options={{ headerShown: false }} />
+          <Stack.Screen name="Folder" component={Folder} options={{ headerShown: false }} />
+          <Stack.Screen name="AddExpenseBlock" component={AddExpenseBlock} options={{ headerShown: false }} />
+          <Stack.Screen name="AddNote" component={AddNote} options={{ headerShown: false }} />
+          <Stack.Screen name="Join" component={Join} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

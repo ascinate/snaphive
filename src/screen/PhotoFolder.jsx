@@ -161,17 +161,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  inviteButton: {
-    backgroundColor: "rgba(0,0,0,0.4)",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 15,
-  },
-  inviteText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "500",
-  },
+    inviteButton: {
+        backgroundColor: "rgba(0,0,0,0.4)",
+        paddingVertical: 6,
+        paddingHorizontal: 13,
+        borderRadius: 15,
+    },
+    inviteText: {
+        color: "#fff",
+        fontSize: 15,
+        fontWeight: "600",
+    },
 
   /* Folder list */
   photoFolder: {

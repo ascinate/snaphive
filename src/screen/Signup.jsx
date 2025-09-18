@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableWithoutFeedback, Tou
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Igoogle from "../../assets/Igoogle.svg";
 import Imail from "../../assets/Imail.svg";
+import Save from "../../assets/svg/save.svg";
 const logo = require("../../assets/logo.png");
 
 const Signup = ({ navigation }) => {
@@ -18,13 +19,17 @@ const Signup = ({ navigation }) => {
             <Text style={styles.description}>
                 Automatically share photos taken by members of your group
             </Text>
+           
 
             <TextInput style={styles.emailInput} value={email} onChangeText={setEmail} placeholder='Enter your email address' />
 
             <TouchableWithoutFeedback>
                 <View style={styles.continueBtn}>
-                    <Text style={styles.continueTxt} onPress={() => navigation.navigate("Login")}>Continue →</Text>
+                    <Text style={styles.continueTxt} onPress={() => navigation.navigate("Login")}>Continue  </Text>
+                     <Save width={20} height={20} />
+                   
                 </View>
+             
             </TouchableWithoutFeedback>
             <View style={styles.orLine}>
                 <View style={styles.line} />
@@ -93,6 +98,9 @@ const styles = StyleSheet.create({
     },
 
     continueBtn: {
+        flexDirection: 'row',           
+        alignItems: 'center',           
+        justifyContent: 'center',      
         backgroundColor: '#FDD32E',
         paddingVertical: 21,
         paddingHorizontal: 30,

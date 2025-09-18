@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, TouchableWithoutFeedback, TextInput } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-
+//component
+import ThemeButton from '../components/ThemeButton';
+//svg
 import Back from '../../assets/svg/back.svg';
 import ThreeDot from '../../assets/svg/threeDot.svg';
 import QR from '../../assets/svg/qr.svg';
@@ -62,12 +64,10 @@ const PeopleTab = ({ navigation }) => {
             placeholderTextColor="#000"
             autoCorrect={false}
           />
-
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("CreateAlbum")}>
-            <View style={styles.continueBtn}>
-              <Text style={styles.continueTxt} >Join </Text>
-            </View>
-          </TouchableWithoutFeedback>
+          <ThemeButton
+            text="Join"
+            onPress={() => navigation.navigate("CreateAlbum")}
+          />
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     color: '#000',
     fontWeight: 600,
   },
-    /* Bottom overlay */
+  /* Bottom overlay */
   bottomOverlay: {
     position: "absolute",
     bottom: 90,
@@ -169,13 +169,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "flex-end",
   },
-   folderHeading: {
+  folderHeading: {
     color: "#fff",
     fontSize: 24,
     fontWeight: "700",
     marginBottom: 4,
   },
-  
+
 });
 
 export default PeopleTab;

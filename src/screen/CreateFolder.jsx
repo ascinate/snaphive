@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, TouchableWithoutFeedback, TextInput } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+//component
+import ThemeButton from '../components/ThemeButton';
 
+//svg
 import Back from '../../assets/svg/back.svg';
 import ThreeDot from '../../assets/svg/threeDot.svg';
 import CreateFolder from '../../assets/svg/createFolder.svg';
@@ -55,7 +58,7 @@ const PeopleTab = ({ navigation }) => {
           <TextInput
             value={code}
             onChangeText={setCode}
-            placeholder="Folder Name"
+            placeholder="Folder Name "
             style={styles.input}
             keyboardType="email-address"
             autoCapitalize="none"
@@ -63,11 +66,11 @@ const PeopleTab = ({ navigation }) => {
             autoCorrect={false}
           />
 
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("CreateFolder")}>
-            <View style={styles.continueBtn}>
-              <Text style={styles.continueTxt} >Create folder </Text>
-            </View>
-          </TouchableWithoutFeedback>
+
+               <ThemeButton
+        text="Create Folder"
+        onPress={() => navigation.navigate("Folder")}
+      />
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>

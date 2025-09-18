@@ -18,13 +18,13 @@ import NavPeople from "./assets/svg/navPeople.svg";
 const Tab = createBottomTabNavigator();
 
 function CustomTabBar({ state, descriptors, navigation }) {
-  const insets = useSafeAreaInsets(); // 👈 safe area padding
+  const insets = useSafeAreaInsets(); //  safe area padding
 
   return (
     <View style={[styles.wrapper, { paddingBottom: insets.bottom }]}>
       {/* Floating Action Button */}
       <TouchableOpacity
-        style={[styles.fab, { bottom: 45 + insets.bottom }]} // 👈 move up if nav bar exists
+        style={[styles.fab, { bottom: 45 + insets.bottom }]} // move up if nav bar exists
         onPress={() => console.log("FAB pressed")}
       >
         <Text style={styles.fabText}>+</Text>

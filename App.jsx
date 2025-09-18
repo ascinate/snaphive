@@ -13,7 +13,7 @@ import Login from "./src/screen/Login";
 import OTP from "./src/screen/OTP";
 import MyTabs from "./MyTabs";
 import PhotoFolder from "./src/screen/PhotoFolder";
- 
+ import CreateAlbum from "./src/screen/CreateAlbum";
 const App = () => {
   return (
     <SafeAreaProvider>
@@ -25,6 +25,7 @@ const App = () => {
           <Stack.Screen name="OTP" component={OTP} />
           <Stack.Screen name="MyTabs" component={MyTabs} options={{ headerShown: false }}/>
           <Stack.Screen name="PhotoFolder" component={PhotoFolder} options={{ headerShown: false }}/>
+                    <Stack.Screen name="CreateAlbum" component={CreateAlbum} options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

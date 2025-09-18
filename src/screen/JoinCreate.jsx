@@ -9,7 +9,7 @@ import QR from '../../assets/svg/qr.svg';
 // Images
 const createFolder = require("../../assets/createFolder.png");
 
-const PeopleTab = ({ navigation }) => {
+const JoinFolder = ({ navigation }) => {
   const [code, setCode] = useState("");
 
   return (
@@ -32,14 +32,6 @@ const PeopleTab = ({ navigation }) => {
                 <ThreeDot height={16} width={16} />
               </View>
             </TouchableWithoutFeedback>
-          </View>
-
-          {/* Bottom overlay (left + right) */}
-          <View style={styles.bottomOverlay}>
-            {/* Left side */}
-            <View>
-              <Text style={styles.folderHeading}>Create folder</Text>
-            </View>
           </View>
         </View>
 
@@ -65,7 +57,7 @@ const PeopleTab = ({ navigation }) => {
 
           <TouchableWithoutFeedback>
             <View style={styles.continueBtn}>
-              <Text style={styles.continueTxt} onPress={() => navigation.navigate("CreateAlbum")}>Join </Text>
+              <Text style={styles.continueTxt} onPress={() => navigation.navigate("OTP")}>Join </Text>
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>
@@ -143,39 +135,22 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
   },
-
-  continueBtn: {
-    backgroundColor: '#FDD32E',
-    paddingVertical: 21,
-    paddingHorizontal: 30,
-    borderRadius: 12,
-    alignItems: 'center',
-    width: "100%",
-    marginBlock: 21,
-  },
-
-  continueTxt: {
-    fontSize: 16,
-    color: '#000',
-    fontWeight: 600,
-  },
-    /* Bottom overlay */
-  bottomOverlay: {
-    position: "absolute",
-    bottom: 90,
-    left: 20,
-    right: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-  },
-   folderHeading: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "700",
-    marginBottom: 4,
-  },
   
+    continueBtn: {
+        backgroundColor: '#FDD32E',
+        paddingVertical: 21,
+        paddingHorizontal: 30,
+        borderRadius: 12,
+        alignItems: 'center',
+        width: "100%",
+        marginBlock: 21,
+    },
+
+    continueTxt: {
+        fontSize: 16,
+        color: '#000',
+        fontWeight: 600,
+    },
 });
 
-export default PeopleTab;
+export default JoinFolder;

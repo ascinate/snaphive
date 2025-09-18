@@ -63,9 +63,9 @@ const PeopleTab = ({ navigation }) => {
             autoCorrect={false}
           />
 
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate("CreateAlbum")}>
             <View style={styles.continueBtn}>
-              <Text style={styles.continueTxt} onPress={() => navigation.navigate("CreateAlbum")}>Join </Text>
+              <Text style={styles.continueTxt} >Join </Text>
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 5,
+    borderWidth: 4,
     borderColor: '#D5D5D5',
     borderStyle: 'dotted',
     borderRadius: 12,

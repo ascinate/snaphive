@@ -4,7 +4,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import Back from '../../assets/svg/back.svg';
 import ThreeDot from '../../assets/svg/threeDot.svg';
-import CreateAlbum from '../../assets/svg/createAlbum.svg';
+import CreateFolder from '../../assets/svg/createFolder.svg';
 
 // Images
 const createFolder = require("../../assets/createFolder.png");
@@ -47,7 +47,7 @@ const PeopleTab = ({ navigation }) => {
         <ScrollView style={styles.container}>
           <View style={styles.qrcodeContainer}>
             <View style={styles.qrcode}>
-              <CreateAlbum width={62} height={62} />
+              <CreateFolder width={62} height={62} />
             </View>
           </View>
 
@@ -55,7 +55,7 @@ const PeopleTab = ({ navigation }) => {
           <TextInput
             value={code}
             onChangeText={setCode}
-            placeholder="Create Album "
+            placeholder="Folder Name"
             style={styles.input}
             keyboardType="email-address"
             autoCapitalize="none"
@@ -65,7 +65,7 @@ const PeopleTab = ({ navigation }) => {
 
           <TouchableWithoutFeedback onPress={() => navigation.navigate("CreateFolder")}>
             <View style={styles.continueBtn}>
-              <Text style={styles.continueTxt} >Create Album </Text>
+              <Text style={styles.continueTxt} >Create folder </Text>
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>

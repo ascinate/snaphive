@@ -3,7 +3,7 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
- 
+
 const Stack = createNativeStackNavigator();
 
 //screen
@@ -13,7 +13,8 @@ import Login from "./src/screen/Login";
 import OTP from "./src/screen/OTP";
 import MyTabs from "./MyTabs";
 import PhotoFolder from "./src/screen/PhotoFolder";
- import CreateAlbum from "./src/screen/CreateAlbum";
+import CreateAlbum from "./src/screen/CreateAlbum";
+import CreateFolder from "./src/screen/CreateFolder";
 const App = () => {
   return (
     <SafeAreaProvider>
@@ -23,9 +24,10 @@ const App = () => {
           <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="OTP" component={OTP} />
-          <Stack.Screen name="MyTabs" component={MyTabs} options={{ headerShown: false }}/>
-          <Stack.Screen name="PhotoFolder" component={PhotoFolder} options={{ headerShown: false }}/>
-                    <Stack.Screen name="CreateAlbum" component={CreateAlbum} options={{ headerShown: false }}/>
+          <Stack.Screen name="MyTabs" component={MyTabs} options={{ headerShown: false }} />
+          <Stack.Screen name="PhotoFolder" component={PhotoFolder} options={{ headerShown: false }} />
+          <Stack.Screen name="CreateAlbum" component={CreateAlbum} options={{ headerShown: false }} />
+          <Stack.Screen name="CreateFolder" component={CreateFolder} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

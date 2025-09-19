@@ -77,7 +77,7 @@ const AddExpenseBlock = ({ navigation, route }) => {
 
                 <ThemeButton style={{ marginTop: 100 }}
                     text="Join"
-                    onPress={() => navigation.navigate("AddNote")}
+                    onPress={() => navigation.navigate("NewPage")}
                 />
 
             </ScrollView>

@@ -19,6 +19,7 @@ import Folder from "./src/screen/Folder";
 import AddExpenseBlock from "./src/screen/AddExpenseBlock";
 import AddNote from "./src/screen/AddNote";
 import Join from "./src/screen/Join";
+import NewPage from "./src/screen/NewPage";
 const App = () => {
   return (
     <SafeAreaProvider>
@@ -36,6 +37,7 @@ const App = () => {
           <Stack.Screen name="AddExpenseBlock" component={AddExpenseBlock} options={{ headerShown: false }} />
           <Stack.Screen name="AddNote" component={AddNote} options={{ headerShown: false }} />
           <Stack.Screen name="Join" component={Join} options={{ headerShown: false }} />
+                    <Stack.Screen name="NewPage" component={NewPage} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

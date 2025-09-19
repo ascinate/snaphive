@@ -18,12 +18,12 @@ const dp8 = require("../../assets/dp8.jpg");
 
 
 
-const MemberList = ({navigation}) => {
+const MemberList = ({ navigation }) => {
     return (
         <SafeAreaProvider>
             <SafeAreaView >
                 <TopNavbar />
-             <ScrollView style={styles.scrollContainer}>
+                <ScrollView style={styles.scrollContainer}>
 
 
                     {/* ---Tabs Navigation---- */}
@@ -34,25 +34,25 @@ const MemberList = ({navigation}) => {
                         <View style={styles.badge}>
                             <Text style={styles.badgeText}>Group</Text>
                         </View>
-                        
+
                     </View>
                     {/* ---Tabs Navigation---- */}
 
                     {/* Member List Screen */}
-                    <View  style={styles.chatList}>
+                    <View style={styles.chatList}>
                         <View style={styles.chatListItem}>
                             <Image source={dp} style={styles.dp} />
                             <Text>Demola Aoki</Text>
                         </View>
-                              <View style={styles.chatListItem}>
+                        <View style={styles.chatListItem}>
                             <Image source={dp3} style={styles.dp} />
                             <Text>Sofia Carrington</Text>
                         </View>
-                              <View style={styles.chatListItem}>
+                        <View style={styles.chatListItem}>
                             <Image source={dp4} style={styles.dp} />
                             <Text>Quincy Thoreau</Text>
                         </View>
-                              <View style={styles.chatListItem}>
+                        <View style={styles.chatListItem}>
                             <Image source={dp5} style={styles.dp} />
                             <Text>Demola Aoki</Text>
                         </View>
@@ -72,7 +72,7 @@ const MemberList = ({navigation}) => {
                             <Image source={dp8} style={styles.dp} />
                             <Text>Quincy Thoreau </Text>
                         </View>
-                        
+
 
 
 
@@ -80,7 +80,7 @@ const MemberList = ({navigation}) => {
 
 
                 </ScrollView>
-        
+
             </SafeAreaView>
         </SafeAreaProvider>
     )

@@ -1,0 +1,155 @@
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+// Screens
+import HomeStack from "./src/navigation/HomeStack";
+import MemberList from "./src/screen/MemberList";
+import ClickPhoto from "./src/screen/ClickPhoto";
+import Profile from "./src/screen/Profile";
+import Settings from "./src/screen/Settings";
+
+// Icons
+import CameraTab from "./assets/svg/cameraTab.svg";
+import NavHome from "./assets/svg/navHome.svg";
+import NavMessage from "./assets/svg/navMessage.svg";
+import NavPeople from "./assets/svg/navPeople.svg";
+
+
+const Tab = createBottomTabNavigator();
+
+function CustomTabBar({ state, descriptors, navigation }) {
+  const insets = useSafeAreaInsets();
+  const currentRoute = state.routes[state.index].name;
+
+  // Hide tab bar on Camera screen
+  if (currentRoute === "Camera") {
+    return null;
+  }
+
+  return (
+    <View style={[styles.wrapper, { paddingBottom: insets.bottom }]}>
+      {/* Bottom Navigation Bar */}
+      <View style={styles.container}>
+        {state.routes.map((route, index) => {
+          const isFocused = state.index === index;
+
+          const onPress = () => {
+            const event = navigation.emit({
+              type: "tabPress",
+              target: route.key,
+              canPreventDefault: true,
+            });
+
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
+
+          let Icon;
+          switch (route.name) {
+            case "HomeScreen":
+              Icon = <NavHome width={32} height={32} />;
+              break;
+            case "MemberList":
+              Icon = <NavPeople width={32} height={32} />;
+              break;
+            case "Settings":
+              Icon = (
+                <View style={styles.fab}>
+                  <Text style={{color: '#ffffff',fontSize:26}}>+</Text>
+                </View>
+              );
+              break;
+            case "Messages":
+              Icon = <NavMessage width={32} height={32} />;
+              break;
+            case "Camera":
+              Icon = <CameraTab width={32} height={32} />;
+              break;
+            default:
+              Icon = <Text>{route.name}</Text>;
+          }
+
+          return (
+            <TouchableOpacity
+              key={route.key}
+              onPress={onPress}
+              style={styles.tabButton}
+              activeOpacity={0.8}
+            >
+              {Icon}
+              {isFocused && <View style={styles.underline} />}
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
+export default function MyTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={{ headerShown: false }}
+      tabBar={(props) => <CustomTabBar {...props} />}
+    >
+      <Tab.Screen name="HomeScreen" component={HomeStack} />
+      <Tab.Screen name="Messages" component={MemberList} />
+      <Tab.Screen name="Settings" component={Settings} />
+      <Tab.Screen name="Camera" component={ClickPhoto} />
+      <Tab.Screen name="MemberList" component={Profile} />
+    </Tab.Navigator>
+  );
+}
+
+const styles = StyleSheet.create({
+  wrapper: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: 70,
+    borderTopWidth: 1,
+    borderTopColor: "#eee",
+    width: "100%",
+    paddingHorizontal: 40,
+  },
+  tabButton: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  underline: {
+    marginTop: 4,
+    height: 3,
+    width: 24,
+    borderRadius: 2,
+    backgroundColor: "black",
+  },
+  fab: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "#000",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: -80,
+    zIndex: 10,
+    borderWidth: 15,
+    borderColor: '#fff',
+  },
+  fabText: {
+    color: "#fff",
+    fontSize: 28,
+    fontWeight: "bold",
+  },
+});

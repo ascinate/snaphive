@@ -1,9 +1,22 @@
-import {View,Text,StyleSheet,TouchableOpacity,Image,ScrollView,Dimensions,PermissionsAndroid,Platform,ActivityIndicator,Alert,} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  Dimensions,
+  PermissionsAndroid,
+  Platform,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import React, { useState, useEffect, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { useFocusEffect } from '@react-navigation/native';
 import TopNav from '../components/TopNavbar';
+import ThemeButton from '../components/ThemeButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -17,7 +30,7 @@ const PhotoShare = ({ navigation }) => {
     if (Platform.OS === 'android') {
       try {
         const apiLevel = Platform.Version;
-        
+
         if (apiLevel >= 33) {
           // Android 13+ requires READ_MEDIA_IMAGES
           const granted = await PermissionsAndroid.request(
@@ -61,7 +74,6 @@ const PhotoShare = ({ navigation }) => {
       const photos = await CameraRoll.getPhotos({
         first: 50, // Number of photos to fetch
         assetType: 'Photos', // Only photos, not videos
-        // Sort by creation date (most recent first)
         include: ['filename', 'imageSize', 'playableDuration'],
       });
 
@@ -87,7 +99,7 @@ const PhotoShare = ({ navigation }) => {
     const initializeGallery = async () => {
       const permission = await requestPermissions();
       setHasPermission(permission);
-      
+
       if (permission) {
         await loadPhotos();
       } else {
@@ -152,8 +164,9 @@ const PhotoShare = ({ navigation }) => {
     <SafeAreaView style={styles.safeArea}>
       <TopNav />
 
+      {/* Scrollable Gallery */}
       <ScrollView
-        contentContainerStyle={styles.container}
+        contentContainerStyle={[styles.container, { paddingBottom: height * 0.12 }]}
         showsVerticalScrollIndicator={false}
       >
         {/* Header row */}
@@ -176,7 +189,6 @@ const PhotoShare = ({ navigation }) => {
                 key={`${img.uri}-${index}`}
                 style={styles.imgContainer}
                 onPress={() => {
-                  // Handle image selection here
                   console.log('Selected image:', img.uri);
                 }}
               >
@@ -190,6 +202,18 @@ const PhotoShare = ({ navigation }) => {
           </View>
         )}
       </ScrollView>
+
+      {/* Fixed Bottom Action Bar */}
+      <View style={styles.bottomBar}>
+        <ThemeButton
+          style={styles.continueBtn}
+          text="Continue →"
+          onPress={() => navigation.navigate('CreateEvent')}
+        />
+        <View>
+          <Text style={{ fontWeight: 800, fontSize: 28 }}>...</Text>
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -280,6 +304,24 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: width * 0.045,
     color: '#666',
+  },
+  continueBtn: {
+    width: '85%',
+    alignSelf: 'center',
+  },
+  bottomBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#fff',
+    paddingHorizontal: width * 0.03,
+    borderTopWidth: 1,
+    borderTopColor: '#EEEEEE',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingVertical: height * 0.015,
   },
 });
 

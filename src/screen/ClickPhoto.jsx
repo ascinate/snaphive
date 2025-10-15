@@ -1,89 +1,107 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text, Platform, PermissionsAndroid, Alert } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { Camera, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
 import TopNav from '../components/TopNavbar';
 import Gallery from '../../assets/svg/gallery.svg';
 import Settings from '../../assets/svg/settings.svg';
-import { launchCamera } from 'react-native-image-picker';
 
 const selfie = require("../../assets/selfie.jpg");
 
 const ClickPhoto = ({ navigation }) => {
-    const [photo, setPhoto] = useState(selfie);
-    const [hasPermission, setHasPermission] = useState(false);
-
-    // Request camera permissions
-    const requestCameraPermission = async () => {
-        if (Platform.OS === 'android') {
-            try {
-                const granted = await PermissionsAndroid.requestMultiple([
-                    PermissionsAndroid.PERMISSIONS.CAMERA,
-                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                ]);
-
-                if (
-                    granted['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED
-                ) {
-                    setHasPermission(true);
-                    return true;
-                } else {
-                    Alert.alert('Permission Denied', 'Camera permission is required to take photos');
-                    return false;
-                }
-            } catch (err) {
-                console.warn(err);
-                return false;
-            }
-        }
-        return true;
-    };
+    const [photo, setPhoto] = useState(null);
+    const [showCamera, setShowCamera] = useState(true);
+    const cameraRef = useRef(null);
+    
+    const device = useCameraDevice('back');
+    const { hasPermission, requestPermission } = useCameraPermission();
 
     useEffect(() => {
-        requestCameraPermission();
-    }, []);
-
-    const openCamera = async () => {
-        // Check permission first
-        const permitted = hasPermission || await requestCameraPermission();
-        
-        if (!permitted) {
-            Alert.alert('Permission Required', 'Please grant camera permission to take photos');
-            return;
+        if (!hasPermission) {
+            requestPermission();
         }
+    }, [hasPermission]);
 
-        const options = {
-            mediaType: 'photo',
-            saveToPhotos: true,
-            cameraType: 'back',
-            quality: 0.8,
-            includeBase64: false,
-        };
-
-        launchCamera(options, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled camera');
-            } else if (response.errorCode) {
-                console.log('Camera Error: ', response.errorMessage);
-                Alert.alert('Camera Error', response.errorMessage || 'Failed to open camera');
-            } else if (response.assets && response.assets[0]) {
-                setPhoto({ uri: response.assets[0].uri });
+    const takePhoto = async () => {
+        if (cameraRef.current) {
+            try {
+                const photo = await cameraRef.current.takePhoto({
+                    qualityPrioritization: 'balanced',
+                    flash: 'off',
+                });
+                
+                setPhoto(`file://${photo.path}`);
+                setShowCamera(false);
+                console.log('Photo taken:', photo.path);
+            } catch (error) {
+                console.error('Failed to take photo:', error);
+                Alert.alert('Error', 'Failed to capture photo');
             }
-        });
+        }
     };
+
+    const retakePhoto = () => {
+        setPhoto(null);
+        setShowCamera(true);
+    };
+
+    if (!hasPermission) {
+        return (
+            <SafeAreaProvider>
+                <SafeAreaView style={styles.safeArea}>
+                    <View style={styles.container}>
+                        <Text style={styles.permissionText}>Camera permission required</Text>
+                    </View>
+                </SafeAreaView>
+            </SafeAreaProvider>
+        );
+    }
+
+    if (!device) {
+        return (
+            <SafeAreaProvider>
+                <SafeAreaView style={styles.safeArea}>
+                    <View style={styles.container}>
+                        <Text style={styles.permissionText}>Camera not available</Text>
+                    </View>
+                </SafeAreaView>
+            </SafeAreaProvider>
+        );
+    }
 
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
                 <TopNav />
                 <View style={styles.container}>
-                    <Image source={photo} style={styles.image} resizeMode="cover" />
+                    {showCamera ? (
+                        <Camera
+                            ref={cameraRef}
+                            style={styles.camera}
+                            device={device}
+                            isActive={showCamera}
+                            photo={true}
+                        />
+                    ) : (
+                        <Image 
+                            source={{ uri: photo }} 
+                            style={styles.image} 
+                            resizeMode="cover" 
+                        />
+                    )}
 
-                    <TouchableOpacity style={styles.shutter} onPress={openCamera}>
+                    <TouchableOpacity 
+                        style={styles.shutter} 
+                        onPress={showCamera ? takePhoto : retakePhoto}
+                        activeOpacity={0.7}
+                    >
                         <View style={styles.shutterBtn} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.settingsBtn} onPress={() => navigation.navigate("ClickPhotoTwo")}>
+                    <TouchableOpacity 
+                        style={styles.settingsBtn} 
+                        onPress={() => navigation.navigate("ClickPhotoTwo")}
+                    >
                         <Settings />
                     </TouchableOpacity>
 
@@ -91,8 +109,11 @@ const ClickPhoto = ({ navigation }) => {
                         <Gallery />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.closeBtn} onPress={() => navigation.goBack()}>
-                        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>X</Text>
+                    <TouchableOpacity 
+                        style={styles.closeBtn} 
+                        onPress={() => navigation.goBack()}
+                    >
+                        <Text style={styles.closeText}>X</Text>
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
@@ -105,6 +126,11 @@ export default ClickPhoto;
 const styles = StyleSheet.create({
     safeArea: { flex: 1 },
     container: { flex: 1, position: 'relative' },
+    camera: { 
+        width: '100%', 
+        height: '100%',
+        position: 'absolute',
+    },
     image: { width: '100%', height: '100%' },
 
     shutter: {
@@ -165,5 +191,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 15,
+    },
+
+    closeText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold'
+    },
+
+    permissionText: {
+        color: 'white',
+        fontSize: 16,
+        textAlign: 'center',
+        marginTop: 50,
     }
 });

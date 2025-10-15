@@ -19,6 +19,7 @@ const TopNav = () => {
 
             </View>
 
+            <Text>i am update</Text>
             {/* Right Section: Notification */}
             <TouchableOpacity style={styles.bellWrapper} onPress={() => navigation.navigate("Notification")}>
                 <Bell width={28} height={28} />

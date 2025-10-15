@@ -6,23 +6,148 @@ import {
   Image,
   ScrollView,
   Dimensions,
+  PermissionsAndroid,
+  Platform,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import TopNav from '../components/TopNavbar';
-import ThemeButton from '../components/ThemeButton';
 
 const { width, height } = Dimensions.get('window');
 
 const PhotoShare = ({ navigation }) => {
-  const images = [
-    require('../../assets/picnic1.jpg'),
-    require('../../assets/picnic2.jpg'),
-    require('../../assets/picnic3.jpg'),
-    require('../../assets/picnic4.jpg'),
-    require('../../assets/picnic1.jpg'),
-    require('../../assets/picnic2.jpg'),
-  ];
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [hasPermission, setHasPermission] = useState(false);
+
+  // Request permissions
+  const requestPermissions = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const apiLevel = Platform.Version;
+        
+        if (apiLevel >= 33) {
+          // Android 13+ requires READ_MEDIA_IMAGES
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+            {
+              title: 'Photo Gallery Permission',
+              message: 'This app needs access to your photos to display them.',
+              buttonNeutral: 'Ask Me Later',
+              buttonNegative: 'Cancel',
+              buttonPositive: 'OK',
+            }
+          );
+          return granted === PermissionsAndroid.RESULTS.GRANTED;
+        } else {
+          // Android 12 and below use READ_EXTERNAL_STORAGE
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            {
+              title: 'Photo Gallery Permission',
+              message: 'This app needs access to your photos to display them.',
+              buttonNeutral: 'Ask Me Later',
+              buttonNegative: 'Cancel',
+              buttonPositive: 'OK',
+            }
+          );
+          return granted === PermissionsAndroid.RESULTS.GRANTED;
+        }
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    }
+    // iOS permissions are handled automatically
+    return true;
+  };
+
+  // Load photos from camera roll
+  const loadPhotos = async () => {
+    try {
+      setLoading(true);
+      const photos = await CameraRoll.getPhotos({
+        first: 50, // Number of photos to fetch
+        assetType: 'Photos', // Only photos, not videos
+        // Sort by creation date (most recent first)
+        include: ['filename', 'imageSize', 'playableDuration'],
+      });
+
+      const photoUris = photos.edges.map((edge) => ({
+        uri: edge.node.image.uri,
+        timestamp: edge.node.timestamp,
+      }));
+
+      // Sort by timestamp (most recent first)
+      photoUris.sort((a, b) => b.timestamp - a.timestamp);
+
+      setImages(photoUris);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading photos:', error);
+      Alert.alert('Error', 'Failed to load photos from your device.');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const initializeGallery = async () => {
+      const permission = await requestPermissions();
+      setHasPermission(permission);
+      
+      if (permission) {
+        await loadPhotos();
+      } else {
+        setLoading(false);
+        Alert.alert(
+          'Permission Required',
+          'This app needs access to your photos to display them in the gallery.'
+        );
+      }
+    };
+
+    initializeGallery();
+  }, []);
+
+  // Render loading state
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <TopNav />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#000" />
+          <Text style={styles.loadingText}>Loading photos...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // Render permission denied state
+  if (!hasPermission) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <TopNav />
+        <View style={styles.loadingContainer}>
+          <Text style={styles.errorText}>Permission denied</Text>
+          <TouchableOpacity
+            style={styles.retryButton}
+            onPress={async () => {
+              const permission = await requestPermissions();
+              setHasPermission(permission);
+              if (permission) {
+                await loadPhotos();
+              }
+            }}
+          >
+            <Text style={styles.retryButtonText}>Grant Permission</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -34,44 +159,38 @@ const PhotoShare = ({ navigation }) => {
       >
         {/* Header row */}
         <View style={styles.headerRow}>
-          <Text style={styles.selectedText}>2 Selected</Text>
+          <Text style={styles.selectedText}>
+            Recent Images ({images.length})
+          </Text>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <View style={styles.cancelButton}>
-              <Text style={styles.cancelText}>Cancel</Text>
+              <Text style={styles.cancelText}>back</Text>
             </View>
           </TouchableOpacity>
         </View>
 
         {/* Image Grid */}
-        <View style={styles.gridContainer}>
-          {images.map((img, index) => (
-            <View style={styles.imgContainer} key={index}>
-              <Image source={img} style={styles.img} />
-            </View>
-          ))}
-        </View>
+        {images.length > 0 ? (
+          <View style={styles.gridContainer}>
+            {images.map((img, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.imgContainer}
+                onPress={() => {
+                  // Handle image selection here
+                  console.log('Selected image:', img.uri);
+                }}
+              >
+                <Image source={{ uri: img.uri }} style={styles.img} />
+              </TouchableOpacity>
+            ))}
+          </View>
+        ) : (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No photos found</Text>
+          </View>
+        )}
       </ScrollView>
-
-      {/* Bottom Action Bar */}
-      <View
-        style={{
-          paddingHorizontal: width * 0.03,
-          borderTopWidth: 1,
-          borderTopColor: '#EEEEEE',
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-        }}
-      >
-        <ThemeButton
-          style={styles.continueBtn}
-          text="Continue →"
-          onPress={() => navigation.navigate('CreateEvent')}
-        />
-        <View>
-          <Text style={{ fontWeight: 800, fontSize: 28 }}>...</Text>
-        </View>
-      </View>
     </SafeAreaView>
   );
 };
@@ -127,10 +246,41 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'cover',
   },
-  continueBtn: {
-    width: '85%',
-    marginTop: height * 0.02,
-    alignSelf: 'center',
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: width * 0.04,
+    color: '#666',
+  },
+  errorText: {
+    fontSize: width * 0.045,
+    color: '#ff0000',
+    marginBottom: 20,
+  },
+  retryButton: {
+    backgroundColor: '#000',
+    paddingHorizontal: width * 0.08,
+    paddingVertical: height * 0.015,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontSize: width * 0.04,
+    fontWeight: '600',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: height * 0.1,
+  },
+  emptyText: {
+    fontSize: width * 0.045,
+    color: '#666',
   },
 });
 

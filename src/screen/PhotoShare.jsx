@@ -1,19 +1,8 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-  Dimensions,
-  PermissionsAndroid,
-  Platform,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
-import React, { useState, useEffect } from 'react';
+import {View,Text,StyleSheet,TouchableOpacity,Image,ScrollView,Dimensions,PermissionsAndroid,Platform,ActivityIndicator,Alert,} from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
+import { useFocusEffect } from '@react-navigation/native';
 import TopNav from '../components/TopNavbar';
 
 const { width, height } = Dimensions.get('window');
@@ -93,6 +82,7 @@ const PhotoShare = ({ navigation }) => {
     }
   };
 
+  // Initial permission check
   useEffect(() => {
     const initializeGallery = async () => {
       const permission = await requestPermissions();
@@ -111,6 +101,15 @@ const PhotoShare = ({ navigation }) => {
 
     initializeGallery();
   }, []);
+
+  // Reload photos when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      if (hasPermission) {
+        loadPhotos();
+      }
+    }, [hasPermission])
+  );
 
   // Render loading state
   if (loading) {
@@ -174,7 +173,7 @@ const PhotoShare = ({ navigation }) => {
           <View style={styles.gridContainer}>
             {images.map((img, index) => (
               <TouchableOpacity
-                key={index}
+                key={`${img.uri}-${index}`}
                 style={styles.imgContainer}
                 onPress={() => {
                   // Handle image selection here

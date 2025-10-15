@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, TouchableOpacity, Image, Text, Platform, PermissionsAndroid, Alert } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import TopNav from '../components/TopNavbar';
 import Gallery from '../../assets/svg/gallery.svg';
@@ -10,16 +10,66 @@ const selfie = require("../../assets/selfie.jpg");
 
 const ClickPhoto = ({ navigation }) => {
     const [photo, setPhoto] = useState(selfie);
+    const [hasPermission, setHasPermission] = useState(false);
 
-    const openCamera = () => {
-        launchCamera(
-            { mediaType: 'photo', saveToPhotos: true },
-            (response) => {
-                if (!response.didCancel && !response.errorCode) {
-                    setPhoto({ uri: response.assets[0].uri });
+    // Request camera permissions
+    const requestCameraPermission = async () => {
+        if (Platform.OS === 'android') {
+            try {
+                const granted = await PermissionsAndroid.requestMultiple([
+                    PermissionsAndroid.PERMISSIONS.CAMERA,
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                ]);
+
+                if (
+                    granted['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED
+                ) {
+                    setHasPermission(true);
+                    return true;
+                } else {
+                    Alert.alert('Permission Denied', 'Camera permission is required to take photos');
+                    return false;
                 }
+            } catch (err) {
+                console.warn(err);
+                return false;
             }
-        );
+        }
+        return true;
+    };
+
+    useEffect(() => {
+        requestCameraPermission();
+    }, []);
+
+    const openCamera = async () => {
+        // Check permission first
+        const permitted = hasPermission || await requestCameraPermission();
+        
+        if (!permitted) {
+            Alert.alert('Permission Required', 'Please grant camera permission to take photos');
+            return;
+        }
+
+        const options = {
+            mediaType: 'photo',
+            saveToPhotos: true,
+            cameraType: 'back',
+            quality: 0.8,
+            includeBase64: false,
+        };
+
+        launchCamera(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled camera');
+            } else if (response.errorCode) {
+                console.log('Camera Error: ', response.errorMessage);
+                Alert.alert('Camera Error', response.errorMessage || 'Failed to open camera');
+            } else if (response.assets && response.assets[0]) {
+                setPhoto({ uri: response.assets[0].uri });
+            }
+        });
     };
 
     return (
@@ -29,22 +79,20 @@ const ClickPhoto = ({ navigation }) => {
                 <View style={styles.container}>
                     <Image source={photo} style={styles.image} resizeMode="cover" />
 
-
-                    <TouchableOpacity style={styles.settingsBtn} onPress={() => navigation.navigate("ClickPhotoTwo")}>
-                        <Settings width={30} height={30} fill="#fff" />
+                    <TouchableOpacity style={styles.shutter} onPress={openCamera}>
+                        <View style={styles.shutterBtn} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.shutter} onPress={openCamera}>
-                        <View style={styles.shutterBtn}></View>
+                    <TouchableOpacity style={styles.settingsBtn} onPress={() => navigation.navigate("ClickPhotoTwo")}>
+                        <Settings />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.galleryBtn}>
-                        <Gallery width={30} height={30} fill="#fff" />
+                        <Gallery />
                     </TouchableOpacity>
 
-
                     <TouchableOpacity style={styles.closeBtn} onPress={() => navigation.goBack()}>
-                        <Text style={{ fontSize: 18 }}>X</Text>
+                        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>X</Text>
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
@@ -59,7 +107,6 @@ const styles = StyleSheet.create({
     container: { flex: 1, position: 'relative' },
     image: { width: '100%', height: '100%' },
 
-    // Shutter button
     shutter: {
         width: 80,
         height: 80,
@@ -81,50 +128,40 @@ const styles = StyleSheet.create({
         borderColor: 'white',
     },
 
-    // Settings button top-right
     settingsBtn: {
-        width: 100,
-        height: 100,
+        width: 40,
+        height: 40,
         backgroundColor: '#030303B2',
-        borderRadius: 50,
+        borderRadius: 20,
         position: 'absolute',
         bottom: 30,
         right: 70,
-        width: 40,
-        height: 40,
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 15,
     },
 
-    // Gallery button bottom-left
     galleryBtn: {
-        width: 100,
-        height: 100,
+        width: 40,
+        height: 40,
         backgroundColor: '#030303B2',
-        borderRadius: 50,
+        borderRadius: 20,
         position: 'absolute',
         bottom: 30,
         left: 70,
-        width: 40,
-        height: 40,
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 15,
-
     },
 
-
     closeBtn: {
-        width: 100,
-        height: 100,
+        width: 40,
+        height: 40,
         backgroundColor: '#FFFFFF4D',
-        borderRadius: 50,
+        borderRadius: 20,
         position: 'absolute',
         top: 30,
         left: 20,
-        width: 40,
-        height: 40,
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 15,

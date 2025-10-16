@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, PanResponder } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ThemeButton from './ThemeButton';
 import CustomText from './CustomText';
 
-// SVG icons (adjust paths as needed)
+// SVG icons
 import Portrait from '../../assets/svg/portrait.svg';
 import Hdr from '../../assets/svg/hdr.svg';
 import Filter from '../../assets/svg/filter.svg';
@@ -13,10 +13,36 @@ import PremiumModal from './PremiumModal';
 // Define before/after images for modal
 const beforeImage = require("../../assets/selfie.jpg");
 const afterImage = require("../../assets/dp3.jpg");
-const PhotoEditMenu = ({ onClose }) => {
+
+const PhotoEditMenu = ({ onClose, brightness: initialBrightness = 50, onBrightnessChange, photoUri }) => {
     const navigation = useNavigation();
-    const [brightness, setBrightness] = useState(50);
+    const [brightness, setBrightness] = useState(initialBrightness);
     const [modalVisible, setModalVisible] = useState(false);
+
+    // Create pan responder for slider
+    const panResponder = React.useRef(
+        PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onMoveShouldSetPanResponder: () => true,
+            onPanResponderGrant: (evt) => {
+                updateBrightnessFromTouch(evt.nativeEvent.locationX);
+            },
+            onPanResponderMove: (evt) => {
+                updateBrightnessFromTouch(evt.nativeEvent.locationX);
+            },
+        })
+    ).current;
+
+    const updateBrightnessFromTouch = (locationX) => {
+        // Assuming slider width is roughly screen width - 100px (for padding and percentage display)
+        const sliderWidth = 270; // Approximate, adjust based on your layout
+        const newBrightness = Math.max(0, Math.min(100, Math.round((locationX / sliderWidth) * 100)));
+        console.log('Touch location:', locationX, 'New brightness:', newBrightness); // Debug log
+        setBrightness(newBrightness);
+        if (onBrightnessChange) {
+            onBrightnessChange(newBrightness);
+        }
+    };
 
     return (
         <View style={styles.bottomPanel}>
@@ -27,19 +53,18 @@ const PhotoEditMenu = ({ onClose }) => {
                         Brightness • {brightness}
                     </CustomText>
 
-              
                     <Text style={styles.closeBtn} onPress={onClose}>X</Text>
                 </View>
 
                 <View style={styles.sliderContainer}>
-                    <View style={styles.customSlider}>
+                    <View 
+                        style={styles.customSlider}
+                        {...panResponder.panHandlers}
+                    >
                         <View style={styles.sliderTrack}>
                             <View style={[styles.sliderFill, { width: `${brightness}%` }]} />
-                            <TouchableOpacity
+                            <View
                                 style={[styles.sliderThumb, { left: `${brightness}%` }]}
-                                onPressIn={() => {
-            
-                                }}
                             />
                         </View>
                     </View>
@@ -142,7 +167,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 15,
     },
-    customSlider: { flex: 1, height: 40, justifyContent: 'center' },
+    customSlider: { 
+        flex: 1, 
+        height: 40, 
+        justifyContent: 'center',
+        paddingHorizontal: 5,
+    },
     sliderTrack: {
         height: 4,
         backgroundColor: '#333',

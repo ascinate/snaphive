@@ -17,6 +17,7 @@ const ClickPhoto = ({ navigation }) => {
     const [showCamera, setShowCamera] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [isEditingUI, setIsEditingUI] = useState(false);
+    const [brightness, setBrightness] = useState(50); // Added brightness state
 
     const cameraRef = useRef(null);
     const device = useCameraDevice('back');
@@ -92,9 +93,17 @@ const ClickPhoto = ({ navigation }) => {
     const retakePhoto = () => {
         setPhoto(null);
         setShowCamera(true);
+        setBrightness(50); // Reset brightness
+        setIsEditingUI(false);
     };
 
     const usePhoto = () => navigation.navigate("PhotoShare");
+
+    // Handle brightness change from PhotoEditMenu
+    const handleBrightnessChange = (value) => {
+        console.log('Brightness changed to:', value); // Debug log
+        setBrightness(value);
+    };
 
     if (!hasPermission) {
         return (
@@ -122,6 +131,15 @@ const ClickPhoto = ({ navigation }) => {
         );
     }
 
+    // Calculate brightness overlay opacity (0 = dark, 100 = bright)
+    const brightnessOverlayOpacity = brightness < 50 
+        ? (50 - brightness) / 50 * 0.7  // Darken
+        : 0;
+    
+    const brightnessOverlayColor = brightness > 50
+        ? `rgba(255, 255, 255, ${(brightness - 50) / 50 * 0.5})` // Brighten
+        : `rgba(0, 0, 0, ${brightnessOverlayOpacity})`;
+
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
@@ -136,7 +154,18 @@ const ClickPhoto = ({ navigation }) => {
                             photo={true}
                         />
                     ) : (
-                        <Image source={{ uri: photo }} style={styles.image} resizeMode="cover" />
+                        <View style={styles.imageContainer}>
+                            <Image source={{ uri: photo }} style={styles.image} resizeMode="cover" />
+                            {/* Brightness overlay */}
+                            {brightness !== 50 && (
+                                <View 
+                                    style={[
+                                        styles.brightnessOverlay, 
+                                        { backgroundColor: brightnessOverlayColor }
+                                    ]} 
+                                />
+                            )}
+                        </View>
                     )}
 
                     {!showCamera && (
@@ -185,7 +214,12 @@ const ClickPhoto = ({ navigation }) => {
 
                 {/* Bottom Edit Menu */}
                 {isEditingUI && (
-                    <PhotoEditMenu onClose={() => setIsEditingUI(false)} />
+                    <PhotoEditMenu 
+                        onClose={() => setIsEditingUI(false)} 
+                        brightness={brightness}
+                        onBrightnessChange={handleBrightnessChange}
+                        photoUri={photo}
+                    />
                 )}
             </SafeAreaView>
         </SafeAreaProvider>
@@ -194,12 +228,24 @@ const ClickPhoto = ({ navigation }) => {
 
 export default ClickPhoto;
 
-// Styles remain unchanged
 const styles = StyleSheet.create({
     safeArea: { flex: 1 },
     container: { flex: 1, position: 'relative' },
     camera: { width: '100%', height: '100%', position: 'absolute' },
+    imageContainer: { 
+        width: '100%', 
+        height: '100%', 
+        position: 'relative' 
+    },
     image: { width: '100%', height: '100%' },
+    brightnessOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        pointerEvents: 'none',
+    },
     shutter: {
         width: 80,
         height: 80,

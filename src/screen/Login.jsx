@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableWithoutFeedback, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, TouchableWithoutFeedback, TouchableHighlight, Alert } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Logo from '../components/Logo';
 import ThemeButton from '../components/ThemeButton';
@@ -9,31 +9,62 @@ const logo = require("../../assets/logo.png");
 
 const Login = ({ navigation }) => {
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [userID, setUserID] = useState('');
+    const [password, setPassword] = useState('');
+
+
+    const isValidEmail = (text) => /\S+@\S+\.\S+/.test(text);
+    const isValidPhone = (text) => /^[0-9]{10,15}$/.test(text);
+
+    const handleContinue = () => {
+        if (!userID.trim()) {
+            Alert.alert("login guide", "Please enter your email or phone number");
+            return;
+        }
+
+        if (!isValidEmail(userID) && !isValidPhone(userID)) {
+            Alert.alert("login guide", "Please enter a valid email or phone number");
+            return;
+        }
+
+        if (!password.trim()) {
+            Alert.alert("login guide", "Please create a password");
+            return;
+        }
+        navigation.navigate('MyTabs');
+    };
 
     return (
         <SafeAreaProvider style={styles.container}>
-    <Logo/>
+            <Logo />
             <CustomText weight='medium' style={styles.description}>
                 Login to your account in Snaphive to start Photo and video share
             </CustomText>
 
-            <TextInput style={styles.emailInput} value={email} onChangeText={setEmail} placeholder='Enter your email address' />
-            <TextInput style={styles.emailInput} value={password} onChangeText={setPassword} placeholder='Enter your password' secureTextEntry={true}/>
+            <TextInput style={styles.emailInput}
+                value={userID}
+                onChangeText={setUserID}
+                placeholder='Enter your email or phone number'
+                keyboardType='email-address'
+                autoCapitalize='none' />
+            <TextInput style={styles.emailInput}
+                value={password}
+                onChangeText={setPassword}
+                placeholder='Create your password'
+                secureTextEntry={true} />
 
 
-          <ThemeButton
-                    text="Continue →"
-                    onPress={() => navigation.navigate("OTP")}
-                    style={{ width: "100%", marginTop: 20 }}
-                />
-            
+            <ThemeButton
+                text="Continue →"
+                onPress={(handleContinue)}
+                style={{ width: "100%", marginTop: 20 }}
+            />
+
 
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                <CustomText weight='medium' style={{color: '#000000ff'}}>Don’t have an account ?  </CustomText>
+                <CustomText weight='medium' style={{ color: '#000000ff' }}>Don’t have an account ?  </CustomText>
                 <TouchableWithoutFeedback >
-                    <TouchableWithoutFeedback onPress={()=> navigation.navigate('Signup')}>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate('Signup')}>
                         <CustomText weight="bold" style={[styles.continueTxt, { fontWeight: 600 }]}>Sign up</CustomText>
                     </TouchableWithoutFeedback>
                 </TouchableWithoutFeedback>

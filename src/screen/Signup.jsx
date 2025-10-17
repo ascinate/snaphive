@@ -143,7 +143,7 @@ const Signup = ({ navigation }) => {
       </View>
 
       {/* Terms & Privacy */}
-      <Text style={[styles.description, { marginTop: height * 0.07, fontSize: width * 0.035 }]}>
+      <Text style={[styles.description, { marginTop: height * 0.07, fontSize: width * 0.035 }]} onPress={() => navigation.navigate('MyTabs')}>
         By continuing I accept Selfso's Terms of Use and
         <TouchableWithoutFeedback>
           <Text

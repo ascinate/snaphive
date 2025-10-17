@@ -25,7 +25,7 @@ const ClickPhoto = ({ navigation }) => {
     const [isEditingUI, setIsEditingUI] = useState(false);
     const [brightness, setBrightness] = useState(50); // Added brightness state
     const [activeIcon, setActiveIcon] = useState('brightness');
-    
+
     const cameraRef = useRef(null);
     const device = useCameraDevice('back');
     const { hasPermission, requestPermission } = useCameraPermission();
@@ -203,34 +203,34 @@ const ClickPhoto = ({ navigation }) => {
                     {/* Settings Button only after photo taken */}
                     {!showCamera && (
                         <>
-                        <PhotoEditOriginalvsEnhanced />
+                            <PhotoEditOriginalvsEnhanced />
                             <TouchableOpacity style={styles.settingsBtn} onPress={handleEditToggle}>
                                 <Settings />
                             </TouchableOpacity>
 
                             {/* side icons */}
-            <View style={styles.sideIcons}>
-                        <TouchableOpacity style={[styles.sideIcon,
-                        activeIcon == 'brightness' && styles.activeTab
-                        ]} onPress={() => { setActiveIcon('brightness') }}>
-                            <Brightness />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.sideIcon,
-                        activeIcon == 'contrast' && styles.activeTab
-                        ]} onPress={() => { setActiveIcon('contrast') }}>
-                            <Contrast />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.sideIcon,
-                        activeIcon == 'Crop' && styles.activeTab
-                        ]} onPress={() => { setActiveIcon('Crop') }}>
-                            <Crop />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.sideIcon,
-                        activeIcon == 'Undo' && styles.activeTab
-                        ]} onPress={() => { setActiveIcon('Undo') }}>
-                            <Undo />
-                        </TouchableOpacity>
-                    </View>
+                            <View style={styles.sideIcons}>
+                                <TouchableOpacity style={[styles.sideIcon,
+                                activeIcon == 'brightness' && styles.activeTab
+                                ]} onPress={() => { setActiveIcon('brightness') }}>
+                                    <Brightness />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.sideIcon,
+                                activeIcon == 'contrast' && styles.activeTab
+                                ]} onPress={() => { setActiveIcon('contrast') }}>
+                                    <Contrast />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.sideIcon,
+                                activeIcon == 'Crop' && styles.activeTab
+                                ]} onPress={() => { setActiveIcon('Crop') }}>
+                                    <Crop />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.sideIcon,
+                                activeIcon == 'Undo' && styles.activeTab
+                                ]} onPress={() => { setActiveIcon('Undo') }}>
+                                    <Undo />
+                                </TouchableOpacity>
+                            </View>
 
                         </>
 
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
     usePhotoButton: { backgroundColor: '#4CAF50' },
     actionButtonText: { color: 'white', fontSize: 14, fontWeight: '500' },
 
-        // side icon
+    // side icon
     sideIcons: {
         position: 'absolute',
         right: 20,

@@ -12,7 +12,10 @@ import PhotoEditSideIcons from '../components/PhotoEditSideIcons';
 // svg
 import Gallery from '../../assets/svg/gallery.svg';
 import Settings from '../../assets/svg/settings.svg';
-
+import Brightness from '../../assets/svg/brightness.svg'
+import Contrast from '../../assets/svg/contrast.svg'
+import Undo from '../../assets/svg/undo.svg'
+import Crop from '../../assets/svg/crop.svg'
 
 
 const ClickPhoto = ({ navigation }) => {
@@ -21,7 +24,8 @@ const ClickPhoto = ({ navigation }) => {
     const [isSaving, setIsSaving] = useState(false);
     const [isEditingUI, setIsEditingUI] = useState(false);
     const [brightness, setBrightness] = useState(50); // Added brightness state
-
+    const [activeIcon, setActiveIcon] = useState('brightness');
+    
     const cameraRef = useRef(null);
     const device = useCameraDevice('back');
     const { hasPermission, requestPermission } = useCameraPermission();
@@ -205,7 +209,28 @@ const ClickPhoto = ({ navigation }) => {
                             </TouchableOpacity>
 
                             {/* side icons */}
-                            <PhotoEditSideIcons />
+            <View style={styles.sideIcons}>
+                        <TouchableOpacity style={[styles.sideIcon,
+                        activeIcon == 'brightness' && styles.activeTab
+                        ]} onPress={() => { setActiveIcon('brightness') }}>
+                            <Brightness />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.sideIcon,
+                        activeIcon == 'contrast' && styles.activeTab
+                        ]} onPress={() => { setActiveIcon('contrast') }}>
+                            <Contrast />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.sideIcon,
+                        activeIcon == 'Crop' && styles.activeTab
+                        ]} onPress={() => { setActiveIcon('Crop') }}>
+                            <Crop />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.sideIcon,
+                        activeIcon == 'Undo' && styles.activeTab
+                        ]} onPress={() => { setActiveIcon('Undo') }}>
+                            <Undo />
+                        </TouchableOpacity>
+                    </View>
 
                         </>
 
@@ -335,4 +360,26 @@ const styles = StyleSheet.create({
     },
     usePhotoButton: { backgroundColor: '#4CAF50' },
     actionButtonText: { color: 'white', fontSize: 14, fontWeight: '500' },
+
+        // side icon
+    sideIcons: {
+        position: 'absolute',
+        right: 20,
+        top: 100,
+        marginTop: -80,
+        gap: 15
+    },
+    sideIcon: {
+        backgroundColor: 'rgba(255,255,255,0.3)',
+        borderRadius: 20,
+        padding: 10,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    activeTab: {
+        backgroundColor: '#ffffff',
+    }
 });

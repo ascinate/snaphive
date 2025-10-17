@@ -16,8 +16,11 @@ const afterImage = require("../../assets/dp3.jpg");
 
 const PhotoEditMenu = ({ onClose, brightness: initialBrightness = 50, onBrightnessChange, photoUri }) => {
     const navigation = useNavigation();
-    const [brightness, setBrightness] = useState(initialBrightness);
+    const [localBrightness, setLocalBrightness] = useState(initialBrightness);
     const [modalVisible, setModalVisible] = useState(false);
+
+    // Use the brightness from parent if available, otherwise use local state
+    const brightness = initialBrightness;
 
     // Create pan responder for slider
     const panResponder = React.useRef(
@@ -38,7 +41,7 @@ const PhotoEditMenu = ({ onClose, brightness: initialBrightness = 50, onBrightne
         const sliderWidth = 270; // Approximate, adjust based on your layout
         const newBrightness = Math.max(0, Math.min(100, Math.round((locationX / sliderWidth) * 100)));
         console.log('Touch location:', locationX, 'New brightness:', newBrightness); // Debug log
-        setBrightness(newBrightness);
+        setLocalBrightness(newBrightness);
         if (onBrightnessChange) {
             onBrightnessChange(newBrightness);
         }

@@ -11,6 +11,10 @@ import PhotoEditMenu from '../components/PhotoEditMenu';
 // svg
 import Gallery from '../../assets/svg/gallery.svg';
 import Settings from '../../assets/svg/settings.svg';
+import Brightness from '../../assets/svg/brightness.svg'
+import Contrast from '../../assets/svg/contrast.svg'
+import Undo from '../../assets/svg/undo.svg'
+import Crop from '../../assets/svg/crop.svg'
 
 const ClickPhoto = ({ navigation }) => {
     const [photo, setPhoto] = useState(null);
@@ -132,10 +136,10 @@ const ClickPhoto = ({ navigation }) => {
     }
 
     // Calculate brightness overlay opacity (0 = dark, 100 = bright)
-    const brightnessOverlayOpacity = brightness < 50 
+    const brightnessOverlayOpacity = brightness < 50
         ? (50 - brightness) / 50 * 0.7  // Darken
         : 0;
-    
+
     const brightnessOverlayColor = brightness > 50
         ? `rgba(255, 255, 255, ${(brightness - 50) / 50 * 0.5})` // Brighten
         : `rgba(0, 0, 0, ${brightnessOverlayOpacity})`;
@@ -158,11 +162,11 @@ const ClickPhoto = ({ navigation }) => {
                             <Image source={{ uri: photo }} style={styles.image} resizeMode="cover" />
                             {/* Brightness overlay */}
                             {brightness !== 50 && (
-                                <View 
+                                <View
                                     style={[
-                                        styles.brightnessOverlay, 
+                                        styles.brightnessOverlay,
                                         { backgroundColor: brightnessOverlayColor }
-                                    ]} 
+                                    ]}
                                 />
                             )}
                         </View>
@@ -195,9 +199,28 @@ const ClickPhoto = ({ navigation }) => {
 
                     {/* Settings Button only after photo taken */}
                     {!showCamera && (
-                        <TouchableOpacity style={styles.settingsBtn} onPress={handleEditToggle}>
-                            <Settings />
-                        </TouchableOpacity>
+                        <>
+                            <TouchableOpacity style={styles.settingsBtn} onPress={handleEditToggle}>
+                                <Settings />
+                            </TouchableOpacity>
+
+                            {/* side icons */}
+                            <View style={styles.sideIcons}>
+                                <TouchableOpacity style={[styles.sideIcon, { backgroundColor: '#c70000ff' }]}>
+                                    <Brightness />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.sideIcon}>
+                                    <Contrast />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.sideIcon}>
+                                    <Crop />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.sideIcon}>
+                                    <Undo />
+                                </TouchableOpacity>
+                            </View>
+                        </>
+
                     )}
 
                     <TouchableOpacity
@@ -214,13 +237,15 @@ const ClickPhoto = ({ navigation }) => {
 
                 {/* Bottom Edit Menu */}
                 {isEditingUI && (
-                    <PhotoEditMenu 
-                        onClose={() => setIsEditingUI(false)} 
+                    <PhotoEditMenu
+                        onClose={() => setIsEditingUI(false)}
                         brightness={brightness}
                         onBrightnessChange={handleBrightnessChange}
                         photoUri={photo}
                     />
                 )}
+
+
             </SafeAreaView>
         </SafeAreaProvider>
     );
@@ -232,10 +257,10 @@ const styles = StyleSheet.create({
     safeArea: { flex: 1 },
     container: { flex: 1, position: 'relative' },
     camera: { width: '100%', height: '100%', position: 'absolute' },
-    imageContainer: { 
-        width: '100%', 
-        height: '100%', 
-        position: 'relative' 
+    imageContainer: {
+        width: '100%',
+        height: '100%',
+        position: 'relative'
     },
     image: { width: '100%', height: '100%' },
     brightnessOverlay: {
@@ -296,7 +321,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF4D',
         borderRadius: 20,
         position: 'absolute',
-        top: 30,
+        top: 20,
         left: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -322,5 +347,23 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     usePhotoButton: { backgroundColor: '#4CAF50' },
-    actionButtonText: { color: 'white', fontSize: 16, fontWeight: '600' },
+    actionButtonText: { color: 'white', fontSize: 14, fontWeight: '500' },
+
+    // side icon
+    sideIcons: {
+        position: 'absolute',
+        right: 20,
+        top: 100,
+        marginTop: -80,
+        gap: 15
+    },
+    sideIcon: {
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        borderRadius: 20,
+        padding: 10,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
 });

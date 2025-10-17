@@ -72,7 +72,7 @@ const PhotoShare = ({ navigation }) => {
     try {
       setLoading(true);
       const photos = await CameraRoll.getPhotos({
-        first: 50, // Number of photos to fetch
+        first: 999999, // Number of photos to fetch
         assetType: 'Photos', // Only photos, not videos
         include: ['filename', 'imageSize', 'playableDuration'],
       });

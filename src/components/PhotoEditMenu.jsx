@@ -80,7 +80,7 @@ const PhotoEditMenu = ({ onClose, brightness: initialBrightness = 50, onBrightne
                 <CustomText weight="medium" style={styles.premiumTitle}>Premium Tools</CustomText>
                 <View style={styles.toolsContainer}>
                     {/* Tool 1 */}
-                    <TouchableOpacity style={styles.premiumTool}>
+                    <TouchableOpacity style={styles.premiumTool}   onPress={() => setModalVisible(true)}>
                         <View style={styles.toolIcon}>
                             <Portrait width={24} height={24} />
                         </View>
@@ -105,7 +105,7 @@ const PhotoEditMenu = ({ onClose, brightness: initialBrightness = 50, onBrightne
                     </TouchableOpacity>
 
                     {/* Tool 3 */}
-                    <TouchableOpacity style={styles.premiumTool}>
+                    <TouchableOpacity style={styles.premiumTool }   onPress={() => setModalVisible(true)}>
                         <View style={styles.toolIcon}>
                             <Filter width={24} height={24} />
                         </View>

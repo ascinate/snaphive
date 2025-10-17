@@ -7,14 +7,13 @@ import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 //components
 import TopNav from '../components/TopNavbar';
 import PhotoEditMenu from '../components/PhotoEditMenu';
-
+import PhotoEditOriginalvsEnhanced from '../components/PhotoEditOriginalvsEnhanced';
+import PhotoEditSideIcons from '../components/PhotoEditSideIcons';
 // svg
 import Gallery from '../../assets/svg/gallery.svg';
 import Settings from '../../assets/svg/settings.svg';
-import Brightness from '../../assets/svg/brightness.svg'
-import Contrast from '../../assets/svg/contrast.svg'
-import Undo from '../../assets/svg/undo.svg'
-import Crop from '../../assets/svg/crop.svg'
+
+
 
 const ClickPhoto = ({ navigation }) => {
     const [photo, setPhoto] = useState(null);
@@ -200,25 +199,14 @@ const ClickPhoto = ({ navigation }) => {
                     {/* Settings Button only after photo taken */}
                     {!showCamera && (
                         <>
+                        <PhotoEditOriginalvsEnhanced />
                             <TouchableOpacity style={styles.settingsBtn} onPress={handleEditToggle}>
                                 <Settings />
                             </TouchableOpacity>
 
                             {/* side icons */}
-                            <View style={styles.sideIcons}>
-                                <TouchableOpacity style={[styles.sideIcon, { backgroundColor: '#c70000ff' }]}>
-                                    <Brightness />
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.sideIcon}>
-                                    <Contrast />
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.sideIcon}>
-                                    <Crop />
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.sideIcon}>
-                                    <Undo />
-                                </TouchableOpacity>
-                            </View>
+                            <PhotoEditSideIcons />
+
                         </>
 
                     )}
@@ -244,7 +232,6 @@ const ClickPhoto = ({ navigation }) => {
                         photoUri={photo}
                     />
                 )}
-
 
             </SafeAreaView>
         </SafeAreaProvider>
@@ -348,22 +335,4 @@ const styles = StyleSheet.create({
     },
     usePhotoButton: { backgroundColor: '#4CAF50' },
     actionButtonText: { color: 'white', fontSize: 14, fontWeight: '500' },
-
-    // side icon
-    sideIcons: {
-        position: 'absolute',
-        right: 20,
-        top: 100,
-        marginTop: -80,
-        gap: 15
-    },
-    sideIcon: {
-        backgroundColor: 'rgba(0,0,0,0.3)',
-        borderRadius: 20,
-        padding: 10,
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
 });

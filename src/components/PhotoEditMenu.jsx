@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, PanResponder } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, PanResponder, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ThemeButton from './ThemeButton';
 import CustomText from './CustomText';
@@ -14,73 +14,97 @@ import PremiumModal from './PremiumModal';
 const beforeImage = require("../../assets/selfie.jpg");
 const afterImage = require("../../assets/dp3.jpg");
 
-const PhotoEditMenu = ({ onClose, brightness: initialBrightness = 50, onBrightnessChange, photoUri }) => {
+const PhotoEditMenu = ({
+    onClose,
+    brightness: initialBrightness = 50,
+    onBrightnessChange,
+    contrast: initialContrast = 50,
+    onContrastChange,
+    photoUri
+}) => {
     const navigation = useNavigation();
     const [localBrightness, setLocalBrightness] = useState(initialBrightness);
+    const [localContrast, setLocalContrast] = useState(initialContrast);
     const [modalVisible, setModalVisible] = useState(false);
 
-    // Use the brightness from parent if available, otherwise use local state
-    const brightness = initialBrightness;
-
-    // Create pan responder for slider
-    const panResponder = React.useRef(
+    // 🔹 Brightness PanResponder
+    const brightnessResponder = useRef(
         PanResponder.create({
             onStartShouldSetPanResponder: () => true,
             onMoveShouldSetPanResponder: () => true,
-            onPanResponderGrant: (evt) => {
-                updateBrightnessFromTouch(evt.nativeEvent.locationX);
-            },
-            onPanResponderMove: (evt) => {
-                updateBrightnessFromTouch(evt.nativeEvent.locationX);
-            },
+            onPanResponderGrant: (evt) => updateBrightnessFromTouch(evt.nativeEvent.locationX),
+            onPanResponderMove: (evt) => updateBrightnessFromTouch(evt.nativeEvent.locationX),
+        })
+    ).current;
+
+    // 🔹 Contrast PanResponder
+    const contrastResponder = useRef(
+        PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onMoveShouldSetPanResponder: () => true,
+            onPanResponderGrant: (evt) => updateContrastFromTouch(evt.nativeEvent.locationX),
+            onPanResponderMove: (evt) => updateContrastFromTouch(evt.nativeEvent.locationX),
         })
     ).current;
 
     const updateBrightnessFromTouch = (locationX) => {
-        // Assuming slider width is roughly screen width - 100px (for padding and percentage display)
-        const sliderWidth = 270; // Approximate, adjust based on your layout
-        const newBrightness = Math.max(0, Math.min(100, Math.round((locationX / sliderWidth) * 100)));
-        console.log('Touch location:', locationX, 'New brightness:', newBrightness); // Debug log
-        setLocalBrightness(newBrightness);
-        if (onBrightnessChange) {
-            onBrightnessChange(newBrightness);
-        }
+        const sliderWidth = 270;
+        const newValue = Math.max(0, Math.min(100, Math.round((locationX / sliderWidth) * 100)));
+        setLocalBrightness(newValue);
+        onBrightnessChange?.(newValue);
+    };
+
+    const updateContrastFromTouch = (locationX) => {
+        const sliderWidth = 270;
+        const newValue = Math.max(0, Math.min(100, Math.round((locationX / sliderWidth) * 100)));
+        setLocalContrast(newValue);
+        onContrastChange?.(newValue);
     };
 
     return (
         <View style={styles.bottomPanel}>
-            {/* Brightness Section */}
-            <View style={styles.brightnessSection}>
+            <Text style={styles.closeBtn} onPress={onClose}>X</Text>
+            <ScrollView style={styles.brightnessSection}>
+
+                {/* 🔸 Brightness Section */}
                 <View style={styles.brightnessHeader}>
                     <CustomText weight="medium" style={styles.brightnessLabel}>
-                        Brightness • {brightness}
+                        Brightness • {localBrightness}
                     </CustomText>
-
-                    <Text style={styles.closeBtn} onPress={onClose}>X</Text>
                 </View>
-
                 <View style={styles.sliderContainer}>
-                    <View 
-                        style={styles.customSlider}
-                        {...panResponder.panHandlers}
-                    >
+                    <View style={styles.customSlider} {...brightnessResponder.panHandlers}>
                         <View style={styles.sliderTrack}>
-                            <View style={[styles.sliderFill, { width: `${brightness}%` }]} />
-                            <View
-                                style={[styles.sliderThumb, { left: `${brightness}%` }]}
-                            />
+                            <View style={[styles.sliderFill, { width: `${localBrightness}%` }]} />
+                            <View style={[styles.sliderThumb, { left: `${localBrightness}%` }]} />
                         </View>
                     </View>
-                    <CustomText weight="semiBold" style={styles.brightnessValue}>{brightness}%</CustomText>
+                    <CustomText weight="semiBold" style={styles.brightnessValue}>{localBrightness}%</CustomText>
                 </View>
-            </View>
 
-            {/* Premium Tools */}
+                {/* 🔸 Contrast Section */}
+                <View style={styles.brightnessHeader}>
+                    <CustomText weight="medium" style={styles.brightnessLabel}>
+                        Contrast • {localContrast}
+                    </CustomText>
+                </View>
+                <View style={styles.sliderContainer}>
+                    <View style={styles.customSlider} {...contrastResponder.panHandlers}>
+                        <View style={styles.sliderTrack}>
+                            <View style={[styles.sliderFill, { width: `${localContrast}%` }]} />
+                            <View style={[styles.sliderThumb, { left: `${localContrast}%` }]} />
+                        </View>
+                    </View>
+                    <CustomText weight="semiBold" style={styles.brightnessValue}>{localContrast}%</CustomText>
+                </View>
+
+            </ScrollView>
+
+            {/* 🔸 Premium Tools */}
             <View style={styles.premiumSection}>
                 <CustomText weight="medium" style={styles.premiumTitle}>Premium Tools</CustomText>
                 <View style={styles.toolsContainer}>
-                    {/* Tool 1 */}
-                    <TouchableOpacity style={styles.premiumTool}   onPress={() => setModalVisible(true)}>
+                    <TouchableOpacity style={styles.premiumTool} onPress={() => setModalVisible(true)}>
                         <View style={styles.toolIcon}>
                             <Portrait width={24} height={24} />
                         </View>
@@ -90,11 +114,7 @@ const PhotoEditMenu = ({ onClose, brightness: initialBrightness = 50, onBrightne
                         </View>
                     </TouchableOpacity>
 
-                    {/* Tool 2 */}
-                    <TouchableOpacity
-                        style={styles.premiumTool}
-                        onPress={() => setModalVisible(true)}
-                    >
+                    <TouchableOpacity style={styles.premiumTool} onPress={() => setModalVisible(true)}>
                         <View style={styles.toolIcon}>
                             <Hdr width={24} height={24} />
                         </View>
@@ -104,8 +124,7 @@ const PhotoEditMenu = ({ onClose, brightness: initialBrightness = 50, onBrightne
                         </View>
                     </TouchableOpacity>
 
-                    {/* Tool 3 */}
-                    <TouchableOpacity style={styles.premiumTool }   onPress={() => setModalVisible(true)}>
+                    <TouchableOpacity style={styles.premiumTool} onPress={() => setModalVisible(true)}>
                         <View style={styles.toolIcon}>
                             <Filter width={24} height={24} />
                         </View>
@@ -117,14 +136,14 @@ const PhotoEditMenu = ({ onClose, brightness: initialBrightness = 50, onBrightne
                 </View>
             </View>
 
-            {/* Continue Button */}
+            {/* 🔸 Continue Button */}
             <ThemeButton
                 text="Continue"
                 onPress={() => navigation.navigate('ClickPhotoThree')}
                 style={{ width: '100%' }}
             />
 
-            {/* Modal */}
+            {/* 🔸 Premium Modal */}
             <PremiumModal
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
@@ -164,15 +183,17 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontSize: 20,
         paddingHorizontal: 10,
+        alignSelf: 'flex-end',
     },
     sliderContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 15,
+        marginBottom: 25,
     },
-    customSlider: { 
-        flex: 1, 
-        height: 40, 
+    customSlider: {
+        flex: 1,
+        height: 40,
         justifyContent: 'center',
         paddingHorizontal: 5,
     },

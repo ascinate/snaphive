@@ -3,27 +3,29 @@ import { View, StyleSheet, TouchableOpacity, Image, Text, Platform, PermissionsA
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Camera, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
+import { Contrast as ContrastFilter, Brightness as BrightnessFilter } from 'react-native-color-matrix-image-filters';
 
-//components
+// Components
 import TopNav from '../components/TopNavbar';
 import PhotoEditMenu from '../components/PhotoEditMenu';
 import PhotoEditOriginalvsEnhanced from '../components/PhotoEditOriginalvsEnhanced';
 import PhotoEditSideIcons from '../components/PhotoEditSideIcons';
-// svg
+
+// SVG icons
 import Gallery from '../../assets/svg/gallery.svg';
 import Settings from '../../assets/svg/settings.svg';
-import Brightness from '../../assets/svg/brightness.svg'
-import Contrast from '../../assets/svg/contrast.svg'
-import Undo from '../../assets/svg/undo.svg'
-import Crop from '../../assets/svg/crop.svg'
-
+import Adjustment from '../../assets/svg/adjustment.svg';
+import Contrast from '../../assets/svg/contrast.svg';
+import Undo from '../../assets/svg/undo.svg';
+import Crop from '../../assets/svg/crop.svg';
 
 const ClickPhoto = ({ navigation }) => {
     const [photo, setPhoto] = useState(null);
     const [showCamera, setShowCamera] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [isEditingUI, setIsEditingUI] = useState(false);
-    const [brightness, setBrightness] = useState(50); // Added brightness state
+    const [brightness, setBrightness] = useState(50);
+    const [contrast, setContrast] = useState(50);
     const [activeIcon, setActiveIcon] = useState('brightness');
 
     const cameraRef = useRef(null);
@@ -100,16 +102,20 @@ const ClickPhoto = ({ navigation }) => {
     const retakePhoto = () => {
         setPhoto(null);
         setShowCamera(true);
-        setBrightness(50); // Reset brightness
+        setBrightness(50);
+        setContrast(50);
         setIsEditingUI(false);
     };
 
-    const usePhoto = () => navigation.navigate("PhotoShare");
+    const usePhoto = () => navigation.navigate('PhotoShare');
 
-    // Handle brightness change from PhotoEditMenu
+    // Handle Brightness & Contrast change
     const handleBrightnessChange = (value) => {
-        console.log('Brightness changed to:', value); // Debug log
         setBrightness(value);
+    };
+
+    const handleContrastChange = (value) => {
+        setContrast(value);
     };
 
     if (!hasPermission) {
@@ -138,15 +144,6 @@ const ClickPhoto = ({ navigation }) => {
         );
     }
 
-    // Calculate brightness overlay opacity (0 = dark, 100 = bright)
-    const brightnessOverlayOpacity = brightness < 50
-        ? (50 - brightness) / 50 * 0.7  // Darken
-        : 0;
-
-    const brightnessOverlayColor = brightness > 50
-        ? `rgba(255, 255, 255, ${(brightness - 50) / 50 * 0.5})` // Brighten
-        : `rgba(0, 0, 0, ${brightnessOverlayOpacity})`;
-
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
@@ -162,16 +159,12 @@ const ClickPhoto = ({ navigation }) => {
                         />
                     ) : (
                         <View style={styles.imageContainer}>
-                            <Image source={{ uri: photo }} style={styles.image} resizeMode="cover" />
-                            {/* Brightness overlay */}
-                            {brightness !== 50 && (
-                                <View
-                                    style={[
-                                        styles.brightnessOverlay,
-                                        { backgroundColor: brightnessOverlayColor }
-                                    ]}
-                                />
-                            )}
+                            {/* Apply contrast + brightness filters together */}
+                            <ContrastFilter amount={contrast / 50}>
+                                <BrightnessFilter amount={brightness / 50}>
+                                    <Image source={{ uri: photo }} style={styles.image} resizeMode="cover" />
+                                </BrightnessFilter>
+                            </ContrastFilter>
                         </View>
                     )}
 
@@ -200,7 +193,6 @@ const ClickPhoto = ({ navigation }) => {
                         <View style={styles.shutterBtn} />
                     </TouchableOpacity>
 
-                    {/* Settings Button only after photo taken */}
                     {!showCamera && (
                         <>
                             <PhotoEditOriginalvsEnhanced />
@@ -208,37 +200,38 @@ const ClickPhoto = ({ navigation }) => {
                                 <Settings />
                             </TouchableOpacity>
 
-                            {/* side icons */}
                             <View style={styles.sideIcons}>
-                                <TouchableOpacity style={[styles.sideIcon,
-                                activeIcon == 'brightness' && styles.activeTab
-                                ]} onPress={() => { setActiveIcon('brightness') }}>
-                                    <Brightness />
+                                <TouchableOpacity
+                                    style={[styles.sideIcon, activeIcon === 'brightness' && styles.activeTab]}
+                                    onPress={() => setActiveIcon('brightness')}
+                                >
+                                    <Adjustment />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={[styles.sideIcon,
-                                activeIcon == 'contrast' && styles.activeTab
-                                ]} onPress={() => { setActiveIcon('contrast') }}>
+                                <TouchableOpacity
+                                    style={[styles.sideIcon, activeIcon === 'contrast' && styles.activeTab]}
+                                    onPress={() => setActiveIcon('contrast')}
+                                >
                                     <Contrast />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={[styles.sideIcon,
-                                activeIcon == 'Crop' && styles.activeTab
-                                ]} onPress={() => { setActiveIcon('Crop') }}>
+                                <TouchableOpacity
+                                    style={[styles.sideIcon, activeIcon === 'Crop' && styles.activeTab]}
+                                    onPress={() => setActiveIcon('Crop')}
+                                >
                                     <Crop />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={[styles.sideIcon,
-                                activeIcon == 'Undo' && styles.activeTab
-                                ]} onPress={() => { setActiveIcon('Undo') }}>
+                                <TouchableOpacity
+                                    style={[styles.sideIcon, activeIcon === 'Undo' && styles.activeTab]}
+                                    onPress={() => setActiveIcon('Undo')}
+                                >
                                     <Undo />
                                 </TouchableOpacity>
                             </View>
-
                         </>
-
                     )}
 
                     <TouchableOpacity
                         style={styles.galleryBtn}
-                        onPress={() => navigation.navigate("PhotoShare")}
+                        onPress={() => navigation.navigate('PhotoShare')}
                     >
                         <Gallery />
                     </TouchableOpacity>
@@ -248,16 +241,16 @@ const ClickPhoto = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
 
-                {/* Bottom Edit Menu */}
                 {isEditingUI && (
                     <PhotoEditMenu
                         onClose={() => setIsEditingUI(false)}
                         brightness={brightness}
                         onBrightnessChange={handleBrightnessChange}
+                        contrast={contrast}
+                        onContrastChange={handleContrastChange}
                         photoUri={photo}
                     />
                 )}
-
             </SafeAreaView>
         </SafeAreaProvider>
     );
@@ -272,17 +265,9 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: '100%',
         height: '100%',
-        position: 'relative'
+        position: 'relative',
     },
     image: { width: '100%', height: '100%' },
-    brightnessOverlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        pointerEvents: 'none',
-    },
     shutter: {
         width: 80,
         height: 80,
@@ -360,14 +345,12 @@ const styles = StyleSheet.create({
     },
     usePhotoButton: { backgroundColor: '#4CAF50' },
     actionButtonText: { color: 'white', fontSize: 14, fontWeight: '500' },
-
-    // side icon
     sideIcons: {
         position: 'absolute',
         right: 20,
         top: 100,
         marginTop: -80,
-        gap: 15
+        gap: 15,
     },
     sideIcon: {
         backgroundColor: 'rgba(255,255,255,0.3)',
@@ -376,10 +359,9 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
-
     activeTab: {
         backgroundColor: '#ffffff',
-    }
+    },
 });

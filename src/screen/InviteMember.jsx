@@ -92,7 +92,7 @@ const CreateEventThree = ({ navigation, route }) => {
         <View style={styles.buttonRow}>
           <ThemeButton
             text="Copy Links"
-            onPress={() => navigation.navigate("FolderTitle")}
+            onPress={() => navigation.navigate("MyTabs")}
             style={{ width: "100%" }}
           />
         </View>

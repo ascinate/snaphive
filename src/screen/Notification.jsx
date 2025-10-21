@@ -20,7 +20,7 @@ const MemberList = ({ navigation }) => {
                 <TopNavbar />
                 <ScrollView style={styles.scrollContainer}>
                     <View>
-                        <BackNavigator width={20} height={20} style={{marginTop:10}}  onPress={() => navigation.goBack()}/>
+                        <BackNavigator width={20} height={20} style={{ marginTop: 10 }} onPress={() => navigation.goBack()} />
                         <Text style={{ fontSize: 18, fontWeight: 600, marginTop: 10 }}>Notifications</Text>
                     </View>
 

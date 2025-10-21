@@ -37,8 +37,8 @@ const Login = ({ navigation }) => {
     return (
         <SafeAreaProvider style={styles.container}>
             <Logo />
-            <CustomText weight='medium' style={[styles.description, { paddingInline:32 }]}>
-                Login to your account in Snaphive to start Photo and video share
+            <CustomText weight='medium' style={styles.description}>
+                Reset your password to regain access to your account
             </CustomText>
 
             <TextInput style={styles.emailInput}
@@ -47,36 +47,13 @@ const Login = ({ navigation }) => {
                 placeholder='Enter your email or phone number'
                 keyboardType='email-address'
                 autoCapitalize='none' />
-            <TextInput style={styles.emailInput}
-                value={password}
-                onChangeText={setPassword}
-                placeholder='Create your password'
-                secureTextEntry={true} />
-
-            <View style={{ width: '100%', marginTop: 10 }}>
-                <TouchableWithoutFeedback>
-                    <CustomText weight='medium' style={{ color: '#111a94ff', textAlign: 'left' }} onPress={() => navigation.navigate("ForgotPassword")}>
-                        Forgot your password ?
-                    </CustomText>
-                </TouchableWithoutFeedback>
-            </View>
-
 
             <ThemeButton
-                text="Continue →"
-                onPress={(handleContinue)}
+                text="Get OTP →"
+         
                 style={{ width: "100%", marginTop: 20 }}
+                    onPress={() => navigation.navigate("NewPassword")}
             />
-
-
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                <CustomText weight='medium' style={{ color: '#000000ff' }}>Don’t have an account ?  </CustomText>
-                <TouchableWithoutFeedback >
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('Signup')}>
-                        <CustomText weight="bold" style={[styles.continueTxt, { fontWeight: 600 }]}>Sign up</CustomText>
-                    </TouchableWithoutFeedback>
-                </TouchableWithoutFeedback>
-            </View>
 
 
             <CustomText weight='medium' style={[styles.description, { position: 'absolute', bottom: 20, textAlign: 'center',fontSize:14 }]}>
@@ -96,7 +73,7 @@ const styles = StyleSheet.create({
     flex: { flexDirection: "row", justifyContent: "center", alignItems: 'center', marginBottom: 24 },
     logo: { width: 50, height: 50, resizeMode: "contain", marginRight: 10 },
     title: { fontSize: 35, color: '#000', fontWeight: '700', textAlign: 'center', },
-    description: { fontSize: 16, color: '#646464', textAlign: 'center', width: '100%' },
+    description: { paddingInline:32,fontSize: 16, color: '#646464', textAlign: 'center', width: '100%' },
 
     emailInput: {
         marginTop: 36,
@@ -111,9 +88,6 @@ const styles = StyleSheet.create({
         paddingLeft: 27,
 
     },
-
-
-
 });
 
 export default Login;

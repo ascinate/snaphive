@@ -44,6 +44,8 @@ import Language from "./src/screen/Language";
 import MyFriend from "./src/screen/MyFriend";
 import EditProfile from "./src/screen/EditProfile";
 import Chat from "./src/screen/Chat";
+import ForgotPassword from "./src/screen/ForgotPassword";
+import NewPassword from "./src/screen/NewPassword";
 //demo camera ui
 import ClickPhotoTwo from "./src/screen/ClickPhotoTwo";
 import ClickPhotoThree from "./src/screen/ClickPhotoThree";
@@ -121,6 +123,10 @@ const App = () => {
           <Stack.Screen name="EditProfile" component={EditProfile}  options={{ headerShown: false }}
 />
           <Stack.Screen name="Chat" component={Chat}  options={{ headerShown: false }}
+ />
+           <Stack.Screen name="ForgotPassword" component={ForgotPassword}  options={{ headerShown: false }}
+ />
+            <Stack.Screen name="NewPassword" component={NewPassword}  options={{ headerShown: false }}
  />
           {/* demo camera ui */}
           <Stack.Screen name="ClickPhotoTwo" component={ClickPhotoTwo} options={{ headerShown: false }}/>

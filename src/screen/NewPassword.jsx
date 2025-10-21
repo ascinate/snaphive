@@ -9,9 +9,9 @@ const logo = require("../../assets/logo.png");
 
 const Login = ({ navigation }) => {
 
-    const [userID, setUserID] = useState('');
+    const [OTP, setOTP] = useState('');
     const [password, setPassword] = useState('');
-
+    const [showPassword, setShowPassword] = useState(false);
 
     const isValidEmail = (text) => /\S+@\S+\.\S+/.test(text);
     const isValidPhone = (text) => /^[0-9]{10,15}$/.test(text);
@@ -37,49 +37,51 @@ const Login = ({ navigation }) => {
     return (
         <SafeAreaProvider style={styles.container}>
             <Logo />
-            <CustomText weight='medium' style={[styles.description, { paddingInline:32 }]}>
-                Login to your account in Snaphive to start Photo and video share
-            </CustomText>
+  
 
             <TextInput style={styles.emailInput}
-                value={userID}
-                onChangeText={setUserID}
-                placeholder='Enter your email or phone number'
+                value={OTP}
+                onChangeText={setOTP}
+                placeholder='OTP sent to your email or phone number'
                 keyboardType='email-address'
                 autoCapitalize='none' />
-            <TextInput style={styles.emailInput}
-                value={password}
-                onChangeText={setPassword}
-                placeholder='Create your password'
-                secureTextEntry={true} />
 
-            <View style={{ width: '100%', marginTop: 10 }}>
+
+            <View style={{ width: '97%', marginTop: 10 }}>
                 <TouchableWithoutFeedback>
-                    <CustomText weight='medium' style={{ color: '#111a94ff', textAlign: 'left' }} onPress={() => navigation.navigate("ForgotPassword")}>
-                        Forgot your password ?
-                    </CustomText>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <CustomText weight='medium' style={{ color: '#5e5e5eff', textAlign: 'left' }} >
+                            Didn't get a code ?
+                        </CustomText>
+                        <CustomText weight='medium' style={{ color: '#111a94ff', textAlign: 'left', marginLeft: 4 }} >
+                            Resend
+                        </CustomText>
+                    </View>
+
                 </TouchableWithoutFeedback>
             </View>
 
 
-            <ThemeButton
-                text="Continue →"
-                onPress={(handleContinue)}
-                style={{ width: "100%", marginTop: 20 }}
+            <TextInput
+                style={styles.emailInput}
+                value={password}
+                onChangeText={setPassword}
+                placeholder='New Password'
+                secureTextEntry={true} 
+                autoCapitalize='none'
             />
 
 
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                <CustomText weight='medium' style={{ color: '#000000ff' }}>Don’t have an account ?  </CustomText>
-                <TouchableWithoutFeedback >
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('Signup')}>
-                        <CustomText weight="bold" style={[styles.continueTxt, { fontWeight: 600 }]}>Sign up</CustomText>
-                    </TouchableWithoutFeedback>
-                </TouchableWithoutFeedback>
-            </View>
+
+            <ThemeButton
+                text="Login →"
+
+                style={{ width: "100%", marginTop: 20 }}
+                onPress={() => navigation.navigate("Login")}
+            />
 
 
-            <CustomText weight='medium' style={[styles.description, { position: 'absolute', bottom: 20, textAlign: 'center',fontSize:14 }]}>
+            <CustomText weight='medium' style={[styles.description, { position: 'absolute', bottom: 20, textAlign: 'center', fontSize: 14 }]}>
                 By continuing I accept Selfso's Terms of Use
                 and
                 <TouchableWithoutFeedback >
@@ -99,7 +101,7 @@ const styles = StyleSheet.create({
     description: { fontSize: 16, color: '#646464', textAlign: 'center', width: '100%' },
 
     emailInput: {
-        marginTop: 36,
+        marginTop: 32,
         width: "100%",
         borderColor: '#ccc',
         borderWidth: 1,
@@ -111,9 +113,6 @@ const styles = StyleSheet.create({
         paddingLeft: 27,
 
     },
-
-
-
 });
 
 export default Login;

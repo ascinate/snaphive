@@ -1,5 +1,7 @@
+
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native'
-import React from 'react'
+import { RefreshControl } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import TopNavbar from "../components/TopNavbar";
 import CustomText from '../components/CustomText';
@@ -31,11 +33,21 @@ const members = [
 ];
 
 const MemberList = ({ navigation }) => {
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 1500);
+    }, []);
     return (
         <SafeAreaProvider>
             <SafeAreaView>
                 <TopNavbar />
-                <ScrollView contentContainerStyle={{ paddingBottom: 200, backgroundColor: '#ffffff' }}>
+                <ScrollView contentContainerStyle={{ paddingBottom: 200, backgroundColor: '#ffffff' }} refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> // ✅ added
+                }>
 
                     {/* ---Tabs Navigation---- */}
                     <View style={{ flexDirection: 'row', gap: 10, marginTop: 20, paddingLeft: 20 }}>

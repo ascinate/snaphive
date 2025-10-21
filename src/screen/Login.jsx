@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableWithoutFeedback, TouchableHighlight, Alert } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+
+//components
 import Logo from '../components/Logo';
 import ThemeButton from '../components/ThemeButton';
 import CustomText from '../components/CustomText';

@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
         paddingBottom: 40,
         zIndex: 15,
     },
-    brightnessSection: { marginBottom: 25 },
+    brightnessSection: { marginBottom: 25,height: 120 },
     brightnessHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',

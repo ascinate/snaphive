@@ -18,12 +18,12 @@ const Login = ({ navigation }) => {
 
     const handleContinue = () => {
         if (!userID.trim()) {
-            Alert.alert("login guide", "Please enter your email or phone number");
+            Alert.alert("Error", "Please enter your email or phone number");
             return;
         }
 
         if (!isValidEmail(userID) && !isValidPhone(userID)) {
-            Alert.alert("login guide", "Please enter a valid email or phone number");
+            Alert.alert("Error", "Please enter your password");
             return;
         }
 
@@ -53,6 +53,14 @@ const Login = ({ navigation }) => {
                 placeholder='Create your password'
                 secureTextEntry={true} />
 
+            <View style={{ width: '100%', marginTop: 10 }}>
+                <TouchableWithoutFeedback>
+                    <CustomText weight='medium' style={{ color: '#111a94ff', textAlign: 'left' }}>
+                        Forgot your password ?
+                    </CustomText>
+                </TouchableWithoutFeedback>
+            </View>
+
 
             <ThemeButton
                 text="Continue →"
@@ -71,11 +79,11 @@ const Login = ({ navigation }) => {
             </View>
 
 
-            <CustomText weight='medium' style={[styles.description, { marginTop: 80 }]}>
+            <CustomText weight='medium' style={[styles.description, { position: 'absolute', bottom: 20, textAlign: 'center',fontSize:14 }]}>
                 By continuing I accept Selfso's Terms of Use
                 and
                 <TouchableWithoutFeedback >
-                    <CustomText weight='bold' style={[styles.continueTxt, { fontWeight: 600, textDecorationLine: "underline", color: "#000000ff" }]}> Privacy Policy</CustomText>
+                    <CustomText weight='medium' style={[styles.continueTxt, { fontWeight: 600, textDecorationLine: "underline", color: "#000000ff" }]}> Privacy Policy</CustomText>
                 </TouchableWithoutFeedback>
             </CustomText>
 

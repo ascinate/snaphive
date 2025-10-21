@@ -7,6 +7,7 @@ import TopNavbar from "../components/TopNavbar";
 
 import CreateAlbum from "../../assets/svg/createAlbum.svg";
 import CreateFolder from "../../assets/svg/createFolder.svg";
+import BackNavigator from "../../assets/svg/backNavigator.svg";
 //Image
 const dp = require("../../assets/dp.jpg");
 const dp2 = require("../../assets/dp2.webp");
@@ -19,6 +20,7 @@ const MemberList = ({ navigation }) => {
                 <TopNavbar />
                 <ScrollView style={styles.scrollContainer}>
                     <View>
+                        <BackNavigator width={20} height={20} style={{marginTop:10}}  onPress={() => navigation.goBack()}/>
                         <Text style={{ fontSize: 18, fontWeight: 600, marginTop: 10 }}>Notifications</Text>
                     </View>
 

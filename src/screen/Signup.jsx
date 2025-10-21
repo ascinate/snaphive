@@ -129,7 +129,7 @@ const Signup = ({ navigation }) => {
 
       {/* Already a user */}
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-        <CustomText style={{ fontSize: width * 0.04 }}>Already a user? </CustomText>
+        <CustomText style={{ fontSize: width * 0.04 }}>All ready have an account ? </CustomText>
         <TouchableWithoutFeedback onPress={() => navigation.navigate('Login')}>
           <View>
             <CustomText
@@ -143,10 +143,11 @@ const Signup = ({ navigation }) => {
       </View>
 
       {/* Terms & Privacy */}
-      <Text style={[styles.description, { marginTop: height * 0.07, fontSize: width * 0.035 }]} onPress={() => navigation.navigate('MyTabs')}>
+      <CustomText style={[styles.description, { fontSize: width * 0.035 ,position:'fixed', top:100}]} onPress={() => navigation.navigate('MyTabs')}>
         By continuing I accept Selfso's Terms of Use and
         <TouchableWithoutFeedback>
-          <Text
+          <CustomText
+          weight='medium'
             style={[
               styles.continueTxt,
               {
@@ -158,9 +159,9 @@ const Signup = ({ navigation }) => {
             ]}
           >
             {' '}Privacy Policy
-          </Text>
+          </CustomText>
         </TouchableWithoutFeedback>
-      </Text>
+      </CustomText>
 
     </SafeAreaProvider>
   );
@@ -177,6 +178,7 @@ const styles = StyleSheet.create({
     color: '#646464',
     textAlign: 'center',
     width: '100%',
+
   },
   input: {
     width: '100%',

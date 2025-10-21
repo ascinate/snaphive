@@ -15,21 +15,24 @@ import PhotoEditSideIcons from '../components/PhotoEditSideIcons';
 import Gallery from '../../assets/svg/gallery.svg';
 import Settings from '../../assets/svg/settings.svg';
 import Adjustment from '../../assets/svg/adjustment.svg';
-import Contrast from '../../assets/svg/contrast.svg';
+import CameraSwitch from '../../assets/svg/cameraswitch.svg';
 import Undo from '../../assets/svg/undo.svg';
 import Crop from '../../assets/svg/crop.svg';
 
 const ClickPhoto = ({ navigation }) => {
     const [photo, setPhoto] = useState(null);
     const [showCamera, setShowCamera] = useState(true);
+
     const [isSaving, setIsSaving] = useState(false);
     const [isEditingUI, setIsEditingUI] = useState(false);
     const [brightness, setBrightness] = useState(50);
     const [contrast, setContrast] = useState(50);
     const [activeIcon, setActiveIcon] = useState('brightness');
+    const [cameraPosition, setCameraPosition] = useState('back');
 
     const cameraRef = useRef(null);
-    const device = useCameraDevice('back');
+    const device = useCameraDevice(cameraPosition);
+
     const { hasPermission, requestPermission } = useCameraPermission();
 
     useEffect(() => {
@@ -207,12 +210,7 @@ const ClickPhoto = ({ navigation }) => {
                                 >
                                     <Adjustment />
                                 </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[styles.sideIcon, activeIcon === 'contrast' && styles.activeTab]}
-                                    onPress={() => setActiveIcon('contrast')}
-                                >
-                                    <Contrast />
-                                </TouchableOpacity>
+
                                 <TouchableOpacity
                                     style={[styles.sideIcon, activeIcon === 'Crop' && styles.activeTab]}
                                     onPress={() => setActiveIcon('Crop')}
@@ -233,12 +231,26 @@ const ClickPhoto = ({ navigation }) => {
                         style={styles.galleryBtn}
                         onPress={() => navigation.navigate('PhotoShare')}
                     >
-                        <Gallery />
+                        <Gallery width={25} height={25} />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.closeBtn} onPress={() => navigation.goBack()}>
                         <Text style={styles.closeText}>X</Text>
                     </TouchableOpacity>
+
+                    {showCamera && (
+
+                        <TouchableOpacity
+                            style={styles.cameraSwitchBtn}
+                            onPress={() =>
+                                setCameraPosition((prev) => (prev === 'back' ? 'front' : 'back'))
+                            }
+
+                        >
+                            <CameraSwitch width={25} height={25} />
+                        </TouchableOpacity>
+                    )}
+
                 </View>
 
                 {isEditingUI && (
@@ -251,6 +263,8 @@ const ClickPhoto = ({ navigation }) => {
                         photoUri={photo}
                     />
                 )}
+
+
             </SafeAreaView>
         </SafeAreaProvider>
     );
@@ -325,6 +339,21 @@ const styles = StyleSheet.create({
         zIndex: 15,
     },
     closeText: { color: 'white', fontSize: 18, fontWeight: 'bold' },
+
+    cameraSwitchBtn: {
+        width: 40,
+        height: 40,
+        backgroundColor: '#FFFFFF4D',
+        borderRadius: 20,
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 15,
+    },
+
+
     permissionText: { color: 'white', fontSize: 16, textAlign: 'center', marginTop: 50 },
     photoActions: {
         position: 'absolute',

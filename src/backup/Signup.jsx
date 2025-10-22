@@ -11,7 +11,6 @@ import {
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // components
-import { registerUser } from "../API/API"; 
 import CustomText from '../components/CustomText';
 import ThemeButton from '../components/ThemeButton';
 import Logo from '../components/Logo';
@@ -29,41 +28,23 @@ const Signup = ({ navigation }) => {
   const isValidPhone = (text) => /^[0-9]{10,15}$/.test(text);
 
   const handleContinue = () => {
-      if (!userID.trim()) {
-        Alert.alert("Create account guide", "Please enter your email or phone number");
-        return;
-      }
-  
-      if (!isValidEmail(userID) && !isValidPhone(userID)) {
-        Alert.alert("Create account guide", "Please enter a valid email or phone number");
-        return;
-      }
-  
-      if (!password.trim()) {
-        Alert.alert("Create account guide", "Please create a password");
-        return;
-      }
-  
-      registerUser({
-        name: userID.split("@")[0],
-        email: userID,
-        password,
-      })
-        .then((res) => {
-          console.log("Register Response:", res.data);
-          if (res.data && res.data.message.includes("OTP sent")) {
-            Alert.alert("Success", "OTP sent to your email", [
-              { text: "OK", onPress: () => navigation.navigate("OTP", { email: userID }) },
-            ]);
-          } else {
-            Alert.alert("Error", res.data.message || "Something went wrong");
-          }
-        })
-        .catch((err) => {
-          console.log("Register error:", err.response?.data || err.message);
-          Alert.alert("Error", err.response?.data?.message || "Registration failed");
-        });
-    };
+    if (!userID.trim()) {
+      Alert.alert("Create account guide", "Please enter your email or phone number");
+      return;
+    }
+
+    if (!isValidEmail(userID) && !isValidPhone(userID)) {
+      Alert.alert("Create account guide", "Please enter a valid email or phone number");
+      return;
+    }
+
+    if (!password.trim()) {
+      Alert.alert("Create account guide", "Please create a password");
+      return;
+    }
+    navigation.navigate('OTP');
+  };
+
   return (
     <SafeAreaProvider style={[styles.container, { padding: width * 0.05 }]}>
 
@@ -109,8 +90,6 @@ const Signup = ({ navigation }) => {
           secureTextEntry={true}
         />
       </View>
-
-      
 
       {/* Continue Button */}
       <ThemeButton

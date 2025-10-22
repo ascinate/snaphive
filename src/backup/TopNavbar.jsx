@@ -7,31 +7,26 @@ import Logo from './Logo'
 // Import your SVGs
 
 import Bell from '../../assets/svg/bell.svg';
-const TopNav = ({ notificationCount = 0 }) => {
-  const navigation = useNavigation();
-  return (
-    <View style={styles.container}>
-      {/* Left Section: Logo */}
-      <View style={styles.leftSection}>
-        <Logo style={{ width: 120, height: 30 }} />
-      </View>
+const TopNav = () => {
 
-      {/* Right Section: Notification */}
-      <TouchableOpacity
-        style={styles.bellWrapper}
-        onPress={() => navigation.navigate("Notification")}
-      >
-        <Bell width={28} height={28} />
-        {notificationCount > 0 && (
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{notificationCount}</Text>
-          </View>
-        )}
-      </TouchableOpacity>
-    </View>
-  );
+    const navigation = useNavigation();
+    return (
+
+        <View style={styles.container}>
+            {/* Left Section: Logo + Text */}
+            <View style={styles.leftSection}>
+                <Logo style={{ width: 120, height: 30 }} />
+            </View>
+            {/* Right Section: Notification */}
+            <TouchableOpacity style={styles.bellWrapper} onPress={() => navigation.navigate("Notification")}>
+                <Bell width={28} height={28} />
+                <View style={styles.badge}>
+                    <Text style={styles.badgeText}>1</Text>
+                </View>
+            </TouchableOpacity>
+        </View>
+    );
 };
-
 
 const styles = StyleSheet.create({
     container: {

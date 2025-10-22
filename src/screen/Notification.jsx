@@ -11,6 +11,11 @@ import CreateFolder from "../../assets/svg/createFolder.svg";
 // Local images
 const dp = require("../../assets/dp.jpg");
 const dp2 = require("../../assets/dp2.webp");
+const dp3 = require("../../assets/dp3.jpg");
+const dp4 = require("../../assets/dp4.jpg");
+const dp5 = require("../../assets/dp5.jpg");
+const dp6 = require("../../assets/dp6.jpg");
+const dp7 = require("../../assets/dp7.jpg");
 
 const MemberList = ({ navigation }) => {
     const [notifications, setNotifications] = useState([]);
@@ -22,17 +27,17 @@ const MemberList = ({ navigation }) => {
                     id: 1,
                     name: 'Demola Aoki',
                     time: '4hrs',
-                    image: dp, 
+                    image: dp,
                     iconType: 'album',
                 },
                 {
                     id: 2,
                     name: 'Quency Demola',
                     time: '4hrs',
-                    image: dp2, 
+                    image: dp2,
                     iconType: 'folder',
                 },
-                
+
             ];
             setNotifications(data);
         };
@@ -42,7 +47,8 @@ const MemberList = ({ navigation }) => {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
-                <TopNavbar />
+             <TopNavbar notificationCount={notifications.length} />
+
 
                 <ScrollView style={styles.scrollContainer}>
                     <View>

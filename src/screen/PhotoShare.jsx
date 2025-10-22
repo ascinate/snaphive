@@ -18,12 +18,28 @@ import { useFocusEffect } from '@react-navigation/native';
 import TopNav from '../components/TopNavbar';
 import ThemeButton from '../components/ThemeButton';
 
+
 const { width, height } = Dimensions.get('window');
 
 const PhotoShare = ({ navigation }) => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+
+
+  const handleLongPress = (img) => {
+    setSelectedImages((prevSelected) => {
+      if (prevSelected.some((i) => i.uri === img.uri)) {
+        // Deselect if already selected
+        return prevSelected.filter((i) => i.uri !== img.uri);
+      } else {
+        // Select new image
+        return [...prevSelected, img];
+      }
+    });
+  };
+
 
   // Request permissions
   const requestPermissions = async () => {
@@ -186,14 +202,30 @@ const PhotoShare = ({ navigation }) => {
           <View style={styles.gridContainer}>
             {images.map((img, index) => (
               <TouchableOpacity
-                key={`${img.uri}-${index}`}
-                style={styles.imgContainer}
+                key={img.uri}
+
+                style={[
+                  styles.imgContainer,
+                  {
+                    borderWidth: 3, // Always reserve border space
+                    borderColor: selectedImages.some((i) => i.uri === img.uri) ? '#007AFF' : 'transparent',
+                  },
+                ]}
+
                 onPress={() => {
-                  console.log('Selected image:', img.uri);
+                  // Deselect only if it's already selected
+                  if (selectedImages.some((i) => i.uri === img.uri)) {
+                    setSelectedImages((prevSelected) =>
+                      prevSelected.filter((i) => i.uri !== img.uri)
+                    );
+                  }
                 }}
+                onLongPress={() => handleLongPress(img)}
+
               >
                 <Image source={{ uri: img.uri }} style={styles.img} />
               </TouchableOpacity>
+
             ))}
           </View>
         ) : (
@@ -203,17 +235,7 @@ const PhotoShare = ({ navigation }) => {
         )}
       </ScrollView>
 
-      {/* Fixed Bottom Action Bar */}
-      <View style={styles.bottomBar}>
-        <ThemeButton
-          style={styles.continueBtn}
-          text="Continue →"
-          onPress={() => navigation.navigate('CreateEvent')}
-        />
-        <View>
-          <Text style={{ fontWeight: 800, fontSize: 28 }}>...</Text>
-        </View>
-      </View>
+
     </SafeAreaView>
   );
 };

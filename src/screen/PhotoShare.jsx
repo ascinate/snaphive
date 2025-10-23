@@ -233,9 +233,15 @@ const PhotoShare = ({ navigation }) => {
             <Text style={styles.emptyText}>No photos found</Text>
           </View>
         )}
+
+        
       </ScrollView>
 
-
+        <ThemeButton
+          style={styles.continueBtn}
+          text="Continue →"
+          onPress={() => navigation.navigate('CreateEvent')}
+        />
     </SafeAreaView>
   );
 };

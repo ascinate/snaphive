@@ -26,39 +26,50 @@ const CreateEventFive = ({ navigation }) => {
       navigation={navigation}
       image={createEvent}
       folderName="Janifer Danis"
-      date="+91 1841 510 1450"          
-     RightIcon={<Pencil height={16} width={16} onPress={() => navigation.navigate("EditProfile")} />}
+      date="+91 1841 510 1450"
+      RightIcon={<Pencil height={16} width={16} onPress={() => navigation.navigate("EditProfile")} />}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         {/* Account Section */}
-          <CustomText weight="medium" style={styles.category}>Account</CustomText>
+        <CustomText weight="medium" style={styles.category}>Account</CustomText>
         <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("Language")}>
           <View style={styles.iconBox}><Language width={20} height={20} /></View>
           <View style={styles.textBox}>
-              <CustomText weight="bold" style={styles.title}>Language</CustomText>
-              <CustomText weight="medium" style={styles.subtitle}>English</CustomText>
+            <CustomText weight="bold" style={styles.title}>Language</CustomText>
+            <CustomText weight="medium" style={styles.subtitle}>English</CustomText>
+          </View>
+          <RightArrow />
+        </TouchableOpacity>
+
+
+
+        <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("Landing")}>
+          <View style={styles.iconBox}><QR width={20} height={20} /></View>
+          <View style={styles.textBox}>
+            <CustomText weight="bold" style={styles.title}>Logout</CustomText>
+            <CustomText weight="medium" style={styles.subtitle}>redirect to landing page</CustomText>
           </View>
           <RightArrow />
         </TouchableOpacity>
 
         {/* Benefit Section */}
-          <CustomText weight="medium" style={styles.category}>Benefit</CustomText>
+        <CustomText weight="medium" style={styles.category}>Benefit</CustomText>
         <TouchableOpacity style={styles.rowProfile} onPress={() => setModalVisible(true)}>
           <View style={styles.iconBox}><Premium width={20} height={20} /></View>
           <View style={styles.textBox}>
-              <CustomText weight="bold" style={styles.title}>Premium</CustomText>
-              <CustomText weight="medium" style={styles.subtitle}>Unlock all features</CustomText>
+            <CustomText weight="bold" style={styles.title}>Premium</CustomText>
+            <CustomText weight="medium" style={styles.subtitle}>Unlock all features</CustomText>
           </View>
           <RightArrow />
         </TouchableOpacity>
 
         {/* Other Section */}
-          <CustomText weight="medium" style={styles.category}>Other</CustomText>
+        <CustomText weight="medium" style={styles.category}>Other</CustomText>
         <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("ContactUs")}>
           <View style={styles.iconBox}><NavMessage width={20} height={20} /></View>
           <View style={styles.textBox}>
-              <CustomText weight="bold" style={styles.title}>Contact Us</CustomText>
-              <CustomText weight="medium" style={styles.subtitle}>Get support anytime</CustomText>
+            <CustomText weight="bold" style={styles.title}>Contact Us</CustomText>
+            <CustomText weight="medium" style={styles.subtitle}>Get support anytime</CustomText>
           </View>
           <RightArrow />
         </TouchableOpacity>
@@ -66,8 +77,8 @@ const CreateEventFive = ({ navigation }) => {
         <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("YourOpinion")}>
           <View style={styles.iconBox}><Heart width={20} height={20} /></View>
           <View style={styles.textBox}>
-              <CustomText weight="bold" style={styles.title}>Give us feedback</CustomText>
-              <CustomText weight="medium" style={styles.subtitle}>Love the app? Leave us a review</CustomText>
+            <CustomText weight="bold" style={styles.title}>Give us feedback</CustomText>
+            <CustomText weight="medium" style={styles.subtitle}>Love the app? Leave us a review</CustomText>
           </View>
           <RightArrow />
         </TouchableOpacity>
@@ -75,11 +86,14 @@ const CreateEventFive = ({ navigation }) => {
         <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("NewPage")}>
           <View style={styles.iconBox}><Share width={20} height={20} /></View>
           <View style={styles.textBox}>
-              <CustomText weight="bold" style={styles.title}>Share the app</CustomText>
-              <CustomText weight="medium" style={styles.subtitle}>Invite your friends to try Airbum</CustomText>
+            <CustomText weight="bold" style={styles.title}>Share the app</CustomText>
+            <CustomText weight="medium" style={styles.subtitle}>Invite your friends to try Airbum</CustomText>
           </View>
           <RightArrow />
         </TouchableOpacity>
+
+
+
 
         {/* Modal */}
         <PremiumModal

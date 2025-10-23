@@ -121,6 +121,14 @@ const ClickPhoto = ({ navigation }) => {
         setContrast(value);
     };
 
+
+    const handleUndo = () => {
+        setBrightness(50);
+        setContrast(50);
+        setIsEditingUI(false);
+        setActiveIcon(null);
+    }
+
     if (!hasPermission) {
         return (
             <SafeAreaProvider>
@@ -219,7 +227,7 @@ const ClickPhoto = ({ navigation }) => {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={[styles.sideIcon, activeIcon === 'Undo' && styles.activeTab]}
-                                    onPress={() => setActiveIcon('Undo')}
+                                    onPress={handleUndo}
                                 >
                                     <Undo />
                                 </TouchableOpacity>

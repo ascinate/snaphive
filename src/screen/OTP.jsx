@@ -7,7 +7,7 @@ import { verifyOtp } from '../API/API';
 
 const OTP = ({ navigation, route }) => {
   const { email } = route.params || {};
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otp, setOtp] = useState(['', '', '', '']);
   const inputRefs = useRef([]);
 
   const handleChange = (text, index) => {
@@ -15,13 +15,13 @@ const OTP = ({ navigation, route }) => {
     newOtp[index] = text.slice(-1); // one digit
     setOtp(newOtp);
 
-    if (text && index < 5) inputRefs.current[index + 1].focus();
+    if (text && index < 3) inputRefs.current[index + 1].focus();
   };
 
 const handleVerify = async () => {
     const finalOtp = otp.join('');
-    if (finalOtp.length < 6) {
-      Alert.alert('Invalid', 'Please enter the complete 6-digit OTP');
+    if (finalOtp.length < 4) {
+      Alert.alert('Invalid', 'Please enter the complete 4-digit OTP');
       return;
     }
 
@@ -48,7 +48,7 @@ const handleVerify = async () => {
       </View>
 
       <CustomText weight="medium" style={styles.description}>
-        Enter the six-digit code sent to your email.
+        Enter the Four-digit code sent to your email.
       </CustomText>
 
       <View style={styles.otpRow}>

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, Alert, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ThemeButton from '../components/ThemeButton';
 import CustomText from '../components/CustomText';
 import { verifyOtp } from '../API/API';
@@ -29,6 +30,8 @@ const handleVerify = async () => {
       const res = await verifyOtp({ email, otp: finalOtp });
       console.log("OTP Verify Response:", res.data);
       if (res?.data?.message) {
+            await AsyncStorage.setItem('token', res.data.token);
+            await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
         Alert.alert('Success', res.data.message, [
           { text: 'OK', onPress: () => navigation.navigate('MyTabs') },
         ]);

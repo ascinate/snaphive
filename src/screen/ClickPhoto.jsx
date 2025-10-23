@@ -4,6 +4,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Camera, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { Contrast as ContrastFilter, Brightness as BrightnessFilter } from 'react-native-color-matrix-image-filters';
+import PhotoCropModal from '../components/PhotoCropModal';
 
 // Components
 import TopNav from '../components/TopNavbar';
@@ -29,6 +30,10 @@ const ClickPhoto = ({ navigation }) => {
     const [contrast, setContrast] = useState(50);
     const [activeIcon, setActiveIcon] = useState('brightness');
     const [cameraPosition, setCameraPosition] = useState('back');
+
+    // ADD THESE TWO MISSING STATE VARIABLES
+    const [showCropModal, setShowCropModal] = useState(false);
+    const [croppedPhoto, setCroppedPhoto] = useState(null);
 
     const cameraRef = useRef(null);
     const device = useCameraDevice(cameraPosition);
@@ -121,13 +126,19 @@ const ClickPhoto = ({ navigation }) => {
         setContrast(value);
     };
 
-
     const handleUndo = () => {
         setBrightness(50);
         setContrast(50);
         setIsEditingUI(false);
         setActiveIcon(null);
+        setCroppedPhoto(null);
     }
+
+    const handleCropComplete = (cropData) => {
+        setCroppedPhoto(cropData);
+        setShowCropModal(false);
+        setActiveIcon('Crop');
+    };
 
     if (!hasPermission) {
         return (
@@ -221,10 +232,11 @@ const ClickPhoto = ({ navigation }) => {
 
                                 <TouchableOpacity
                                     style={[styles.sideIcon, activeIcon === 'Crop' && styles.activeTab]}
-                                    onPress={() => setActiveIcon('Crop')}
+                                    onPress={() => setShowCropModal(true)}
                                 >
                                     <Crop />
                                 </TouchableOpacity>
+
                                 <TouchableOpacity
                                     style={[styles.sideIcon, activeIcon === 'Undo' && styles.activeTab]}
                                     onPress={handleUndo}
@@ -247,13 +259,11 @@ const ClickPhoto = ({ navigation }) => {
                     </TouchableOpacity>
 
                     {showCamera && (
-
                         <TouchableOpacity
                             style={styles.cameraSwitchBtn}
                             onPress={() =>
                                 setCameraPosition((prev) => (prev === 'back' ? 'front' : 'back'))
                             }
-
                         >
                             <CameraSwitch width={25} height={25} />
                         </TouchableOpacity>
@@ -272,6 +282,12 @@ const ClickPhoto = ({ navigation }) => {
                     />
                 )}
 
+                <PhotoCropModal
+                    visible={showCropModal}
+                    photoUri={photo}
+                    onClose={() => setShowCropModal(false)}
+                    onCropComplete={handleCropComplete}
+                />
 
             </SafeAreaView>
         </SafeAreaProvider>
@@ -360,7 +376,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         zIndex: 15,
     },
-
 
     permissionText: { color: 'white', fontSize: 16, textAlign: 'center', marginTop: 50 },
     photoActions: {

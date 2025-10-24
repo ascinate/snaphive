@@ -164,7 +164,7 @@ const Signup = ({ navigation }) => {
       </View>
 
       {/* Terms & Privacy */}
-      <CustomText style={[styles.description, { fontSize: width * 0.035, position: 'fixed', top: 100 }]} >
+      <CustomText style={[styles.description, { fontSize: width * 0.035, position: 'fixed', top: 100 }]}>
         By continuing I accept Selfso's Terms of Use and
         <TouchableWithoutFeedback>
           <CustomText
@@ -183,7 +183,6 @@ const Signup = ({ navigation }) => {
           </CustomText>
         </TouchableWithoutFeedback>
       </CustomText>
-
     </SafeAreaProvider>
   );
 };

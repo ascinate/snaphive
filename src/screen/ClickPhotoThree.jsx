@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     },
     closeBtnText: {
         fontSize: 20,
-        color: '#000000',
+        color: '#000000', 
     },
 
     // Filter Container

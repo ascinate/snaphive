@@ -21,31 +21,61 @@ const PhotoCropModal = ({ visible, photoUri, onClose, onCropComplete }) => {
   });
 
   const [imageLayout, setImageLayout] = useState(null);
+  const cropPositionRef = useRef({ x: SCREEN_WIDTH * 0.1, y: SCREEN_HEIGHT * 0.2 });
+  const cropSizeRef = useRef({ width: SCREEN_WIDTH * 0.8, height: SCREEN_HEIGHT * 0.4 });
 
+  // PanResponder for moving the crop area
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        cropPositionRef.current = { x: cropArea.x, y: cropArea.y };
+      },
       onPanResponderMove: (_, gestureState) => {
-        setCropArea((prev) => {
-          const newX = Math.max(0, Math.min(prev.x + gestureState.dx, SCREEN_WIDTH - prev.width));
-          const newY = Math.max(0, Math.min(prev.y + gestureState.dy, SCREEN_HEIGHT - prev.height));
-          return { ...prev, x: newX, y: newY };
+        const maxX = SCREEN_WIDTH - cropSizeRef.current.width;
+        const maxY = SCREEN_HEIGHT - cropSizeRef.current.height;
+        
+        const newX = Math.max(0, Math.min(cropPositionRef.current.x + gestureState.dx, maxX));
+        const newY = Math.max(0, Math.min(cropPositionRef.current.y + gestureState.dy, maxY));
+        
+        setCropArea({
+          x: newX,
+          y: newY,
+          width: cropSizeRef.current.width,
+          height: cropSizeRef.current.height,
         });
+      },
+      onPanResponderRelease: () => {
+        cropPositionRef.current = { x: cropArea.x, y: cropArea.y };
       },
     })
   ).current;
 
+  // PanResponder for resizing the crop area
   const resizeResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        cropSizeRef.current = { width: cropArea.width, height: cropArea.height };
+      },
       onPanResponderMove: (_, gestureState) => {
-        setCropArea((prev) => {
-          const newWidth = Math.max(100, Math.min(prev.width + gestureState.dx, SCREEN_WIDTH - prev.x));
-          const newHeight = Math.max(100, Math.min(prev.height + gestureState.dy, SCREEN_HEIGHT - prev.y));
-          return { ...prev, width: newWidth, height: newHeight };
+        const maxWidth = SCREEN_WIDTH - cropArea.x;
+        const maxHeight = SCREEN_HEIGHT - cropArea.y;
+        
+        const newWidth = Math.max(100, Math.min(cropSizeRef.current.width + gestureState.dx, maxWidth));
+        const newHeight = Math.max(100, Math.min(cropSizeRef.current.height + gestureState.dy, maxHeight));
+        
+        setCropArea({
+          x: cropArea.x,
+          y: cropArea.y,
+          width: newWidth,
+          height: newHeight,
         });
+      },
+      onPanResponderRelease: () => {
+        cropSizeRef.current = { width: cropArea.width, height: cropArea.height };
       },
     })
   ).current;
@@ -70,12 +100,15 @@ const PhotoCropModal = ({ visible, photoUri, onClose, onCropComplete }) => {
   };
 
   const handleReset = () => {
-    setCropArea({
+    const resetArea = {
       x: SCREEN_WIDTH * 0.1,
       y: SCREEN_HEIGHT * 0.2,
       width: SCREEN_WIDTH * 0.8,
       height: SCREEN_HEIGHT * 0.4,
-    });
+    };
+    setCropArea(resetArea);
+    cropPositionRef.current = { x: resetArea.x, y: resetArea.y };
+    cropSizeRef.current = { width: resetArea.width, height: resetArea.height };
   };
 
   return (
@@ -103,15 +136,15 @@ const PhotoCropModal = ({ visible, photoUri, onClose, onCropComplete }) => {
           />
 
           {/* Overlay */}
-          <View style={styles.overlay}>
+          <View style={styles.overlay} pointerEvents="box-none">
             {/* Top overlay */}
-            <View style={[styles.overlaySection, { height: cropArea.y }]} />
+            <View style={[styles.overlaySection, { height: cropArea.y }]} pointerEvents="none" />
 
-            {/* Middle section with left, crop area, and right */}
-            <View style={styles.middleSection}>
-              <View style={[styles.overlaySection, { width: cropArea.x }]} />
+            {/* Middle section */}
+            <View style={styles.middleSection} pointerEvents="box-none">
+              <View style={[styles.overlaySection, { width: cropArea.x }]} pointerEvents="none" />
               
-              {/* Crop Area */}
+              {/* Crop Area - this is the interactive part */}
               <View
                 style={[
                   styles.cropArea,
@@ -122,20 +155,26 @@ const PhotoCropModal = ({ visible, photoUri, onClose, onCropComplete }) => {
                 ]}
                 {...panResponder.panHandlers}
               >
-                <View style={styles.cropBorder}>
+                <View style={styles.cropBorder} pointerEvents="none">
+                  {/* Grid lines */}
+                  <View style={[styles.gridLine, styles.gridVertical1]} />
+                  <View style={[styles.gridLine, styles.gridVertical2]} />
+                  <View style={[styles.gridLine, styles.gridHorizontal1]} />
+                  <View style={[styles.gridLine, styles.gridHorizontal2]} />
+                  
                   {/* Corner handles */}
                   <View style={[styles.corner, styles.topLeft]} />
                   <View style={[styles.corner, styles.topRight]} />
                   <View style={[styles.corner, styles.bottomLeft]} />
                   <View style={[styles.corner, styles.bottomRight]} />
+                </View>
 
-                  {/* Resize handle */}
-                  <View
-                    style={styles.resizeHandle}
-                    {...resizeResponder.panHandlers}
-                  >
-                    <View style={styles.resizeIcon} />
-                  </View>
+                {/* Resize handle */}
+                <View
+                  style={styles.resizeHandle}
+                  {...resizeResponder.panHandlers}
+                >
+                  <View style={styles.resizeIcon} />
                 </View>
               </View>
 
@@ -144,6 +183,7 @@ const PhotoCropModal = ({ visible, photoUri, onClose, onCropComplete }) => {
                   styles.overlaySection,
                   { width: SCREEN_WIDTH - cropArea.x - cropArea.width },
                 ]}
+                pointerEvents="none"
               />
             </View>
 
@@ -155,6 +195,7 @@ const PhotoCropModal = ({ visible, photoUri, onClose, onCropComplete }) => {
                   height: SCREEN_HEIGHT - cropArea.y - cropArea.height,
                 },
               ]}
+              pointerEvents="none"
             />
           </View>
         </View>
@@ -207,7 +248,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   overlaySection: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   middleSection: {
     flexDirection: 'row',
@@ -219,7 +260,30 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 2,
     borderColor: '#fff',
-    borderStyle: 'dashed',
+  },
+  gridLine: {
+    position: 'absolute',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  gridVertical1: {
+    left: '33.33%',
+    width: 1,
+    height: '100%',
+  },
+  gridVertical2: {
+    left: '66.66%',
+    width: 1,
+    height: '100%',
+  },
+  gridHorizontal1: {
+    top: '33.33%',
+    width: '100%',
+    height: 1,
+  },
+  gridHorizontal2: {
+    top: '66.66%',
+    width: '100%',
+    height: 1,
   },
   corner: {
     position: 'absolute',
@@ -256,18 +320,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -15,
     right: -15,
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
     backgroundColor: '#fff',
-    borderRadius: 15,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 3,
+    borderColor: '#000',
   },
   resizeIcon: {
-    width: 10,
-    height: 10,
-    borderRightWidth: 2,
-    borderBottomWidth: 2,
+    width: 12,
+    height: 12,
+    borderRightWidth: 3,
+    borderBottomWidth: 3,
     borderColor: '#000',
     transform: [{ rotate: '-45deg' }],
   },

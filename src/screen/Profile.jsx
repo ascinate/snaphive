@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-
+import { View, Text, Alert, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+ 
 // svg
 import QR from "../../assets/svg/qr.svg";
 import Language from "../../assets/svg/language.svg";
@@ -10,6 +10,7 @@ import NavMessage from "../../assets/svg/navMessage.svg";
 import Heart from "../../assets/svg/heart.svg";
 import Share from "../../assets/svg/share.svg";
 import Pencil from "../../assets/svg/pencil.svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // components
 import FolderLayout from "../components/FolderLayout";
 import PremiumModal from "../components/PremiumModal";
@@ -17,10 +18,22 @@ import CustomText from '../components/CustomText';
 const createEvent = require("../../assets/profile.jpg");
 const beforeImage = require("../../assets/selfie.jpg");
 const afterImage = require("../../assets/dp3.jpg");
-
+ 
 const CreateEventFive = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
+const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("user");
+      Alert.alert("Logout", "You have been logged out.", [
+        { text: "OK", onPress: () => navigation.navigate("Landing") },
+      ]);
+    } catch (err) {
+      Alert.alert("Error", "Failed to logout. Please try again.");
+    }
+  };
 
+ 
   return (
     <FolderLayout
       navigation={navigation}
@@ -40,10 +53,10 @@ const CreateEventFive = ({ navigation }) => {
           </View>
           <RightArrow />
         </TouchableOpacity>
-
-
-
-        <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("Landing")}>
+ 
+ 
+ 
+        <TouchableOpacity style={styles.rowProfile} onPress={handleLogout}>
           <View style={styles.iconBox}><QR width={20} height={20} /></View>
           <View style={styles.textBox}>
             <CustomText weight="bold" style={styles.title}>Logout</CustomText>
@@ -51,7 +64,7 @@ const CreateEventFive = ({ navigation }) => {
           </View>
           <RightArrow />
         </TouchableOpacity>
-
+ 
         {/* Benefit Section */}
         <CustomText weight="medium" style={styles.category}>Benefit</CustomText>
         <TouchableOpacity style={styles.rowProfile} onPress={() => setModalVisible(true)}>
@@ -62,7 +75,7 @@ const CreateEventFive = ({ navigation }) => {
           </View>
           <RightArrow />
         </TouchableOpacity>
-
+ 
         {/* Other Section */}
         <CustomText weight="medium" style={styles.category}>Other</CustomText>
         <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("ContactUs")}>
@@ -73,7 +86,7 @@ const CreateEventFive = ({ navigation }) => {
           </View>
           <RightArrow />
         </TouchableOpacity>
-
+ 
         <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("YourOpinion")}>
           <View style={styles.iconBox}><Heart width={20} height={20} /></View>
           <View style={styles.textBox}>
@@ -82,7 +95,7 @@ const CreateEventFive = ({ navigation }) => {
           </View>
           <RightArrow />
         </TouchableOpacity>
-
+ 
         <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("NewPage")}>
           <View style={styles.iconBox}><Share width={20} height={20} /></View>
           <View style={styles.textBox}>
@@ -91,10 +104,10 @@ const CreateEventFive = ({ navigation }) => {
           </View>
           <RightArrow />
         </TouchableOpacity>
-
-
-
-
+ 
+ 
+ 
+ 
         {/* Modal */}
         <PremiumModal
           visible={modalVisible}
@@ -102,12 +115,12 @@ const CreateEventFive = ({ navigation }) => {
           beforeImage={beforeImage}
           afterImage={afterImage}
         />
-
+ 
       </ScrollView>
     </FolderLayout>
   );
 };
-
+ 
 const styles = StyleSheet.create({
   scrollContainer: { padding: 20, paddingBottom: 80 },
   category: { fontSize: 14, fontWeight: "600", color: "#666", marginBottom: 12, marginTop: 20, textTransform: "uppercase" },
@@ -117,5 +130,5 @@ const styles = StyleSheet.create({
   title: { fontSize: 16, fontWeight: "500", color: "#1C1C1C" },
   subtitle: { fontSize: 13, color: "#888", marginTop: 2 },
 });
-
+ 
 export default CreateEventFive;

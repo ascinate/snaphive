@@ -64,77 +64,81 @@ const PhotoEditMenu = ({
     return (
         <View style={styles.bottomPanel}>
             <Text style={styles.closeBtn} onPress={onClose}>X</Text>
-            <ScrollView style={styles.brightnessSection}>
+            {/* feature photo edit Container */}
+            <View>
+                <ScrollView style={styles.brightnessSection}>
 
-                {/* 🔸 Brightness Section */}
-                <View style={styles.brightnessHeader}>
-                    <CustomText weight="medium" style={styles.brightnessLabel}>
-                        Brightness • {localBrightness}
-                    </CustomText>
-                </View>
-                <View style={styles.sliderContainer}>
-                    <View style={styles.customSlider} {...brightnessResponder.panHandlers}>
-                        <View style={styles.sliderTrack}>
-                            <View style={[styles.sliderFill, { width: `${localBrightness}%` }]} />
-                            <View style={[styles.sliderThumb, { left: `${localBrightness}%` }]} />
-                        </View>
+                    {/* 🔸 Brightness Section */}
+                    <View style={styles.brightnessHeader}>
+                        <CustomText weight="medium" style={styles.brightnessLabel}>
+                            Brightness • {localBrightness}
+                        </CustomText>
                     </View>
-                    <CustomText weight="semiBold" style={styles.brightnessValue}>{localBrightness}%</CustomText>
-                </View>
-
-                {/* 🔸 Contrast Section */}
-                <View style={styles.brightnessHeader}>
-                    <CustomText weight="medium" style={styles.brightnessLabel}>
-                        Contrast • {localContrast}
-                    </CustomText>
-                </View>
-                <View style={styles.sliderContainer}>
-                    <View style={styles.customSlider} {...contrastResponder.panHandlers}>
-                        <View style={styles.sliderTrack}>
-                            <View style={[styles.sliderFill, { width: `${localContrast}%` }]} />
-                            <View style={[styles.sliderThumb, { left: `${localContrast}%` }]} />
+                    <View style={styles.sliderContainer}>
+                        <View style={styles.customSlider} {...brightnessResponder.panHandlers}>
+                            <View style={styles.sliderTrack}>
+                                <View style={[styles.sliderFill, { width: `${localBrightness}%` }]} />
+                                <View style={[styles.sliderThumb, { left: `${localBrightness}%` }]} />
+                            </View>
                         </View>
+                        <CustomText weight="semiBold" style={styles.brightnessValue}>{localBrightness}%</CustomText>
                     </View>
-                    <CustomText weight="semiBold" style={styles.brightnessValue}>{localContrast}%</CustomText>
-                </View>
 
-            </ScrollView>
+                    {/* 🔸 Contrast Section */}
+                    <View style={styles.brightnessHeader}>
+                        <CustomText weight="medium" style={styles.brightnessLabel}>
+                            Contrast • {localContrast}
+                        </CustomText>
+                    </View>
+                    <View style={styles.sliderContainer}>
+                        <View style={styles.customSlider} {...contrastResponder.panHandlers}>
+                            <View style={styles.sliderTrack}>
+                                <View style={[styles.sliderFill, { width: `${localContrast}%` }]} />
+                                <View style={[styles.sliderThumb, { left: `${localContrast}%` }]} />
+                            </View>
+                        </View>
+                        <CustomText weight="semiBold" style={styles.brightnessValue}>{localContrast}%</CustomText>
+                    </View>
 
-            {/* 🔸 Premium Tools */}
-            <View style={styles.premiumSection}>
-                <CustomText weight="medium" style={styles.premiumTitle}>Premium Tools</CustomText>
-                <View style={styles.toolsContainer}>
-                    <TouchableOpacity style={styles.premiumTool} onPress={() => setModalVisible(true)}>
-                        <View style={styles.toolIcon}>
-                            <Portrait width={24} height={24} />
-                        </View>
-                        <CustomText weight="semiBold" style={styles.toolText}>Portrait Retouch</CustomText>
-                        <View style={styles.crownIcon}>
-                            <CustomText weight="semiBold" style={styles.crownText}>👑</CustomText>
-                        </View>
-                    </TouchableOpacity>
+                </ScrollView>
+                {/* 🔸 Premium Tools */}
+                <View style={styles.premiumSection}>
+                    <CustomText weight="medium" style={styles.premiumTitle}>Premium Tools</CustomText>
+                    <View style={styles.toolsContainer}>
+                        <TouchableOpacity style={styles.premiumTool} onPress={() => setModalVisible(true)}>
+                            <View style={styles.toolIcon}>
+                                <Portrait width={24} height={24} />
+                            </View>
+                            <CustomText weight="semiBold" style={styles.toolText}>Portrait Retouch</CustomText>
+                            <View style={styles.crownIcon}>
+                                <CustomText weight="semiBold" style={styles.crownText}>👑</CustomText>
+                            </View>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.premiumTool} onPress={() => setModalVisible(true)}>
-                        <View style={styles.toolIcon}>
-                            <Hdr width={24} height={24} />
-                        </View>
-                        <CustomText weight="semiBold" style={styles.toolText}>Advanced Filters</CustomText>
-                        <View style={styles.crownIcon}>
-                            <CustomText weight="semiBold" style={styles.crownText}>👑</CustomText>
-                        </View>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.premiumTool} onPress={() => setModalVisible(true)}>
+                            <View style={styles.toolIcon}>
+                                <Hdr width={24} height={24} />
+                            </View>
+                            <CustomText weight="semiBold" style={styles.toolText}>Advanced Filters</CustomText>
+                            <View style={styles.crownIcon}>
+                                <CustomText weight="semiBold" style={styles.crownText}>👑</CustomText>
+                            </View>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.premiumTool} onPress={() => setModalVisible(true)}>
-                        <View style={styles.toolIcon}>
-                            <Filter width={24} height={24} />
-                        </View>
-                        <CustomText weight="semiBold" style={styles.toolText}>HDR Boost</CustomText>
-                        <View style={styles.crownIcon}>
-                            <CustomText weight="semiBold" style={styles.crownText}>👑</CustomText>
-                        </View>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.premiumTool} onPress={() => setModalVisible(true)}>
+                            <View style={styles.toolIcon}>
+                                <Filter width={24} height={24} />
+                            </View>
+                            <CustomText weight="semiBold" style={styles.toolText}>HDR Boost</CustomText>
+                            <View style={styles.crownIcon}>
+                                <CustomText weight="semiBold" style={styles.crownText}>👑</CustomText>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
+
+
 
             {/* 🔸 Continue Button */}
             <ThemeButton
@@ -167,7 +171,7 @@ const styles = StyleSheet.create({
         paddingBottom: 40,
         zIndex: 15,
     },
-    brightnessSection: { marginBottom: 25,height: 120 },
+    brightnessSection: { marginBottom: 25, height: 120 },
     brightnessHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',

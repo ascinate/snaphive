@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 const { width, height } = Dimensions.get("window");
@@ -11,11 +11,31 @@ import Logo from '../components/Logo'
 import Landing2 from "../../assets/svg/landing.svg";
 import LandingBtn from "../../assets/svg/landingBtn.svg";
 import LandingArrow from "../../assets/svg/landingArrow.svg";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //image
 const mainImg = require("../../assets/home-pic.png");
 
 const Landing = ({ navigation }) => {
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const user = await AsyncStorage.getItem('user');
+
+        if (token && user) {
+          navigation.replace('MyTabs');
+        } else {
+          navigation.replace('Signup');
+        }
+      } catch (error) {
+        console.log('Auto-login check error:', error);
+        navigation.replace('Signup');
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>

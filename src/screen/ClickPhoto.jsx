@@ -19,6 +19,7 @@ import Adjustment from '../../assets/svg/adjustment.svg';
 import CameraSwitch from '../../assets/svg/cameraswitch.svg';
 import Undo from '../../assets/svg/undo.svg';
 import Crop from '../../assets/svg/crop.svg';
+import CustomText from '../components/CustomText';
 
 const ClickPhoto = ({ navigation }) => {
     const [photo, setPhoto] = useState(null);
@@ -30,7 +31,7 @@ const ClickPhoto = ({ navigation }) => {
     const [contrast, setContrast] = useState(50);
     const [activeIcon, setActiveIcon] = useState('brightness');
     const [cameraPosition, setCameraPosition] = useState('back');
-
+    const [activeTab, setActiveTab] = useState('Original');
     // ADD THESE TWO MISSING STATE VARIABLES
     const [showCropModal, setShowCropModal] = useState(false);
     const [croppedPhoto, setCroppedPhoto] = useState(null);
@@ -120,10 +121,12 @@ const ClickPhoto = ({ navigation }) => {
     // Handle Brightness & Contrast change
     const handleBrightnessChange = (value) => {
         setBrightness(value);
+        setActiveTab('Enhanced')
     };
 
     const handleContrastChange = (value) => {
         setContrast(value);
+        setActiveTab('Enhanced')
     };
 
     const handleUndo = () => {
@@ -132,14 +135,17 @@ const ClickPhoto = ({ navigation }) => {
         setIsEditingUI(false);
         setActiveIcon(null);
         setCroppedPhoto(null);
+        setActiveTab('Original')
     }
 
     const handleCropComplete = (cropData) => {
         setCroppedPhoto(cropData);
         setShowCropModal(false);
         setActiveIcon('Crop');
+        setActiveTab('Enhanced')
     };
 
+    
     if (!hasPermission) {
         return (
             <SafeAreaProvider>
@@ -181,13 +187,18 @@ const ClickPhoto = ({ navigation }) => {
                         />
                     ) : (
                         <View style={styles.imageContainer}>
-                            {/* Apply contrast + brightness filters together */}
-                            <ContrastFilter amount={contrast / 50}>
-                                <BrightnessFilter amount={brightness / 50}>
-                                    <Image source={{ uri: photo }} style={styles.image} resizeMode="cover" />
-                                </BrightnessFilter>
-                            </ContrastFilter>
+                            {activeTab === 'Original' ? (
+                                <Image source={{ uri: photo }} style={styles.image} resizeMode="cover" />
+                            ) : (
+                                <ContrastFilter amount={contrast / 50}>
+                                    <BrightnessFilter amount={brightness / 50}>
+                                        <Image source={{ uri: photo }} style={styles.image} resizeMode="cover" />
+                                    </BrightnessFilter>
+                                </ContrastFilter>
+                            )}
                         </View>
+
+
                     )}
 
                     {!showCamera && (
@@ -217,7 +228,32 @@ const ClickPhoto = ({ navigation }) => {
 
                     {!showCamera && (
                         <>
-                            <PhotoEditOriginalvsEnhanced />
+                            {/* photo original vs enhanced */}
+                            <View style={styles.topTabs}>
+                                <TouchableOpacity
+                                    style={[styles.tab, activeTab === 'Original' && styles.activeTab]}
+                                    onPress={() => setActiveTab('Original')}
+                                >
+                                    <CustomText
+                                        weight="semiBold"
+                                        style={[styles.tabText, activeTab === 'Original' && styles.activeTabText]}
+                                    >
+                                        Original
+                                    </CustomText>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={[styles.tab, activeTab === 'Enhanced' && styles.activeTab]}
+                                    onPress={() => setActiveTab('Enhanced')}
+                                >
+                                    <CustomText
+                                        weight="semiBold"
+                                        style={[styles.tabText, activeTab === 'Enhanced' && styles.activeTabText]}
+                                    >
+                                        Enhanced
+                                    </CustomText>
+                                </TouchableOpacity>
+                            </View>
                             <TouchableOpacity style={styles.settingsBtn} onPress={handleEditToggle}>
                                 <Settings />
                             </TouchableOpacity>
@@ -244,6 +280,7 @@ const ClickPhoto = ({ navigation }) => {
                                     <Undo />
                                 </TouchableOpacity>
                             </View>
+
                         </>
                     )}
 
@@ -415,5 +452,34 @@ const styles = StyleSheet.create({
     },
     activeTab: {
         backgroundColor: '#ffffff',
+    },
+
+    // Photo original enhance
+
+    topTabs: {
+        position: 'absolute',
+        top: 20,
+        left: '50%',
+        flexDirection: 'row',
+        backgroundColor: 'rgba(255,255,255,0.4)',
+        borderRadius: 25,
+        padding: 4,
+        transform: [{ translateX: -100 }],
+    },
+    tab: {
+        paddingHorizontal: 20,
+        paddingVertical: 8,
+        borderRadius: 20,
+    },
+    activeTab: {
+        backgroundColor: '#fff',
+    },
+    tabText: {
+        color: '#000000ff',
+        fontSize: 14,
+        fontWeight: '500',
+    },
+    activeTabText: {
+        color: '#000',
     },
 });

@@ -15,7 +15,7 @@ const TopNav = ({ notificationCount = 0 }) => {
       <View style={styles.leftSection}>
         <Logo style={{ width: 120, height: 30 }} />
       </View>
-
+<Text>Login enable</Text>
       {/* Right Section: Notification */}
       <TouchableOpacity
         style={styles.bellWrapper}

@@ -10,5 +10,6 @@ export const verifyOtp = (data) => api.post("/verify-otp", data);
 export const loginUser = (data) => api.post("/login", data);
 export const forgotpassword = (data) => api.post("/forgot-password", data);
 export const resetpassword = (data) => api.post("/reset-password", data);
+export const resendOtp = (data) => api.post("/resend-otp", data);
 
 export default api;

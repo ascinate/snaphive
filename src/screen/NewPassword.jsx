@@ -5,9 +5,11 @@ import Logo from '../components/Logo';
 import ThemeButton from '../components/ThemeButton';
 import CustomText from '../components/CustomText';
 import { resetpassword } from '../API/API';
+import { resendOtp } from '../API/API';
+
 
 const NewPassword = ({ navigation, route }) => {
-  const { email } = route.params; // email from previous page
+  const { email } = route.params;
   const [OTP, setOTP] = useState('');
   const [password, setPassword] = useState('');
 
@@ -52,18 +54,27 @@ const NewPassword = ({ navigation, route }) => {
         autoCapitalize='none'
       />
 
-      <View style={{ width: '97%', marginTop: 10 }}>
-        <TouchableWithoutFeedback>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <CustomText weight='medium' style={{ color: '#5e5e5e' }}>
-              Didn't get a code?
-            </CustomText>
-            <CustomText weight='medium' style={{ color: '#111a94', marginLeft: 4 }}>
-              Resend
-            </CustomText>
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
+    <View style={{ width: '97%', marginTop: 10 }}>
+    <TouchableWithoutFeedback onPress={async () => {
+        try {
+        const { data } = await resendOtp({ email });
+        Alert.alert("Success", data.message);
+        } catch (err) {
+        Alert.alert("Error", err.response?.data?.message || "Failed to resend OTP");
+        }
+     }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <CustomText weight='medium' style={{ color: '#5e5e5e' }}>
+            Didn't get a code?
+        </CustomText>
+        <CustomText weight='medium' style={{ color: '#111a94', marginLeft: 4 }}>
+            Resend
+        </CustomText>
+        </View>
+    </TouchableWithoutFeedback>
+    </View>
+
+      
 
       <TextInput
         style={styles.emailInput}

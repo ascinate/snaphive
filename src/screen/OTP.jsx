@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ThemeButton from '../components/ThemeButton';
 import CustomText from '../components/CustomText';
 import { verifyOtp } from '../API/API';
+import { resendOtp } from '../API/API';
 
 const OTP = ({ navigation, route }) => {
   const { email } = route.params || {};
@@ -13,13 +14,13 @@ const OTP = ({ navigation, route }) => {
 
   const handleChange = (text, index) => {
     const newOtp = [...otp];
-    newOtp[index] = text.slice(-1); // one digit
+    newOtp[index] = text.slice(-1);
     setOtp(newOtp);
 
     if (text && index < 3) inputRefs.current[index + 1].focus();
   };
 
-const handleVerify = async () => {
+  const handleVerify = async () => {
     const finalOtp = otp.join('');
     if (finalOtp.length < 4) {
       Alert.alert('Invalid', 'Please enter the complete 4-digit OTP');
@@ -30,8 +31,8 @@ const handleVerify = async () => {
       const res = await verifyOtp({ email, otp: finalOtp });
       console.log("OTP Verify Response:", res.data);
       if (res?.data?.message) {
-            await AsyncStorage.setItem('token', res.data.token);
-            await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
+        await AsyncStorage.setItem('token', res.data.token);
+        await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
         Alert.alert('Success', res.data.message, [
           { text: 'OK', onPress: () => navigation.navigate('MyTabs') },
         ]);
@@ -74,9 +75,17 @@ const handleVerify = async () => {
         style={{ width: '100%', marginTop: 20 }}
       />
 
+
       <View style={styles.resendRow}>
         <CustomText weight="medium">Didn’t receive a code? </CustomText>
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={async () => {
+          try {
+            const { data } = await resendOtp({ email });
+            Alert.alert("Success", data.message);
+          } catch (err) {
+            Alert.alert("Error", err.response?.data?.message || "Failed to resend OTP");
+          }
+        }}>
           <View>
             <CustomText weight="Bold" style={[styles.continueTxt, { fontWeight: 600 }]}>
               Resend

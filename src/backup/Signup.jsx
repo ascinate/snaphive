@@ -51,7 +51,7 @@ const Signup = ({ navigation }) => {
       <Logo />
 
       {/* Description */}
-      <Text style={[styles.description, { fontSize: width * 0.04, paddingInline: 32 }]}>
+      <Text style={[styles.description, { fontSize: width * 0.04, paddingInline: 32 }]} onPress={() => navigation.navigate("Home")}>
         Automatically share photos taken by members of your group
       </Text>
 

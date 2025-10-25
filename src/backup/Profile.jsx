@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert} from "react-native";
+import React, { useState } from "react";
+import { View, Text, Alert, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
  
 // svg
 import QR from "../../assets/svg/qr.svg";
@@ -20,24 +20,8 @@ const beforeImage = require("../../assets/selfie.jpg");
 const afterImage = require("../../assets/dp3.jpg");
  
 const CreateEventFive = ({ navigation }) => {
-const [modalVisible, setModalVisible] = useState(false);
-  const [user, setUser] = useState(null);
-   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const storedUser = await AsyncStorage.getItem("user");
-        if (storedUser) {
-          setUser(JSON.parse(storedUser));
-          console.log("Loaded user:", JSON.parse(storedUser));
-        }
-      } catch (error) {
-        console.log("Error loading user:", error);
-      }
-    };
-    fetchUser();
-  }, []);
-
- const handleLogout = async () => {
+  const [modalVisible, setModalVisible] = useState(false);
+const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("token");
       await AsyncStorage.removeItem("user");
@@ -54,8 +38,8 @@ const [modalVisible, setModalVisible] = useState(false);
     <FolderLayout
       navigation={navigation}
       image={createEvent}
-      folderName={user ? user.name : "Loading..."}
-      date={user ? user.email : ""}
+      folderName="Janifer Danis"
+      date="+91 1841 510 1450"
       RightIcon={<Pencil height={16} width={16} onPress={() => navigation.navigate("EditProfile")} />}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>

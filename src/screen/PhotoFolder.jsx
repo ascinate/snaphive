@@ -11,7 +11,7 @@ const picnic2 = require("../../assets/picnic2.jpg");
 const picnic3 = require("../../assets/picnic3.jpg");
 const picnic4 = require("../../assets/picnic4.jpg");
 
-const CreateEvent = ({ navigation, route }) => {
+const PhotoFolder = ({ navigation, route }) => {
   const [code, setCode] = useState("");
 
   const { folderName, date, owner } = route.params || {
@@ -20,14 +20,18 @@ const CreateEvent = ({ navigation, route }) => {
     owner: "NA",
   };
 
-  //  Image list (dynamic grid)
-  const images = [picnic1, picnic2, picnic3, picnic4];
+  // Get photos from route params (selected from PhotoShare)
+  const eventPhotos = route.params?.eventPhotos || [];
+  
+  // Fallback to default images if no photos selected
+  const defaultImages = [picnic1, picnic2, picnic3, picnic4];
+  const images = eventPhotos.length > 0 ? eventPhotos : defaultImages;
 
   return (
     <FolderLayout
       navigation={navigation}
       image={createEvent}
-      folderName="Create Event"
+      folderName="Photo Folder"
       date="Sep 19"
       owner="A"
       inviteText="+ invite a friend"
@@ -43,7 +47,10 @@ const CreateEvent = ({ navigation, route }) => {
         <View style={styles.grid}>
           {images.map((img, index) => (
             <View key={index} style={styles.photoContainer}>
-              <Image source={img} style={styles.photo} />
+              <Image 
+                source={typeof img === 'object' && img.uri ? { uri: img.uri } : img} 
+                style={styles.photo} 
+              />
             </View>
           ))}
         </View>
@@ -83,4 +90,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateEvent;
+export default PhotoFolder;

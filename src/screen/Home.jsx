@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import {
   View,
@@ -37,38 +36,39 @@ const picnic4 = require('../../assets/picnic4.jpg');
 
 const { width, height } = Dimensions.get('window');
 
-const Listing = ({ navigation,route }) => {
+const Listing = ({ navigation, route }) => {
 
 
   const [refreshing, setRefreshing] = useState(false);
   const [events, setEvents] = useState([
-    { img: picnic1, title: 'Summer Vacation', count: '10 Photos' },
-    { img: picnic3, title: 'Family Picnic', count: '8 Photos' },
+    { img: picnic1, title: 'Summer Vacation', count: '10 Photos', photos: [] },
+    { img: picnic3, title: 'Family Picnic', count: '8 Photos', photos: [] },
   ]);
-// store created events globally during runtime
-const createdEventsRef = React.useRef([]);
+  // store created events globally during runtime
+  const createdEventsRef = React.useRef([]);
 
-   // Handle newly created event
-useEffect(() => {
-  if (route?.params?.newEvent) {
-    const { name, photos } = route.params.newEvent;
-    const newEventObj = {
-      img: { uri: photos[0]?.uri },
-      title: name,
-      count: `${photos.length} Photos`,
-    };
+  // Handle newly created event
+  useEffect(() => {
+    if (route?.params?.newEvent) {
+      const { name, photos } = route.params.newEvent;
+      const newEventObj = {
+        img: { uri: photos[0]?.uri },
+        title: name,
+        count: `${photos.length} Photos`,
+        photos: photos, // STORE PHOTOS HERE
+      };
 
-    // Keep previous created events in memory and add new one on top
-    createdEventsRef.current = [newEventObj, ...createdEventsRef.current];
+      // Keep previous created events in memory and add new one on top
+      createdEventsRef.current = [newEventObj, ...createdEventsRef.current];
 
-    // Combine default + created events
-    setEvents([
-      ...createdEventsRef.current,
-      { img: picnic1, title: 'Summer Vacation', count: '10 Photos' },
-      { img: picnic3, title: 'Family Picnic', count: '8 Photos' },
-    ]);
-  }
-}, [route?.params?.newEvent]);
+      // Combine default + created events
+      setEvents([
+        ...createdEventsRef.current,
+        { img: picnic1, title: 'Summer Vacation', count: '10 Photos', photos: [] },
+        { img: picnic3, title: 'Family Picnic', count: '8 Photos', photos: [] },
+      ]);
+    }
+  }, [route?.params?.newEvent]);
 
 
   const onRefresh = useCallback(() => {
@@ -84,7 +84,7 @@ useEffect(() => {
 
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> 
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
           {/* Hero Section */}
@@ -190,14 +190,12 @@ useEffect(() => {
               </TouchableOpacity>
             </View>
 
-{events.map((item, index) => (
-
-
+            {events.map((item, index) => (
               <View key={index} style={styles.eventRow}>
                 <Image source={item.img} style={styles.cardImg} />
                 <TouchableOpacity
                   style={{ flex: 1, marginLeft: width * 0.03 }}
-                  onPress={() => navigation.navigate('PhotoFolder')}>
+                  onPress={() => navigation.navigate('PhotoFolder', { eventPhotos: item.photos })}>
                   <CustomText weight="bold" style={styles.eventTitle}>{item.title}</CustomText>
                   <CustomText weight="medium" style={styles.mtop}>{item.count}</CustomText>
                   <View style={styles.profileIcon}>
@@ -361,7 +359,7 @@ const styles = StyleSheet.create({
   eventSection: {
     fontSize: width * 0.045,
     fontWeight: '800',
-        padddingBottom: 200,
+    padddingBottom: 200,
   },
   eventHeader: {
     flexDirection: 'row',

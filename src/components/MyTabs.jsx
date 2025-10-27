@@ -4,17 +4,17 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Screens
-import HomeStack from "./src/navigation/HomeStack";
-import MemberList from "./src/screen/MemberList";
-import ClickPhoto from "./src/screen/ClickPhoto";
-import Profile from "./src/screen/Profile";
-import PhotoShare from "./src/screen/PhotoShare";
+import HomeStack from "../navigation/HomeStack";
+import MemberList from "../screen/MemberList";
+import ClickPhoto from "../screen/ClickPhoto";
+import Profile from "../screen/Profile";
+import PhotoShare from "../screen/PhotoShare";
 
 // Icons
-import CameraTab from "./assets/svg/cameraTab.svg";
-import NavHome from "./assets/svg/navHome.svg";
-import NavMessage from "./assets/svg/navMessage.svg";
-import NavPeople from "./assets/svg/navPeople.svg";
+import CameraTab from "../../assets/svg/cameraTab.svg";
+import NavHome from "../../assets/svg/navHome.svg";
+import NavMessage from "../../assets/svg/navMessage.svg";
+import NavPeople from "../../assets/svg/navPeople.svg";
 
 
 const Tab = createBottomTabNavigator();

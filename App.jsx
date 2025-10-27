@@ -10,7 +10,7 @@ import Landing from "./src/screen/Landing";
 import Signup from "./src/screen/Signup";
 import Login from "./src/screen/Login";
 import OTP from "./src/screen/OTP";
-import MyTabs from "./MyTabs";
+import MyTabs from "./src/components/MyTabs";
 import PhotoFolder from "./src/screen/PhotoFolder";
 import CreateAlbum from "./src/screen/CreateAlbum";
 import CreateFolder from "./src/screen/CreateFolder";

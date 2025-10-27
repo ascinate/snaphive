@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -37,20 +37,49 @@ const picnic4 = require('../../assets/picnic4.jpg');
 
 const { width, height } = Dimensions.get('window');
 
-const Listing = ({ navigation }) => {
+const Listing = ({ navigation,route }) => {
 
-  const [refreshing, setRefreshing] = useState(false); 
 
-  const onRefresh = useCallback(() => { 
+  const [refreshing, setRefreshing] = useState(false);
+  const [events, setEvents] = useState([
+    { img: picnic1, title: 'Summer Vacation', count: '10 Photos' },
+    { img: picnic3, title: 'Family Picnic', count: '8 Photos' },
+  ]);
+// store created events globally during runtime
+const createdEventsRef = React.useRef([]);
+
+   // Handle newly created event
+useEffect(() => {
+  if (route?.params?.newEvent) {
+    const { name, photos } = route.params.newEvent;
+    const newEventObj = {
+      img: { uri: photos[0]?.uri },
+      title: name,
+      count: `${photos.length} Photos`,
+    };
+
+    // Keep previous created events in memory and add new one on top
+    createdEventsRef.current = [newEventObj, ...createdEventsRef.current];
+
+    // Combine default + created events
+    setEvents([
+      ...createdEventsRef.current,
+      { img: picnic1, title: 'Summer Vacation', count: '10 Photos' },
+      { img: picnic3, title: 'Family Picnic', count: '8 Photos' },
+    ]);
+  }
+}, [route?.params?.newEvent]);
+
+
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
     }, 1500);
   }, []);
-
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff', }}>
         <TopNav />
 
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}
@@ -161,15 +190,14 @@ const Listing = ({ navigation }) => {
               </TouchableOpacity>
             </View>
 
-            {[
-              { img: picnic1, title: 'Summer Vacation', count: '10 Photos' },
-              { img: picnic3, title: 'Family Picnic', count: '8 Photos' },
-            ].map((item, index) => (
+{events.map((item, index) => (
+
+
               <View key={index} style={styles.eventRow}>
                 <Image source={item.img} style={styles.cardImg} />
                 <TouchableOpacity
                   style={{ flex: 1, marginLeft: width * 0.03 }}
-                  onPress={() => navigation.navigate('Join')}>
+                  onPress={() => navigation.navigate('PhotoFolder')}>
                   <CustomText weight="bold" style={styles.eventTitle}>{item.title}</CustomText>
                   <CustomText weight="medium" style={styles.mtop}>{item.count}</CustomText>
                   <View style={styles.profileIcon}>
@@ -182,7 +210,7 @@ const Listing = ({ navigation }) => {
           </View>
 
           {/* Recent Activity */}
-          <View>
+          <View style={{ paddingBottom: 150 }}>
             <View style={styles.eventHeader}>
               <CustomText weight="bold" style={styles.eventSection}>Recent Activity</CustomText>
             </View>
@@ -212,7 +240,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: width * 0.05,
     backgroundColor: '#fff',
-    marginBottom: 100,
+
   },
   heroSection: {
     justifyContent: 'center',
@@ -333,12 +361,14 @@ const styles = StyleSheet.create({
   eventSection: {
     fontSize: width * 0.045,
     fontWeight: '800',
+        padddingBottom: 200,
   },
   eventHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: height * 0.04,
+
   },
   eventTitle: {
     fontSize: width * 0.04,

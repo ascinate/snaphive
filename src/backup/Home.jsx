@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,8 +9,11 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
+import { RefreshControl } from 'react-native';
+
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
+
 
 // SVGs
 import Brush from '../../assets/svg/brush.svg';
@@ -34,12 +38,26 @@ const picnic4 = require('../../assets/picnic4.jpg');
 const { width, height } = Dimensions.get('window');
 
 const Listing = ({ navigation }) => {
+
+  const [refreshing, setRefreshing] = useState(false); 
+
+  const onRefresh = useCallback(() => { 
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
         <TopNav />
 
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> 
+          }
+        >
           {/* Hero Section */}
           <View style={styles.heroSection}>
             <Image source={hero} style={styles.heroImg} />
@@ -138,7 +156,7 @@ const Listing = ({ navigation }) => {
           <View>
             <View style={styles.eventHeader}>
               <CustomText weight="medium" style={styles.eventSection}>Your Events</CustomText>
-              <TouchableOpacity onPress={()=>{navigation.navigate('CreateEvent')}}>
+              <TouchableOpacity onPress={() => { navigation.navigate('CreateEvent') }}>
                 <CustomText weight="bold" style={styles.newEvent}>+ New Event</CustomText>
               </TouchableOpacity>
             </View>
@@ -234,7 +252,7 @@ const styles = StyleSheet.create({
     paddingVertical: height * 0.012,
     paddingHorizontal: width * 0.08,
     borderRadius: 6,
-    marginTop:21,
+    marginTop: 21,
   },
   continueTxt: {
     fontSize: width * 0.04,

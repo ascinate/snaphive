@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Image, StyleSheet, TextInput, ScrollView, TouchableOpacity, Alert } from "react-native";
+import { View, Text, Image, StyleSheet, TextInput, ScrollView } from "react-native";
 import FolderLayout from "../components/FolderLayout";
 import Cloud from "../../assets/svg/cloud.svg";
 import QR from "../../assets/svg/qr.svg";
@@ -10,21 +10,12 @@ const createEvent = require("../../assets/createEvent.png");
 
 const CreateEvent = ({ navigation, route }) => {
     const [code, setCode] = useState("");
-    const [selectedEventType, setSelectedEventType] = useState('');
-    const eventTypes = ['Corporate', 'Birthday Party', 'Wedding', 'Reunion', 'Others..'];
 
     const { folderName, date, owner } = route.params || {
         folderName: "Untitled Folder",
         date: "Unknown Date",
         owner: "NA",
     };
-    const categories = [
-        "Corporate",
-        "Birthday Party",
-        "Wedding",
-        "Reunion",
-        "Others..",
-    ];
 
     return (
         <FolderLayout
@@ -33,7 +24,7 @@ const CreateEvent = ({ navigation, route }) => {
             folderName="Create Event"
             date="Sep 19"
             owner="A"
-            inviteText="+ invite a friend" onInvitePress={() => navigation.navigate("InviteHiveMember")}
+            inviteText="+ invite a friend"   onInvitePress={() => navigation.navigate("InviteHiveMember")}
             RightIcon={<QR height={16} width={16} />}
         >
             {/*  unique screen content */}
@@ -53,28 +44,30 @@ const CreateEvent = ({ navigation, route }) => {
                 </View>
 
                 <Text style={{ marginTop: 24, }}>Event Type *</Text>
-        <View
-  style={{
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-    marginTop: 27,
-  }}
->
-  {eventTypes.map((type) => (
-    <TouchableOpacity
-      key={type}
-      style={[
-        styles.badge,
-        { backgroundColor: selectedEventType === type ? "#FFD966" : "#eee" },
-      ]}
-      onPress={() => setSelectedEventType(type)}
-    >
-      <Text>{type}</Text>
-    </TouchableOpacity>
-  ))}
-</View>
-
+                <View
+                    style={{
+                        flexDirection: "row",
+                        flexWrap: "wrap",
+                        gap: 10,
+                        marginTop: 27,
+                    }}
+                >
+                    <View style={styles.badge}>
+                        <Text>Corporate</Text>
+                    </View>
+                    <View style={styles.badge}>
+                        <Text>Birthday Party</Text>
+                    </View>
+                    <View style={styles.badge}>
+                        <Text>Wedding</Text>
+                    </View>
+                    <View style={styles.badge}>
+                        <Text>Reunion</Text>
+                    </View>
+                    <View style={styles.badge}>
+                        <Text>Others..</Text>
+                    </View>
+                </View>
 
                 {/*  fixed TextInput */}
                 <TextInput
@@ -88,24 +81,11 @@ const CreateEvent = ({ navigation, route }) => {
                     autoCorrect={false}
                 />
 
-<ThemeButton
-  text="Continue"
-  style={{ marginTop: 31 }}
-  onPress={() => {
-    if (!code || !selectedEventType) {
-      Alert.alert('Please fill all fields');
-      return;
-    }
-    navigation.navigate('Home', {
-      newEvent: {
-        name: code,
-        type: selectedEventType,
-        photos: route.params?.selectedImages || [],
-      },
-    });
-  }}
-/>
-
+                <ThemeButton
+                    text="Continue"
+                    onPress={() => navigation.navigate("CreateEventTwo")}
+                    style={{ marginTop: 31 }}
+                />
             </ScrollView>
         </FolderLayout>
     );

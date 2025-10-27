@@ -21,7 +21,7 @@ import ThemeButton from '../components/ThemeButton';
 
 const { width, height } = Dimensions.get('window');
 
-const PhotoShare = ({ navigation }) => {
+const PhotoShare = ({ navigation,route }) => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
@@ -236,12 +236,15 @@ const PhotoShare = ({ navigation }) => {
 
         
       </ScrollView>
+<ThemeButton
+  style={styles.continueBtn}
+  text="Continue →"
+  onPress={() =>
+    navigation.navigate('CreateEvent', { selectedImages })
+  }
+/>
 
-        <ThemeButton
-          style={styles.continueBtn}
-          text="Continue →"
-          onPress={() => navigation.navigate('CreateEvent')}
-        />
+
     </SafeAreaView>
   );
 };

@@ -19,7 +19,6 @@ import Adjustment from '../../assets/svg/adjustment.svg';
 import CameraSwitch from '../../assets/svg/cameraswitch.svg';
 import Undo from '../../assets/svg/undo.svg';
 import Crop from '../../assets/svg/crop.svg';
-import CustomText from '../components/CustomText';
 
 const ClickPhoto = ({ navigation }) => {
     const [photo, setPhoto] = useState(null);
@@ -31,10 +30,11 @@ const ClickPhoto = ({ navigation }) => {
     const [contrast, setContrast] = useState(50);
     const [activeIcon, setActiveIcon] = useState('brightness');
     const [cameraPosition, setCameraPosition] = useState('back');
-    const [activeTab, setActiveTab] = useState('Original');
-    // ADD THESE TWO MISSING STATE VARIABLES
+
     const [showCropModal, setShowCropModal] = useState(false);
     const [croppedPhoto, setCroppedPhoto] = useState(null);
+    const [originalPhoto, setOriginalPhoto] = useState(null);
+    const [cropData, setCropData] = useState(null); // Store crop coordinates
 
     const cameraRef = useRef(null);
     const device = useCameraDevice(cameraPosition);
@@ -99,6 +99,7 @@ const ClickPhoto = ({ navigation }) => {
 
                 const photoUri = `file://${photo.path}`;
                 setPhoto(photoUri);
+                setOriginalPhoto(photoUri);
                 setShowCamera(false);
                 await savePhotoToGallery(photoUri);
             } catch (error) {
@@ -110,10 +111,13 @@ const ClickPhoto = ({ navigation }) => {
 
     const retakePhoto = () => {
         setPhoto(null);
+        setOriginalPhoto(null);
         setShowCamera(true);
         setBrightness(50);
         setContrast(50);
         setIsEditingUI(false);
+        setCroppedPhoto(null);
+        setCropData(null);
     };
 
     const usePhoto = () => navigation.navigate('PhotoShare');
@@ -121,12 +125,10 @@ const ClickPhoto = ({ navigation }) => {
     // Handle Brightness & Contrast change
     const handleBrightnessChange = (value) => {
         setBrightness(value);
-        setActiveTab('Enhanced')
     };
 
     const handleContrastChange = (value) => {
         setContrast(value);
-        setActiveTab('Enhanced')
     };
 
     const handleUndo = () => {
@@ -135,17 +137,28 @@ const ClickPhoto = ({ navigation }) => {
         setIsEditingUI(false);
         setActiveIcon(null);
         setCroppedPhoto(null);
-        setActiveTab('Original')
+        setCropData(null);
+        if (originalPhoto) {
+            setPhoto(originalPhoto);
+        }
     }
 
-    const handleCropComplete = (cropData) => {
-        setCroppedPhoto(cropData);
-        setShowCropModal(false);
-        setActiveIcon('Crop');
-        setActiveTab('Enhanced')
+    // Simple crop implementation - just store the crop data
+    const handleCropComplete = (cropDataFromModal) => {
+        try {
+            setShowCropModal(false);
+            setCropData(cropDataFromModal);
+            setCroppedPhoto(cropDataFromModal);
+            setActiveIcon('Crop');
+            
+            // Show success message
+            console.log('Crop applied:', cropDataFromModal);
+        } catch (error) {
+            console.error('Crop failed:', error);
+            Alert.alert('Error', 'Failed to apply crop');
+        }
     };
 
-    
     if (!hasPermission) {
         return (
             <SafeAreaProvider>
@@ -187,8 +200,27 @@ const ClickPhoto = ({ navigation }) => {
                         />
                     ) : (
                         <View style={styles.imageContainer}>
-                            {activeTab === 'Original' ? (
-                                <Image source={{ uri: photo }} style={styles.image} resizeMode="cover" />
+                            {/* Apply crop if exists */}
+                            {cropData ? (
+                                <View style={styles.croppedContainer}>
+                                    <ContrastFilter amount={contrast / 50}>
+                                        <BrightnessFilter amount={brightness / 50}>
+                                            <Image 
+                                                source={{ uri: originalPhoto || photo }} 
+                                                style={[
+                                                    styles.image,
+                                                    {
+                                                        width: cropData.imageWidth,
+                                                        height: cropData.imageHeight,
+                                                        marginLeft: -cropData.x,
+                                                        marginTop: -cropData.y,
+                                                    }
+                                                ]} 
+                                                resizeMode="cover" 
+                                            />
+                                        </BrightnessFilter>
+                                    </ContrastFilter>
+                                </View>
                             ) : (
                                 <ContrastFilter amount={contrast / 50}>
                                     <BrightnessFilter amount={brightness / 50}>
@@ -197,8 +229,6 @@ const ClickPhoto = ({ navigation }) => {
                                 </ContrastFilter>
                             )}
                         </View>
-
-
                     )}
 
                     {!showCamera && (
@@ -228,32 +258,7 @@ const ClickPhoto = ({ navigation }) => {
 
                     {!showCamera && (
                         <>
-                            {/* photo original vs enhanced */}
-                            <View style={styles.topTabs}>
-                                <TouchableOpacity
-                                    style={[styles.tab, activeTab === 'Original' && styles.activeTab]}
-                                    onPress={() => setActiveTab('Original')}
-                                >
-                                    <CustomText
-                                        weight="semiBold"
-                                        style={[styles.tabText, activeTab === 'Original' && styles.activeTabText]}
-                                    >
-                                        Original
-                                    </CustomText>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    style={[styles.tab, activeTab === 'Enhanced' && styles.activeTab]}
-                                    onPress={() => setActiveTab('Enhanced')}
-                                >
-                                    <CustomText
-                                        weight="semiBold"
-                                        style={[styles.tabText, activeTab === 'Enhanced' && styles.activeTabText]}
-                                    >
-                                        Enhanced
-                                    </CustomText>
-                                </TouchableOpacity>
-                            </View>
+                            <PhotoEditOriginalvsEnhanced />
                             <TouchableOpacity style={styles.settingsBtn} onPress={handleEditToggle}>
                                 <Settings />
                             </TouchableOpacity>
@@ -280,7 +285,6 @@ const ClickPhoto = ({ navigation }) => {
                                     <Undo />
                                 </TouchableOpacity>
                             </View>
-
                         </>
                     )}
 
@@ -321,7 +325,7 @@ const ClickPhoto = ({ navigation }) => {
 
                 <PhotoCropModal
                     visible={showCropModal}
-                    photoUri={photo}
+                    photoUri={originalPhoto || photo}
                     onClose={() => setShowCropModal(false)}
                     onCropComplete={handleCropComplete}
                 />
@@ -341,8 +345,14 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         position: 'relative',
+        overflow: 'hidden',
     },
     image: { width: '100%', height: '100%' },
+    croppedContainer: {
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+    },
     shutter: {
         width: 80,
         height: 80,
@@ -452,34 +462,5 @@ const styles = StyleSheet.create({
     },
     activeTab: {
         backgroundColor: '#ffffff',
-    },
-
-    // Photo original enhance
-
-    topTabs: {
-        position: 'absolute',
-        top: 20,
-        left: '50%',
-        flexDirection: 'row',
-        backgroundColor: 'rgba(255,255,255,0.4)',
-        borderRadius: 25,
-        padding: 4,
-        transform: [{ translateX: -100 }],
-    },
-    tab: {
-        paddingHorizontal: 20,
-        paddingVertical: 8,
-        borderRadius: 20,
-    },
-    activeTab: {
-        backgroundColor: '#fff',
-    },
-    tabText: {
-        color: '#000000ff',
-        fontSize: 14,
-        fontWeight: '500',
-    },
-    activeTabText: {
-        color: '#000',
     },
 });

@@ -13,7 +13,7 @@ import ThemeButton from "../components/ThemeButton";
 
 const createEvent = require("../../assets/createEvent.png");
 
-const CreateEventThree = ({ navigation, route }) => {
+const CreateEventFour = ({ navigation, route }) => {
     // separate states for each field
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
@@ -174,4 +174,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CreateEventThree;
+export default CreateEventFour;

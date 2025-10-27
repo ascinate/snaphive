@@ -13,7 +13,7 @@ import ThemeButton from "../components/ThemeButton";
 
 const createEvent = require("../../assets/createEvent.png");
 
-const CreateEvent = ({ navigation, route }) => {
+const CreateEventTwo = ({ navigation, route }) => {
   const [code, setCode] = useState("");
 
   const { folderName, date, owner } = route.params || {
@@ -184,4 +184,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateEvent;
+export default CreateEventTwo;

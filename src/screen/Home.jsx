@@ -36,7 +36,7 @@ const picnic4 = require('../../assets/picnic4.jpg');
 
 const { width, height } = Dimensions.get('window');
 
-const Listing = ({ navigation, route }) => {
+const Home = ({ navigation, route }) => {
 
 
   const [refreshing, setRefreshing] = useState(false);
@@ -407,4 +407,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Listing;
+export default Home;

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import { RefreshControl } from 'react-native';
 
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
-
+import { EventContext } from '../context/EventContext';
 
 // SVGs
 import Brush from '../../assets/svg/brush.svg';
@@ -40,9 +40,7 @@ const Home = ({ navigation, route }) => {
 
 
   const [refreshing, setRefreshing] = useState(false);
-  const [events, setEvents] = useState([
-    { img: picnic1, title: 'Summer Vacation', count: '10 Photos', photos: [] },
-  ]);
+const { events } = useContext(EventContext);
 
   const createdEventsRef = React.useRef([]);
   useEffect(() => {

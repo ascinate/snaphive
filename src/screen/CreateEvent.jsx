@@ -1,30 +1,58 @@
-import React, { useState } from "react";
-import { View, Text, Image, StyleSheet, TextInput, ScrollView, TouchableOpacity, Alert } from "react-native";
+import React, { useState, useContext } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import FolderLayout from "../components/FolderLayout";
 import Cloud from "../../assets/svg/cloud.svg";
 import QR from "../../assets/svg/qr.svg";
 import Utility from "../../assets/svg/utility.svg";
 import ThemeButton from "../components/ThemeButton";
+import { EventContext } from "../context/EventContext"; // ✅ import context
 const createEvent = require("../../assets/createEvent.png");
-
 
 const CreateEvent = ({ navigation, route }) => {
   const [code, setCode] = useState("");
-  const [selectedEventType, setSelectedEventType] = useState('');
-  const eventTypes = ['Corporate', 'Birthday Party', 'Wedding', 'Reunion', 'Others..'];
+  const [selectedEventType, setSelectedEventType] = useState("");
+  const { addEvent } = useContext(EventContext); // ✅ use context
 
-  const { folderName, date, owner } = route.params || {
-    folderName: "Untitled Folder",
-    date: "Unknown Date",
-    owner: "NA",
-  };
-  const categories = [
+  const eventTypes = [
     "Corporate",
     "Birthday Party",
     "Wedding",
     "Reunion",
     "Others..",
   ];
+
+  // Photos passed from PhotoShare (if any)
+  const selectedPhotos = route.params?.selectedImages || [];
+
+  const handleCreateEvent = () => {
+    if (!code.trim() || !selectedEventType) {
+      Alert.alert("Please fill all fields");
+      return;
+    }
+
+    if (selectedPhotos.length === 0) {
+      Alert.alert("Please select at least one photo for your event");
+      return;
+    }
+
+    const newEvent = {
+      img: { uri: selectedPhotos[0].uri },
+      title: code,
+      count: `${selectedPhotos.length} Photos`,
+      photos: selectedPhotos,
+    };
+
+    addEvent(newEvent); // ✅ instantly updates Home
+    navigation.navigate("Home");
+  };
 
   return (
     <FolderLayout
@@ -33,10 +61,10 @@ const CreateEvent = ({ navigation, route }) => {
       folderName="Create Event"
       date="Sep 19"
       owner="A"
-      inviteText="+ invite a friend" onInvitePress={() => navigation.navigate("InviteHiveMember")}
+      inviteText="+ invite a friend"
+      onInvitePress={() => navigation.navigate("InviteHiveMember")}
       RightIcon={<QR height={16} width={16} />}
     >
-      {/*  unique screen content */}
       <ScrollView style={{ padding: 20, flex: 1 }}>
         <View
           style={{
@@ -44,15 +72,13 @@ const CreateEvent = ({ navigation, route }) => {
             alignItems: "center",
             gap: 8,
             marginBottom: 20,
-
           }}
         >
           <Utility width={24} height={24} />
-          {/*  fixed fontWeight */}
           <Text style={{ fontSize: 18, fontWeight: "600" }}>Event Details</Text>
         </View>
 
-        <Text style={{ marginTop: 24, }}>Event Type *</Text>
+        <Text style={{ marginTop: 24 }}>Event Type *</Text>
         <View
           style={{
             flexDirection: "row",
@@ -66,7 +92,10 @@ const CreateEvent = ({ navigation, route }) => {
               key={type}
               style={[
                 styles.badge,
-                { backgroundColor: selectedEventType === type ? "#FFD966" : "#eee" },
+                {
+                  backgroundColor:
+                    selectedEventType === type ? "#FFD966" : "#eee",
+                },
               ]}
               onPress={() => setSelectedEventType(type)}
             >
@@ -75,8 +104,6 @@ const CreateEvent = ({ navigation, route }) => {
           ))}
         </View>
 
-
-        {/*  fixed TextInput */}
         <TextInput
           value={code}
           onChangeText={setCode}
@@ -91,47 +118,14 @@ const CreateEvent = ({ navigation, route }) => {
         <ThemeButton
           text="Continue"
           style={{ marginTop: 31 }}
-          onPress={() => {
-            if (!code || !selectedEventType) {
-              Alert.alert('Please fill all fields');
-              return;
-            }
-            console.log('Creating event with name:', code, 'and type:', selectedEventType);
-            navigation.navigate('Home', {
-              newEvent: {
-                name: code,
-                type: selectedEventType,
-                photos: route.params?.selectedImages || [],
-              },
-            });
-          }}
+          onPress={handleCreateEvent}
         />
-
       </ScrollView>
     </FolderLayout>
   );
 };
 
 const styles = StyleSheet.create({
-  photoFolder: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  folderImageList: {
-    width: 80,
-    height: 80,
-    marginRight: 12,
-    borderRadius: 12,
-  },
-  folderText: { fontSize: 16, fontWeight: "500" },
-  uploadBtn: {
-    marginTop: 20,
-    backgroundColor: "#f2f2f2",
-    padding: 12,
-    borderRadius: 50,
-    alignSelf: "center",
-  },
   badge: {
     backgroundColor: "#FAFAFA",
     paddingVertical: 14,

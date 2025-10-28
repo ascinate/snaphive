@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // screens
 import Home from "../screen/Home";
 import PhotoFolder from "../screen/PhotoFolder";
-import Join from "../screen/Join";
+
 import Notification from "../screen/Notification";
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +14,7 @@ export default function HomeStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeMain" component={Home} />
       <Stack.Screen name="PhotoFolder" component={PhotoFolder} />
-      <Stack.Screen name="Join" component={Join} />
+
       <Stack.Screen name="Notification" component={Notification} />
     </Stack.Navigator>
   );

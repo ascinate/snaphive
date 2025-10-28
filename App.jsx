@@ -17,7 +17,7 @@ import CreateFolder from "./src/screen/CreateFolder";
 import Folder from "./src/screen/Folder";
 import AddExpenseBlock from "./src/screen/AddExpenseBlock";
 import AddNote from "./src/screen/AddNote";
-import Join from "./src/screen/Join";
+
 import NewPage from "./src/screen/ShareApps";
 import Home from "./src/screen/Home";
 import PhotoShare from "./src/screen/PhotoShare";
@@ -46,12 +46,14 @@ import EditProfile from "./src/screen/EditProfile";
 import Chat from "./src/screen/Chat";
 import ForgotPassword from "./src/screen/ForgotPassword";
 import NewPassword from "./src/screen/NewPassword";
+import { EventProvider } from './src/context/EventContext';
 //demo camera ui
 import ClickPhotoTwo from "./src/screen/ClickPhotoTwo";
 import ClickPhotoThree from "./src/screen/ClickPhotoThree";
 const App = () => {
   return (
     <SafeAreaProvider>
+      <EventProvider>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Landing" component={Landing}  options={{ headerShown: false }}/>
@@ -70,8 +72,7 @@ const App = () => {
 />
           <Stack.Screen name="AddNote" component={AddNote}  options={{ headerShown: false }}
 />
-          <Stack.Screen name="Join" component={Join}  options={{ headerShown: false }}
-/>
+
           <Stack.Screen name="NewPage" component={NewPage} options={{ headerShown: false }}
  />
           <Stack.Screen name="Home" component={Home}  options={{ headerShown: false }}
@@ -133,6 +134,7 @@ const App = () => {
           <Stack.Screen name="ClickPhotoThree" component={ClickPhotoThree} options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
+    </EventProvider>
     </SafeAreaProvider>
   )
 }

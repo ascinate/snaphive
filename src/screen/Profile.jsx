@@ -19,7 +19,7 @@ const createEvent = require("../../assets/profile.jpg");
 const beforeImage = require("../../assets/selfie.jpg");
 const afterImage = require("../../assets/dp3.jpg");
  
-const CreateEventFive = ({ navigation }) => {
+const CreateEventFive = ({ navigation,state }) => {
 const [modalVisible, setModalVisible] = useState(false);
   const [user, setUser] = useState(null);
    useEffect(() => {

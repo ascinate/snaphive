@@ -23,7 +23,7 @@ function CustomTabBar({ state, descriptors, navigation }) {
   const insets = useSafeAreaInsets();
   const currentRoute = state.routes[state.index].name;
 
-  // Hide tab bar on Camera screen
+  // Hide bottom tab bar on Camera screen
   if (currentRoute === "Camera" ||currentRoute === "PhotoShare" ) {
     return null;
   }

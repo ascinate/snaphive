@@ -45,33 +45,48 @@ const Home = ({ navigation, route }) => {
   ]);
 
   const createdEventsRef = React.useRef([]);
-useEffect(() => {
-  if (route?.params?.newEvent) {
-    const { name, photos } = route.params.newEvent;
+  useEffect(() => {
+    if (route?.params?.newEvent) {
+      const { name, photos } = route.params.newEvent;
 
-    const newEventObj = {
-      img: { uri: photos[0]?.uri },
-      title: name,
-      count: `${photos.length} Photos`,
-      photos,
-    };
+      const newEventObj = {
+        img: { uri: photos[0]?.uri },
+        title: name,
+        count: `${photos.length} Photos`,
+        photos,
+      };
 
-    // Append the new event instead of replacing
-    setEvents(prevEvents => [newEventObj, ...prevEvents]);
+      // Append the new event instead of replacing
+      setEvents(prevEvents => [newEventObj, ...prevEvents]);
 
-    // Clear the params after adding, so it doesn't re-add on re-render
-    navigation.setParams({ newEvent: null });
-  }
-}, [route?.params?.newEvent]);
+      // Clear the params after adding, so it doesn't re-add on re-render
+      navigation.setParams({ newEvent: null });
+    }
+  }, [route?.params?.newEvent]);
 
 
+  const fetchEvents = useCallback(async () => {
+    // Example: load events from local storage or backend
+    // const storedEvents = await AsyncStorage.getItem('events');
+    // setEvents(JSON.parse(storedEvents) || []);
+
+    // For now, simulate a reload:
+    console.log("Refreshing events...");
+    setEvents(prev => [...prev]);
+  }, []);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
+      setEvents(prev => [...prev]); // re-render the event list
       setRefreshing(false);
-    }, 1500);
+    }, 1000);
   }, []);
+
+
+
+
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#fff', }}>

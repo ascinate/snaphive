@@ -21,7 +21,7 @@ import ThemeButton from '../components/ThemeButton';
 
 const { width, height } = Dimensions.get('window');
 
-const PhotoShare = ({ navigation,route }) => {
+const PhotoShare = ({ navigation, route }) => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
@@ -187,9 +187,13 @@ const PhotoShare = ({ navigation,route }) => {
       >
         {/* Header row */}
         <View style={styles.headerRow}>
-          <Text style={styles.selectedText}>
-            Recent Images ({images.length})
-          </Text>
+          <View>
+            <Text style={styles.selectedText}>
+              Recent Images ({images.length})
+            </Text>
+            <Text>Selected ({selectedImages.length})</Text>
+          </View>
+
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <View style={styles.cancelButton}>
               <Text style={styles.cancelText}>back</Text>
@@ -234,15 +238,16 @@ const PhotoShare = ({ navigation,route }) => {
           </View>
         )}
 
-        
+
       </ScrollView>
-<ThemeButton
-  style={styles.continueBtn}
-  text="Continue →"
-  onPress={() =>
-    navigation.navigate('CreateEvent', { selectedImages })
-  }
-/>
+      <ThemeButton
+        style={styles.continueBtn}
+        
+       text={`Continue → (${selectedImages.length})`}
+        onPress={() =>
+          navigation.navigate('CreateEvent', { selectedImages })
+        }
+      />
 
 
     </SafeAreaView>

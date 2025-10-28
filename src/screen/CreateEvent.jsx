@@ -9,149 +9,150 @@ const createEvent = require("../../assets/createEvent.png");
 
 
 const CreateEvent = ({ navigation, route }) => {
-    const [code, setCode] = useState("");
-    const [selectedEventType, setSelectedEventType] = useState('');
-    const eventTypes = ['Corporate', 'Birthday Party', 'Wedding', 'Reunion', 'Others..'];
+  const [code, setCode] = useState("");
+  const [selectedEventType, setSelectedEventType] = useState('');
+  const eventTypes = ['Corporate', 'Birthday Party', 'Wedding', 'Reunion', 'Others..'];
 
-    const { folderName, date, owner } = route.params || {
-        folderName: "Untitled Folder",
-        date: "Unknown Date",
-        owner: "NA",
-    };
-    const categories = [
-        "Corporate",
-        "Birthday Party",
-        "Wedding",
-        "Reunion",
-        "Others..",
-    ];
+  const { folderName, date, owner } = route.params || {
+    folderName: "Untitled Folder",
+    date: "Unknown Date",
+    owner: "NA",
+  };
+  const categories = [
+    "Corporate",
+    "Birthday Party",
+    "Wedding",
+    "Reunion",
+    "Others..",
+  ];
 
-    return (
-        <FolderLayout
-            navigation={navigation}
-            image={createEvent}
-            folderName="Create Event"
-            date="Sep 19"
-            owner="A"
-            inviteText="+ invite a friend" onInvitePress={() => navigation.navigate("InviteHiveMember")}
-            RightIcon={<QR height={16} width={16} />}
-        >
-            {/*  unique screen content */}
-            <ScrollView style={{ padding: 20, flex: 1 }}>
-                <View
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: 8,
-                        marginBottom: 20,
-
-                    }}
-                >
-                    <Utility width={24} height={24} />
-                    {/*  fixed fontWeight */}
-                    <Text style={{ fontSize: 18, fontWeight: "600" }}>Event Details</Text>
-                </View>
-
-                <Text style={{ marginTop: 24, }}>Event Type *</Text>
-        <View
-  style={{
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-    marginTop: 27,
-  }}
->
-  {eventTypes.map((type) => (
-    <TouchableOpacity
-      key={type}
-      style={[
-        styles.badge,
-        { backgroundColor: selectedEventType === type ? "#FFD966" : "#eee" },
-      ]}
-      onPress={() => setSelectedEventType(type)}
+  return (
+    <FolderLayout
+      navigation={navigation}
+      image={createEvent}
+      folderName="Create Event"
+      date="Sep 19"
+      owner="A"
+      inviteText="+ invite a friend" onInvitePress={() => navigation.navigate("InviteHiveMember")}
+      RightIcon={<QR height={16} width={16} />}
     >
-      <Text>{type}</Text>
-    </TouchableOpacity>
-  ))}
-</View>
+      {/*  unique screen content */}
+      <ScrollView style={{ padding: 20, flex: 1 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+            marginBottom: 20,
+
+          }}
+        >
+          <Utility width={24} height={24} />
+          {/*  fixed fontWeight */}
+          <Text style={{ fontSize: 18, fontWeight: "600" }}>Event Details</Text>
+        </View>
+
+        <Text style={{ marginTop: 24, }}>Event Type *</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            gap: 10,
+            marginTop: 27,
+          }}
+        >
+          {eventTypes.map((type) => (
+            <TouchableOpacity
+              key={type}
+              style={[
+                styles.badge,
+                { backgroundColor: selectedEventType === type ? "#FFD966" : "#eee" },
+              ]}
+              onPress={() => setSelectedEventType(type)}
+            >
+              <Text>{type}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
 
-                {/*  fixed TextInput */}
-                <TextInput
-                    value={code}
-                    onChangeText={setCode}
-                    placeholder="Enter Your Event name"
-                    style={styles.input}
-                    keyboardType="default"
-                    autoCapitalize="none"
-                    placeholderTextColor="#000"
-                    autoCorrect={false}
-                />
+        {/*  fixed TextInput */}
+        <TextInput
+          value={code}
+          onChangeText={setCode}
+          placeholder="Enter Your Event name"
+          style={styles.input}
+          keyboardType="default"
+          autoCapitalize="none"
+          placeholderTextColor="#000"
+          autoCorrect={false}
+        />
 
-<ThemeButton
-  text="Continue"
-  style={{ marginTop: 31 }}
-  onPress={() => {
-    if (!code || !selectedEventType) {
-      Alert.alert('Please fill all fields');
-      return;
-    }
-    navigation.navigate('Home', {
-      newEvent: {
-        name: code,
-        type: selectedEventType,
-        photos: route.params?.selectedImages || [],
-      },
-    });
-  }}
-/>
+        <ThemeButton
+          text="Continue"
+          style={{ marginTop: 31 }}
+          onPress={() => {
+            if (!code || !selectedEventType) {
+              Alert.alert('Please fill all fields');
+              return;
+            }
+            console.log('Creating event with name:', code, 'and type:', selectedEventType);
+            navigation.navigate('Home', {
+              newEvent: {
+                name: code,
+                type: selectedEventType,
+                photos: route.params?.selectedImages || [],
+              },
+            });
+          }}
+        />
 
-            </ScrollView>
-        </FolderLayout>
-    );
+      </ScrollView>
+    </FolderLayout>
+  );
 };
 
 const styles = StyleSheet.create({
-    photoFolder: {
-        flexDirection: "row",
-        alignItems: "center",
-        marginBottom: 15,
-    },
-    folderImageList: {
-        width: 80,
-        height: 80,
-        marginRight: 12,
-        borderRadius: 12,
-    },
-    folderText: { fontSize: 16, fontWeight: "500" },
-    uploadBtn: {
-        marginTop: 20,
-        backgroundColor: "#f2f2f2",
-        padding: 12,
-        borderRadius: 50,
-        alignSelf: "center",
-    },
-    badge: {
-        backgroundColor: "#FAFAFA",
-        paddingVertical: 14,
-        paddingHorizontal: 24,
-        borderRadius: 6,
-        alignSelf: "flex-start",
-        borderWidth: 1,
-        borderColor: "#EDEDED",
-        borderStyle: "solid",
-        marginTop: 10,
-    },
-    input: {
-        borderBottomWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 8,
-        paddingHorizontal: 12,
-        paddingVertical: 10,
-        fontSize: 16,
-        marginTop: 41,
-        fontWeight: "600",
-    },
+  photoFolder: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  folderImageList: {
+    width: 80,
+    height: 80,
+    marginRight: 12,
+    borderRadius: 12,
+  },
+  folderText: { fontSize: 16, fontWeight: "500" },
+  uploadBtn: {
+    marginTop: 20,
+    backgroundColor: "#f2f2f2",
+    padding: 12,
+    borderRadius: 50,
+    alignSelf: "center",
+  },
+  badge: {
+    backgroundColor: "#FAFAFA",
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 6,
+    alignSelf: "flex-start",
+    borderWidth: 1,
+    borderColor: "#EDEDED",
+    borderStyle: "solid",
+    marginTop: 10,
+  },
+  input: {
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 16,
+    marginTop: 41,
+    fontWeight: "600",
+  },
 });
 
 export default CreateEvent;

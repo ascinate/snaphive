@@ -42,33 +42,28 @@ const Home = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [events, setEvents] = useState([
     { img: picnic1, title: 'Summer Vacation', count: '10 Photos', photos: [] },
-    { img: picnic3, title: 'Family Picnic', count: '8 Photos', photos: [] },
   ]);
-  // store created events globally during runtime
+
   const createdEventsRef = React.useRef([]);
+useEffect(() => {
+  if (route?.params?.newEvent) {
+    const { name, photos } = route.params.newEvent;
 
-  // Handle newly created event
-  useEffect(() => {
-    if (route?.params?.newEvent) {
-      const { name, photos } = route.params.newEvent;
-      const newEventObj = {
-        img: { uri: photos[0]?.uri },
-        title: name,
-        count: `${photos.length} Photos`,
-        photos: photos, // STORE PHOTOS HERE
-      };
+    const newEventObj = {
+      img: { uri: photos[0]?.uri },
+      title: name,
+      count: `${photos.length} Photos`,
+      photos,
+    };
 
-      // Keep previous created events in memory and add new one on top
-      createdEventsRef.current = [newEventObj, ...createdEventsRef.current];
+    // Append the new event instead of replacing
+    setEvents(prevEvents => [newEventObj, ...prevEvents]);
 
-      // Combine default + created events
-      setEvents([
-        ...createdEventsRef.current,
-        { img: picnic1, title: 'Summer Vacation', count: '10 Photos', photos: [] },
-        { img: picnic3, title: 'Family Picnic', count: '8 Photos', photos: [] },
-      ]);
-    }
-  }, [route?.params?.newEvent]);
+    // Clear the params after adding, so it doesn't re-add on re-render
+    navigation.setParams({ newEvent: null });
+  }
+}, [route?.params?.newEvent]);
+
 
 
   const onRefresh = useCallback(() => {
@@ -192,6 +187,7 @@ const Home = ({ navigation, route }) => {
 
             {events.map((item, index) => (
               <View key={index} style={styles.eventRow}>
+                {console.log('EVENT ITEM PHOTOS:', item.photos)}
                 <Image source={item.img} style={styles.cardImg} />
                 <TouchableOpacity
                   style={{ flex: 1, marginLeft: width * 0.03 }}
@@ -213,7 +209,7 @@ const Home = ({ navigation, route }) => {
               <CustomText weight="bold" style={styles.eventSection}>Recent Activity</CustomText>
             </View>
 
-            {[picnic1, picnic4].map((img, i) => (
+            {[picnic1].map((img, i) => (
               <View key={i} style={styles.eventRow}>
                 <Image source={img} style={styles.cardImg} />
                 <View style={{ flex: 1, marginLeft: width * 0.03 }}>

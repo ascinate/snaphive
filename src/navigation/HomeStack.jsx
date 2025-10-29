@@ -1,12 +1,12 @@
-// this file is for where my Bottom tab navigation stack is defined
+// this file is for where my Bottom tab navigation stack is showing different screens
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // screens
 import Home from "../screen/Home";
 import PhotoFolder from "../screen/PhotoFolder";
-
 import Notification from "../screen/Notification";
+
 const Stack = createNativeStackNavigator();
 
 export default function HomeStack() {
@@ -14,7 +14,6 @@ export default function HomeStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeMain" component={Home} />
       <Stack.Screen name="PhotoFolder" component={PhotoFolder} />
-
       <Stack.Screen name="Notification" component={Notification} />
     </Stack.Navigator>
   );

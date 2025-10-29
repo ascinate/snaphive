@@ -1,5 +1,4 @@
-
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -13,7 +12,7 @@ import { RefreshControl } from 'react-native';
 
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
-
+import { EventContext } from '../context/EventContext';
 
 // SVGs
 import Brush from '../../assets/svg/brush.svg';
@@ -37,25 +36,63 @@ const picnic4 = require('../../assets/picnic4.jpg');
 
 const { width, height } = Dimensions.get('window');
 
-const Listing = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
 
-  const [refreshing, setRefreshing] = useState(false); 
 
-  const onRefresh = useCallback(() => { 
+  const [refreshing, setRefreshing] = useState(false);
+const { events } = useContext(EventContext);
+
+  const createdEventsRef = React.useRef([]);
+  useEffect(() => {
+    if (route?.params?.newEvent) {
+      const { name, photos } = route.params.newEvent;
+
+      const newEventObj = {
+        img: { uri: photos[0]?.uri },
+        title: name,
+        count: `${photos.length} Photos`,
+        photos,
+      };
+
+      // Append the new event instead of replacing
+      setEvents(prevEvents => [newEventObj, ...prevEvents]);
+
+      // Clear the params after adding, so it doesn't re-add on re-render
+      navigation.setParams({ newEvent: null });
+    }
+  }, [route?.params?.newEvent]);
+
+
+  const fetchEvents = useCallback(async () => {
+    // Example: load events from local storage or backend
+    // const storedEvents = await AsyncStorage.getItem('events');
+    // setEvents(JSON.parse(storedEvents) || []);
+
+    // For now, simulate a reload:
+    console.log("Refreshing events...");
+    setEvents(prev => [...prev]);
+  }, []);
+
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
+      setEvents(prev => [...prev]); // re-render the event list
       setRefreshing(false);
-    }, 1500);
+    }, 1000);
   }, []);
+
+
+
+
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff', }}>
         <TopNav />
 
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> 
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
           {/* Hero Section */}
@@ -161,15 +198,13 @@ const Listing = ({ navigation }) => {
               </TouchableOpacity>
             </View>
 
-            {[
-              { img: picnic1, title: 'Summer Vacation', count: '10 Photos' },
-              { img: picnic3, title: 'Family Picnic', count: '8 Photos' },
-            ].map((item, index) => (
+            {events.map((item, index) => (
               <View key={index} style={styles.eventRow}>
+                {console.log('EVENT ITEM PHOTOS:', item.photos)}
                 <Image source={item.img} style={styles.cardImg} />
                 <TouchableOpacity
                   style={{ flex: 1, marginLeft: width * 0.03 }}
-                  onPress={() => navigation.navigate('Join')}>
+                  onPress={() => navigation.navigate('PhotoFolder', { eventPhotos: item.photos })}>
                   <CustomText weight="bold" style={styles.eventTitle}>{item.title}</CustomText>
                   <CustomText weight="medium" style={styles.mtop}>{item.count}</CustomText>
                   <View style={styles.profileIcon}>
@@ -182,12 +217,12 @@ const Listing = ({ navigation }) => {
           </View>
 
           {/* Recent Activity */}
-          <View>
+          <View style={{ paddingBottom: 150 }}>
             <View style={styles.eventHeader}>
               <CustomText weight="bold" style={styles.eventSection}>Recent Activity</CustomText>
             </View>
 
-            {[picnic1, picnic4].map((img, i) => (
+            {[picnic1].map((img, i) => (
               <View key={i} style={styles.eventRow}>
                 <Image source={img} style={styles.cardImg} />
                 <View style={{ flex: 1, marginLeft: width * 0.03 }}>
@@ -212,7 +247,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: width * 0.05,
     backgroundColor: '#fff',
-    marginBottom: 100,
+
   },
   heroSection: {
     justifyContent: 'center',
@@ -333,12 +368,14 @@ const styles = StyleSheet.create({
   eventSection: {
     fontSize: width * 0.045,
     fontWeight: '800',
+    padddingBottom: 200,
   },
   eventHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: height * 0.04,
+
   },
   eventTitle: {
     fontSize: width * 0.04,
@@ -379,4 +416,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Listing;
+export default Home;

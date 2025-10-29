@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         alignSelf: 'flex-end',
     },
-    brightnessSection: { marginBottom: 25, height: 120 },
+    brightnessSection: { marginBottom: 25, height: 100 },
     brightnessHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     },
     brightnessValue: { color: '#fff', fontSize: 14, minWidth: 35 },
 
-    premiumSection: { marginBottom: 25 },
+    premiumSection: { marginBottom: 25, borderTopColor: '#444', borderTopWidth: 1, paddingTop: 15 },
     premiumTitle: { color: '#fff', fontSize: 16, fontWeight: '600', marginBottom: 15 },
     toolsContainer: { flexDirection: 'row', justifyContent: 'space-between', gap: 10 },
     premiumTool: {

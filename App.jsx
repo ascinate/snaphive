@@ -3,6 +3,8 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { navigationRef } from './src/navigation/RootNavigation';
+import { useNavigationContainerRef } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 //screen
@@ -51,10 +53,13 @@ import { EventProvider } from './src/context/EventContext';
 import ClickPhotoTwo from "./src/screen/ClickPhotoTwo";
 import ClickPhotoThree from "./src/screen/ClickPhotoThree";
 const App = () => {
+
+
   return (
     <SafeAreaProvider>
       <EventProvider>
-      <NavigationContainer>
+<NavigationContainer ref={navigationRef}>
+
         <Stack.Navigator>
           <Stack.Screen name="Landing" component={Landing}  options={{ headerShown: false }}/>
           <Stack.Screen name="Signup" component={Signup}  options={{ headerShown: false }}/>
@@ -75,8 +80,12 @@ const App = () => {
 
           <Stack.Screen name="NewPage" component={NewPage} options={{ headerShown: false }}
  />
-          <Stack.Screen name="Home" component={Home}  options={{ headerShown: false }}
+<Stack.Screen
+  name="Home"
+  component={MyTabs} // ✅ Redirect to MyTabs
+  options={{ headerShown: false }}
 />
+
           <Stack.Screen name="PhotoShare" component={PhotoShare}  options={{ headerShown: false }}
 />
           <Stack.Screen name="AddMember" component={AddMember}  options={{ headerShown: false }}

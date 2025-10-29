@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Image, StyleSheet, ScrollView } from "react-native";
 import FolderLayout from "../components/FolderLayout";
-import QR from "../../assets/svg/qr.svg";
+import ThreeDot from "../../assets/svg/threeDot.svg";
 import ThemeButton from "../components/ThemeButton";
 
 // Images
@@ -36,7 +36,7 @@ const PhotoFolder = ({ navigation, route }) => {
       owner="A"
       inviteText="+ invite a friend"
       onInvitePress={() => navigation.navigate("InviteHiveMember")}
-      RightIcon={<QR height={16} width={16} />}
+      RightIcon={<ThreeDot height={16} width={16} />}
     >
       {/*  Main Content */}
       <ScrollView

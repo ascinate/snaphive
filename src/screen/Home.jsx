@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react';
+import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   ScrollView,
   Dimensions,
   Platform,
+  Animated
 } from 'react-native';
 import { RefreshControl } from 'react-native';
 
@@ -36,9 +37,10 @@ const { width, height } = Dimensions.get('window');
 
 const Home = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
+  const [showImportBanner, setShowImportBanner] = useState(true);
   const { events, setEvents } = useContext(EventContext);
-
-  
+  const slideAnim = useRef(new Animated.Value(0)).current; // for slide
+  const opacityAnim = useRef(new Animated.Value(1)).current; // for fade out
   useEffect(() => {
     if (route?.params?.newEvent) {
       const { name, photos } = route.params.newEvent;
@@ -62,6 +64,24 @@ const Home = ({ navigation, route }) => {
       setRefreshing(false);
     }, 1000);
   }, []);
+
+
+  const handleLater = () => {
+    Animated.parallel([
+      Animated.timing(slideAnim, {
+        toValue: width,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start(() => setShowImportBanner(false));
+  };
+
+
 
   return (
     <SafeAreaProvider>
@@ -97,65 +117,75 @@ const Home = ({ navigation, route }) => {
           </View>
 
           {/* Gradient Section */}
-          <View style={{ marginTop: height * 0.025 }}>
-            <LinearGradient
-              colors={['#FDD32E', '#FFA500']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.ImportSection}
+          {/* Gradient Section */}
+          {showImportBanner && (
+            <Animated.View
+              style={{
+                marginTop: height * 0.025,
+                transform: [{ translateX: slideAnim }],
+                opacity: opacityAnim,
+              }}
             >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: width * 0.03,
-                }}
+              <LinearGradient
+                colors={['#FDD32E', '#FFA500']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.ImportSection}
               >
-                <View style={styles.cameraIcon}>
-                  <Camera width={width * 0.07} height={width * 0.07} />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <CustomText weight="bold" style={styles.importHeading}>
-                    We found 10 new photos in your library.
-                  </CustomText>
-                  <CustomText weight="medium" style={styles.importSub}>
-                    Import into Birthday Party?
-                  </CustomText>
-                </View>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  gap: width * 0.02,
-                }}
-              >
-                <TouchableOpacity
-                  style={[styles.importBtnWhite, { flex: 0.7 }]}
-                  onPress={() => navigation.navigate('PhotoShare')}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: width * 0.03,
+                  }}
                 >
-                  <Import width={width * 0.04} height={width * 0.04} />
-                  <CustomText weight="bold" style={styles.continueTxt}>
-                    Import
-                  </CustomText>
-                </TouchableOpacity>
+                  <View style={styles.cameraIcon}>
+                    <Camera width={width * 0.07} height={width * 0.07} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <CustomText weight="bold" style={styles.importHeading}>
+                      We found 10 new photos in your library.
+                    </CustomText>
+                    <CustomText weight="medium" style={styles.importSub}>
+                      Import into Birthday Party?
+                    </CustomText>
+                  </View>
+                </View>
 
-                <TouchableOpacity
-                  style={[styles.laterBtn, { flex: 0.3 }]}
-                  onPress={() => console.log('Later pressed')}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    gap: width * 0.02,
+                  }}
                 >
-                  <CustomText
-                    weight="bold"
-                    style={[styles.continueTxt, { color: '#fff' }]}
+                  <TouchableOpacity
+                    style={[styles.importBtnWhite, { flex: 0.7 }]}
+                    onPress={() => navigation.navigate('PhotoShare')}
                   >
-                    Later
-                  </CustomText>
-                </TouchableOpacity>
-              </View>
-            </LinearGradient>
-          </View>
+                    <Import width={width * 0.04} height={width * 0.04} />
+                    <CustomText weight="bold" style={styles.continueTxt}>
+                      Import
+                    </CustomText>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[styles.laterBtn, { flex: 0.3 }]}
+                    onPress={handleLater}
+                  >
+                    <CustomText
+                      weight="bold"
+                      style={[styles.continueTxt, { color: '#fff' }]}
+                    >
+                      Later
+                    </CustomText>
+                  </TouchableOpacity>
+                </View>
+              </LinearGradient>
+            </Animated.View>
+          )}
+
 
           {/* Dashboard Cards */}
           <View

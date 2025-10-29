@@ -1,61 +1,154 @@
-import React, { useState } from "react";
-import { View, Text, ScrollView, StyleSheet, Image, TextInput, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Image,
+  TextInput,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FolderLayout from "../components/FolderLayout";
 import ThemeButton from "../components/ThemeButton";
 import CustomText from "../components/CustomText";
 import Pencil from "../../assets/svg/pencil.svg";
-import { updateProfile } from '../API/API';
-const profileImage = require("../../assets/profile.jpg");
+import { updateProfile } from "../API/API";
+import { launchImageLibrary } from "react-native-image-picker";
 
 const EditScreen = ({ navigation }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Load user info from AsyncStorage
+  useEffect(() => {
+    (async () => {
+      const userData = await AsyncStorage.getItem("user");
+      if (userData) {
+        const user = JSON.parse(userData);
+        const nameParts = user.name ? user.name.split(" ") : [];
+        setFirstName(nameParts[0] || "");
+        setLastName(nameParts.slice(1).join(" ") || "");
+        setEmail(user.email || "");
+        setProfileImage(user.profileImage || null);
+      }
+    })();
+  }, []);
+
+  // 📸 Pick image using react-native-image-picker
+  const handlePickImage = async () => {
+    const options = {
+      mediaType: "photo",
+      quality: 1,
+      includeBase64: false,
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) return;
+      if (response.errorMessage) {
+        Alert.alert("Error", response.errorMessage);
+        return;
+      }
+
+      const uri = response.assets && response.assets[0]?.uri;
+      if (uri) {
+        setProfileImage(uri);
+      }
+    });
+  };
+
   const handleSave = async () => {
-  try {
-    if (!firstName && !lastName && !email) {
-      Alert.alert("Error", "Please fill at least one field to update");
-      return;
-    }
+    try {
+      if (!firstName && !lastName && !email && !profileImage) {
+        Alert.alert("Error", "Please fill at least one field or change image");
+        return;
+      }
 
-    setLoading(true);
+      setLoading(true);
 
-    const token = await AsyncStorage.getItem("token");
-    if (!token) {
-      Alert.alert("Error", "User not logged in");
-      return;
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        Alert.alert("Error", "User not logged in");
+        return;
+      }
+
+      const name = `${firstName} ${lastName}`.trim();
+
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("email", email);
+
+      if (profileImage && profileImage.startsWith("file:")) {
+        formData.append("profileImage", {
+          uri: profileImage,
+          name: `profile_${Date.now()}.jpg`,
+          type: "image/jpeg",
+        });
+      }
+
+      console.log("🟡 Sending FormData...");
+      console.log("Name:", name);
+      console.log("Email:", email);
+      console.log("ProfileImage:", profileImage);
+
+      const response = await updateProfile(formData, token);
+      console.log("✅ Profile Updated Response:", response.data);
+
+      await AsyncStorage.setItem("user", JSON.stringify(response.data.user));
+
+      Alert.alert("Success", response.data.message);
+      navigation.navigate("MyTabs");
+    } catch (error) {
+      console.log("❌ Error updating profile:", error);
+      console.log("Response:", error.response);
+      console.log("Response Data:", error.response?.data);
+      console.log("Message:", error.response?.data?.message);
+
+      Alert.alert(
+        "Error",
+        error.response?.data?.message || "Failed to update profile"
+      );
+    } finally {
+      setLoading(false);
     }
-    const name = `${firstName} ${lastName}`.trim();
-    const response = await updateProfile({ name, email }, token);
-    await AsyncStorage.setItem("user", JSON.stringify(response.data.user));
-    Alert.alert("Success", response.data.message);
-    navigation.navigate("MyTabs");
-  } catch (error) {
-    Alert.alert("Error", error.response?.data?.message || "Failed to update profile");
-  } finally {
-    setLoading(false);
-  }
   };
 
 
   return (
     <FolderLayout
       navigation={navigation}
-      image={profileImage}
+      image={
+        profileImage ? { uri: profileImage } : require("../../assets/profile.jpg")
+      }
       folderName="Edit Profile"
       date="+91 1841 510 1450"
-      RightIcon={<Pencil height={16} width={16} onPress={() => {}} />}
+      RightIcon={<Pencil height={16} width={16} onPress={handlePickImage} />}
     >
-      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.photoContainer}>
-          <Image source={profileImage} style={styles.photo} />
+          <TouchableOpacity onPress={handlePickImage}>
+            <Image
+              source={
+                profileImage
+                  ? { uri: profileImage }
+                  : require("../../assets/profile.jpg")
+              }
+              style={styles.photo}
+            />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.inputWrapper}>
-          <CustomText weight="medium" style={styles.blockText}>First Name</CustomText>
+          <CustomText weight="medium" style={styles.blockText}>
+            First Name
+          </CustomText>
           <TextInput
             style={styles.input}
             value={firstName}
@@ -66,7 +159,9 @@ const EditScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.inputWrapper}>
-          <CustomText weight="medium" style={styles.blockText}>Last Name</CustomText>
+          <CustomText weight="medium" style={styles.blockText}>
+            Last Name
+          </CustomText>
           <TextInput
             style={styles.input}
             value={lastName}
@@ -77,7 +172,9 @@ const EditScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.inputWrapper}>
-          <CustomText weight="medium" style={styles.blockText}>Email</CustomText>
+          <CustomText weight="medium" style={styles.blockText}>
+            Email
+          </CustomText>
           <TextInput
             style={styles.input}
             value={email}
@@ -101,45 +198,16 @@ const EditScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    padding: 20,
-    alignItems: "center",
-  },
-  photoContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    overflow: "hidden",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 0,
-    marginBottom: 15,
-    borderWidth: 6,
-    borderColor: "#F2F2F2",
-  },
-  photo: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
-  },
-  inputWrapper: {
-    width: "100%",
-    marginTop: 10,
-  },
-  blockText: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#1C1C1C",
-    marginBottom: 8,
-  },
+  scrollContainer: { paddingBottom: 40 },
+  photoContainer: { alignItems: "center", marginBottom: 20 },
+  photo: { width: 120, height: 120, borderRadius: 60 },
+  inputWrapper: { marginBottom: 20 },
+  blockText: { marginBottom: 6, color: "#333" },
   input: {
-    borderColor: "#F7F7F7",
-    backgroundColor: "#EFEFEF",
     borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    fontSize: 16,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
     color: "#000",
   },
 });

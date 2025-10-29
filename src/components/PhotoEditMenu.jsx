@@ -3,12 +3,16 @@ import { View, Text, StyleSheet, TouchableOpacity, PanResponder, ScrollView } fr
 import { useNavigation } from '@react-navigation/native';
 import ThemeButton from './ThemeButton';
 import CustomText from './CustomText';
+import PremiumModal from './PremiumModal';
 
 // SVG icons
 import Portrait from '../../assets/svg/portrait.svg';
 import Hdr from '../../assets/svg/hdr.svg';
 import Filter from '../../assets/svg/filter.svg';
-import PremiumModal from './PremiumModal';
+import Replce from '../../assets/svg/replce.svg';
+import Mirror from '../../assets/svg/mirror.svg';
+import Filp from '../../assets/svg/filp.svg';
+import Bottom from '../../assets/svg/bottom.svg';
 
 // Define before/after images for modal
 const beforeImage = require("../../assets/selfie.jpg");
@@ -26,14 +30,15 @@ const PhotoEditMenu = ({
     const [localBrightness, setLocalBrightness] = useState(initialBrightness);
     const [localContrast, setLocalContrast] = useState(initialContrast);
     const [modalVisible, setModalVisible] = useState(false);
-    const [showFilters, setShowFilters] = useState(false);
+    const [activeMenu, setActiveMenu] = useState(null); // "filters" or "portrait"
 
     // Dummy color filters
+    // Dynamic color filters with labels
     const colorFilters = [
-        { id: 1, color: '#FF6F61' },
-        { id: 2, color: '#FFD54F' },
-        { id: 3, color: '#4FC3F7' },
-        { id: 4, color: '#81C784' },
+        { id: 1, label: 'Vivd', color: '#FF6F61' },
+        { id: 2, label: 'B&W', color: '#FFD54F' },
+        { id: 3, label: 'Sunny', color: '#4FC3F7' },
+        { id: 4, label: 'Moonbeam', color: '#81C784' },
     ];
 
     // 🔹 Brightness PanResponder
@@ -75,7 +80,7 @@ const PhotoEditMenu = ({
             <Text style={styles.closeBtn} onPress={onClose}>X</Text>
 
             {/* ===================== MAIN CONTENT ===================== */}
-            {!showFilters ? (
+            {!activeMenu ? (
                 <>
                     {/* 🔸 Brightness & Contrast Section */}
                     <ScrollView style={styles.brightnessSection}>
@@ -116,13 +121,15 @@ const PhotoEditMenu = ({
                     <View style={styles.premiumSection}>
                         <CustomText weight="medium" style={styles.premiumTitle}>Premium Tools</CustomText>
                         <View style={styles.toolsContainer}>
-                            <TouchableOpacity style={styles.premiumTool} onPress={() => setModalVisible(true)}>
+                            {/*  Portrait Retouch opens Collage UI */}
+                            <TouchableOpacity style={styles.premiumTool} onPress={() => setActiveMenu("portrait")}>
                                 <View style={styles.toolIcon}><Portrait width={24} height={24} /></View>
                                 <CustomText weight="semiBold" style={styles.toolText}>Portrait Retouch</CustomText>
                                 <View style={styles.crownIcon}><CustomText weight="semiBold" style={styles.crownText}>👑</CustomText></View>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.premiumTool} onPress={() => setShowFilters(true)}>
+                            {/*  Advanced Filters opens Filter UI */}
+                            <TouchableOpacity style={styles.premiumTool} onPress={() => setActiveMenu("filters")}>
                                 <View style={styles.toolIcon}><Hdr width={24} height={24} /></View>
                                 <CustomText weight="semiBold" style={styles.toolText}>Advanced Filters</CustomText>
                                 <View style={styles.crownIcon}><CustomText weight="semiBold" style={styles.crownText}>👑</CustomText></View>
@@ -136,42 +143,74 @@ const PhotoEditMenu = ({
                         </View>
                     </View>
                 </>
-            ) : (
+            ) : activeMenu === "filters" ? (
                 // ===================== FILTER UI =====================
                 <View style={styles.filterContainer}>
                     <View style={styles.filtersHeader}>
-                        <TouchableOpacity onPress={() => setShowFilters(false)}>
+                        <TouchableOpacity onPress={() => setActiveMenu(null)}>
                             <Text style={styles.filtersText}>✕</Text>
                         </TouchableOpacity>
                         <Text style={styles.filtersTitle}>Filters</Text>
-                        <TouchableOpacity onPress={() => setShowFilters(false)}>
+                        <TouchableOpacity onPress={() => setActiveMenu(null)}>
+                            <Text style={styles.filtersApply}>✓</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.colorFiltersContainer}>
+                        <View style={styles.colorFiltersRow}>
+                            {colorFilters.map((filter) => (
+                                <View key={filter.id} style={{ alignItems: 'center', marginHorizontal: 10 }}>
+                                    {/* Dynamic label */}
+                                    <Text style={{ color: '#ffffff', marginBottom: 10 }}>{filter.label}</Text>
+
+                                    {/* Color circle */}
+                                    <TouchableOpacity style={[styles.colorCircle, { backgroundColor: filter.color }]} />
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                </View>
+            ) : (
+                // ===================== PORTRAIT RETOUCH (COLLAGE) UI =====================
+                <View style={styles.filterContainer}>
+                    <View style={styles.filtersHeader}>
+                        <TouchableOpacity onPress={() => setActiveMenu(null)}>
+                            <Text style={styles.filtersText}>✕</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.filtersTitle}>Collage</Text>
+                        <TouchableOpacity onPress={() => setActiveMenu(null)}>
                             <Text style={styles.filtersApply}>✓</Text>
                         </TouchableOpacity>
                     </View>
 
-                    {/* Filter Colors */}
-                    <View style={styles.colorFiltersContainer}>
-                        <View style={styles.colorFiltersRow}>
-                            {colorFilters.map((filter) => (
-                                <View key={filter.id} style={{ alignItems: 'center' }}>
-                                    <Text style={{ color: '#ffffff', marginBottom: 10 }}>Color</Text>
-                                    <TouchableOpacity style={[styles.colorCircle, { backgroundColor: filter.color }]} />
-                                </View>
-
-                            ))}
+                    <View style={styles.collageContainer}>
+                        <View>
+                            <Text style={styles.collageText}>Replce</Text>
+                            <View style={styles.collageManu}><Replce /></View>
+                        </View>
+                        <View>
+                            <Text style={styles.collageText}>Mirror</Text>
+                            <View style={styles.collageManu}><Mirror /></View>
+                        </View>
+                        <View>
+                            <Text style={styles.collageText}>Flip</Text>
+                            <View style={styles.collageManu}><Filp /></View>
+                        </View>
+                        <View>
+                            <Text style={styles.collageText}>Bottom</Text>
+                            <View style={styles.collageManu}><Bottom /></View>
                         </View>
                     </View>
                 </View>
             )}
 
-            {/* 🔸 Continue Button */}
+            {/*  Continue Button */}
             <ThemeButton
                 text="Continue"
                 onPress={() => navigation.navigate('ClickPhotoThree')}
                 style={{ width: '100%' }}
             />
 
-            {/* 🔸 Premium Modal */}
+            {/*  Premium Modal */}
             <PremiumModal
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
@@ -244,10 +283,39 @@ const styles = StyleSheet.create({
     filtersText: { color: '#fff', fontSize: 22 },
     filtersTitle: { color: '#fff', fontSize: 18, fontWeight: '600' },
     filtersApply: { color: '#4CAF50', fontSize: 22 },
-    colorFiltersContainer: { alignItems: 'center' },
-    colorFiltersRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 15, width: '100%' },
+    colorFiltersContainer: { alignItems: 'center', paddingInline: 45 },
+    colorFiltersContainer: {
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    colorFiltersRow: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
     colorCircle: {
         width: 50, height: 50, borderRadius: 8,
         borderWidth: 2, borderColor: '#fff',
     },
+
+    collageContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 15,
+        paddingInline: 45,
+    },
+    collageManu: {
+        height: 55,
+        width: 55,
+        backgroundColor: '#ffffff',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    collageText: {
+        color: '#ffffffff',
+        fontSize: 12,
+        fontWeight: '500',
+        textAlign: 'center',
+        marginBottom: 5,
+    }
 });

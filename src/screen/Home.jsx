@@ -193,7 +193,7 @@ const Home = ({ navigation, route }) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               flexWrap: 'wrap',
-              marginTop: height * 0.03,
+              marginTop: height * 0.01,
             }}
           >
             <View style={styles.dashCard}>

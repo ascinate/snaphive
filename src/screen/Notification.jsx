@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useNotification } from "../context/NotificationContext"; // Import context
@@ -9,8 +9,10 @@ import CreateFolder from "../../assets/svg/createFolder.svg";
 
 // Local images
 const NotificationScreen = ({ navigation }) => {
-  const { notifications } = useNotification(); // Use global context only
-
+  const { notifications, markAllAsRead } = useNotification();; // Use global context only
+  useEffect(() => {
+    markAllAsRead(); // clear notification count when page opens
+  }, []);
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>

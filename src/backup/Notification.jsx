@@ -1,139 +1,92 @@
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import BottomNav from "../components/BottomNav";
-import TopNavbar from "../components/TopNavbar";
-
-
+import { useNotification } from "../context/NotificationContext"; // Import context
+import TopNav from "../components/TopNavbar";
+import BackNavigator from "../../assets/svg/backNavigator.svg";
 import CreateAlbum from "../../assets/svg/createAlbum.svg";
 import CreateFolder from "../../assets/svg/createFolder.svg";
-import BackNavigator from "../../assets/svg/backNavigator.svg";
-//Image
+
+// Local images
 const dp = require("../../assets/dp.jpg");
 const dp2 = require("../../assets/dp2.webp");
 
+const NotificationScreen = ({ navigation }) => {
+  const { notifications, setNotifications } = useNotification(); // Use global context
 
-const MemberList = ({ navigation }) => {
-    return (
-        <SafeAreaProvider>
-            <SafeAreaView style={styles.container} >
-                <TopNavbar />
-                <ScrollView style={styles.scrollContainer}>
-                    <View>
-                        <BackNavigator width={20} height={20} style={{ marginTop: 10 }} onPress={() => navigation.goBack()} />
-                        <Text style={{ fontSize: 18, fontWeight: 600, marginTop: 10 }}>Notifications</Text>
-                    </View>
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const data = [
+        { id: 1, name: "Demola Aoki", time: "4hrs", image: dp, iconType: "album" },
+        { id: 2, name: "Quency Demola", time: "4hrs", image: dp2, iconType: "folder" },
 
-                    {/* ---Tabs Navigation---- */}
-                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginBlock: 20, }}>
-                        <View style={[styles.badge, styles.badgeActive]}>
-                            <Text style={styles.badgeText}>Today</Text>
-                        </View>
-                    </View>
-                    {/* ---Tabs Navigation---- */}
+      ];
+      setNotifications(data); //  Update global notifications
+    };
+    fetchNotifications();
+  }, []);
 
-                    {/* Notification List Screen */}
-                    <View style={styles.chatList}>
-                        <View style={styles.chatListItem}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-                                <Image source={dp} style={styles.dp} />
-                                <View>
-                                    <Text style={{ fontSize: 15, fontWeight: 500 }}>Demola Aoki</Text>
-                                    <Text style={{ color: '#A8A8A8', fontSize: 12 }}>4hrs</Text>
-                                </View>
-                            </View>
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <TopNav />
 
+        <ScrollView style={styles.scrollContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <BackNavigator width={20} height={20} style={{ marginTop: 10 }} />
+          </TouchableOpacity>
+          <Text style={{ fontSize: 18, fontWeight: "600", marginTop: 10 }}>Notifications</Text>
 
-                            <CreateAlbum width={30} height={30} />
-                        </View>
-                        <View style={styles.chatListItem}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-                                <Image source={dp2} style={styles.dp} />
-                                <View>
-                                    <Text style={{ fontSize: 15, fontWeight: 500 }}>Quency Demola</Text>
-                                    <Text style={{ color: '#A8A8A8', fontSize: 12 }}>4hrs</Text>
-                                </View>
-                            </View>
+          <View style={{ flexDirection: "row", gap: 10, marginVertical: 20 }}>
+            <View style={[styles.badge, styles.badgeActive]}>
+              <Text style={styles.badgeText}>Today</Text>
+            </View>
+          </View>
 
+          <View style={styles.chatList}>
+            {notifications.map((item) => (
+              <View key={item.id} style={styles.chatListItem}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 15 }}>
+                  <Image source={item.image} style={styles.dp} />
+                  <View>
+                    <Text style={{ fontSize: 15, fontWeight: "500" }}>{item.name}</Text>
+                    <Text style={{ color: "#A8A8A8", fontSize: 12 }}>{item.time}</Text>
+                  </View>
+                </View>
 
-                            <CreateFolder width={30} height={30} />
-                        </View>
-                    </View>
-                </ScrollView>
-            </SafeAreaView>
-        </SafeAreaProvider>
-    )
-}
+                {item.iconType === "album" ? (
+                  <CreateAlbum width={30} height={30} />
+                ) : (
+                  <CreateFolder width={30} height={30} />
+                )}
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
+  container: { flex: 1, backgroundColor: "#fff" },
+  scrollContainer: { paddingHorizontal: 20, paddingVertical: 10 },
+  badge: { backgroundColor: "gray", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 5 },
+  badgeText: { color: "white", fontSize: 14, fontWeight: "600" },
+  badgeActive: { backgroundColor: "black" },
+  chatList: { marginBottom: 20 },
+  chatListItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#FAFAFA",
+    gap: 15,
+    marginBottom: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    borderRadius: 10,
+  },
+  dp: { width: 51, height: 51, borderRadius: 25, resizeMode: "cover" },
+});
 
-    },
-    scrollContainer: {
-        paddingInline: 20,
-        paddingBlock: 10,
-    },
-    // ---Tabs Navigation----
-    badge: {
-
-        backgroundColor: 'gray',
-        paddingHorizontal: 12,   // horizontal padding for spacing around text
-        paddingVertical: 6,      // vertical padding
-        borderRadius: 5,
-        alignSelf: 'flex-start', // makes View wrap content instead of stretching full width
-        borderRadius: 5,
-    },
-    badgeText: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 14,
-        fontWeight: '600',
-    },
-    badgeActive: {
-        color: 'white',
-        backgroundColor: 'black',
-    },
-    // ---Tabs Navigation----
-
-    // Member List
-
-
-
-    chatListItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: '#FAFAFA',
-        gap: 15,
-        marginBottom: 20,
-        paddingHorizontal: 20,
-        paddingVertical: 20,
-        borderRadius: 10,
-    },
-
-    dp: {
-        width: 51,
-        height: 51,
-        borderRadius: 80 / 2,
-        resizeMode: "cover",
-    },
-    bottomNav: {
-        marginTop: 20,
-        position: "absolute",
-        left: 0,
-        right: 0,
-        bottom: 0,
-        height: 60, // adjust height
-        backgroundColor: "#fff",
-        flexDirection: "row",
-        justifyContent: "space-around",
-        alignItems: "center",
-        borderTopWidth: 1,
-        borderTopColor: "#ddd",
-    }
-
-})
-
-export default MemberList
+export default NotificationScreen;

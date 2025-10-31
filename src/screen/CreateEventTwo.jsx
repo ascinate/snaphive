@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { launchImageLibrary } from 'react-native-image-picker';
 
@@ -10,12 +10,14 @@ import Play from "../../assets/svg/play.svg";
 // components
 import FolderLayout from "../components/FolderLayout";
 import ThemeButton from "../components/ThemeButton";
+import { EventContext } from "../context/EventContext";
 
 const createEvent = require("../../assets/createEvent.png");
 
 const CreateEventTwo = ({ navigation, route }) => {
+  const { addEvent } = useContext(EventContext);
   const [code, setCode] = useState("");
-
+  const newEvent = route.params?.newEvent;
   const { folderName, date, owner } = route.params || {
     folderName: "Untitled Folder",
     date: "Unknown Date",
@@ -70,7 +72,7 @@ const CreateEventTwo = ({ navigation, route }) => {
                 } else if (response.assets && response.assets.length > 0) {
                   const selectedImage = response.assets[0];
                   console.log('Selected image:', selectedImage.uri);
-  
+
                 }
               });
             }}
@@ -123,8 +125,15 @@ const CreateEventTwo = ({ navigation, route }) => {
 
         <ThemeButton
           text="Continue"
-          onPress={() => navigation.navigate("CreateEventThree")}
-          style={{ marginTop: 64 }}
+          onPress={() => {
+            if (newEvent) {
+              addEvent(newEvent); // add event to context
+              navigation.navigate("Home");
+            } else {
+              Alert.alert("Something went wrong, try again!");
+            }
+          }}
+          style={{ width: "100%" }}
         />
       </ScrollView>
     </FolderLayout>

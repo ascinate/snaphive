@@ -32,27 +32,29 @@ const CreateEvent = ({ navigation, route }) => {
   // Photos passed from PhotoShare (if any)
   const selectedPhotos = route.params?.selectedImages || [];
 
-  const handleCreateEvent = () => {
-    if (!code.trim() || !selectedEventType) {
-      Alert.alert("Please fill all fields");
-      return;
-    }
+const handleCreateEvent = () => {
+  if (!code.trim() || !selectedEventType) {
+    Alert.alert("Please fill all fields");
+    return;
+  }
 
-    if (selectedPhotos.length === 0) {
-      Alert.alert("Please select at least one photo for your event");
-      return;
-    }
+  if (selectedPhotos.length === 0) {
+    Alert.alert("Please select at least one photo for your event");
+    return;
+  }
 
-    const newEvent = {
-      img: { uri: selectedPhotos[0].uri },
-      title: code,
-      count: `${selectedPhotos.length} Photos`,
-      photos: selectedPhotos,
-    };
-
-    addEvent(newEvent); // ✅ instantly updates Home
-    navigation.navigate("Home");
+  const newEvent = {
+    img: { uri: selectedPhotos[0].uri },
+    title: code,
+    count: `${selectedPhotos.length} Photos`,
+    photos: selectedPhotos,
+    type: selectedEventType,
   };
+
+  //  Go to CreateEventTwo and pass newEvent
+  navigation.navigate("CreateEventTwo", { newEvent });
+};
+
 
   return (
     <FolderLayout

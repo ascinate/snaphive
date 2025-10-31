@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { launchImageLibrary } from 'react-native-image-picker';
 
 // svg
@@ -17,6 +17,8 @@ const createEvent = require("../../assets/createEvent.png");
 const CreateEventTwo = ({ navigation, route }) => {
   const { addEvent } = useContext(EventContext);
   const [code, setCode] = useState("");
+  const [uploadedImage, setUploadedImage] = useState(null); // 👈 state to store uploaded image
+
   const newEvent = route.params?.newEvent;
   const { folderName, date, owner } = route.params || {
     folderName: "Untitled Folder",
@@ -32,7 +34,7 @@ const CreateEventTwo = ({ navigation, route }) => {
   return (
     <FolderLayout
       navigation={navigation}
-      image={createEvent}
+      image={uploadedImage ? { uri: uploadedImage } : createEvent} // ✅ show uploaded image if available
       folderName="Create Event"
       date="Sep 19"
       owner="A"
@@ -54,25 +56,25 @@ const CreateEventTwo = ({ navigation, route }) => {
           <Text style={{ fontSize: 18, fontWeight: "600" }}>Cover Image</Text>
         </View>
 
-
         <View style={styles.uploadContainer}>
+          {/* Upload Button */}
           <TouchableOpacity
             style={styles.uploadBtn}
             onPress={() => {
               const options = {
-                mediaType: 'photo',
+                mediaType: "photo",
                 quality: 1,
               };
 
               launchImageLibrary(options, (response) => {
                 if (response.didCancel) {
-                  console.log('User cancelled image picker');
+                  console.log("User cancelled image picker");
                 } else if (response.errorCode) {
-                  console.log('ImagePicker Error: ', response.errorMessage);
+                  console.log("ImagePicker Error: ", response.errorMessage);
                 } else if (response.assets && response.assets.length > 0) {
                   const selectedImage = response.assets[0];
-                  console.log('Selected image:', selectedImage.uri);
-
+                  console.log("Selected image:", selectedImage.uri);
+                  setUploadedImage(selectedImage.uri); // save selected image
                 }
               });
             }}
@@ -83,7 +85,6 @@ const CreateEventTwo = ({ navigation, route }) => {
         </View>
 
         <Text>Or choose from stock options based on event type</Text>
-
 
         <View style={styles.imageGrid}>
           <View style={styles.imageContainer}>
@@ -122,12 +123,11 @@ const CreateEventTwo = ({ navigation, route }) => {
           </View>
         </View>
 
-
         <ThemeButton
           text="Continue"
           onPress={() => {
             if (newEvent) {
-              addEvent(newEvent); // add event to context
+              addEvent(newEvent);
               navigation.navigate("Home");
             } else {
               Alert.alert("Something went wrong, try again!");
@@ -162,9 +162,9 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   imageGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     gap: 10,
     marginTop: 20,
   },

@@ -7,7 +7,7 @@ import Bell from "../../assets/svg/bell.svg";
 
 const TopNav = () => {
   const navigation = useNavigation();
-const { notifications, unreadCount } = useNotification(); // Access notifications from global state
+  const { notifications, unreadCount } = useNotification(); // Access notifications from global state
 
   return (
     <View style={styles.container}>
@@ -20,11 +20,11 @@ const { notifications, unreadCount } = useNotification(); // Access notification
         onPress={() => navigation.navigate("Notification")}
       >
         <Bell width={28} height={28} />
-{unreadCount > 0 && (
-  <View style={styles.badge}>
-    <Text style={styles.badgeText}>{unreadCount}</Text>
-  </View>
-)}
+        {unreadCount > 0 && (
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>{unreadCount}</Text>
+          </View>
+        )}
 
       </TouchableOpacity>
     </View>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet, Platform, TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -10,6 +10,7 @@ import BackArrow from "../../assets/svg/backArrow.svg";
 //components
 import FolderLayout from "../components/FolderLayout";
 import ThemeButton from "../components/ThemeButton";
+import { EventContext } from "../context/EventContext";
 
 const createEvent = require("../../assets/createEvent.png");
 
@@ -25,11 +26,15 @@ const CreateEventFour = ({ navigation, route }) => {
     const [showStartTime, setShowStartTime] = useState(false);
     const [showEndTime, setShowEndTime] = useState(false);
 
-
+    const [uploadedImage, setUploadedImage] = useState(null);
 
 
     const [inputData, setInputData] = useState("");
 
+    const newEvent = route.params?.newEvent;
+
+
+    const { addEvent } = useContext(EventContext);
 
 
 
@@ -140,14 +145,21 @@ const CreateEventFour = ({ navigation, route }) => {
                     )}
                 </View>
 
-                <Text style={{color: '#A8A8A8'}}>You can now create events with complete control over media sharing, dates, times, and attendee access. The QR code and passcode system makes it easy for attendees to join and share media at your events.</Text>
+                <Text style={{ color: '#A8A8A8' }}>You can now create events with complete control over media sharing, dates, times, and attendee access. The QR code and passcode system makes it easy for attendees to join and share media at your events.</Text>
 
 
                 {/* Continue Button */}
                 <ThemeButton
                     text="Create event"
-                    onPress={() => navigation.navigate("CreateEventFive")}
-                    style={{ marginTop: 130 }}
+                    onPress={() => {
+                        if (newEvent) {
+                            addEvent(newEvent);
+                            navigation.navigate("Home");
+                        } else {
+                            Alert.alert("Something went wrong, try again!");
+                        }
+                    }}
+                    style={{ marginTop: 40 }}
                 />
             </ScrollView>
         </FolderLayout>

@@ -116,8 +116,9 @@ const Home = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
 
+   
           {/* Gradient Section */}
-          {/* Gradient Section */}
+          
           {showImportBanner && (
             <Animated.View
               style={{

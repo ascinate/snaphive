@@ -56,12 +56,11 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <SafeAreaProvider>
-      {/* ✅ Make providers wrap everything */}
+
       <NotificationProvider>
         <EventProvider>
-          {/* ✅ Only one NavigationContainer */}
           <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator >
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen name="Landing" component={Landing} />
               <Stack.Screen name="Signup" component={Signup} />
               <Stack.Screen name="Login" component={Login} />

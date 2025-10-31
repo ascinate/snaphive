@@ -26,10 +26,10 @@ const CreateEventThree = ({ navigation, route }) => {
     const [showStartTime, setShowStartTime] = useState(false);
     const [showEndTime, setShowEndTime] = useState(false);
 
-    // ✅ Get newEvent from route params
+
     const newEvent = route.params?.newEvent;
     
-    // ✅ Get addEvent from context
+
     const { addEvent } = useContext(EventContext);
 
     const onChangeStartDate = (event, selectedDate) => {
@@ -189,18 +189,18 @@ const CreateEventThree = ({ navigation, route }) => {
 
 
                 {/* Continue Button */}
-                <ThemeButton
-                    text="Continue"
-                    onPress={() => {
-                        if (newEvent) {
-                            addEvent(newEvent);
-                            navigation.navigate("Home");
-                        } else {
-                            Alert.alert("Something went wrong, try again!");
-                        }
-                    }}
-                    style={{ marginTop: 40 }}
-                />
+<ThemeButton
+          text="Continue"
+          onPress={() => {
+            if (newEvent) {
+
+              navigation.navigate("CreateEventFour", { newEvent });
+            } else {
+              Alert.alert("Something went wrong, try again!");
+            }
+          }}
+          style={{ width: "100%" }}
+        />
             </ScrollView>
         </FolderLayout>
     );

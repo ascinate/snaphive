@@ -96,7 +96,7 @@ const handleCreateEvent = () => {
                 styles.badge,
                 {
                   backgroundColor:
-                    selectedEventType === type ? "#FFD966" : "#eee",
+                    selectedEventType === type ? "#FDD32E" : "#ffffffff",
                 },
               ]}
               onPress={() => setSelectedEventType(type)}
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderBottomWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#ccccccb4",
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,

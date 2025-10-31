@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, ScrollView, StyleSheet, Platform, TouchableOpacity, } from "react-native";
+import React, { useState, useContext } from "react";
+import { View, Text, TextInput, ScrollView, StyleSheet, Platform, TouchableOpacity, Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import CheckBox from '@react-native-community/checkbox';
 //svg
@@ -10,6 +10,7 @@ import Timer from "../../assets/svg/timer.svg";
 //components
 import FolderLayout from "../components/FolderLayout";
 import ThemeButton from "../components/ThemeButton";
+import { EventContext } from "../context/EventContext";
 
 const createEvent = require("../../assets/createEvent.png");
 
@@ -24,6 +25,12 @@ const CreateEventThree = ({ navigation, route }) => {
     const [showEndDate, setShowEndDate] = useState(false);
     const [showStartTime, setShowStartTime] = useState(false);
     const [showEndTime, setShowEndTime] = useState(false);
+
+    // ✅ Get newEvent from route params
+    const newEvent = route.params?.newEvent;
+    
+    // ✅ Get addEvent from context
+    const { addEvent } = useContext(EventContext);
 
     const onChangeStartDate = (event, selectedDate) => {
         setShowStartDate(Platform.OS === "ios");
@@ -184,7 +191,14 @@ const CreateEventThree = ({ navigation, route }) => {
                 {/* Continue Button */}
                 <ThemeButton
                     text="Continue"
-                    onPress={() => navigation.navigate("CreateEventFour")}
+                    onPress={() => {
+                        if (newEvent) {
+                            addEvent(newEvent);
+                            navigation.navigate("Home");
+                        } else {
+                            Alert.alert("Something went wrong, try again!");
+                        }
+                    }}
                     style={{ marginTop: 40 }}
                 />
             </ScrollView>

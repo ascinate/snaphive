@@ -127,8 +127,8 @@ const CreateEventTwo = ({ navigation, route }) => {
           text="Continue"
           onPress={() => {
             if (newEvent) {
-              addEvent(newEvent);
-              navigation.navigate("Home");
+              // ✅ Navigate to CreateEventThree instead of creating event and going to Home
+              navigation.navigate("CreateEventThree", { newEvent });
             } else {
               Alert.alert("Something went wrong, try again!");
             }

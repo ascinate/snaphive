@@ -150,7 +150,7 @@ const Signup = ({ navigation }) => {
 
       {/* Already a user */}
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-        <CustomText style={{ fontSize: width * 0.04 }}>All ready have an account ? </CustomText>
+        <CustomText style={{ fontSize: width * 0.04 }}>Already have an account ? </CustomText>
         <TouchableWithoutFeedback onPress={() => navigation.navigate('Login')}>
           <View>
             <CustomText

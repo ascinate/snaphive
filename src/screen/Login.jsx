@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableWithoutFeedback, TouchableHighlight, Alert } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { loginUser } from "../API/API"; 
+import { loginUser } from "../API/API";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Logo from '../components/Logo';
@@ -34,34 +34,34 @@ const Login = ({ navigation }) => {
             Alert.alert("login guide", "Please create a password");
             return;
         }
-        
+
         try {
-        const res = await loginUser({
-            email: userID,
-            password,
-        });
+            const res = await loginUser({
+                email: userID,
+                password,
+            });
 
-        console.log("Login Response:", res.data);
+            console.log("Login Response:", res.data);
 
-        if (res.data && res.data.token) {
-            await AsyncStorage.setItem('token', res.data.token);
-            await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
-            Alert.alert("Success", "Login successful", [
-            { text: "OK", onPress: () => navigation.navigate("MyTabs") },
-            ]);
-        } else {
-            Alert.alert("Error", "Invalid response from server");
-        }
+            if (res.data && res.data.token) {
+                await AsyncStorage.setItem('token', res.data.token);
+                await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
+                Alert.alert("Success", "Login successful", [
+                    { text: "OK", onPress: () => navigation.navigate("MyTabs") },
+                ]);
+            } else {
+                Alert.alert("Error", "Invalid response from server");
+            }
         } catch (err) {
-        console.log("Login Error:", err.response?.data || err.message);
-        Alert.alert("Error", err.response?.data?.message || "Login failed");
+            console.log("Login Error:", err.response?.data || err.message);
+            Alert.alert("Error", err.response?.data?.message || "Login failed");
         }
     };
 
     return (
         <SafeAreaProvider style={styles.container}>
             <Logo />
-            <CustomText weight='medium' style={[styles.description, { paddingInline:32 }]}>
+            <CustomText weight='medium' style={[styles.description, { paddingInline: 32 }]}>
                 Login to your account in Snaphive to start Photo and video share
             </CustomText>
 
@@ -74,7 +74,7 @@ const Login = ({ navigation }) => {
             <TextInput style={styles.emailInput}
                 value={password}
                 onChangeText={setPassword}
-                placeholder='Create your password'
+                placeholder='Enter your password'
                 secureTextEntry={true} />
 
             <View style={{ width: '100%', marginTop: 10 }}>
@@ -103,7 +103,7 @@ const Login = ({ navigation }) => {
             </View>
 
 
-            <CustomText weight='medium' style={[styles.description, { position: 'absolute', bottom: 20, textAlign: 'center',fontSize:14 }]}>
+            <CustomText weight='medium' style={[styles.description, { position: 'absolute', bottom: 20, textAlign: 'center', fontSize: 14 }]}>
                 By continuing I accept Selfso's Terms of Use
                 and
                 <TouchableWithoutFeedback >

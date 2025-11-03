@@ -267,10 +267,10 @@ const Home = ({ navigation, route }) => {
           >
             <View style={styles.dashCard}>
               <View>
-                <CustomText weight="bold" style={styles.cardText}>
+                <CustomText weight="bold" style={[styles.cardText,{color:'#9f31d8'}]}>
                   11
                 </CustomText>
-                <CustomText weight="medium">
+                <CustomText weight="medium" style={styles.dashText}>
                   Hives
                 </CustomText>
               </View>
@@ -278,21 +278,21 @@ const Home = ({ navigation, route }) => {
 
             <View style={styles.dashCard}>
               <View>
-                <CustomText weight="bold" style={styles.cardText}>
+                <CustomText weight="bold" style={[styles.cardText,{color:'#d92779'}]}>
                   1
                 </CustomText>
-                <CustomText weight="medium">
+                <CustomText weight="medium" style={styles.dashText}>
                   Photos
                 </CustomText>
               </View>
             </View>
             <View style={styles.dashCard}>
               <View>
-                <CustomText weight="bold" style={styles.cardText}>
+       <CustomText weight="bold" style={[styles.cardText,{color:'#f56824'}]}>
                   1
                 </CustomText>
 
-                <CustomText weight="medium">
+                <CustomText weight="medium" style={styles.dashText}>
                   Members
                 </CustomText>
               </View>
@@ -320,31 +320,25 @@ const Home = ({ navigation, route }) => {
             </View>
 
             {events.map((item, index) => (
-              <View key={index} style={styles.eventRow}>
-                <Image source={item.img} style={styles.cardImg} />
-                <TouchableOpacity
-                  style={{ flex: 1, marginLeft: width * 0.03 }}
-                  onPress={() =>
-                    navigation.navigate('PhotoFolder', {
-                      eventPhotos: item.photos,
-                    })
-                  }
-                >
-                  <CustomText weight="bold" style={styles.eventTitle}>
-                    {item.title}
-                  </CustomText>
-                  <CustomText weight="medium" style={styles.mtop}>
-                    {item.count}
-                  </CustomText>
-                  <View style={styles.profileIcon}>
-                    <CustomText weight="medium" style={{ color: '#FFFFFF' }}>
-                      PG
-                    </CustomText>
-                  </View>
-                </TouchableOpacity>
-                <RightArrow width={width * 0.035} height={width * 0.035} />
-              </View>
+              <TouchableOpacity key={index} onPress={() =>
+                navigation.navigate('PhotoFolder', {
+                  eventPhotos: item.photos,
+                })
+              }>
 
+                <View style={styles.eventRow} >
+                  <Image source={item.img} style={styles.cardImg} />
+                  <View style={styles.eventRowInformation}>
+                    <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>{item.title}</CustomText>
+                    <CustomText weight="medium" style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}>I travel rajasthan</CustomText>
+                    <View style={{ flexDirection: 'row', gap: 20 }}>
+                      <CustomText>{item.count}</CustomText>
+                      <CustomText>2</CustomText>
+                      <CustomText>3</CustomText>
+                    </View>
+                  </View>
+                </View>
+              </TouchableOpacity>
             ))}
           </View>
 
@@ -355,41 +349,27 @@ const Home = ({ navigation, route }) => {
                 Recent Activity
               </CustomText>
             </View>
+            {[picnic1].map((img, i) => (
+              <TouchableOpacity key={i} onPress={() =>
+                navigation.navigate('PhotoFolder', {
+                  eventPhotos: item.photos,
+                })
+              }>
 
-            {/* {[picnic1].map((img, i) => (
-              <View key={i} style={styles.eventRow}>
-                <Image source={img} style={styles.cardImg} />
-                <View style={{ flex: 1, marginLeft: width * 0.03 }}>
-                  <CustomText weight="bold" style={styles.eventTitle}>
-                    Summer Vacation
-                  </CustomText>
-                  <CustomText weight="medium" style={styles.mtop}>
-                    10 Photos
-                  </CustomText>
-                  <View style={styles.profileIcon}>
-                    <CustomText weight="medium" style={{ color: '#FFFFFF' }}>
-                      PG
-                    </CustomText>
+                <View style={styles.eventRow} >
+                  <Image source={img} style={styles.cardImg} />
+                  <View style={styles.eventRowInformation}>
+                    <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>rajasthan</CustomText>
+                    <CustomText weight="medium" style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}>I travel rajasthan</CustomText>
+                    <View style={{ flexDirection: 'row', gap: 20 }}>
+                      <CustomText>1</CustomText>
+                      <CustomText>2</CustomText>
+                      <CustomText>3</CustomText>
+                    </View>
                   </View>
                 </View>
-                <RightArrow width={width * 0.035} height={width * 0.035} />
-              </View>
-            ))} */}
-
-
-            <View style={styles.eventRow}>
-              <Image source={picnic1} style={styles.cardImg} />
-              <View style={styles.eventRowInformation}>
-                <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>rajasthan</CustomText>
-                <CustomText weight="medium" style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}>I travel rajasthan</CustomText>
-                <View style={{ flexDirection: 'row', gap: 20 }}>
-                  <CustomText>1</CustomText>
-                  <CustomText>2</CustomText>
-                  <CustomText>3</CustomText>
-                </View>
-              </View>
-            </View>
-
+              </TouchableOpacity>
+            ))}
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -459,19 +439,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   ImportSection: {
-    borderRadius: 12,
+    borderRadius: 24,
     padding: width * 0.05,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOpacity: 0.15,
-        shadowRadius: 6,
-        shadowOffset: { width: 0, height: 3 },
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
+     ...Platform.select({
+    ios: {
+      shadowColor: '#000',
+      shadowOpacity: 0.15,
+      shadowRadius: 6,
+      shadowOffset: { width: 0, height: 4 },
+    },
+    android: {
+      elevation:20,
+    },
+  }),
   },
   cameraIcon: {
     width: width * 0.13,
@@ -524,27 +504,30 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginVertical: 10,
   },
-  dashCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: 120,
-    padding: width * 0.045,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: height * 0.02,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        shadowOffset: { width: 0, height: 2 },
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
-  },
+dashCard: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  width: 120,
+  padding: width * 0.045,
+  backgroundColor: '#FFFFFF',
+  borderRadius: 12,
+  alignItems: 'center',
+  marginTop: height * 0.02,
+  ...Platform.select({
+    ios: {
+      shadowColor: '#000',
+      shadowOpacity: 0.15,
+      shadowRadius: 6,
+      shadowOffset: { width: 0, height: 4 },
+    },
+    android: {
+      elevation:1,
+    },
+  }),
+},
+dashText: {
+color:'#6B7280'
+},
   icon: {
     width: width * 0.12,
     height: width * 0.12,
@@ -557,12 +540,12 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   newEvent: {
-    fontSize: width * 0.03,
+    fontSize: 14,
     fontWeight: '600',
-    color: '#00146F',
+    color: '#9333EA',
   },
   eventSection: {
-    fontSize: width * 0.045,
+    fontSize: 20,
     fontWeight: '800',
   },
   eventHeader: {

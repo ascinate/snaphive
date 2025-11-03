@@ -96,7 +96,75 @@ const Home = ({ navigation, route }) => {
           }
         >
           {/* Hero Section */}
-          <View style={styles.heroSection}>
+
+          <Animated.View
+            style={{
+              marginTop: height * 0.025,
+              transform: [{ translateX: slideAnim }],
+              opacity: opacityAnim,
+            }}
+          >
+            <LinearGradient
+              colors={[
+                '#a131d3',
+                '#b128c4',
+                '#bd22b5',
+                '#c61fa7',
+                '#cc2199',
+                '#d71f8c',
+                '#df227f',
+                '#e52a73',
+                '#ef3462',
+                '#f44250',
+                '#f5533d',
+                '#f36529',
+              ]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }} // right bottom direction
+              style={styles.ImportSection}
+            >
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: width * 0.03,
+                }}
+              >
+
+                <View style={{ flex: 1 }}>
+                  <CustomText weight="medium" style={styles.importHeading}>
+                    Welcome back!
+                  </CustomText>
+                  <CustomText weight="bold" style={styles.importSub}>
+                    pritam
+                  </CustomText>
+
+                  <CustomText weight="medium" style={styles.importSubLine}>
+                    Share your moments with your hives
+                  </CustomText>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  gap: width * 0.02,
+                }}
+              >
+
+
+
+              </View>
+            </LinearGradient>
+          </Animated.View>
+
+
+
+
+
+          {/* <View style={styles.heroSection}>
             <Image source={hero} style={styles.heroImg} />
             <CustomText weight="bold" style={styles.HeroHeading}>
               Welcome to Snaphive
@@ -114,12 +182,12 @@ const Home = ({ navigation, route }) => {
                 Import photo
               </CustomText>
             </TouchableOpacity>
-          </View>
+          </View> */}
 
-   
+
           {/* Gradient Section */}
-          
-          {showImportBanner && (
+
+          {/* {showImportBanner && (
             <Animated.View
               style={{
                 marginTop: height * 0.025,
@@ -151,7 +219,7 @@ const Home = ({ navigation, route }) => {
                     <CustomText weight="medium" style={styles.importSub}>
                       Import into Birthday Party?
                     </CustomText>
-                  </View>
+                  </View> 
                 </View>
 
                 <View
@@ -185,7 +253,7 @@ const Home = ({ navigation, route }) => {
                 </View>
               </LinearGradient>
             </Animated.View>
-          )}
+          )} */}
 
 
           {/* Dashboard Cards */}
@@ -198,45 +266,47 @@ const Home = ({ navigation, route }) => {
             }}
           >
             <View style={styles.dashCard}>
-              <View
-                style={[
-                  styles.icon,
-                  { backgroundColor: '#D2F7FF', borderRadius: 50 },
-                ]}
-              >
-                <Photo width={width * 0.045} height={width * 0.045} />
-              </View>
               <View>
                 <CustomText weight="bold" style={styles.cardText}>
-                  89%
+                  11
                 </CustomText>
-                <CustomText weight="medium">Enhanced</CustomText>
+                <CustomText weight="medium">
+                  Hives
+                </CustomText>
               </View>
             </View>
 
             <View style={styles.dashCard}>
-              <View
-                style={[
-                  styles.icon,
-                  { backgroundColor: '#DBFFD2', borderRadius: 50 },
-                ]}
-              >
-                <Brush width={width * 0.045} height={width * 0.045} />
-              </View>
               <View>
                 <CustomText weight="bold" style={styles.cardText}>
-                  257
+                  1
                 </CustomText>
-                <CustomText weight="medium">Total Photos</CustomText>
+                <CustomText weight="medium">
+                  Photos
+                </CustomText>
               </View>
             </View>
+            <View style={styles.dashCard}>
+              <View>
+                <CustomText weight="bold" style={styles.cardText}>
+                  1
+                </CustomText>
+
+                <CustomText weight="medium">
+                  Members
+                </CustomText>
+              </View>
+            </View>
+
+
+
           </View>
 
           {/* Events Section */}
           <View>
             <View style={styles.eventHeader}>
               <CustomText weight="medium" style={styles.eventSection}>
-                Your Events
+                Your Hives
               </CustomText>
               <TouchableOpacity
                 onPress={() => {
@@ -244,7 +314,7 @@ const Home = ({ navigation, route }) => {
                 }}
               >
                 <CustomText weight="bold" style={styles.newEvent}>
-                  + New Event
+                  See all
                 </CustomText>
               </TouchableOpacity>
             </View>
@@ -274,6 +344,7 @@ const Home = ({ navigation, route }) => {
                 </TouchableOpacity>
                 <RightArrow width={width * 0.035} height={width * 0.035} />
               </View>
+
             ))}
           </View>
 
@@ -285,7 +356,7 @@ const Home = ({ navigation, route }) => {
               </CustomText>
             </View>
 
-            {[picnic1].map((img, i) => (
+            {/* {[picnic1].map((img, i) => (
               <View key={i} style={styles.eventRow}>
                 <Image source={img} style={styles.cardImg} />
                 <View style={{ flex: 1, marginLeft: width * 0.03 }}>
@@ -303,7 +374,22 @@ const Home = ({ navigation, route }) => {
                 </View>
                 <RightArrow width={width * 0.035} height={width * 0.035} />
               </View>
-            ))}
+            ))} */}
+
+
+            <View style={styles.eventRow}>
+              <Image source={picnic1} style={styles.cardImg} />
+              <View style={styles.eventRowInformation}>
+                <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>rajasthan</CustomText>
+                <CustomText weight="medium" style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}>I travel rajasthan</CustomText>
+                <View style={{ flexDirection: 'row', gap: 20 }}>
+                  <CustomText>1</CustomText>
+                  <CustomText>2</CustomText>
+                  <CustomText>3</CustomText>
+                </View>
+              </View>
+            </View>
+
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -315,7 +401,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: width * 0.05,
-    backgroundColor: '#fff',
+    backgroundColor: '#fdf2f8',
   },
   heroSection: {
     justifyContent: 'center',
@@ -396,15 +482,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   importHeading: {
-    fontSize: width * 0.04,
+    fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: '#ffffffff',
     marginBottom: 4,
     lineHeight: 20,
   },
   importSub: {
-    fontSize: width * 0.035,
-    color: '#333',
+    fontSize: 24,
+    color: '#ffffffff',
+  },
+  importSubLine: {
+    fontSize: 14,
+    color: '#ffffffff',
   },
   importBtnWhite: {
     flexDirection: 'row',
@@ -437,7 +527,7 @@ const styles = StyleSheet.create({
   dashCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '48%',
+    width: 120,
     padding: width * 0.045,
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
@@ -481,49 +571,98 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: height * 0.04,
   },
-  eventTitle: {
-    fontSize: width * 0.04,
-    fontWeight: '600',
-    color: '#000',
-  },
-  cardImg: {
-    width: width * 0.25,
-    height: width * 0.22,
-    borderRadius: 8,
-  },
-  profileIcon: {
-    marginTop: height * 0.01,
-    width: width * 0.08,
-    height: width * 0.08,
-    borderRadius: (width * 0.08) / 2,
-    backgroundColor: '#ED3C50',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
+
+
+
+  // event style
+  // eventRow: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   marginTop: height * 0.02,
+  //   padding: width * 0.03,
+  //   borderRadius: 8,
+  //   backgroundColor: '#fff',
+  //   borderWidth: 1,
+  //   borderColor: '#EFEFEF',
+  //   ...Platform.select({
+  //     ios: {
+  //       shadowColor: '#000',
+  //       shadowOpacity: 0.15,
+  //       shadowRadius: 3,
+  //       shadowOffset: { width: 0, height: 2 },
+  //     },
+  //     android: {
+  //       elevation: 3,
+  //     },
+  //   }),
+  // },
+  // mtop: {
+  //   marginTop: height * 0.01,
+  // },
+
+  //   cardImg: {
+  //   width: width * 0.25,
+  //   height: width * 0.22,
+  //   borderRadius: 8,
+  // },
+  //   eventTitle: {
+  //   fontSize: width * 0.04,
+  //   fontWeight: '600',
+  //   color: '#000',
+  // },
+  //   profileIcon: {
+  //   marginTop: height * 0.01,
+  //   width: width * 0.08,
+  //   height: width * 0.08,
+  //   borderRadius: (width * 0.08) / 2,
+  //   backgroundColor: '#ED3C50',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
+
+
   eventRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: height * 0.02,
-    padding: width * 0.03,
-    borderRadius: 8,
+    marginTop: 16,
+    width: '100%',
+    height: 280,
+    borderRadius: 24,
+    overflow: 'hidden',
     backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#EFEFEF',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOpacity: 0.15,
-        shadowRadius: 3,
-        shadowOffset: { width: 0, height: 2 },
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
   },
-  mtop: {
-    marginTop: height * 0.01,
+
+  cardImg: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
+
+  eventRowInformation: {
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: '#ffffffff',
+    width: '100%',
+    padding: 16,
+  }
+
+  // mtop: {
+  //   marginTop: height * 0.01,
+  // },
+
+  // eventTitle: {
+  //   fontSize: width * 0.04,
+  //   fontWeight: '600',
+  //   color: '#000',
+  // },
+  // profileIcon: {
+  //   marginTop: height * 0.01,
+  //   width: width * 0.08,
+  //   height: width * 0.08,
+  //   borderRadius: (width * 0.08) / 2,
+  //   backgroundColor: '#ED3C50',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
 });
 
 export default Home;

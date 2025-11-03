@@ -202,6 +202,7 @@ const PhotoShare = ({ navigation, route }) => {
             </View>
           </TouchableOpacity>
         </View>
+        
 
         {/* Image Grid */}
         {images.length > 0 ? (
@@ -278,13 +279,13 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   cancelButton: {
-    backgroundColor: '#000',
+    backgroundColor: '#d6277e',
     paddingHorizontal: width * 0.05,
     paddingVertical: height * 0.01,
     borderRadius: 6,
   },
   cancelText: {
-    color: '#fff',
+    color: '#FFF',
     fontSize: width * 0.04,
     fontWeight: '500',
   },

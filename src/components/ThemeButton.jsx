@@ -5,9 +5,9 @@ import CustomText from './CustomText';
 const ThemeButton = ({ text, onPress, style, textStyle }) => {
   return (
     <LinearGradient
-      colors={['#FDD32E', '#FFA600']}         
+      colors={['#9333EA', '#d6277e']}         
       start={{ x: 0, y: 0 }}                   
-      end={{ x: 1.2, y: 0 }}                     
+      end={{ x: 1.6, y: 0 }}                     
       style={[styles.continueBtn, style]}     
     >
       <TouchableOpacity
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   continueTxt: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#000',
+    color: '#ffffff',
   },
 });
 

@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
 import {
   View,
-  Text,
   Image,
   StyleSheet,
   TouchableOpacity,
@@ -16,17 +15,9 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
 
-// SVGs
-import Brush from '../../assets/svg/brush.svg';
-import Photo from '../../assets/svg/photo.svg';
-import CameraIcon from '../../assets/svg/camera.svg';
-import Import from '../../assets/svg/import.svg';
-import Camera from '../../assets/svg/camera.svg';
-import RightArrow from '../../assets/svg/rightArrow.svg';
 
 // components
 import TopNav from '../components/TopNavbar';
-import ThemeButton from '../components/ThemeButton';
 import CustomText from '../components/CustomText';
 
 // assets
@@ -157,107 +148,9 @@ const Home = ({ navigation, route }) => {
                 }}
               >
 
-
-
               </View>
             </LinearGradient>
           </Animated.View>
-
-
-
-
-
-          {/* <View style={styles.heroSection}>
-            <Image source={hero} style={styles.heroImg} />
-            <CustomText weight="bold" style={styles.HeroHeading}>
-              Welcome to Snaphive
-            </CustomText>
-            <CustomText weight="medium" style={styles.HeroSubText}>
-              Import your photos, enhance automatically, and organize by events.
-            </CustomText>
-
-            <TouchableOpacity
-              style={styles.importBtn}
-              onPress={() => navigation.navigate('PhotoShare')}
-            >
-              <Import width={width * 0.045} height={width * 0.045} />
-              <CustomText weight="bold" style={styles.continueTxt}>
-                Import photo
-              </CustomText>
-            </TouchableOpacity>
-          </View> */}
-
-
-          {/* Gradient Section */}
-
-          {/* {showImportBanner && (
-            <Animated.View
-              style={{
-                marginTop: height * 0.025,
-                transform: [{ translateX: slideAnim }],
-                opacity: opacityAnim,
-              }}
-            >
-              <LinearGradient
-                colors={['#FDD32E', '#FFA500']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.ImportSection}
-              >
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: width * 0.03,
-                  }}
-                >
-                  <View style={styles.cameraIcon}>
-                    <Camera width={width * 0.07} height={width * 0.07} />
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <CustomText weight="bold" style={styles.importHeading}>
-                      We found 10 new photos in your library.
-                    </CustomText>
-                    <CustomText weight="medium" style={styles.importSub}>
-                      Import into Birthday Party?
-                    </CustomText>
-                  </View> 
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    gap: width * 0.02,
-                  }}
-                >
-                  <TouchableOpacity
-                    style={[styles.importBtnWhite, { flex: 0.7 }]}
-                    onPress={() => navigation.navigate('PhotoShare')}
-                  >
-                    <Import width={width * 0.04} height={width * 0.04} />
-                    <CustomText weight="bold" style={styles.continueTxt}>
-                      Import
-                    </CustomText>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={[styles.laterBtn, { flex: 0.3 }]}
-                    onPress={handleLater}
-                  >
-                    <CustomText
-                      weight="bold"
-                      style={[styles.continueTxt, { color: '#fff' }]}
-                    >
-                      Later
-                    </CustomText>
-                  </TouchableOpacity>
-                </View>
-              </LinearGradient>
-            </Animated.View>
-          )} */}
-
 
           {/* Dashboard Cards */}
           <View
@@ -536,7 +429,7 @@ const styles = StyleSheet.create({
   dashCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: 120,
+    width: "30%",
     padding: width * 0.045,
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
@@ -585,71 +478,23 @@ const styles = StyleSheet.create({
   },
 
 
+  eventRow: {
+    marginTop: 16,
+    width: '100%',
+    height: 280,
+    borderRadius: 24,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
 
+    // 💡 Shadow for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
 
-  // event style
-  // eventRow: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   marginTop: height * 0.02,
-  //   padding: width * 0.03,
-  //   borderRadius: 8,
-  //   backgroundColor: '#fff',
-  //   borderWidth: 1,
-  //   borderColor: '#EFEFEF',
-  //   ...Platform.select({
-  //     ios: {
-  //       shadowColor: '#000',
-  //       shadowOpacity: 0.15,
-  //       shadowRadius: 3,
-  //       shadowOffset: { width: 0, height: 2 },
-  //     },
-  //     android: {
-  //       elevation: 3,
-  //     },
-  //   }),
-  // },
-  // mtop: {
-  //   marginTop: height * 0.01,
-  // },
-
-  //   cardImg: {
-  //   width: width * 0.25,
-  //   height: width * 0.22,
-  //   borderRadius: 8,
-  // },
-  //   eventTitle: {
-  //   fontSize: width * 0.04,
-  //   fontWeight: '600',
-  //   color: '#000',
-  // },
-  //   profileIcon: {
-  //   marginTop: height * 0.01,
-  //   width: width * 0.08,
-  //   height: width * 0.08,
-  //   borderRadius: (width * 0.08) / 2,
-  //   backgroundColor: '#ED3C50',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
-
-eventRow: {
-  marginTop: 16,
-  width: '100%',
-  height: 280,
-  borderRadius: 24,
-  overflow: 'hidden',
-  backgroundColor: '#fff',
-
-  // 💡 Shadow for iOS
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 4 },
-  shadowOpacity: 0.25,
-  shadowRadius: 8,
-
-  // 💡 Shadow for Android
-  elevation: 1,
-},
+    // 💡 Shadow for Android
+    elevation: 1,
+  },
 
 
   cardImg: {
@@ -666,24 +511,6 @@ eventRow: {
     padding: 16,
   }
 
-  // mtop: {
-  //   marginTop: height * 0.01,
-  // },
-
-  // eventTitle: {
-  //   fontSize: width * 0.04,
-  //   fontWeight: '600',
-  //   color: '#000',
-  // },
-  // profileIcon: {
-  //   marginTop: height * 0.01,
-  //   width: width * 0.08,
-  //   height: width * 0.08,
-  //   borderRadius: (width * 0.08) / 2,
-  //   backgroundColor: '#ED3C50',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
 });
 
 export default Home;

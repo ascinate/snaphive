@@ -633,15 +633,24 @@ const styles = StyleSheet.create({
   //   alignItems: 'center',
   // },
 
+eventRow: {
+  marginTop: 16,
+  width: '100%',
+  height: 280,
+  borderRadius: 24,
+  overflow: 'hidden',
+  backgroundColor: '#fff',
 
-  eventRow: {
-    marginTop: 16,
-    width: '100%',
-    height: 280,
-    borderRadius: 24,
-    overflow: 'hidden',
-    backgroundColor: '#fff',
-  },
+  // 💡 Shadow for iOS
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.25,
+  shadowRadius: 8,
+
+  // 💡 Shadow for Android
+  elevation: 1,
+},
+
 
   cardImg: {
     width: '100%',

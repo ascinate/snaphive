@@ -11,7 +11,7 @@ import {
   Animated
 } from 'react-native';
 import { RefreshControl } from 'react-native';
-
+import { Sparkles, Users, FileImage, Clock5 } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
@@ -133,9 +133,12 @@ const Home = ({ navigation, route }) => {
               >
 
                 <View style={{ flex: 1 }}>
-                  <CustomText weight="medium" style={styles.importHeading}>
-                    Welcome back!
-                  </CustomText>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <Sparkles color='#ffffff' size={22} />
+                    <CustomText weight="medium" style={styles.importHeading}>
+                      Welcome back!
+                    </CustomText>
+                  </View>
                   <CustomText weight="bold" style={styles.importSub}>
                     pritam
                   </CustomText>
@@ -267,7 +270,7 @@ const Home = ({ navigation, route }) => {
           >
             <View style={styles.dashCard}>
               <View>
-                <CustomText weight="bold" style={[styles.cardText,{color:'#9f31d8'}]}>
+                <CustomText weight="bold" style={[styles.cardText, { color: '#9f31d8' }]}>
                   11
                 </CustomText>
                 <CustomText weight="medium" style={styles.dashText}>
@@ -278,7 +281,7 @@ const Home = ({ navigation, route }) => {
 
             <View style={styles.dashCard}>
               <View>
-                <CustomText weight="bold" style={[styles.cardText,{color:'#d92779'}]}>
+                <CustomText weight="bold" style={[styles.cardText, { color: '#d92779' }]}>
                   1
                 </CustomText>
                 <CustomText weight="medium" style={styles.dashText}>
@@ -288,7 +291,7 @@ const Home = ({ navigation, route }) => {
             </View>
             <View style={styles.dashCard}>
               <View>
-       <CustomText weight="bold" style={[styles.cardText,{color:'#f56824'}]}>
+                <CustomText weight="bold" style={[styles.cardText, { color: '#f56824' }]}>
                   1
                 </CustomText>
 
@@ -331,12 +334,25 @@ const Home = ({ navigation, route }) => {
                   <View style={styles.eventRowInformation}>
                     <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>{item.title}</CustomText>
                     <CustomText weight="medium" style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}>I travel rajasthan</CustomText>
+
                     <View style={{ flexDirection: 'row', gap: 20 }}>
-                      <CustomText>{item.count}</CustomText>
-                      <CustomText>2</CustomText>
-                      <CustomText>3</CustomText>
+                      <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                        <Users width={14} height={14} color='#6B7280' />
+                        <CustomText style={{ color: '#6B7280' }}>1</CustomText>
+                      </View>
+
+                      <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', }}>
+                        <FileImage width={14} height={14} color='#6B7280' />
+                        <CustomText style={{ color: '#6B7280' }}>{item.count}</CustomText>
+                      </View>
+
+                      <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', }}>
+                        <Clock5 width={14} height={14} color='#ea580c' />
+                        <CustomText style={{ color: '#ea580c' }}>3</CustomText>
+                      </View>
                     </View>
                   </View>
+
                 </View>
               </TouchableOpacity>
             ))}
@@ -362,9 +378,20 @@ const Home = ({ navigation, route }) => {
                     <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>rajasthan</CustomText>
                     <CustomText weight="medium" style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}>I travel rajasthan</CustomText>
                     <View style={{ flexDirection: 'row', gap: 20 }}>
-                      <CustomText>1</CustomText>
-                      <CustomText>2</CustomText>
-                      <CustomText>3</CustomText>
+                      <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                        <Users width={14} height={14} color='#6B7280' />
+                        <CustomText style={{ color: '#6B7280' }}>1</CustomText>
+                      </View>
+
+                      <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', }}>
+                        <FileImage width={14} height={14} color='#6B7280' />
+                        <CustomText style={{ color: '#6B7280' }}>2</CustomText>
+                      </View>
+
+                      <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', }}>
+                        <Clock5 width={14} height={14} color='#ea580c' />
+                        <CustomText style={{ color: '#ea580c' }}>3</CustomText>
+                      </View>
                     </View>
                   </View>
                 </View>
@@ -440,18 +467,18 @@ const styles = StyleSheet.create({
   },
   ImportSection: {
     borderRadius: 24,
-    padding: width * 0.05,
-     ...Platform.select({
-    ios: {
-      shadowColor: '#000',
-      shadowOpacity: 0.15,
-      shadowRadius: 6,
-      shadowOffset: { width: 0, height: 4 },
-    },
-    android: {
-      elevation:20,
-    },
-  }),
+    padding: width * 0.06,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOpacity: 0.15,
+        shadowRadius: 6,
+        shadowOffset: { width: 0, height: 4 },
+      },
+      android: {
+        elevation: 20,
+      },
+    }),
   },
   cameraIcon: {
     width: width * 0.13,
@@ -469,10 +496,12 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   importSub: {
+    marginTop: 4,
     fontSize: 24,
     color: '#ffffffff',
   },
   importSubLine: {
+    marginTop: 4,
     fontSize: 14,
     color: '#ffffffff',
   },
@@ -504,30 +533,30 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginVertical: 10,
   },
-dashCard: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  width: 120,
-  padding: width * 0.045,
-  backgroundColor: '#FFFFFF',
-  borderRadius: 12,
-  alignItems: 'center',
-  marginTop: height * 0.02,
-  ...Platform.select({
-    ios: {
-      shadowColor: '#000',
-      shadowOpacity: 0.15,
-      shadowRadius: 6,
-      shadowOffset: { width: 0, height: 4 },
-    },
-    android: {
-      elevation:1,
-    },
-  }),
-},
-dashText: {
-color:'#6B7280'
-},
+  dashCard: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: 120,
+    padding: width * 0.045,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: height * 0.02,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOpacity: 0.15,
+        shadowRadius: 6,
+        shadowOffset: { width: 0, height: 4 },
+      },
+      android: {
+        elevation: 1,
+      },
+    }),
+  },
+  dashText: {
+    color: '#6B7280'
+  },
   icon: {
     width: width * 0.12,
     height: width * 0.12,
@@ -552,7 +581,7 @@ color:'#6B7280'
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: height * 0.04,
+    marginTop: height * 0.03,
   },
 
 

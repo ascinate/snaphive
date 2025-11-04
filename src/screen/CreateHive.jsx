@@ -36,8 +36,8 @@ const CreateHive = ({ navigation, route }) => {
     const [hiveName, setHiveName] = useState("");
     const [description, setDescription] = useState("");
     const { addEvent } = useContext(EventContext);
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const [isEnabled, setIsEnabled] = useState(false);
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const handleCreateHive = () => {
         if (!hiveName.trim()) {
             alert('Please enter a hive name');
@@ -98,7 +98,7 @@ const CreateHive = ({ navigation, route }) => {
                             <CustomText weight="bold" style={[styles.snapText, { opacity: 0 }]} />
                         </LinearGradient>
                     </MaskedView>
-                    <CustomText weight='regular ' style={{color: '#374151'}}>Start sharing memories with your group</CustomText>
+                    <CustomText weight='regular ' style={{ color: '#374151' }}>Start sharing memories with your group</CustomText>
                     <CustomText weight='medium' style={{ marginTop: 18, marginBottom: 4, color: '#374151' }}>Cover Image</CustomText>
 
                     <TouchableWithoutFeedback onPress={() => {
@@ -132,7 +132,7 @@ const CreateHive = ({ navigation, route }) => {
                                 <>
                                     <Image color='#c084fc' width={48} height={48} />
                                     <CustomText weight='mideum' style={{ marginTop: 8 }}>Tap to upload cover</CustomText>
-                                    <CustomText weight='mideum' style={{ marginTop: 4,color: '#67696b' }}>JPG, PNG up to 10MB</CustomText>
+                                    <CustomText weight='mideum' style={{ marginTop: 4, color: '#67696b' }}>JPG, PNG up to 10MB</CustomText>
                                 </>
                             )}
                         </View>
@@ -197,13 +197,13 @@ const CreateHive = ({ navigation, route }) => {
                                 <CustomText weight='bold' style={{ fontSize: 16 }}>Temporary Event Hive</CustomText>
                                 <CustomText weight='medium' style={{ color: '#374151' }}>Set dates for this event</CustomText>
                             </View>
-                                    <Switch
-          trackColor={{false: '#767577', true: '#81b0ff'}}
-          thumbColor={isEnabled ? '#4b5cf5ff' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={isEnabled}
-        />
+                            <Switch
+                                trackColor={{ false: '#767577', true: '#81b0ff' }}
+                                thumbColor={isEnabled ? '#4b5cf5ff' : '#f4f3f4'}
+                                ios_backgroundColor="#3e3e3e"
+                                onValueChange={toggleSwitch}
+                                value={isEnabled}
+                            />
                         </View>
 
                     </View>

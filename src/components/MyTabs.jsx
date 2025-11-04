@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import LinearGradient from "react-native-linear-gradient";
 
 // Screens
 import HomeStack from "../navigation/HomeStack";
@@ -11,10 +12,8 @@ import Profile from "../screen/Profile";
 import CreateHive from "../screen/CreateHive";
 
 // Icons
-import CameraTab from "../../assets/svg/cameraTab.svg";
-import NavHome from "../../assets/svg/navHome.svg";
-import NavMessage from "../../assets/svg/navMessage.svg";
-import NavPeople from "../../assets/svg/navPeople.svg";
+import { Camera, CirclePlus, House, MessageCircle, UserRound } from "lucide-react-native";
+import CustomText from "./CustomText";
 
 
 const Tab = createBottomTabNavigator();
@@ -24,7 +23,7 @@ function CustomTabBar({ state, descriptors, navigation }) {
   const currentRoute = state.routes[state.index].name;
 
   // Hide bottom tab bar on Camera screen
-  if (currentRoute === "Camera" ||currentRoute === "PhotoShare" ) {
+  if (currentRoute === "Camera" || currentRoute === "PhotoShare") {
     return null;
   }
 
@@ -50,30 +49,138 @@ function CustomTabBar({ state, descriptors, navigation }) {
           let Icon;
           switch (route.name) {
             case "HomeScreen":
-              Icon = <NavHome width={32} height={32} />;
-              break;
-            case "MemberList":
-              Icon = <NavPeople width={32} height={32} />;
-              break;
-            case "PhotoShare":
               Icon = (
-                <View style={styles.fabWhite}>
-                  <View style={styles.fab}>
-                    <Text style={styles.fabText}>+</Text>
-                  </View>
+                <View style={{ alignItems: 'center', gap: 2 }}>
+                  {isFocused ? (
+                    <LinearGradient
+                      colors={[
+                        '#9d31d9', '#b91ec2', '#cc09ab', '#d70596',
+                        '#dd1782', '#e32075', '#e72b68', '#e9385c',
+                        '#ef4250', '#f34d43', '#f45936', '#f46626'
+                      ]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={{ padding: 10, borderRadius: 16 }}
+                    >
+                      <House width={25} height={25} color='#ffffff' />
+                    </LinearGradient>
+                  ) : (
+                    <View style={{ padding: 10, borderRadius: 16 }}>
+                      <House width={25} height={25} />
+                    </View>
+                  )}
+                  <CustomText weight="mideum">Home</CustomText>
                 </View>
               );
               break;
-            case "Messages":
-              Icon = <NavMessage width={32} height={32} />;
-              break;
-            case "Camera":
-              Icon = <CameraTab width={32} height={32} />;
-              break;
-            default:
-              Icon = <Text>{route.name}</Text>;
-          }
 
+            case "MemberList":
+              Icon = (
+                <View style={{ alignItems: 'center', gap: 2 }}>
+                  {isFocused ? (
+                    <LinearGradient
+                      colors={[
+                        '#9d31d9', '#b91ec2', '#cc09ab', '#d70596',
+                        '#dd1782', '#e32075', '#e72b68', '#e9385c',
+                        '#ef4250', '#f34d43', '#f45936', '#f46626'
+                      ]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={{ padding: 10, borderRadius: 16 }}
+                    >
+                      <UserRound width={25} height={25} color='#ffffff' />
+                    </LinearGradient>
+                  ) : (
+                    <View style={{ padding: 10, borderRadius: 16 }}>
+                      <UserRound width={25} height={25} />
+                    </View>
+                  )}
+                  <CustomText weight="mideum">Profile</CustomText>
+                </View>
+              );
+              break;
+
+            case "CreateHive":
+              Icon = (
+                <View style={{ alignItems: 'center', gap: 2 }}>
+                  {isFocused ? (
+                    <LinearGradient
+                      colors={[
+                        '#9d31d9', '#b91ec2', '#cc09ab', '#d70596',
+                        '#dd1782', '#e32075', '#e72b68', '#e9385c',
+                        '#ef4250', '#f34d43', '#f45936', '#f46626'
+                      ]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={{ padding: 10, borderRadius: 16 }}
+                    >
+                      <CirclePlus width={25} height={25} color="#fff" />
+                    </LinearGradient>
+                  ) : (
+                    <View style={{ padding: 10, borderRadius: 16 }}>
+                      <CirclePlus width={25} height={25} color="#000" />
+                    </View>
+                  )}
+                  <CustomText weight="mideum">Create</CustomText>
+                </View>
+              );
+              break;
+
+            case "Messages":
+              Icon = (
+                <View style={{ alignItems: 'center', gap: 2 }}>
+                  {isFocused ? (
+                    <LinearGradient
+                      colors={[
+                        '#9d31d9', '#b91ec2', '#cc09ab', '#d70596',
+                        '#dd1782', '#e32075', '#e72b68', '#e9385c',
+                        '#ef4250', '#f34d43', '#f45936', '#f46626'
+                      ]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={{ padding: 10, borderRadius: 16 }}
+                    >
+                      <MessageCircle width={25} height={25} color='#ffffff' />
+                    </LinearGradient>
+                  ) : (
+                    <View style={{ padding: 10, borderRadius: 16 }}>
+                      <MessageCircle width={25} height={25} />
+                    </View>
+                  )}
+                  <CustomText weight="mideum">Message</CustomText>
+                </View>
+              );
+              break;
+
+            case "Camera":
+              Icon = (
+                <View style={{ alignItems: 'center', gap: 2 }}>
+                  {isFocused ? (
+                    <LinearGradient
+                      colors={[
+                        '#9d31d9', '#b91ec2', '#cc09ab', '#d70596',
+                        '#dd1782', '#e32075', '#e72b68', '#e9385c',
+                        '#ef4250', '#f34d43', '#f45936', '#f46626'
+                      ]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={{ padding: 10, borderRadius: 16 }}
+                    >
+                      <Camera width={25} height={25} color='#ffffff' />
+                    </LinearGradient>
+                  ) : (
+                    <View style={{ padding: 10, borderRadius: 16 }}>
+                      <Camera width={25} height={25} />
+                    </View>
+                  )}
+                  <CustomText weight="mideum">Camera</CustomText>
+                </View>
+              );
+              break;
+
+            default:
+              Icon = <CustomText>{route.name}</CustomText>;
+          }
           return (
             <TouchableOpacity
               key={route.key}
@@ -99,7 +206,7 @@ export default function MyTabs() {
     >
       <Tab.Screen name="HomeScreen" component={HomeStack} />
       <Tab.Screen name="Messages" component={MemberList} />
-      <Tab.Screen name="PhotoShare" component={CreateHive} />
+      <Tab.Screen name="CreateHive" component={CreateHive} />
       <Tab.Screen name="Camera" component={ClickPhoto} />
       <Tab.Screen name="MemberList" component={Profile} />
     </Tab.Navigator>
@@ -119,56 +226,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    height: 70,
+    height: 90,
     borderTopWidth: 1,
     borderTopColor: "#eee",
     width: "100%",
-    paddingHorizontal: 40,
+    paddingHorizontal: 30,
   },
   tabButton: {
     alignItems: "center",
     justifyContent: "center",
   },
-  underline: {
-    marginTop: 4,
-    height: 3,
-    width: 24,
-    borderRadius: 2,
-    backgroundColor: "black",
-  },
-  fabWhite: {
-    width: 100,
-    height: 100,
-    backgroundColor: "#ffffffff",
-    borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    top: -80,
-    zIndex: 10,
-    
-  },
-  fab: {
-    width: 70,
-    height: 70,
-    borderRadius: 50,
-    backgroundColor: "#000",
-    justifyContent: "center",
-    alignItems: "center",
+  // underline: {
+  //   width: 30,
+  //   height: 30,
+  //   marginTop: 4,
+  //   height: 3,
+  //   width: 24,
+  //   borderRadius: 2,
+  //   backgroundColor: "red",
+  // },
 
-    borderWidth: 15,
 
-    // iOS Shadow
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    // Android Shadow
-    elevation: 8,
-  },
-  fabText: {
-    color: "#fff",
-    fontSize: 26,
-    fontWeight: "bold",
-  },
+
 });

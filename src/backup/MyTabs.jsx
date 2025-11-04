@@ -4,17 +4,17 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Screens
-import HomeStack from "./src/navigation/HomeStack";
-import MemberList from "./src/screen/MemberList";
-import ClickPhoto from "./src/screen/ClickPhoto";
-import Profile from "./src/screen/Profile";
-import Settings from "./src/screen/Settings";
+import HomeStack from "../navigation/HomeStack";
+import MemberList from "../screen/MemberList";
+import ClickPhoto from "../screen/ClickPhoto";
+import Profile from "../screen/Profile";
+import PhotoShare from "../screen/PhotoShare";
 
 // Icons
-import CameraTab from "./assets/svg/cameraTab.svg";
-import NavHome from "./assets/svg/navHome.svg";
-import NavMessage from "./assets/svg/navMessage.svg";
-import NavPeople from "./assets/svg/navPeople.svg";
+import CameraTab from "../../assets/svg/cameraTab.svg";
+import NavHome from "../../assets/svg/navHome.svg";
+import NavMessage from "../../assets/svg/navMessage.svg";
+import NavPeople from "../../assets/svg/navPeople.svg";
 
 
 const Tab = createBottomTabNavigator();
@@ -23,8 +23,8 @@ function CustomTabBar({ state, descriptors, navigation }) {
   const insets = useSafeAreaInsets();
   const currentRoute = state.routes[state.index].name;
 
-  // Hide tab bar on Camera screen
-  if (currentRoute === "Camera") {
+  // Hide bottom tab bar on Camera screen
+  if (currentRoute === "Camera" ||currentRoute === "PhotoShare" ) {
     return null;
   }
 
@@ -55,10 +55,12 @@ function CustomTabBar({ state, descriptors, navigation }) {
             case "MemberList":
               Icon = <NavPeople width={32} height={32} />;
               break;
-            case "Settings":
+            case "PhotoShare":
               Icon = (
-                <View style={styles.fab}>
-                  <Text style={{color: '#ffffff',fontSize:26}}>+</Text>
+                <View style={styles.fabWhite}>
+                  <View style={styles.fab}>
+                    <Text style={styles.fabText}>+</Text>
+                  </View>
                 </View>
               );
               break;
@@ -97,7 +99,7 @@ export default function MyTabs() {
     >
       <Tab.Screen name="HomeScreen" component={HomeStack} />
       <Tab.Screen name="Messages" component={MemberList} />
-      <Tab.Screen name="Settings" component={Settings} />
+      <Tab.Screen name="PhotoShare" component={PhotoShare} />
       <Tab.Screen name="Camera" component={ClickPhoto} />
       <Tab.Screen name="MemberList" component={Profile} />
     </Tab.Navigator>
@@ -134,22 +136,39 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: "black",
   },
-  fab: {
+  fabWhite: {
     width: 100,
     height: 100,
+    backgroundColor: "#ffffffff",
     borderRadius: 50,
-    backgroundColor: "#000",
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
     top: -80,
     zIndex: 10,
+    
+  },
+  fab: {
+    width: 70,
+    height: 70,
+    borderRadius: 50,
+    backgroundColor: "#000",
+    justifyContent: "center",
+    alignItems: "center",
+
     borderWidth: 15,
-    borderColor: '#fff',
+
+    // iOS Shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    // Android Shadow
+    elevation: 8,
   },
   fabText: {
     color: "#fff",
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: "bold",
   },
 });

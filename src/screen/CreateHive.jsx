@@ -99,20 +99,21 @@ const Home = ({ navigation, route }) => {
                         <View style={styles.privacy}>
                             <View>
                                 <View style={{ width: 35, height: 35, backgroundColor: '#e9d5ff', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
-                                    <LockOpen />
+                                    <LockOpen color='#9E48ED' />
                                 </View>
 
                             </View>
                             <View>
-                                <CustomText>Automatic Upload</CustomText>
+                                <CustomText >Automatic Upload</CustomText>
                                 <CustomText>All members can upload instantly. Best for casual events.</CustomText>
                             </View>
                         </View>
                     </View>
-
-                    <ThemeButton text="Create Hive"
-                        onPress={() => navigation.navigate("Home")}
-                        style={{ width: "100%" }} />
+                    <View style={{ paddingBottom: 100 }}>
+                        <ThemeButton text="Create Hive"
+                            onPress={() => navigation.navigate("Home")}
+                            style={{ width: "100%", }} />
+                    </View>
                 </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider>

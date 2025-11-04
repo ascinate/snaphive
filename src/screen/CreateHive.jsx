@@ -9,10 +9,11 @@ import {
     Animated,
     Text,
     TextInput,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    Switch
 } from 'react-native';
 import { navigate } from '../navigation/RootNavigation';
-import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen, Lock } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
@@ -35,9 +36,9 @@ const CreateHive = ({ navigation, route }) => {
     const [hiveName, setHiveName] = useState("");
     const [description, setDescription] = useState("");
     const { addEvent } = useContext(EventContext);
-
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const handleCreateHive = () => {
-        // Validate required fields
         if (!hiveName.trim()) {
             alert('Please enter a hive name');
             return;
@@ -48,28 +49,25 @@ const CreateHive = ({ navigation, route }) => {
             return;
         }
 
-        // Create new event object
         const newEvent = {
             img: { uri: uploadedImage },
             title: hiveName,
             description: description || 'No description',
             count: '0 Photos',
-            photos: [], // Empty photos array initially
+            photos: [],
             createdAt: new Date().toISOString(),
         };
 
-        // Add the new event to the events array
+
         addEvent(newEvent);
 
-        // Clear form fields
         setUploadedImage(null);
         setHiveName("");
         setDescription("");
 
-        // Navigate back to Home with a slight delay to ensure state updates
-        setTimeout(() => {
-            navigation.navigate('Home');
-        }, 100);
+
+        navigation.goBack();
+
     };
 
     return (
@@ -100,8 +98,8 @@ const CreateHive = ({ navigation, route }) => {
                             <CustomText weight="bold" style={[styles.snapText, { opacity: 0 }]} />
                         </LinearGradient>
                     </MaskedView>
-                    <CustomText>Start sharing memories with your group</CustomText>
-                    <CustomText style={{ marginTop: 18, marginBottom: 4 }}>Cover Image</CustomText>
+                    <CustomText weight='regular ' style={{color: '#374151'}}>Start sharing memories with your group</CustomText>
+                    <CustomText weight='medium' style={{ marginTop: 18, marginBottom: 4, color: '#374151' }}>Cover Image</CustomText>
 
                     <TouchableWithoutFeedback onPress={() => {
                         const options = {
@@ -141,10 +139,10 @@ const CreateHive = ({ navigation, route }) => {
                     </TouchableWithoutFeedback>
 
                     <View style={{ marginBottom: 16 }}>
-                        <CustomText weight='medium' style={{ marginBottom: 4 }}>Hive Name *</CustomText>
-                        <TextInput 
-                            placeholder='Summer Vacation 2024' 
-                            style={styles.inputType} 
+                        <CustomText weight='medium' style={{ marginBottom: 4, color: '#374151' }}>Hive Name *</CustomText>
+                        <TextInput
+                            placeholder='Summer Vacation 2024'
+                            style={styles.inputType}
                             keyboardType="default"
                             autoCapitalize="words"
                             autoCorrect={false}
@@ -152,9 +150,9 @@ const CreateHive = ({ navigation, route }) => {
                             onChangeText={setHiveName}
                         />
                     </View>
-                    
+
                     <View style={{ marginBottom: 16 }}>
-                        <CustomText weight="medium" style={{ marginBottom: 4 }}>
+                        <CustomText weight="medium" style={{ marginBottom: 4, color: '#374151' }}>
                             Description
                         </CustomText>
                         <TextInput
@@ -166,29 +164,55 @@ const CreateHive = ({ navigation, route }) => {
                             onChangeText={setDescription}
                         />
                     </View>
-                    
-                    <View style={{ marginBottom: 16 }}>
-                        <CustomText weight="medium" style={{ marginBottom: 4 }}>
+
+                    <View style={{ marginBottom: 0, }}>
+                        <CustomText weight="medium" style={{ marginBottom: 4, color: '#374151' }}>
                             Privacy Mode
                         </CustomText>
                         <View style={styles.privacy}>
-                            <View>
+                            <View >
                                 <View style={{ width: 35, height: 35, backgroundColor: '#e9d5ff', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
                                     <LockOpen color='#9E48ED' />
                                 </View>
                             </View>
                             <View style={{ flex: 1, marginLeft: 12 }}>
-                                <CustomText>Automatic Upload</CustomText>
-                                <CustomText>All members can upload instantly. Best for casual events.</CustomText>
+                                <CustomText weight='bold' style={{ fontSize: 16 }}>Automatic Upload</CustomText>
+                                <CustomText weight='medium' style={{ color: '#374151' }}>All members can upload instantly. Best for casual events.</CustomText>
                             </View>
                         </View>
+                        <View style={styles.privacy}>
+                            <View >
+                                <View style={{ width: 35, height: 35, backgroundColor: '#e9d5ff', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
+                                    <Lock color='#9E48ED' />
+                                </View>
+                            </View>
+                            <View style={{ flex: 1, marginLeft: 12 }}>
+                                <CustomText weight='bold' style={{ fontSize: 16 }}>Approval Required</CustomText>
+                                <CustomText weight='medium' style={{ color: '#374151' }}>Media must be reviewed by authorized members. Best for formal events.</CustomText>
+                            </View>
+                        </View>
+
+                        <View style={styles.privacy}>
+                            <View style={{ flex: 1, marginLeft: 12 }}>
+                                <CustomText weight='bold' style={{ fontSize: 16 }}>Temporary Event Hive</CustomText>
+                                <CustomText weight='medium' style={{ color: '#374151' }}>Set dates for this event</CustomText>
+                            </View>
+                                    <Switch
+          trackColor={{false: '#767577', true: '#81b0ff'}}
+          thumbColor={isEnabled ? '#4b5cf5ff' : '#f4f3f4'}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
+                        </View>
+
                     </View>
-                    
+
                     <View style={{ paddingBottom: 100 }}>
-                        <ThemeButton 
+                        <ThemeButton
                             text="Create Hive"
                             onPress={handleCreateHive}
-                            style={{ width: "100%" }} 
+                            style={{ width: "100%" }}
                         />
                     </View>
                 </ScrollView>
@@ -204,16 +228,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#fdf2f8',
     },
     snapText: {
-        fontSize: 32,
-        marginTop: 20,
-        marginBottom: 8,
+        fontSize: 30,
+        marginTop: 10,
+
     },
     uploadContainer: {
-        width: '100%', 
-        height: 188, 
-        borderWidth: 2, 
-        borderColor: '#E5E7EB', 
-        borderStyle: 'dashed', 
+        width: '100%',
+        height: 188,
+        borderWidth: 2,
+        borderColor: '#E5E7EB',
+        borderStyle: 'dashed',
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
@@ -222,21 +246,23 @@ const styles = StyleSheet.create({
     inputType: {
         borderWidth: 1,
         borderColor: '#E5E7EB',
-        borderRadius: 8,
+        borderRadius: 16,
         paddingLeft: 10,
-        paddingVertical: 12,
+        paddingVertical: 16,
         fontSize: 16,
     },
     privacy: {
         flexDirection: 'row',
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        padding: 12,
+        padding: 16,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 6,
         elevation: 3,
+        marginTop: 8,
+        marginBottom: 10,
     },
 });
 

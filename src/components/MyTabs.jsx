@@ -8,7 +8,7 @@ import HomeStack from "../navigation/HomeStack";
 import MemberList from "../screen/MemberList";
 import ClickPhoto from "../screen/ClickPhoto";
 import Profile from "../screen/Profile";
-import PhotoShare from "../screen/PhotoShare";
+import CreateHive from "../screen/CreateHive";
 
 // Icons
 import CameraTab from "../../assets/svg/cameraTab.svg";
@@ -99,7 +99,7 @@ export default function MyTabs() {
     >
       <Tab.Screen name="HomeScreen" component={HomeStack} />
       <Tab.Screen name="Messages" component={MemberList} />
-      <Tab.Screen name="PhotoShare" component={PhotoShare} />
+      <Tab.Screen name="PhotoShare" component={CreateHive} />
       <Tab.Screen name="Camera" component={ClickPhoto} />
       <Tab.Screen name="MemberList" component={Profile} />
     </Tab.Navigator>

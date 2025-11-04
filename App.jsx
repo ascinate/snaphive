@@ -46,7 +46,7 @@ import EditProfile from "./src/screen/EditProfile";
 import Chat from "./src/screen/Chat";
 import ForgotPassword from "./src/screen/ForgotPassword";
 import NewPassword from "./src/screen/NewPassword";
-
+import CreateHive from './src/screen/CreateHive'
 // Demo camera UI
 import ClickPhotoTwo from "./src/screen/ClickPhotoTwo";
 import ClickPhotoThree from "./src/screen/ClickPhotoThree";
@@ -74,6 +74,7 @@ const App = () => {
               <Stack.Screen name="AddNote" component={AddNote} />
               <Stack.Screen name="NewPage" component={NewPage} />
               <Stack.Screen name="Home" component={MyTabs} />
+               <Stack.Screen name="CreateHive" component={CreateHive} />
               <Stack.Screen name="PhotoShare" component={PhotoShare} />
               <Stack.Screen name="AddMember" component={AddMember} />
               <Stack.Screen name="Notification" component={Notification} />
@@ -102,6 +103,7 @@ const App = () => {
               <Stack.Screen name="NewPassword" component={NewPassword} />
               <Stack.Screen name="ClickPhotoTwo" component={ClickPhotoTwo} />
               <Stack.Screen name="ClickPhotoThree" component={ClickPhotoThree} />
+                           
             </Stack.Navigator>
           </NavigationContainer>
         </EventProvider>

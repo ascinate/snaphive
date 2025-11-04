@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
 import {
     View,
-
     StyleSheet,
     TouchableOpacity,
     ScrollView,
@@ -31,10 +30,47 @@ const picnic1 = require('../../assets/picnic1.jpg');
 
 const { width, height } = Dimensions.get('window');
 
-const Home = ({ navigation, route }) => {
+const CreateHive = ({ navigation, route }) => {
     const [uploadedImage, setUploadedImage] = useState(null);
+    const [hiveName, setHiveName] = useState("");
+    const [description, setDescription] = useState("");
+    const { addEvent } = useContext(EventContext);
 
+    const handleCreateHive = () => {
+        // Validate required fields
+        if (!hiveName.trim()) {
+            alert('Please enter a hive name');
+            return;
+        }
 
+        if (!uploadedImage) {
+            alert('Please upload a cover image');
+            return;
+        }
+
+        // Create new event object
+        const newEvent = {
+            img: { uri: uploadedImage },
+            title: hiveName,
+            description: description || 'No description',
+            count: '0 Photos',
+            photos: [], // Empty photos array initially
+            createdAt: new Date().toISOString(),
+        };
+
+        // Add the new event to the events array
+        addEvent(newEvent);
+
+        // Clear form fields
+        setUploadedImage(null);
+        setHiveName("");
+        setDescription("");
+
+        // Navigate back to Home with a slight delay to ensure state updates
+        setTimeout(() => {
+            navigation.navigate('Home');
+        }, 100);
+    };
 
     return (
         <SafeAreaProvider>
@@ -44,7 +80,6 @@ const Home = ({ navigation, route }) => {
                 <ScrollView
                     style={styles.container}
                     showsVerticalScrollIndicator={false}
-
                 >
                     <MaskedView
                         maskElement={
@@ -68,7 +103,6 @@ const Home = ({ navigation, route }) => {
                     <CustomText>Start sharing memories with your group</CustomText>
                     <CustomText style={{ marginTop: 18, marginBottom: 4 }}>Cover Image</CustomText>
 
-
                     <TouchableWithoutFeedback onPress={() => {
                         const options = {
                             mediaType: "photo",
@@ -89,7 +123,6 @@ const Home = ({ navigation, route }) => {
                     }}>
                         <View style={styles.uploadContainer}>
                             {uploadedImage ? (
-
                                 <View style={{ width: '100%', height: '100%', borderRadius: 8, overflow: 'hidden' }}>
                                     <Animated.Image
                                         source={{ uri: uploadedImage }}
@@ -104,14 +137,22 @@ const Home = ({ navigation, route }) => {
                                     <CustomText style={{ marginTop: 4 }}>JPG, PNG up to 10MB</CustomText>
                                 </>
                             )}
-
                         </View>
                     </TouchableWithoutFeedback>
 
                     <View style={{ marginBottom: 16 }}>
                         <CustomText weight='medium' style={{ marginBottom: 4 }}>Hive Name *</CustomText>
-                        <TextInput placeholder='Summer Vacation 2024' style={styles.inputType} />
+                        <TextInput 
+                            placeholder='Summer Vacation 2024' 
+                            style={styles.inputType} 
+                            keyboardType="default"
+                            autoCapitalize="words"
+                            autoCorrect={false}
+                            value={hiveName}
+                            onChangeText={setHiveName}
+                        />
                     </View>
+                    
                     <View style={{ marginBottom: 16 }}>
                         <CustomText weight="medium" style={{ marginBottom: 4 }}>
                             Description
@@ -121,8 +162,11 @@ const Home = ({ navigation, route }) => {
                             style={[styles.inputType, { textAlignVertical: 'top', height: 100 }]}
                             multiline={true}
                             numberOfLines={4}
+                            value={description}
+                            onChangeText={setDescription}
                         />
                     </View>
+                    
                     <View style={{ marginBottom: 16 }}>
                         <CustomText weight="medium" style={{ marginBottom: 4 }}>
                             Privacy Mode
@@ -132,18 +176,20 @@ const Home = ({ navigation, route }) => {
                                 <View style={{ width: 35, height: 35, backgroundColor: '#e9d5ff', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
                                     <LockOpen color='#9E48ED' />
                                 </View>
-
                             </View>
-                            <View>
-                                <CustomText >Automatic Upload</CustomText>
+                            <View style={{ flex: 1, marginLeft: 12 }}>
+                                <CustomText>Automatic Upload</CustomText>
                                 <CustomText>All members can upload instantly. Best for casual events.</CustomText>
                             </View>
                         </View>
                     </View>
+                    
                     <View style={{ paddingBottom: 100 }}>
-                        <ThemeButton text="Create Hive"
-                            onPress={() => navigation.navigate("Home")}
-                            style={{ width: "100%", }} />
+                        <ThemeButton 
+                            text="Create Hive"
+                            onPress={handleCreateHive}
+                            style={{ width: "100%" }} 
+                        />
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -157,8 +203,18 @@ const styles = StyleSheet.create({
         paddingHorizontal: width * 0.05,
         backgroundColor: '#fdf2f8',
     },
+    snapText: {
+        fontSize: 32,
+        marginTop: 20,
+        marginBottom: 8,
+    },
     uploadContainer: {
-        width: '100%', height: 188, borderWidth: 2, borderColor: '#E5E7EB', borderStyle: 'dashed', borderRadius: 8,
+        width: '100%', 
+        height: 188, 
+        borderWidth: 2, 
+        borderColor: '#E5E7EB', 
+        borderStyle: 'dashed', 
+        borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 20,
@@ -168,23 +224,20 @@ const styles = StyleSheet.create({
         borderColor: '#E5E7EB',
         borderRadius: 8,
         paddingLeft: 10,
+        paddingVertical: 12,
+        fontSize: 16,
     },
     privacy: {
         flexDirection: 'row',
         backgroundColor: '#ffffff',
         borderRadius: 12,
         padding: 12,
-
-        // ✅ Shadow for iOS
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 6,
-
-        // ✅ Shadow for Android
         elevation: 3,
     },
-
 });
 
-export default Home;
+export default CreateHive;

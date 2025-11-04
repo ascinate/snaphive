@@ -214,7 +214,7 @@ const Home = ({ navigation, route }) => {
                 </CustomText>
               </TouchableOpacity>
             </View>
-
+{/* here the event list show */}
             {events.map((item, index) => (
               <TouchableOpacity key={index} onPress={() =>
                 navigation.navigate('PhotoFolder', {

@@ -1,5 +1,5 @@
 import { View, Image,StyleSheet } from 'react-native'
-const logo = require("../../assets/logo-snaphive.png");
+const logo = require("../../assets/logoTwo.png");
 
 const Logo = ({ style }) => {
   return (

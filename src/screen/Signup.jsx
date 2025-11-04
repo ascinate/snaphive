@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#FDF3F9',
   },
   description: {
     color: '#646464',
@@ -202,11 +202,13 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    borderColor: '#F0F5F5',
-    backgroundColor: '#F0F5F5',
+     borderColor: '#ccc',
+
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: 16,
     paddingHorizontal: 14,
+    paddingVertical: 21,
+    paddingLeft: 27,
 
   },
   outlineBtn: {

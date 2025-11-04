@@ -97,7 +97,7 @@ const Login = ({ navigation }) => {
                 <CustomText weight='medium' style={{ color: '#000000ff' }}>Don’t have an account ?  </CustomText>
                 <TouchableWithoutFeedback >
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('Signup')}>
-                        <CustomText weight="bold" style={[styles.continueTxt, { fontWeight: 600 }]}>Sign up</CustomText>
+                        <CustomText weight="bold" style={[styles.continueTxt, { fontWeight: 600, color: '#111a94ff' }]}>Sign up</CustomText>
                     </TouchableWithoutFeedback>
                 </TouchableWithoutFeedback>
             </View>
@@ -116,27 +116,33 @@ const Login = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#ffffff", padding: 20 },
+    container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#FDF3F9", padding: 20 },
     flex: { flexDirection: "row", justifyContent: "center", alignItems: 'center', marginBottom: 24 },
     logo: { width: 50, height: 50, resizeMode: "contain", marginRight: 10 },
     title: { fontSize: 35, color: '#000', fontWeight: '700', textAlign: 'center', },
     description: { fontSize: 16, color: '#646464', textAlign: 'center', width: '100%' },
 
     emailInput: {
-        marginTop: 36,
+        marginTop: 20,
         width: "100%",
         borderColor: '#ccc',
         borderWidth: 1,
-        borderRadius: 12,
+        borderRadius: 16,
         paddingHorizontal: 10,
         paddingVertical: 21,
         fontSize: 16,
         textAlign: 'left',
         paddingLeft: 27,
-
     },
 
-
+    inputType: {
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+        borderRadius: 16,
+        paddingLeft: 10,
+        paddingVertical: 16,
+        fontSize: 16,
+    },
 
 });
 

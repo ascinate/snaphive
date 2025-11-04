@@ -132,7 +132,7 @@ const CreateHive = ({ navigation, route }) => {
                                 <>
                                     <Image color='#c084fc' width={48} height={48} />
                                     <CustomText weight='mideum' style={{ marginTop: 8 }}>Tap to upload cover</CustomText>
-                                    <CustomText style={{ marginTop: 4 }}>JPG, PNG up to 10MB</CustomText>
+                                    <CustomText weight='mideum' style={{ marginTop: 4,color: '#67696b' }}>JPG, PNG up to 10MB</CustomText>
                                 </>
                             )}
                         </View>

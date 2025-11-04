@@ -17,7 +17,7 @@ import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen } fr
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
-
+import { launchImageLibrary } from 'react-native-image-picker';
 
 // components
 import TopNav from '../components/TopNavbar';
@@ -32,7 +32,7 @@ const picnic1 = require('../../assets/picnic1.jpg');
 const { width, height } = Dimensions.get('window');
 
 const Home = ({ navigation, route }) => {
-
+    const [uploadedImage, setUploadedImage] = useState(null);
 
 
 
@@ -69,11 +69,42 @@ const Home = ({ navigation, route }) => {
                     <CustomText style={{ marginTop: 18, marginBottom: 4 }}>Cover Image</CustomText>
 
 
-                    <TouchableWithoutFeedback onPress={() => navigate('PhotoShare')}>
+                    <TouchableWithoutFeedback onPress={() => {
+                        const options = {
+                            mediaType: "photo",
+                            quality: 1,
+                        };
+
+                        launchImageLibrary(options, (response) => {
+                            if (response.didCancel) {
+                                console.log("User cancelled image picker");
+                            } else if (response.errorCode) {
+                                console.log("ImagePicker Error: ", response.errorMessage);
+                            } else if (response.assets && response.assets.length > 0) {
+                                const selectedImage = response.assets[0];
+                                console.log("Selected image:", selectedImage.uri);
+                                setUploadedImage(selectedImage.uri);
+                            }
+                        });
+                    }}>
                         <View style={styles.uploadContainer}>
-                            <Image color='#c084fc' width={48} height={48} />
-                            <CustomText weight='mideum' style={{ marginTop: 8 }}>Tap to upload cover</CustomText>
-                            <CustomText style={{ marginTop: 4 }}>JPG, PNG up to 10MB</CustomText>
+                            {uploadedImage ? (
+
+                                <View style={{ width: '100%', height: '100%', borderRadius: 8, overflow: 'hidden' }}>
+                                    <Animated.Image
+                                        source={{ uri: uploadedImage }}
+                                        style={{ width: '100%', height: '100%' }}
+                                        resizeMode="cover"
+                                    />
+                                </View>
+                            ) : (
+                                <>
+                                    <Image color='#c084fc' width={48} height={48} />
+                                    <CustomText weight='mideum' style={{ marginTop: 8 }}>Tap to upload cover</CustomText>
+                                    <CustomText style={{ marginTop: 4 }}>JPG, PNG up to 10MB</CustomText>
+                                </>
+                            )}
+
                         </View>
                     </TouchableWithoutFeedback>
 

@@ -6,14 +6,15 @@ import LinearGradient from "react-native-linear-gradient";
 
 // Screens
 import HomeStack from "../navigation/HomeStack";
-import MemberList from "../screen/MemberList";
+import MemberList from "../screen/MyHives";
 import ClickPhoto from "../screen/ClickPhoto";
 import Profile from "../screen/Profile";
 import CreateHive from "../screen/CreateHive";
 
 // Icons
-import { Camera, CirclePlus, House, MessageCircle, UserRound } from "lucide-react-native";
+import { Camera, CirclePlus, House, MessageCircle, UserRound,Image } from "lucide-react-native";
 import CustomText from "./CustomText";
+
 
 
 const Tab = createBottomTabNavigator();
@@ -66,15 +67,15 @@ function CustomTabBar({ state, descriptors, navigation }) {
                     </LinearGradient>
                   ) : (
                     <View style={{ padding: 10, borderRadius: 16 }}>
-                      <House width={25} height={25} />
+                      <House width={25} height={25} color='#6B7280'/>
                     </View>
                   )}
-                  <CustomText weight="mideum">Home</CustomText>
+                  <CustomText weight="mideum" style={{color: '#6B7280'}}>Home</CustomText>
                 </View>
               );
               break;
 
-            case "MemberList":
+            case "Profile":
               Icon = (
                 <View style={{ alignItems: 'center', gap: 2 }}>
                   {isFocused ? (
@@ -92,10 +93,10 @@ function CustomTabBar({ state, descriptors, navigation }) {
                     </LinearGradient>
                   ) : (
                     <View style={{ padding: 10, borderRadius: 16 }}>
-                      <UserRound width={25} height={25} />
+                      <UserRound width={25} height={25} color='#6B7280'/>
                     </View>
                   )}
-                  <CustomText weight="mideum">Profile</CustomText>
+                  <CustomText weight="mideum" style={{color: '#6B7280'}}>Profile</CustomText>
                 </View>
               );
               break;
@@ -118,10 +119,10 @@ function CustomTabBar({ state, descriptors, navigation }) {
                     </LinearGradient>
                   ) : (
                     <View style={{ padding: 10, borderRadius: 16 }}>
-                      <CirclePlus width={25} height={25} color="#000" />
+                      <CirclePlus width={25} height={25} color="#6B7280" />
                     </View>
                   )}
-                  <CustomText weight="mideum">Create</CustomText>
+                  <CustomText weight="mideum" style={{color: '#6B7280'}}>Create</CustomText>
                 </View>
               );
               break;
@@ -140,14 +141,14 @@ function CustomTabBar({ state, descriptors, navigation }) {
                       end={{ x: 1, y: 1 }}
                       style={{ padding: 10, borderRadius: 16 }}
                     >
-                      <MessageCircle width={25} height={25} color='#ffffff' />
+                      <Image width={25} height={25} color='#ffffff' />
                     </LinearGradient>
                   ) : (
                     <View style={{ padding: 10, borderRadius: 16 }}>
-                      <MessageCircle width={25} height={25} />
+                      <Image  width={25} height={25} color='#6B7280'/>
                     </View>
                   )}
-                  <CustomText weight="mideum">Message</CustomText>
+                  <CustomText weight="mideum" style={{color: '#6B7280'}}>My Hives</CustomText>
                 </View>
               );
               break;
@@ -170,10 +171,10 @@ function CustomTabBar({ state, descriptors, navigation }) {
                     </LinearGradient>
                   ) : (
                     <View style={{ padding: 10, borderRadius: 16 }}>
-                      <Camera width={25} height={25} />
+                      <Camera width={25} height={25} color='#6B7280'/>
                     </View>
                   )}
-                  <CustomText weight="mideum">Camera</CustomText>
+                  <CustomText weight="mideum" style={{color: '#6B7280'}}>Camera</CustomText>
                 </View>
               );
               break;
@@ -208,7 +209,7 @@ export default function MyTabs() {
       <Tab.Screen name="Messages" component={MemberList} />
       <Tab.Screen name="CreateHive" component={CreateHive} />
       <Tab.Screen name="Camera" component={ClickPhoto} />
-      <Tab.Screen name="MemberList" component={Profile} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 }

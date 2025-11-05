@@ -52,7 +52,7 @@ const TopNav = () => {
           </LinearGradient>
         </MaskedView>
       </View>
-<Text>Update</Text>
+
       <TouchableOpacity
         style={styles.bellWrapper}
         onPress={() => navigation.navigate("Notification")}

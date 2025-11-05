@@ -119,7 +119,7 @@ const FolderLayout = ({
             </TouchableOpacity>
           ))}
         </View>
-        <Text>Under Component</Text>
+        {/* <Text>Under Component</Text> */}
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={styles.scrollContainer}
@@ -136,8 +136,8 @@ const FolderLayout = ({
             ))}
           </View>
         </ScrollView>
-        {/* <Text>New Screen</Text>
-        {children} */}
+        {/* <Text>New Screen</Text> */}
+        {children}
       </View>
     </SafeAreaView>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Back from "../../assets/svg/back.svg";
@@ -136,8 +136,8 @@ const FolderLayout = ({
             ))}
           </View>
         </ScrollView>
-        <Text>New Screen</Text>
-        {children}
+        {/* <Text>New Screen</Text>
+        {children} */}
       </View>
     </SafeAreaView>
   );

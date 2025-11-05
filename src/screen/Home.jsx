@@ -36,11 +36,13 @@ const Home = ({ navigation, route }) => {
     if (route?.params?.newEvent) {
       const { name, photos } = route.params.newEvent;
 
-      const newEventObj = {
-        img: { uri: photos[0]?.uri },
-        title: name,
-        count: `${photos.length} Photos`,
-        photos,
+      const newEvent = {
+        img: { uri: uploadedImage },
+        title: hiveName,
+        description: hiveDescription || 'No description',
+        count: '0 Photos',
+        photos: [],
+        createdAt: new Date().toISOString(),
       };
 
       setEvents(prevEvents => [newEventObj, ...prevEvents]);
@@ -214,7 +216,7 @@ const Home = ({ navigation, route }) => {
                 </CustomText>
               </TouchableOpacity>
             </View>
-{/* here the event list show */}
+            {/* here the event list show */}
             {events.map((item, index) => (
               <TouchableOpacity key={index} onPress={() =>
                 navigation.navigate('PhotoFolder', {
@@ -226,7 +228,7 @@ const Home = ({ navigation, route }) => {
                   <Image source={item.img} style={styles.cardImg} />
                   <View style={styles.eventRowInformation}>
                     <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>{item.title}</CustomText>
-                    <CustomText weight="medium" style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}>I travel rajasthan</CustomText>
+                    <CustomText weight="medium" style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}>{item.description || 'No description'}</CustomText>
 
                     <View style={{ flexDirection: 'row', gap: 20 }}>
                       <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
@@ -250,9 +252,11 @@ const Home = ({ navigation, route }) => {
               </TouchableOpacity>
             ))}
           </View>
-
+<View>
+  
+</View>
           {/* Recent Activity */}
-          <View style={{ paddingBottom: 150 }}>
+          {/* <View style={{ paddingBottom: 150 }}>
             <View style={styles.eventHeader}>
               <CustomText weight="bold" style={styles.eventSection}>
                 Recent Activity
@@ -290,7 +294,7 @@ const Home = ({ navigation, route }) => {
                 </View>
               </TouchableOpacity>
             ))}
-          </View>
+          </View> */}
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>

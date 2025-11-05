@@ -34,7 +34,8 @@ const { width, height } = Dimensions.get('window');
 const CreateHive = ({ navigation, route }) => {
     const [uploadedImage, setUploadedImage] = useState(null);
     const [hiveName, setHiveName] = useState("");
-    const [description, setDescription] = useState("");
+
+const [hiveDescription, setHiveDescription] = useState("");
     const { addEvent } = useContext(EventContext);
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -48,11 +49,10 @@ const CreateHive = ({ navigation, route }) => {
             alert('Please upload a cover image');
             return;
         }
-
-        const newEvent = {
+const newEvent = {
             img: { uri: uploadedImage },
             title: hiveName,
-            description: description || 'No description',
+            description: hiveDescription || 'No description',
             count: '0 Photos',
             photos: [],
             createdAt: new Date().toISOString(),
@@ -63,7 +63,7 @@ const CreateHive = ({ navigation, route }) => {
 
         setUploadedImage(null);
         setHiveName("");
-        setDescription("");
+        setHiveDescription("");
 
 
         navigation.goBack();
@@ -160,8 +160,8 @@ const CreateHive = ({ navigation, route }) => {
                             style={[styles.inputType, { textAlignVertical: 'top', height: 100 }]}
                             multiline={true}
                             numberOfLines={4}
-                            value={description}
-                            onChangeText={setDescription}
+                    value={hiveDescription}
+                            onChangeText={setHiveDescription}
                         />
                     </View>
 

@@ -1,21 +1,33 @@
 import React from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomText from './CustomText';
-const ThemeButton = ({ text, onPress, style, textStyle }) => {
+
+const ThemeButton = ({ text, icon, onPress, style, textStyle, iconPosition = 'left' }) => {
   return (
     <LinearGradient
-      colors={['#9333EA', '#d6277e']}         
-      start={{ x: 0, y: 0 }}                   
-      end={{ x: 1.6, y: 0 }}                     
-      style={[styles.continueBtn, style]}     
+      colors={['#9333EA', '#d6277e']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1.6, y: 0 }}
+      style={[styles.continueBtn, style]}
     >
       <TouchableOpacity
         onPress={onPress}
         activeOpacity={0.8}
-        style={styles.touchable}             
+        style={styles.touchable}
       >
-        <CustomText weight='Bold' style={[styles.continueTxt, textStyle]}>{text}</CustomText>
+        <View style={styles.content}>
+          {/* Optional icon on the left */}
+          {icon && iconPosition === 'left' && <View style={styles.icon}>{icon}</View>}
+
+          {/* Button text */}
+          <CustomText weight="Bold" style={[styles.continueTxt, textStyle]}>
+            {text}
+          </CustomText>
+
+          {/* Optional icon on the right */}
+          {icon && iconPosition === 'right' && <View style={styles.icon}>{icon}</View>}
+        </View>
       </TouchableOpacity>
     </LinearGradient>
   );
@@ -26,13 +38,23 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     width: '100%',
     marginVertical: 21,
-    overflow: 'hidden',       
+    overflow: 'hidden',
   },
   touchable: {
     paddingVertical: 21,
     paddingHorizontal: 30,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8, // space between icon and text
+  },
+  icon: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   continueTxt: {
     fontSize: 16,

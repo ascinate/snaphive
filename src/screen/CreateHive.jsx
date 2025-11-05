@@ -10,7 +10,8 @@ import {
     Text,
     TextInput,
     TouchableWithoutFeedback,
-    Switch
+    Switch,
+    Keyboard
 } from 'react-native';
 import { navigate } from '../navigation/RootNavigation';
 import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen, Lock } from 'lucide-react-native';
@@ -35,7 +36,7 @@ const CreateHive = ({ navigation, route }) => {
     const [uploadedImage, setUploadedImage] = useState(null);
     const [hiveName, setHiveName] = useState("");
 
-const [hiveDescription, setHiveDescription] = useState("");
+    const [hiveDescription, setHiveDescription] = useState("");
     const { addEvent } = useContext(EventContext);
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -49,7 +50,7 @@ const [hiveDescription, setHiveDescription] = useState("");
             alert('Please upload a cover image');
             return;
         }
-const newEvent = {
+        const newEvent = {
             img: { uri: uploadedImage },
             title: hiveName,
             description: hiveDescription || 'No description',
@@ -144,10 +145,11 @@ const newEvent = {
                             placeholder='Summer Vacation 2024'
                             style={styles.inputType}
                             keyboardType="default"
-                            autoCapitalize="words"
+                            autoCapitalize="none"
                             autoCorrect={false}
                             value={hiveName}
                             onChangeText={setHiveName}
+                            onSubmitEditing={() => Keyboard.dismiss()}
                         />
                     </View>
 
@@ -160,8 +162,9 @@ const newEvent = {
                             style={[styles.inputType, { textAlignVertical: 'top', height: 100 }]}
                             multiline={true}
                             numberOfLines={4}
-                    value={hiveDescription}
+                            value={hiveDescription}
                             onChangeText={setHiveDescription}
+                            onSubmitEditing={() => Keyboard.dismiss()}
                         />
                     </View>
 

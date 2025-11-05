@@ -10,7 +10,7 @@ import {
   Animated
 } from 'react-native';
 import { RefreshControl } from 'react-native';
-import { Sparkles, Users, FileImage, Clock5 } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, ImagePlus, MoveRight } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
@@ -201,7 +201,7 @@ const Home = ({ navigation, route }) => {
           </View>
 
           {/* Events Section */}
-          <View>
+          <View style={{ paddingBottom:100,}}>
             <View style={styles.eventHeader}>
               <CustomText weight="medium" style={styles.eventSection}>
                 Your Hives
@@ -217,44 +217,93 @@ const Home = ({ navigation, route }) => {
               </TouchableOpacity>
             </View>
             {/* here the event list show */}
-            {events.map((item, index) => (
-              <TouchableOpacity key={index} onPress={() =>
-                navigation.navigate('PhotoFolder', {
-                  eventPhotos: item.photos,
-                })
-              }>
+            {/* ✅ Show hives or placeholder */}
+            {events.length > 0 ? (
+              events.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() =>
+                    navigation.navigate('PhotoFolder', {
+                      eventPhotos: item.photos,
+                    })
+                  }
+                >
+                  <View style={styles.eventRow}>
+                    <Image source={item.img} style={styles.cardImg} />
+                    <View style={styles.eventRowInformation}>
+                      <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>
+                        {item.title}
+                      </CustomText>
+                      <CustomText
+                        weight="medium"
+                        style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}
+                      >
+                        {item.description || 'No description'}
+                      </CustomText>
 
-                <View style={styles.eventRow} >
-                  <Image source={item.img} style={styles.cardImg} />
-                  <View style={styles.eventRowInformation}>
-                    <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>{item.title}</CustomText>
-                    <CustomText weight="medium" style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}>{item.description || 'No description'}</CustomText>
+                      <View style={{ flexDirection: 'row', gap: 20 }}>
+                        <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                          <Users width={14} height={14} color="#6B7280" />
+                          <CustomText style={{ color: '#6B7280' }}>1</CustomText>
+                        </View>
 
-                    <View style={{ flexDirection: 'row', gap: 20 }}>
-                      <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                        <Users width={14} height={14} color='#6B7280' />
-                        <CustomText style={{ color: '#6B7280' }}>1</CustomText>
-                      </View>
+                        <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                          <FileImage width={14} height={14} color="#6B7280" />
+                          <CustomText style={{ color: '#6B7280' }}>{item.count}</CustomText>
+                        </View>
 
-                      <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', }}>
-                        <FileImage width={14} height={14} color='#6B7280' />
-                        <CustomText style={{ color: '#6B7280' }}>{item.count}</CustomText>
-                      </View>
-
-                      <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', }}>
-                        <Clock5 width={14} height={14} color='#ea580c' />
-                        <CustomText style={{ color: '#ea580c' }}>3</CustomText>
+                        <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                          <Clock5 width={14} height={14} color="#ea580c" />
+                          <CustomText style={{ color: '#ea580c' }}>3</CustomText>
+                        </View>
                       </View>
                     </View>
                   </View>
-
+                </TouchableOpacity>
+              ))
+            ) : (
+              // ✅ Empty state (your provided design)
+              <View
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 10,
+                  marginTop: 60,
+                  marginBottom: 80,
+                }}
+              >
+                <View
+                  style={{
+                    width: 60,
+                    height: 60,
+                    backgroundColor: '#f1e4ff',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 50,
+                  }}
+                >
+                  <ImagePlus color="#C084FC" size={28} />
                 </View>
-              </TouchableOpacity>
-            ))}
+
+                <CustomText weight="medium" style={{ color: '#6B7280' }}>
+                  No hives yet
+                </CustomText>
+
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <CustomText
+                    weight="bold"
+                    style={{ color: '#C084FC' }}
+                    onPress={() => navigation.navigate('CreateHive')}
+                  >
+                    Create your first hive
+                  </CustomText>
+                  <MoveRight color="#C084FC" />
+                </View>
+              </View>
+            )}
+
           </View>
-<View>
-  
-</View>
+
           {/* Recent Activity */}
           {/* <View style={{ paddingBottom: 150 }}>
             <View style={styles.eventHeader}>
@@ -306,6 +355,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: width * 0.05,
     backgroundColor: '#fdf2f8',
+
   },
   heroSection: {
     justifyContent: 'center',
@@ -362,21 +412,24 @@ const styles = StyleSheet.create({
     color: '#000',
     fontWeight: '600',
   },
-  ImportSection: {
-    borderRadius: 24,
-    padding: width * 0.06,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOpacity: 0.15,
-        shadowRadius: 6,
-        shadowOffset: { width: 0, height: 4 },
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-  },
+ImportSection: {
+  borderRadius: 24,
+  padding: width * 0.06,
+  overflow: 'hidden', // ✅ ensures rounded corners visible for gradient on iOS
+  backgroundColor: 'transparent', // ✅ fixes flat background under gradient
+  ...Platform.select({
+    ios: {
+      shadowColor: '#000',
+      shadowOpacity: 0.25, // slightly stronger for iOS parity
+      shadowRadius: 10,
+      shadowOffset: { width: 0, height: 4 },
+    },
+    android: {
+      elevation: 12, // reduced to look same as iOS shadow
+    },
+  }),
+},
+
   cameraIcon: {
     width: width * 0.13,
     height: width * 0.13,
@@ -479,6 +532,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: height * 0.03,
+       
   },
 
 
@@ -513,6 +567,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffffff',
     width: '100%',
     padding: 16,
+    
   }
 
 });

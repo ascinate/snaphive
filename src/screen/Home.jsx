@@ -103,18 +103,18 @@ const Home = ({ navigation, route }) => {
             >
 
               <View style={{ flex: 1 }}>
-                {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Sparkles color='#ffffff' size={22} />
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  {/* <Sparkles color='#ffffff' size={22} /> */}
                   <CustomText weight="medium" style={styles.importHeading}>
-                    Welcome back!
+                    Welcome to SnapHive
                   </CustomText>
-                </View> */}
+                </View>
                 <CustomText weight="bold" style={styles.importSub}>
-        Welcome User
+                  Capture your favorite moments and share them with your hives.
                 </CustomText>
 
                 <CustomText weight="medium" style={styles.importSubLine}>
-                  Share your moments with your hives
+                  Let the memories flow! ✨
                 </CustomText>
               </View>
             </View>
@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   ImportSection: {
-    backgroundColor: '#a131d3', 
+    backgroundColor: '#a131d3',
     marginTop: height * 0.025,
     borderRadius: 24,
     padding: width * 0.06,
@@ -430,12 +430,12 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   importSub: {
-    marginTop: 4,
+    marginTop: 10,
     fontSize: 24,
     color: '#ffffffff',
   },
   importSubLine: {
-    marginTop: 4,
+    marginTop: 10,
     fontSize: 14,
     color: '#ffffffff',
   },

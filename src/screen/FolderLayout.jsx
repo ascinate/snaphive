@@ -264,28 +264,29 @@ const styles = StyleSheet.create({
   scrollContainer: {
     padding: 20,
   },
+
 grid: {
   width: '100%',
   marginTop: 10,
+  alignItems: 'center',
 },
 
 imageWrapperRow: {
   flexDirection: 'row',
   flexWrap: 'wrap',
-  justifyContent: 'flex-start', // ✅ correct spelling (was 'flex-startr')
-  alignItems: 'flex-start', // ✅ aligns each row top
+  justifyContent: 'flex-start',
+  alignItems: 'flex-start',
   gap: 15,
+  width: '100%',
 },
 
 imageGrid: {
-  width: 100,
-  height: 100,
+  width: '30%',
+  aspectRatio: 1,
   borderRadius: 10,
   overflow: 'hidden',
   backgroundColor: '#e5e7eb',
-  marginBottom: 12, // ✅ adds space between rows
 },
-
 photo: {
   width: '100%',
   height: '100%',

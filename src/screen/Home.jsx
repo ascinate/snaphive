@@ -122,7 +122,7 @@ const Home = ({ navigation, route }) => {
               <View style={{ flex: 1 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                   {/* <Sparkles color='#ffffff' size={22} /> */}
-                  <CustomText weight="medium" style={styles.importHeading}>Welcome </CustomText>
+                  <CustomText weight="medium" style={styles.importHeading}>Welcome</CustomText>
                   <CustomText weight="bold" style={[styles.importHeading,]}>{user ? user.name : "Loading..."}!</CustomText>
                 </View>
                 <CustomText weight="bold" style={styles.importSub}>

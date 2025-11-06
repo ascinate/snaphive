@@ -155,16 +155,31 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
-  Text,
+  Alert,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 // components
 import TopNav from '../components/TopNavbar';
+import ThemeButton from '../components/ThemeButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const { width, height } = Dimensions.get('window'); 
+const { width, height } = Dimensions.get('window');
 
 const Profile = () => {
+  const navigation = useNavigation();
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("user");
+      Alert.alert("Logout", "You have been logged out.", [
+        { text: "OK", onPress: () => navigation.navigate("Landing") },
+      ]);
+    } catch (err) {
+      Alert.alert("Error", "Failed to logout. Please try again.");
+    }
+  };
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -173,8 +188,17 @@ const Profile = () => {
         <ScrollView
           style={styles.container}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ alignItems: 'center' }}
         >
-          <Text style={styles.text}>coming soon</Text>
+          <ThemeButton
+            text="Logout"
+            onPress={handleLogout}
+            style={{
+              marginTop: 31,
+              width: '50%',
+              alignItems: 'center',
+            }}
+          />
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -187,13 +211,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
     backgroundColor: '#fdf2f8',
   },
-  text: {
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#6B7280',
-    marginTop: height * 0.4,
-    fontWeight: '500',
-  },
 });
 
 export default Profile;
+

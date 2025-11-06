@@ -127,20 +127,24 @@ const FolderLayout = ({ navigation, route }) => {
           contentContainerStyle={styles.scrollContainer}
           showsVerticalScrollIndicator={false}
         >
-          {selectedTab === "Gallery" && (
-            <View style={styles.grid}>
-              <View style={styles.imageWrapperRow}>
-                {/* Existing static images */}
-                {[picnic1, picnic1, picnic1, picnic1, picnic1].map((img, index) => (
-                  <View key={index} style={styles.imageGrid}>
-                    <Image source={img} style={styles.photo} />
-                  </View>
-                ))}
+{selectedTab === "Gallery" && (
+  <View style={styles.grid}>
+    {uploadedImages.length === 0 ? (
+      <Text style={styles.infoText}>No photos</Text>
+    ) : (
+      <View style={styles.imageWrapperRow}>
 
 
-              </View>
-            </View>
-          )}
+        {/* Uploaded images - same grid style */}
+        {uploadedImages.map((uri, index) => (
+          <View key={`uploaded-${index}`} style={styles.imageGrid}>
+            <Image source={{ uri }} style={styles.photo} />
+          </View>
+        ))}
+      </View>
+    )}
+  </View>
+)}
 
           {selectedTab === "Chat" && (
             <Text style={styles.infoText}>Chat feature coming soon 💬</Text>

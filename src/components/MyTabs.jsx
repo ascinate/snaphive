@@ -209,7 +209,7 @@ export default function MyTabs() {
       <Tab.Screen name="Messages" component={MemberList} />
       <Tab.Screen name="CreateHive" component={CreateHive} />
       <Tab.Screen name="Camera" component={ClickPhoto} />
-      {/* <Tab.Screen name="Profile" component={Profile} /> */}
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 }

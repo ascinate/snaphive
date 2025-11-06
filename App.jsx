@@ -47,6 +47,7 @@ import Chat from "./src/screen/Chat";
 import ForgotPassword from "./src/screen/ForgotPassword";
 import NewPassword from "./src/screen/NewPassword";
 import CreateHive from './src/screen/CreateHive'
+import FolderLayout from './src/components/FolderLayout'
 // Demo camera UI
 import ClickPhotoTwo from "./src/screen/ClickPhotoTwo";
 import ClickPhotoThree from "./src/screen/ClickPhotoThree";
@@ -103,7 +104,7 @@ const App = () => {
               <Stack.Screen name="NewPassword" component={NewPassword} />
               <Stack.Screen name="ClickPhotoTwo" component={ClickPhotoTwo} />
               <Stack.Screen name="ClickPhotoThree" component={ClickPhotoThree} />
-                           
+                           <Stack.Screen name="FolderLayout" component={FolderLayout} />         
             </Stack.Navigator>
           </NavigationContainer>
         </EventProvider>

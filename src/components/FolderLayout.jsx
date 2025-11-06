@@ -1,102 +1,107 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Back from "../../assets/svg/back.svg";
-import { Plus, Upload, UserPlus, Users } from "lucide-react-native";
+import { Upload, UserPlus, Users, MessageCircle } from "lucide-react-native";
 import ThemeButton from "./ThemeButton";
-
-//Image
-const createEvent = require("../../assets/createEvent.png");
-const picnic1 = require("../../assets/picnic1.jpg");
-const picnic2 = require("../../assets/picnic2.jpg");
-const picnic3 = require("../../assets/picnic3.jpg");
-const picnic4 = require("../../assets/picnic4.jpg");
-
-const FolderLayout = ({
-  navigation,
-  image,
-  folderName,
-  date,
-  owner,
-  inviteText,
-  onInvitePress,
-  children,
-  showOverlay = true, // show/hide bottom overlay
-  RightIcon,          // dynamic top-right icon
-}) => {
+import { launchImageLibrary } from "react-native-image-picker";
+const FolderLayout = ({ navigation, route }) => {
+  const { image, folderName, date, owner, photos = [] } = route.params || {};
   const [selectedTab, setSelectedTab] = useState("Gallery");
+  const [uploadedImage, setUploadedImage] = useState(null);
 
-  const images = [picnic1, picnic2, picnic3, picnic4];
+  // ✅ Add this function
+  const handleUpload = () => {
+    const options = {
+      mediaType: "photo",
+      includeBase64: false,
+      quality: 0.8,
+    };
 
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log("User cancelled image picker");
+      } else if (response.errorCode) {
+        console.log("ImagePicker Error: ", response.errorMessage);
+      } else if (response.assets && response.assets.length > 0) {
+        const selectedImage = response.assets[0];
+        console.log("Selected image:", selectedImage.uri);
+        setUploadedImage(selectedImage.uri); // ✅ save selected image
+      }
+    });
+  };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      {/* Header Image */}
       <View style={styles.imageWrapper}>
-        {/* Header Image */}
         <Image source={image} style={styles.folderImage} />
 
-        {/* Top bar with back & dynamic right icon */}
+        {/* Top Bar (Back Button) */}
         <View style={styles.topBar}>
           <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
             <View style={styles.iconButton}>
               <Back height={16} width={16} />
             </View>
           </TouchableWithoutFeedback>
-
-          {RightIcon && (
-            <TouchableWithoutFeedback onPress={() => console.log("Right icon pressed")}>
-              <View style={styles.iconButton}>{RightIcon}</View>
-            </TouchableWithoutFeedback>
-          )}
         </View>
 
-        {/* Bottom overlay */}
-        {showOverlay && (folderName || date || owner || inviteText) && (
-          <View style={styles.bottomOverlay}>
-            <View>
-              {folderName && <Text style={styles.folderHeading}>{folderName}</Text>}
-              {date && <Text style={styles.folderHeadingDate}>{date}</Text>}
-              {owner && (
-                <View style={styles.profileIcon}>
-                  <Users color="#FFFFFF" width={16} height={16} />
-                  <Text style={{ color: "#FFFFFF" }}>{owner}</Text>
-                </View>
-              )}
-            </View>
-
-            {inviteText && (
-              <TouchableWithoutFeedback onPress={onInvitePress}>
-                <View style={styles.inviteButton}>
-                  <Text style={styles.inviteText}>{inviteText}</Text>
-                </View>
-              </TouchableWithoutFeedback>
+        {/* Bottom Overlay */}
+        <View style={styles.bottomOverlay}>
+          <View>
+            {folderName && <Text style={styles.folderHeading}>{folderName}</Text>}
+            {date && (
+              <Text style={styles.folderHeadingDate}>
+                {new Date(date).toDateString()}
+              </Text>
+            )}
+            {owner && (
+              <View style={styles.profileIcon}>
+                <Users color="#FFFFFF" width={16} height={16} />
+                <Text style={{ color: "#FFFFFF" }}>{owner}</Text>
+              </View>
             )}
           </View>
-        )}
+        </View>
       </View>
 
-      {/* Dynamic content */}
+      {/* Content Area */}
       <View style={styles.container}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Upload + Add Member */}
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <ThemeButton
             text="Upload"
             icon={<Upload color="#fff" size={18} />}
-            onPress={() => navigation.navigate("ClickPhotoThree")}
+            onPress={handleUpload} // ✅ fixed
             style={{ width: "78%" }}
           />
+
 
           <TouchableOpacity>
             <View style={styles.addMemberBtn}>
               <UserPlus width={20} height={20} />
             </View>
           </TouchableOpacity>
-          {/* i want to imepement tab feature here */}
         </View>
 
         {/* Tabs Section */}
         <View style={styles.tabsContainer}>
           {[
             { label: "Gallery", icon: <Upload width={16} height={16} color="#000" /> },
-            { label: "Chat", icon: <Users width={16} height={16} color="#000" /> },
+            { label: "Chat", icon: <MessageCircle width={16} height={16} color="#000" /> },
             { label: "Members", icon: <UserPlus width={16} height={16} color="#000" /> },
           ].map((tab, index) => (
             <TouchableOpacity
@@ -119,25 +124,52 @@ const FolderLayout = ({
             </TouchableOpacity>
           ))}
         </View>
-        {/* <Text>Under Component</Text> */}
+
+        {/* Scrollable Tab Content */}
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={styles.scrollContainer}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.grid}>
-            {images.map((img, index) => (
-              <View key={index} style={styles.photoContainer}>
-                <Image
-                  source={typeof img === "object" && img.uri ? { uri: img.uri } : img}
-                  style={styles.photo}
-                />
-              </View>
-            ))}
-          </View>
+          {selectedTab === "Gallery" && (
+            <View style={styles.grid}>
+              {photos && photos.length > 0 ? (
+                photos.map((photo, index) => (
+                  <View key={index} style={styles.photoContainer}>
+                    <Image
+                      source={{ uri: photo.uri }}
+                      style={styles.photo}
+                    />
+                  </View>
+                ))
+              ) : (
+                <Text
+                  style={{
+                    color: "#6B7280",
+                    textAlign: "center",
+                    marginTop: 20,
+                    fontSize: 15,
+                    width: '100%'
+                  }}
+                >
+                  No photos yet in this hive.
+                </Text>
+              )}
+            </View>
+          )}
+
+          {selectedTab === "Chat" && (
+            <Text style={{ textAlign: "center", color: "#6B7280", marginTop: 20 }}>
+              Chat feature coming soon 💬
+            </Text>
+          )}
+
+          {selectedTab === "Members" && (
+            <Text style={{ textAlign: "center", color: "#6B7280", marginTop: 20 }}>
+              Members list will appear here 👥
+            </Text>
+          )}
         </ScrollView>
-        {/* <Text>New Screen</Text> */}
-        {children}
       </View>
     </SafeAreaView>
   );
@@ -199,17 +231,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
-  inviteButton: {
-    backgroundColor: "rgba(0,0,0,0.4)",
-    paddingVertical: 6,
-    paddingHorizontal: 13,
-    borderRadius: 15,
-  },
-  inviteText: {
-    color: "#fff",
-    fontSize: 15,
-    fontWeight: "600",
-  },
   addMemberBtn: {
     paddingVertical: 21,
     paddingHorizontal: 25,
@@ -223,7 +244,6 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 2,
   },
-  //tab menu
   tabsContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -258,7 +278,6 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "700",
   },
-  //image scroll
   scrollContainer: {
     padding: 20,
   },

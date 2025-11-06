@@ -202,8 +202,12 @@ const Home = ({ navigation, route }) => {
                 <TouchableOpacity
                   key={index}
                   onPress={() =>
-                    navigation.navigate('PhotoFolder', {
-                      eventPhotos: item.photos,
+                    navigation.navigate('FolderLayout', {
+                      image: item.img,
+                      folderName: item.title,
+                      date: item.createdAt,
+                      owner: "Pritam",
+                      photos: item.photos,
                     })
                   }
                 >
@@ -281,9 +285,8 @@ const Home = ({ navigation, route }) => {
               </View>
             )}
 
-          </View>
 
-          {/* Recent Activity */}
+{/* Recent Activity */}
           {/* <View style={{ paddingBottom: 150 }}>
             <View style={styles.eventHeader}>
               <CustomText weight="bold" style={styles.eventSection}>
@@ -323,6 +326,9 @@ const Home = ({ navigation, route }) => {
               </TouchableOpacity>
             ))}
           </View> */}
+          </View>
+
+
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>

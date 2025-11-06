@@ -90,69 +90,49 @@ const Home = ({ navigation, route }) => {
         >
           {/* Hero Section */}
 
-          <Animated.View
-            style={{
-              marginTop: height * 0.025,
-              transform: [{ translateX: slideAnim }],
-              opacity: opacityAnim,
-            }}
+          <LinearGradient
+            colors={['#9333EA', '#F2612D']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1.6, y: 0 }}
+            style={styles.ImportSection}
           >
-            <LinearGradient
-              colors={[
-                '#a131d3',
-                '#b128c4',
-                '#bd22b5',
-                '#c61fa7',
-                '#cc2199',
-                '#d71f8c',
-                '#df227f',
-                '#e52a73',
-                '#ef3462',
-                '#f44250',
-                '#f5533d',
-                '#f36529',
-              ]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }} // right bottom direction
-              style={styles.ImportSection}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: width * 0.03,
+              }}
             >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: width * 0.03,
-                }}
-              >
 
-                <View style={{ flex: 1 }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                    <Sparkles color='#ffffff' size={22} />
-                    <CustomText weight="medium" style={styles.importHeading}>
-                      Welcome back!
-                    </CustomText>
-                  </View>
-                  <CustomText weight="bold" style={styles.importSub}>
-                    pritam
-                  </CustomText>
-
-                  <CustomText weight="medium" style={styles.importSubLine}>
-                    Share your moments with your hives
+              <View style={{ flex: 1 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  <Sparkles color='#ffffff' size={22} />
+                  <CustomText weight="medium" style={styles.importHeading}>
+                    Welcome back!
                   </CustomText>
                 </View>
-              </View>
+                <CustomText weight="bold" style={styles.importSub}>
+                  pritam
+                </CustomText>
 
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  gap: width * 0.02,
-                }}
-              >
-
+                <CustomText weight="medium" style={styles.importSubLine}>
+                  Share your moments with your hives
+                </CustomText>
               </View>
-            </LinearGradient>
-          </Animated.View>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                gap: width * 0.02,
+              }}
+            >
+
+            </View>
+          </LinearGradient>
+
 
           {/* Dashboard Cards */}
           <View
@@ -201,7 +181,7 @@ const Home = ({ navigation, route }) => {
           </View>
 
           {/* Events Section */}
-          <View style={{ paddingBottom:100,}}>
+          <View style={{ paddingBottom: 100, }}>
             <View style={styles.eventHeader}>
               <CustomText weight="medium" style={styles.eventSection}>
                 Your Hives
@@ -217,7 +197,6 @@ const Home = ({ navigation, route }) => {
               </TouchableOpacity>
             </View>
             {/* here the event list show */}
-            {/* ✅ Show hives or placeholder */}
             {events.length > 0 ? (
               events.map((item, index) => (
                 <TouchableOpacity
@@ -262,7 +241,7 @@ const Home = ({ navigation, route }) => {
                 </TouchableOpacity>
               ))
             ) : (
-              // ✅ Empty state (your provided design)
+
               <View
                 style={{
                   alignItems: 'center',
@@ -412,23 +391,24 @@ const styles = StyleSheet.create({
     color: '#000',
     fontWeight: '600',
   },
-ImportSection: {
-  borderRadius: 24,
-  padding: width * 0.06,
-  overflow: 'hidden', // ✅ ensures rounded corners visible for gradient on iOS
-  backgroundColor: 'transparent', // ✅ fixes flat background under gradient
-  ...Platform.select({
-    ios: {
-      shadowColor: '#000',
-      shadowOpacity: 0.25, // slightly stronger for iOS parity
-      shadowRadius: 10,
-      shadowOffset: { width: 0, height: 4 },
-    },
-    android: {
-      elevation: 12, // reduced to look same as iOS shadow
-    },
-  }),
-},
+  ImportSection: {
+    marginTop: height * 0.025,
+    borderRadius: 24,
+    padding: width * 0.06,
+    overflow: 'hidden', // ✅ ensures rounded corners visible for gradient on iOS
+    backgroundColor: 'transparent', // ✅ fixes flat background under gradient
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOpacity: 0.25, // slightly stronger for iOS parity
+        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 4 },
+      },
+      android: {
+        elevation: 12, // reduced to look same as iOS shadow
+      },
+    }),
+  },
 
   cameraIcon: {
     width: width * 0.13,
@@ -532,7 +512,7 @@ ImportSection: {
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: height * 0.03,
-       
+
   },
 
 
@@ -567,7 +547,7 @@ ImportSection: {
     backgroundColor: '#ffffffff',
     width: '100%',
     padding: 16,
-    
+
   }
 
 });

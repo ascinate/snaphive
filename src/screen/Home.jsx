@@ -19,6 +19,7 @@ import { EventContext } from '../context/EventContext';
 // components
 import TopNav from '../components/TopNavbar';
 import CustomText from '../components/CustomText';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // assets
 const hero = require('../../assets/hero.png');
@@ -32,6 +33,22 @@ const Home = ({ navigation, route }) => {
   const { events, setEvents } = useContext(EventContext);
   const slideAnim = useRef(new Animated.Value(0)).current; // for slide
   const opacityAnim = useRef(new Animated.Value(1)).current; // for fade out
+
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const storedUser = await AsyncStorage.getItem("user");
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+          console.log("Loaded user:", JSON.parse(storedUser));
+        }
+      } catch (error) {
+        console.log("Error loading user:", error);
+      }
+    };
+    fetchUser();
+  }, []);
   useEffect(() => {
     if (route?.params?.newEvent) {
       const { name, photos } = route.params.newEvent;
@@ -105,9 +122,8 @@ const Home = ({ navigation, route }) => {
               <View style={{ flex: 1 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                   {/* <Sparkles color='#ffffff' size={22} /> */}
-                  <CustomText weight="medium" style={styles.importHeading}>
-                    Welcome to SnapHive
-                  </CustomText>
+                  <CustomText weight="medium" style={styles.importHeading}>Welcome </CustomText>
+                  <CustomText weight="bold" style={[styles.importHeading,]}>{user ? user.name : "Loading..."}!</CustomText>
                 </View>
                 <CustomText weight="bold" style={styles.importSub}>
                   Capture your moments with hives

@@ -10,15 +10,18 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Back from "../../assets/svg/back.svg";
-import { Upload, UserPlus, Users, MessageCircle } from "lucide-react-native";
-import ThemeButton from "./ThemeButton";
+import { Upload, UserPlus, Users, MessageCircle, Settings } from "lucide-react-native";
+import ThemeButton from "../components/ThemeButton";
 import { launchImageLibrary } from "react-native-image-picker";
+
+
+const picnic1 = require("../../assets/picnic1.jpg");
+
 const FolderLayout = ({ navigation, route }) => {
   const { image, folderName, date, owner, photos = [] } = route.params || {};
   const [selectedTab, setSelectedTab] = useState("Gallery");
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedImages, setUploadedImages] = useState([]);
 
-  // ✅ Add this function
   const handleUpload = () => {
     const options = {
       mediaType: "photo",
@@ -34,21 +37,28 @@ const FolderLayout = ({ navigation, route }) => {
       } else if (response.assets && response.assets.length > 0) {
         const selectedImage = response.assets[0];
         console.log("Selected image:", selectedImage.uri);
-        setUploadedImage(selectedImage.uri); // ✅ save selected image
+        setUploadedImages((prev) => [...prev, selectedImage.uri]);
       }
     });
   };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       {/* Header Image */}
       <View style={styles.imageWrapper}>
-        <Image source={image} style={styles.folderImage} />
+        <Image source={image ? image : picnic1} style={styles.folderImage} />
 
-        {/* Top Bar (Back Button) */}
+        {/* Top Bar (Back & Settings) */}
         <View style={styles.topBar}>
           <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
             <View style={styles.iconButton}>
               <Back height={16} width={16} />
+            </View>
+          </TouchableWithoutFeedback>
+
+          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+            <View style={styles.iconButton}>
+              <Settings size={18} />
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -75,21 +85,13 @@ const FolderLayout = ({ navigation, route }) => {
       {/* Content Area */}
       <View style={styles.container}>
         {/* Upload + Add Member */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
+        <View style={styles.rowBetween}>
           <ThemeButton
             text="Upload"
             icon={<Upload color="#fff" size={18} />}
-            onPress={handleUpload} // ✅ fixed
+            onPress={handleUpload}
             style={{ width: "78%" }}
           />
-
-
           <TouchableOpacity>
             <View style={styles.addMemberBtn}>
               <UserPlus width={20} height={20} />
@@ -97,27 +99,21 @@ const FolderLayout = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
 
-        {/* Tabs Section */}
+        {/* Tabs */}
         <View style={styles.tabsContainer}>
           {[
             { label: "Gallery", icon: <Upload width={16} height={16} color="#000" /> },
             { label: "Chat", icon: <MessageCircle width={16} height={16} color="#000" /> },
             { label: "Members", icon: <UserPlus width={16} height={16} color="#000" /> },
-          ].map((tab, index) => (
+          ].map((tab, i) => (
             <TouchableOpacity
-              key={index}
-              style={[
-                styles.tabButton,
-                selectedTab === tab.label && styles.tabButtonActive,
-              ]}
+              key={i}
+              style={[styles.tabButton, selectedTab === tab.label && styles.tabButtonActive]}
               onPress={() => setSelectedTab(tab.label)}
             >
               {tab.icon}
               <Text
-                style={[
-                  styles.tabText,
-                  selectedTab === tab.label && styles.tabTextActive,
-                ]}
+                style={[styles.tabText, selectedTab === tab.label && styles.tabTextActive]}
               >
                 {tab.label}
               </Text>
@@ -125,7 +121,7 @@ const FolderLayout = ({ navigation, route }) => {
           ))}
         </View>
 
-        {/* Scrollable Tab Content */}
+        {/* Tab Content */}
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={styles.scrollContainer}
@@ -133,41 +129,29 @@ const FolderLayout = ({ navigation, route }) => {
         >
           {selectedTab === "Gallery" && (
             <View style={styles.grid}>
-              {photos && photos.length > 0 ? (
-                photos.map((photo, index) => (
-                  <View key={index} style={styles.photoContainer}>
-                    <Image
-                      source={{ uri: photo.uri }}
-                      style={styles.photo}
-                    />
-                  </View>
-                ))
-              ) : (
-                <Text
-                  style={{
-                    color: "#6B7280",
-                    textAlign: "center",
-                    marginTop: 20,
-                    fontSize: 15,
-                    width: '100%'
-                  }}
-                >
-                  No photos yet in this hive.
-                </Text>
-              )}
+              {/* Default Images */}
+              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
+                <View style={styles.imageGrid}>
+                  <Image source={picnic1} style={styles.photo} />
+                </View>
+                <View style={styles.imageGrid}>
+                  <Image source={picnic1} style={styles.photo} />
+                </View>
+                <View style={styles.imageGrid}>
+                  <Image source={picnic1} style={styles.photo} />
+                </View>
+
+  
+              </View>
             </View>
           )}
 
           {selectedTab === "Chat" && (
-            <Text style={{ textAlign: "center", color: "#6B7280", marginTop: 20 }}>
-              Chat feature coming soon 💬
-            </Text>
+            <Text style={styles.infoText}>Chat feature coming soon 💬</Text>
           )}
 
           {selectedTab === "Members" && (
-            <Text style={{ textAlign: "center", color: "#6B7280", marginTop: 20 }}>
-              Members list will appear here 👥
-            </Text>
+            <Text style={styles.infoText}>Members list will appear here 👥</Text>
           )}
         </ScrollView>
       </View>
@@ -181,6 +165,11 @@ const styles = StyleSheet.create({
     marginTop: -60,
     padding: 20,
     backgroundColor: "#FDF2F6",
+  },
+  rowBetween: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   topBar: {
     position: "absolute",
@@ -282,21 +271,26 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
-    gap: 12,
+    flexDirection: "column",
+    justifyContent: "center",
+    width: "100%",
   },
-  photoContainer: {
-    width: "30%",
-    aspectRatio: 1,
-    borderRadius: 6,
+  imageGrid: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
     overflow: "hidden",
-    marginBottom: 15,
+    backgroundColor: "#e5e7eb",
   },
   photo: {
     width: "100%",
     height: "100%",
+    resizeMode: "cover",
+  },
+  infoText: {
+    textAlign: "center",
+    color: "#6B7280",
+    marginTop: 20,
   },
 });
 

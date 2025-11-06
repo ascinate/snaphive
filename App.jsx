@@ -47,7 +47,7 @@ import Chat from "./src/screen/Chat";
 import ForgotPassword from "./src/screen/ForgotPassword";
 import NewPassword from "./src/screen/NewPassword";
 import CreateHive from './src/screen/CreateHive'
-import FolderLayout from './src/components/FolderLayout'
+import FolderLayout from './src/screen/FolderLayout'
 // Demo camera UI
 import ClickPhotoTwo from "./src/screen/ClickPhotoTwo";
 import ClickPhotoThree from "./src/screen/ClickPhotoThree";

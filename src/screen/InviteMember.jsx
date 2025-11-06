@@ -15,7 +15,7 @@ import CopyIcon from "../../assets/svg/copyIcon.svg";
 import Link from "../../assets/svg/link.svg";
 
 // components
-import FolderLayout from "../components/FolderLayout";
+import FolderLayout from "./FolderLayout";
 import ThemeButton from "../components/ThemeButton";
 
 const inviteMember = require("../../assets/inviteMember.png");

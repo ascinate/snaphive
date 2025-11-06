@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Image, StyleSheet, ScrollView } from "react-native";
-import FolderLayout from "../components/FolderLayout";
+import FolderLayout from "./FolderLayout";
 import ThreeDot from "../../assets/svg/threeDot.svg";
 import ThemeButton from "../components/ThemeButton";
 

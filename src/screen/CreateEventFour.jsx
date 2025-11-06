@@ -8,7 +8,7 @@ import Calender from "../../assets/svg/calender.svg";
 import BackArrow from "../../assets/svg/backArrow.svg";
 
 //components
-import FolderLayout from "../components/FolderLayout";
+import FolderLayout from "./FolderLayout";
 import ThemeButton from "../components/ThemeButton";
 import { EventContext } from "../context/EventContext";
 

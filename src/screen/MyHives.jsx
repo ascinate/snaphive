@@ -25,6 +25,7 @@ import {
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
+import { useNavigation } from '@react-navigation/native';
 
 // components
 import TopNav from '../components/TopNavbar';
@@ -138,7 +139,8 @@ const MyHives = ({ navigation, route }) => {
                     {/* Example Event Row */}
                     <TouchableOpacity
                         style={styles.eventRow}
-                        onPress={() => navigation.navigate('PhotoFolder')}>
+                       onPress={() => navigation.navigate('FolderLayout')}
+>
                         <Image source={picnic1} style={styles.eventImg} />
                         <View style={{ flex: 1, marginLeft: width * 0.03 }}>
                             <CustomText weight="bold" style={styles.eventTitle}>

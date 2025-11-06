@@ -90,10 +90,7 @@ const Home = ({ navigation, route }) => {
         >
           {/* Hero Section */}
 
-          <LinearGradient
-            colors={['#9333EA', '#F2612D']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1.6, y: 0 }}
+          <View
             style={styles.ImportSection}
           >
             <View
@@ -131,7 +128,7 @@ const Home = ({ navigation, route }) => {
             >
 
             </View>
-          </LinearGradient>
+          </View>
 
 
           {/* Dashboard Cards */}
@@ -286,8 +283,8 @@ const Home = ({ navigation, route }) => {
             )}
 
 
-{/* Recent Activity */}
-          {/* <View style={{ paddingBottom: 150 }}>
+            {/* Recent Activity */}
+            {/* <View style={{ paddingBottom: 150 }}>
             <View style={styles.eventHeader}>
               <CustomText weight="bold" style={styles.eventSection}>
                 Recent Activity
@@ -398,23 +395,24 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   ImportSection: {
+    backgroundColor: '#a131d3', 
     marginTop: height * 0.025,
     borderRadius: 24,
     padding: width * 0.06,
-    overflow: 'hidden', // ✅ ensures rounded corners visible for gradient on iOS
-    backgroundColor: 'transparent', // ✅ fixes flat background under gradient
+    overflow: 'hidden',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOpacity: 0.25, // slightly stronger for iOS parity
+        shadowOpacity: 0.25,
         shadowRadius: 10,
         shadowOffset: { width: 0, height: 4 },
       },
       android: {
-        elevation: 12, // reduced to look same as iOS shadow
+        elevation: 12,
       },
     }),
   },
+
 
   cameraIcon: {
     width: width * 0.13,

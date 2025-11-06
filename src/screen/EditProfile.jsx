@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import FolderLayout from "../components/FolderLayout";
+import FolderLayout from "./FolderLayout";
 import ThemeButton from "../components/ThemeButton";
 import CustomText from "../components/CustomText";
 import Pencil from "../../assets/svg/pencil.svg";

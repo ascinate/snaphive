@@ -103,14 +103,14 @@ const Home = ({ navigation, route }) => {
             >
 
               <View style={{ flex: 1 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                   <Sparkles color='#ffffff' size={22} />
                   <CustomText weight="medium" style={styles.importHeading}>
                     Welcome back!
                   </CustomText>
-                </View>
+                </View> */}
                 <CustomText weight="bold" style={styles.importSub}>
-                  pritam
+        Welcome User
                 </CustomText>
 
                 <CustomText weight="medium" style={styles.importSubLine}>

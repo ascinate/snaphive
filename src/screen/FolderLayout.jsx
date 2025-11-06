@@ -127,24 +127,18 @@ const FolderLayout = ({ navigation, route }) => {
           contentContainerStyle={styles.scrollContainer}
           showsVerticalScrollIndicator={false}
         >
-          {selectedTab === "Gallery" && (
-            <View style={styles.grid}>
-              {/* Default Images */}
-              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
-                <View style={styles.imageGrid}>
-                  <Image source={picnic1} style={styles.photo} />
-                </View>
-                <View style={styles.imageGrid}>
-                  <Image source={picnic1} style={styles.photo} />
-                </View>
-                <View style={styles.imageGrid}>
-                  <Image source={picnic1} style={styles.photo} />
-                </View>
+   {selectedTab === "Gallery" && (
+  <View style={styles.grid}>
+    <View style={styles.imageWrapperRow}>
+      {[picnic1, picnic1, picnic1, picnic1, picnic1].map((img, index) => (
+        <View key={index} style={styles.imageGrid}>
+          <Image source={img} style={styles.photo} />
+        </View>
+      ))}
+    </View>
+  </View>
+)}
 
-  
-              </View>
-            </View>
-          )}
 
           {selectedTab === "Chat" && (
             <Text style={styles.infoText}>Chat feature coming soon 💬</Text>
@@ -270,23 +264,35 @@ const styles = StyleSheet.create({
   scrollContainer: {
     padding: 20,
   },
-  grid: {
-    flexDirection: "column",
-    justifyContent: "center",
-    width: "100%",
-  },
-  imageGrid: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    overflow: "hidden",
-    backgroundColor: "#e5e7eb",
-  },
-  photo: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
-  },
+grid: {
+  width: '100%',
+  marginTop: 10,
+},
+
+imageWrapperRow: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'flex-start', // ✅ correct spelling (was 'flex-startr')
+  alignItems: 'flex-start', // ✅ aligns each row top
+  gap: 15,
+},
+
+imageGrid: {
+  width: 100,
+  height: 100,
+  borderRadius: 10,
+  overflow: 'hidden',
+  backgroundColor: '#e5e7eb',
+  marginBottom: 12, // ✅ adds space between rows
+},
+
+photo: {
+  width: '100%',
+  height: '100%',
+  resizeMode: 'cover',
+},
+
+
   infoText: {
     textAlign: "center",
     color: "#6B7280",

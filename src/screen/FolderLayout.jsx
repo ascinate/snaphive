@@ -127,18 +127,20 @@ const FolderLayout = ({ navigation, route }) => {
           contentContainerStyle={styles.scrollContainer}
           showsVerticalScrollIndicator={false}
         >
-   {selectedTab === "Gallery" && (
-  <View style={styles.grid}>
-    <View style={styles.imageWrapperRow}>
-      {[picnic1, picnic1, picnic1, picnic1, picnic1].map((img, index) => (
-        <View key={index} style={styles.imageGrid}>
-          <Image source={img} style={styles.photo} />
-        </View>
-      ))}
-    </View>
-  </View>
-)}
+          {selectedTab === "Gallery" && (
+            <View style={styles.grid}>
+              <View style={styles.imageWrapperRow}>
+                {/* Existing static images */}
+                {[picnic1, picnic1, picnic1, picnic1, picnic1].map((img, index) => (
+                  <View key={index} style={styles.imageGrid}>
+                    <Image source={img} style={styles.photo} />
+                  </View>
+                ))}
 
+
+              </View>
+            </View>
+          )}
 
           {selectedTab === "Chat" && (
             <Text style={styles.infoText}>Chat feature coming soon 💬</Text>
@@ -265,33 +267,33 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 
-grid: {
-  width: '100%',
-  marginTop: 10,
-  alignItems: 'center',
-},
+  grid: {
+    width: '100%',
+    marginTop: 10,
+    alignItems: 'center',
+  },
 
-imageWrapperRow: {
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  justifyContent: 'flex-start',
-  alignItems: 'flex-start',
-  gap: 15,
-  width: '100%',
-},
+  imageWrapperRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    gap: 15,
+    width: '100%',
+  },
 
-imageGrid: {
-  width: '30%',
-  aspectRatio: 1,
-  borderRadius: 10,
-  overflow: 'hidden',
-  backgroundColor: '#e5e7eb',
-},
-photo: {
-  width: '100%',
-  height: '100%',
-  resizeMode: 'cover',
-},
+  imageGrid: {
+    width: '30%',
+    aspectRatio: 1,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#e5e7eb',
+  },
+  photo: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
 
 
   infoText: {

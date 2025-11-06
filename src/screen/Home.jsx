@@ -110,7 +110,7 @@ const Home = ({ navigation, route }) => {
                   </CustomText>
                 </View>
                 <CustomText weight="bold" style={styles.importSub}>
-                  Capture your favorite moments and share them with your hives.
+                  Capture your moments with hives
                 </CustomText>
 
                 <CustomText weight="medium" style={styles.importSubLine}>

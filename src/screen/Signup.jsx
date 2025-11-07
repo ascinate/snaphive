@@ -114,7 +114,7 @@ const Signup = ({ navigation }) => {
 
       {/* Continue Button */}
       <ThemeButton
-        text="Continue →"
+        text="Sign up →"
         onPress={handleContinue}
         style={{ width: '100%', marginTop: 20 }}
       />

@@ -87,7 +87,7 @@ const Login = ({ navigation }) => {
 
 
             <ThemeButton
-                text="Continue →"
+                text="Login →"
                 onPress={(handleContinue)}
                 style={{ width: "100%", marginTop: 20 }}
             />

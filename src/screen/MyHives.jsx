@@ -20,7 +20,8 @@ import {
     MoveRight,
     Brush,
     Image as Photo,
-    Search, 
+    Search,
+    CirclePlus,
 } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
@@ -39,27 +40,6 @@ const { width, height } = Dimensions.get('window');
 const MyHives = ({ navigation, route }) => {
     const [refreshing, setRefreshing] = useState(false);
     const { events, setEvents } = useContext(EventContext);
-
-    const slideAnim = useRef(new Animated.Value(0)).current;
-    const opacityAnim = useRef(new Animated.Value(1)).current;
-
-    useEffect(() => {
-        if (route?.params?.newEvent) {
-            const { name, photos = [], description } = route.params.newEvent;
-
-            const newEventObj = {
-                img: photos.length > 0 ? { uri: photos[0].uri || photos[0] } : picnic1,
-                title: name || 'Untitled Hive',
-                description: description || 'No description',
-                count: `${photos.length} Photos`,
-                photos,
-                createdAt: new Date().toISOString(),
-            };
-
-            setEvents(prevEvents => [newEventObj, ...prevEvents]);
-            navigation.setParams({ newEvent: null });
-        }
-    }, [route?.params?.newEvent]);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -99,7 +79,7 @@ const MyHives = ({ navigation, route }) => {
                                 }}
                             />
                             <TextInput
-                                style={[styles.searchInput, { paddingLeft: 38 }]} 
+                                style={[styles.searchInput, { paddingLeft: 38 }]}
                                 placeholder="Search hive..."
                                 placeholderTextColor="#9CA3AF"
                             />
@@ -137,10 +117,108 @@ const MyHives = ({ navigation, route }) => {
                     </View>
 
                     {/* Example Event Row */}
+
+                    {/* Event Row Section */}
+                    <View style={{ marginTop: 20, paddingBottom: 100 }}>
+                        {events.length > 0 ? (
+                            events.map((item, index) => (
+                                <TouchableOpacity
+                                    key={index}
+                                    onPress={() =>
+                                        navigation.navigate('FolderLayout', {
+                                            image: item.img,
+                                            folderName: item.title,
+                                            date: item.createdAt,
+                                            owner: "Pritam",
+                                            photos: item.photos,
+                                        })
+                                    }
+                                >
+                                    <View style={styles.eventRow}>
+                                        <Image source={item.img} style={styles.eventImg} />
+                                        <View style={{ flex: 1, marginLeft: width * 0.03 }}>
+                                            <CustomText weight="bold" style={styles.eventTitle}>
+                                                {item.title}
+                                            </CustomText>
+                                            <CustomText weight="medium" style={styles.mtop}>
+                                                {item.description || 'No description'}
+                                            </CustomText>
+                                            <View style={{ flexDirection: 'row', gap: 20, marginTop: 6 }}>
+                                                <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                                                    <Users width={14} height={14} color="#6B7280" />
+                                                    <CustomText style={{ color: '#6B7280' }}>1</CustomText>
+                                                </View>
+
+                                                <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                                                    <FileImage width={14} height={14} color="#6B7280" />
+                                                    <CustomText style={{ color: '#6B7280' }}>{item.count}</CustomText>
+                                                </View>
+
+                                                {item.isTemporary && (
+                                                    <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                                                        <Clock5 width={14} height={14} color="#ea580c" />
+                                                        <CustomText style={{ color: '#ea580c' }}>
+                                                           {item.expiryDate}
+                                                        </CustomText>
+                                                    </View>
+                                                )}
+                                            </View>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            ))
+                        ) : (
+                            <View
+                                style={{
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: 10,
+                                    marginTop: 60,
+                                    marginBottom: 80,
+                                }}
+                            >
+                                <View
+                                    style={{
+                                        width: 60,
+                                        height: 60,
+                                        backgroundColor: '#f1e4ff',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        borderRadius: 50,
+                                    }}
+                                >
+                                    <ImagePlus color="#C084FC" size={28} />
+                                </View>
+
+                                <CustomText weight="medium" style={{ color: '#6B7280' }}>
+                                    No hives yet
+                                </CustomText>
+                                <TouchableOpacity onPress={() => navigation.navigate('CreateHive')}>
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            gap: 6,
+                                            backgroundColor: '#AE54F0',
+                                            padding: 15,
+                                            borderRadius: 12,
+                                            marginTop: 8,
+                                        }}
+                                    >
+                                        <CustomText weight="bold" style={{ color: '#ffffff' }}>
+                                            Create your first hive
+                                        </CustomText>
+                                        <CirclePlus color="#ffffffff" />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </View>
+
+                    {/*                     
                     <TouchableOpacity
                         style={styles.eventRow}
-                       onPress={() => navigation.navigate('FolderLayout')}
->
+                        onPress={() => navigation.navigate('FolderLayout')}>
                         <Image source={picnic1} style={styles.eventImg} />
                         <View style={{ flex: 1, marginLeft: width * 0.03 }}>
                             <CustomText weight="bold" style={styles.eventTitle}>
@@ -166,8 +244,7 @@ const MyHives = ({ navigation, route }) => {
                                 </View>
                             </View>
                         </View>
-
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider>

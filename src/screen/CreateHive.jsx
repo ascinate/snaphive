@@ -233,7 +233,7 @@ const CreateHive = ({ navigation, route }) => {
                                     {/* Event Date */}
 
                                     <View style={{ marginTop: 15 }}>
-                                    <View style={{ backgroundColor: '#ccc', height: 0.4, width: '100%', }} />
+                                        <View style={{ backgroundColor: '#ccc', height: 0.4, width: '100%', }} />
 
                                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5, marginTop: 15 }}>
                                             <Calendar width={16} />

@@ -320,7 +320,7 @@ const Home = ({ navigation, route }) => {
                           <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
                             <Clock5 width={14} height={14} color="#ea580c" />
                             <CustomText style={{ color: '#ef4444', }}>
-                             {item.endTime} - {item.expiryDate}
+                              {item.endTime} - {item.expiryDate}
                             </CustomText>
                           </View>
                         )}

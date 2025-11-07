@@ -25,31 +25,90 @@ const Home = ({ navigation, route }) => {
   const opacityAnim = useRef(new Animated.Value(1)).current;
 
   const [user, setUser] = useState(null);
-  useEffect(() => {
-    const removeExpiredEvents = () => {
-      const now = new Date();
 
-      setEvents(prevEvents =>
-        prevEvents.filter(event => {
-          if (!event.isTemporary) return true;
-          if (!event.expiryDate) return true;
 
-          const [day, month, year] = event.expiryDate.split('-');
-          const eventExpiry = new Date(`20${year}-${month}-${day}T23:59:59`); // same day till midnight
-
-          return eventExpiry >= now;
-        })
+  const parseExpiryDate = (dateString, timeString) => {
+    try {
+      if (!dateString) return null;
+      
+      // Parse DD-MM-YY format
+      const [day, month, year] = dateString.split('-');
+      if (!day || !month || !year) return null;
+      
+      // Convert 2-digit year to 4-digit (assuming 20XX)
+      const fullYear = year.length === 2 ? `20${year}` : year;
+      
+      // Parse time if provided (HH:MM format)
+      let hours = 23, minutes = 59, seconds = 59;
+      if (timeString) {
+        const timeParts = timeString.split(':');
+        if (timeParts.length === 2) {
+          hours = parseInt(timeParts[0]) || 23;
+          minutes = parseInt(timeParts[1]) || 59;
+        }
+      }
+      
+      // Create date object (month is 0-indexed in JS)
+      const expiryDate = new Date(
+        parseInt(fullYear),
+        parseInt(month) - 1,
+        parseInt(day),
+        hours,
+        minutes,
+        seconds
       );
-    };
+      
+      // Validate the date
+      if (isNaN(expiryDate.getTime())) {
+        console.warn('Invalid expiry date:', dateString);
+        return null;
+      }
+      
+      return expiryDate;
+    } catch (error) {
+      console.error('Error parsing expiry date:', error);
+      return null;
+    }
+  };
 
+  const removeExpiredEvents = useCallback(() => {
+    const now = new Date();
+    
+    setEvents(prevEvents =>
+      prevEvents.filter(event => {
+        // Keep non-temporary events
+        if (!event.isTemporary) return true;
+        
+        // Keep events without expiry date (safety)
+        if (!event.expiryDate) return true;
+
+        // Parse the expiry date with end time if available
+        const eventExpiry = parseExpiryDate(event.expiryDate, event.endTime);
+        
+        // If parsing failed, keep the event (safety)
+        if (!eventExpiry) return true;
+
+        // Check if event has expired
+        const hasExpired = eventExpiry < now;
+        
+        if (hasExpired) {
+          console.log(`Removing expired event: ${event.title}, expired at: ${eventExpiry.toISOString()}`);
+        }
+        
+        return !hasExpired;
+      })
+    );
+  }, [setEvents]);
+
+  useEffect(() => {
     // Run immediately when component mounts
     removeExpiredEvents();
 
-    // ✅ Also run every minute to auto-remove expired events
-    const interval = setInterval(removeExpiredEvents, 60 * 1000);
+    // Run every 30 seconds to auto-remove expired events
+    const interval = setInterval(removeExpiredEvents, 30 * 1000);
 
     return () => clearInterval(interval);
-  }, [setEvents]);
+  }, [removeExpiredEvents]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -88,19 +147,10 @@ const Home = ({ navigation, route }) => {
     setRefreshing(true);
 
     setTimeout(() => {
-      setEvents(prevEvents => prevEvents.filter(event => {
-        if (!event.isTemporary) return true;
-        if (!event.expiryDate) return true;
-
-        const [day, month, year] = event.expiryDate.split('-');
-        const eventExpiry = new Date(`20${year}-${month}-${day}T23:59:59`);
-        return eventExpiry >= new Date();
-      }));
+      removeExpiredEvents();
       setRefreshing(false);
     }, 1000);
-  }, []);
-
-
+  }, [removeExpiredEvents]);
 
   const handleLater = () => {
     Animated.parallel([
@@ -181,7 +231,7 @@ const Home = ({ navigation, route }) => {
             <View style={styles.dashCard}>
               <View>
                 <CustomText weight="bold" style={[styles.cardText, { color: '#9f31d8' }]}>
-                  11
+                  {events.length}
                 </CustomText>
                 <CustomText weight="medium" style={styles.dashText}>
                   Hives
@@ -192,7 +242,7 @@ const Home = ({ navigation, route }) => {
             <View style={styles.dashCard}>
               <View>
                 <CustomText weight="bold" style={[styles.cardText, { color: '#d92779' }]}>
-                  1
+                  {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
                 </CustomText>
                 <CustomText weight="medium" style={styles.dashText}>
                   Photos
@@ -267,8 +317,6 @@ const Home = ({ navigation, route }) => {
                         </View>
 
                         <View style={{ flexDirection: 'row', gap: 4, alignContent: 'center' }}>
-
-
                           {/*  Temporary Tag */}
                           {item.isTemporary && (
                             <>
@@ -276,7 +324,6 @@ const Home = ({ navigation, route }) => {
                               <CustomText style={{ color: '#ef4444', marginBottom: 8 }}>
                                 expires on {item.expiryDate}
                               </CustomText>
-
                             </>
                           )}
                         </View>

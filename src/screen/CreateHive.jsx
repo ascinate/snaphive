@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView, Dimensions, PlatformAnimated, Text, TextInput, TouchableWithoutFeedback, Switch, Keyboard, Animated } from 'react-native';
 import { navigate } from '../navigation/RootNavigation';
-import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen, Lock } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
@@ -224,15 +224,23 @@ const CreateHive = ({ navigation, route }) => {
                                         value={isEnabled}
                                     />
                                 </View>
-                                <CustomText weight='medium' style={{ color: '#374151', paddingLeft: 16 }}>Set dates for this event</CustomText>
+                                <CustomText weight='medium' style={{ color: '#374151', paddingLeft: 14 }}>Set dates for this event</CustomText>
                             </View>
 
                             {/* that tome only show this View */}
                             {isEnabled && (
-                                <View>
+                                <View style={{ paddingInline: 6 }}>
                                     {/* Event Date */}
-                                    <View style={{ paddingLeft: 16, marginTop: 20 }}>
-                                        <CustomText>Event Date</CustomText>
+
+                                    <View style={{ marginTop: 15 }}>
+                                    <View style={{ backgroundColor: '#ccc', height: 0.4, width: '100%', }} />
+
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5, marginTop: 15 }}>
+                                            <Calendar width={16} />
+                                            <CustomText weight="semiBold" color="#374151">Event Date</CustomText>
+
+
+                                        </View>
                                         <TextInput
                                             style={styles.input}
                                             placeholder="DD-MM-YY"
@@ -251,9 +259,12 @@ const CreateHive = ({ navigation, route }) => {
                                     </View>
 
                                     {/* Start Time */}
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
-                                            <CustomText>Start Time</CustomText>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                                        <View style={{ marginTop: 20, width: '50%' }}>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                                                <Timer width={16} />
+                                                <CustomText weight="semiBold" color="#374151">Start Time</CustomText>
+                                            </View>
                                             <TextInput
                                                 style={styles.input}
                                                 placeholder="HH:MM"
@@ -271,7 +282,10 @@ const CreateHive = ({ navigation, route }) => {
 
                                         {/* End Time */}
                                         <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
-                                            <CustomText>End Time</CustomText>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                                                <TimerOff width={16} />
+                                                <CustomText weight="semiBold" color="#374151">End Time</CustomText>
+                                            </View>
                                             <TextInput
                                                 style={styles.input}
                                                 placeholder="HH:MM"
@@ -289,8 +303,11 @@ const CreateHive = ({ navigation, route }) => {
                                     </View>
 
                                     {/* Expiry Date */}
-                                    <View style={{ paddingLeft: 16, marginTop: 20 }}>
-                                        <CustomText>Expiry Date</CustomText>
+                                    <View style={{ marginTop: 20 }}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                                            <CalendarOff width={16} />
+                                            <CustomText weight="semiBold" color="#374151">Expiry Date</CustomText>
+                                        </View>
                                         <TextInput
                                             style={styles.input}
                                             placeholder="DD-MM-YY"

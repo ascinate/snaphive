@@ -30,14 +30,14 @@ const Home = ({ navigation, route }) => {
   const parseExpiryDate = (dateString, timeString) => {
     try {
       if (!dateString) return null;
-      
+
       // Parse DD-MM-YY format
       const [day, month, year] = dateString.split('-');
       if (!day || !month || !year) return null;
-      
+
       // Convert 2-digit year to 4-digit (assuming 20XX)
       const fullYear = year.length === 2 ? `20${year}` : year;
-      
+
       // Parse time if provided (HH:MM format)
       let hours = 23, minutes = 59, seconds = 59;
       if (timeString) {
@@ -47,7 +47,7 @@ const Home = ({ navigation, route }) => {
           minutes = parseInt(timeParts[1]) || 59;
         }
       }
-      
+
       // Create date object (month is 0-indexed in JS)
       const expiryDate = new Date(
         parseInt(fullYear),
@@ -57,13 +57,13 @@ const Home = ({ navigation, route }) => {
         minutes,
         seconds
       );
-      
+
       // Validate the date
       if (isNaN(expiryDate.getTime())) {
         console.warn('Invalid expiry date:', dateString);
         return null;
       }
-      
+
       return expiryDate;
     } catch (error) {
       console.error('Error parsing expiry date:', error);
@@ -73,28 +73,28 @@ const Home = ({ navigation, route }) => {
 
   const removeExpiredEvents = useCallback(() => {
     const now = new Date();
-    
+
     setEvents(prevEvents =>
       prevEvents.filter(event => {
         // Keep non-temporary events
         if (!event.isTemporary) return true;
-        
+
         // Keep events without expiry date (safety)
         if (!event.expiryDate) return true;
 
         // Parse the expiry date with end time if available
         const eventExpiry = parseExpiryDate(event.expiryDate, event.endTime);
-        
+
         // If parsing failed, keep the event (safety)
         if (!eventExpiry) return true;
 
         // Check if event has expired
         const hasExpired = eventExpiry < now;
-        
+
         if (hasExpired) {
           console.log(`Removing expired event: ${event.title}, expired at: ${eventExpiry.toISOString()}`);
         }
-        
+
         return !hasExpired;
       })
     );
@@ -316,17 +316,14 @@ const Home = ({ navigation, route }) => {
                           <CustomText style={{ color: '#6B7280' }}>{item.count}</CustomText>
                         </View>
 
-                        <View style={{ flexDirection: 'row', gap: 4, alignContent: 'center' }}>
-                          {/*  Temporary Tag */}
-                          {item.isTemporary && (
-                            <>
-                              <Clock5 width={14} height={14} color="#ea580c" />
-                              <CustomText style={{ color: '#ef4444', marginBottom: 8 }}>
-                                expires on {item.expiryDate}
-                              </CustomText>
-                            </>
-                          )}
-                        </View>
+                        {item.isTemporary && (
+                          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                            <Clock5 width={14} height={14} color="#ea580c" />
+                            <CustomText style={{ color: '#ef4444', }}>
+                             {item.endTime} - {item.expiryDate}
+                            </CustomText>
+                          </View>
+                        )}
                       </View>
                     </View>
                   </View>

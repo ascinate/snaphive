@@ -36,6 +36,22 @@ const Home = ({ navigation, route }) => {
 
   const [user, setUser] = useState(null);
   useEffect(() => {
+    // 🕒 Remove expired temporary events
+    const now = new Date();
+
+    setEvents(prevEvents =>
+      prevEvents.filter(event => {
+        if (!event.isTemporary) return true; // keep permanent
+        if (!event.expiryDate) return true;
+
+        const [day, month, year] = event.expiryDate.split('-');
+        const eventExpiry = new Date(`20${year}-${month}-${day}`); // convert dd-mm-yy → yyyy-mm-dd
+
+        return eventExpiry >= now; // keep if not expired
+      })
+    );
+  }, []);
+  useEffect(() => {
     const fetchUser = async () => {
       try {
         const storedUser = await AsyncStorage.getItem("user");
@@ -49,6 +65,7 @@ const Home = ({ navigation, route }) => {
     };
     fetchUser();
   }, []);
+
   useEffect(() => {
     if (route?.params?.newEvent) {
       const { name, photos } = route.params.newEvent;
@@ -236,6 +253,14 @@ const Home = ({ navigation, route }) => {
                       >
                         {item.description || 'No description'}
                       </CustomText>
+
+
+                      {/* ✅ Temporary Tag */}
+                      {item.isTemporary && (
+                        <CustomText style={{ color: '#ef4444', marginBottom: 8 }}>
+                          ⏳ Temporary Hive (expires on {item.expiryDate})
+                        </CustomText>
+                      )}
 
                       <View style={{ flexDirection: 'row', gap: 20 }}>
                         <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>

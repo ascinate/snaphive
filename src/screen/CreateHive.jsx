@@ -43,6 +43,7 @@ const CreateHive = ({ navigation, route }) => {
     const { addEvent } = useContext(EventContext);
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
     const handleCreateHive = () => {
         if (!hiveName.trim()) {
             alert('Please enter a hive name');
@@ -53,6 +54,15 @@ const CreateHive = ({ navigation, route }) => {
             alert('Please upload a cover image');
             return;
         }
+
+        // check temporary hive date/time if enabled
+        if (isEnabled) {
+            if (!date || !startDate || !endTime || !endDate) {
+                alert('Please fill all date and time fields for temporary event');
+                return;
+            }
+        }
+
         const newEvent = {
             img: { uri: uploadedImage },
             title: hiveName,
@@ -60,19 +70,28 @@ const CreateHive = ({ navigation, route }) => {
             count: '0 Photos',
             photos: [],
             createdAt: new Date().toISOString(),
+            isTemporary: isEnabled, // ✅ mark as temporary
+            eventDate: date,
+            startTime: startDate,
+            endTime: endTime,
+            expiryDate: endDate,
         };
-
 
         addEvent(newEvent);
 
+        // reset fields
         setUploadedImage(null);
         setHiveName("");
         setHiveDescription("");
+        setDate('');
+        setStartDate('');
+        setEndTime('');
+        setEndDate('');
+        setIsEnabled(false);
 
-
-        navigation.goBack();
-
+        navigation.goBack() // redirect to Home
     };
+
 
 
     const handleChange = (text) => {
@@ -212,10 +231,14 @@ const CreateHive = ({ navigation, route }) => {
                                 <CustomText weight='medium' style={{ color: '#374151' }}>Media must be reviewed by authorized members. Best for formal events.</CustomText>
                             </View>
                         </View>
+
+
                         <View style={styles.privacyContainer}>
                             <View style={{}}>
                                 <View style={{ flexDirection: 'row', marginLeft: 12, justifyContent: 'space-between' }}>
                                     <CustomText weight='bold' style={{ fontSize: 16 }}>Temporary Event Hive</CustomText>
+
+                                    {/*this is toggle when swtich on  */}
                                     <Switch
                                         trackColor={{ false: '#767577', true: '#81b0ff' }}
                                         thumbColor={isEnabled ? '#4b5cf5ff' : '#f4f3f4'}
@@ -224,65 +247,66 @@ const CreateHive = ({ navigation, route }) => {
                                         value={isEnabled}
                                     />
                                 </View>
-
                                 <CustomText weight='medium' style={{ color: '#374151', paddingLeft: 16 }}>Set dates for this event</CustomText>
                             </View>
 
-                            <View style={{ paddingLeft: 16, marginTop: 20 }}>
-                                <CustomText>Event Date</CustomText>
 
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="dd-mm-yy"
-                                    value={date}
-                                    onChangeText={handleChange}
-                                    keyboardType="numeric"
-                                    maxLength={8}
-                                />
-                            </View>
 
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
-                                    <CustomText>Start Time</CustomText>
+                            {/* that tome only show this View */}
 
-                                    <TextInput
-                                        style={[styles.input,]}
-                                        placeholder="dd-mm-yy"
-                                        value={date}
-                                        onChangeText={handleChange}
-                                        keyboardType="numeric"
-                                        maxLength={8}
-                                    />
+                            {isEnabled && (
+                                <View>
+                                    <View style={{ paddingLeft: 16, marginTop: 20 }}>
+                                        <CustomText>Event Date</CustomText>
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="dd-mm-yy"
+                                            value={date}
+                                            onChangeText={handleChange}
+                                            keyboardType="numeric"
+                                            maxLength={8}
+                                        />
+                                    </View>
+
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
+                                            <CustomText>Start Time</CustomText>
+                                            <TextInput
+                                                style={styles.input}
+                                                placeholder="hh:mm"
+                                                value={startDate}
+                                                onChangeText={setStartDate}
+                                                keyboardType="numeric"
+
+                                            />
+                                        </View>
+
+                                        <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
+                                            <CustomText>End Time</CustomText>
+                                            <TextInput
+                                                style={styles.input}
+                                                placeholder="hh:mm"
+                                                value={endTime}
+                                                onChangeText={setEndTime}
+                                                keyboardType="numeric"
+                                            />
+                                        </View>
+                                    </View>
+
+                                    <View style={{ paddingLeft: 16, marginTop: 20 }}>
+                                        <CustomText>Expiry Date</CustomText>
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="dd-mm-yy"
+                                            value={endDate}
+                                            onChangeText={setEndDate}
+                                            keyboardType="numeric"
+                                            maxLength={8}
+                                        />
+                                    </View>
                                 </View>
+                            )}
 
-                                <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
-                                    <CustomText>End Time</CustomText>
-
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="dd-mm-yy"
-                                        value={endDate}
-                                        onChangeText={handleChange}
-                                        keyboardType="numeric"
-                                        maxLength={8}
-                                    />
-                                </View>
-
-                            </View>
-
-
-                            <View style={{ paddingLeft: 16, marginTop: 20 }}>
-                                <CustomText>Expiry Date</CustomText>
-
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="dd-mm-yy"
-                                    value={date}
-                                    onChangeText={handleChange}
-                                    keyboardType="numeric"
-                                    maxLength={8}
-                                />
-                            </View>
 
                         </View>
 

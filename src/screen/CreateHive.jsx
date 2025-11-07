@@ -1,18 +1,5 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
-import {
-    View,
-    StyleSheet,
-    TouchableOpacity,
-    ScrollView,
-    Dimensions,
-    Platform,
-    Animated,
-    Text,
-    TextInput,
-    TouchableWithoutFeedback,
-    Switch,
-    Keyboard
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, Dimensions, PlatformAnimated, Text, TextInput, TouchableWithoutFeedback, Switch, Keyboard, Animated } from 'react-native';
 import { navigate } from '../navigation/RootNavigation';
 import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen, Lock } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -29,10 +16,10 @@ import MaskedView from '@react-native-masked-view/masked-view';
 // assets
 const hero = require('../../assets/hero.png');
 const picnic1 = require('../../assets/picnic1.jpg');
-
 const { width, height } = Dimensions.get('window');
 
 const CreateHive = ({ navigation, route }) => {
+
     const [uploadedImage, setUploadedImage] = useState(null);
     const [hiveName, setHiveName] = useState("");
     const [date, setDate] = useState('');
@@ -55,7 +42,6 @@ const CreateHive = ({ navigation, route }) => {
             return;
         }
 
-        // check temporary hive date/time if enabled
         if (isEnabled) {
             if (!date || !startDate || !endTime || !endDate) {
                 alert('Please fill all date and time fields for temporary event');
@@ -70,7 +56,7 @@ const CreateHive = ({ navigation, route }) => {
             count: '0 Photos',
             photos: [],
             createdAt: new Date().toISOString(),
-            isTemporary: isEnabled, // ✅ mark as temporary
+            isTemporary: isEnabled,
             eventDate: date,
             startTime: startDate,
             endTime: endTime,
@@ -78,7 +64,6 @@ const CreateHive = ({ navigation, route }) => {
         };
 
         addEvent(newEvent);
-
         // reset fields
         setUploadedImage(null);
         setHiveName("");
@@ -88,11 +73,8 @@ const CreateHive = ({ navigation, route }) => {
         setEndTime('');
         setEndDate('');
         setIsEnabled(false);
-
         navigation.goBack() // redirect to Home
     };
-
-
 
     const handleChange = (text) => {
         // Optional: auto-add dashes for format dd-mm-yy
@@ -101,18 +83,13 @@ const CreateHive = ({ navigation, route }) => {
             formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
         else if (formatted.length > 4)
             formatted = `${formatted.slice(0, 2)}-${formatted.slice(2, 4)}-${formatted.slice(4, 6)}`;
-
         setDate(formatted);
     }
-
-
-
 
     return (
         <SafeAreaProvider>
             <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
                 <TopNav />
-
                 <ScrollView
                     style={styles.container}
                     showsVerticalScrollIndicator={false}
@@ -250,71 +227,89 @@ const CreateHive = ({ navigation, route }) => {
                                 <CustomText weight='medium' style={{ color: '#374151', paddingLeft: 16 }}>Set dates for this event</CustomText>
                             </View>
 
-
-
                             {/* that tome only show this View */}
-
                             {isEnabled && (
                                 <View>
+                                    {/* Event Date */}
                                     <View style={{ paddingLeft: 16, marginTop: 20 }}>
                                         <CustomText>Event Date</CustomText>
                                         <TextInput
                                             style={styles.input}
-                                            placeholder="dd-mm-yy"
+                                            placeholder="DD-MM-YY"
                                             value={date}
-                                            onChangeText={handleChange}
+                                            onChangeText={(text) => {
+                                                let formatted = text.replace(/[^0-9]/g, '');
+                                                if (formatted.length > 2 && formatted.length <= 4)
+                                                    formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
+                                                else if (formatted.length > 4)
+                                                    formatted = `${formatted.slice(0, 2)}-${formatted.slice(2, 4)}-${formatted.slice(4, 6)}`;
+                                                setDate(formatted);
+                                            }}
                                             keyboardType="numeric"
                                             maxLength={8}
                                         />
                                     </View>
 
+                                    {/* Start Time */}
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
                                             <CustomText>Start Time</CustomText>
                                             <TextInput
                                                 style={styles.input}
-                                                placeholder="hh:mm"
+                                                placeholder="HH:MM"
                                                 value={startDate}
-                                                onChangeText={setStartDate}
+                                                onChangeText={(text) => {
+                                                    let formatted = text.replace(/[^0-9]/g, '');
+                                                    if (formatted.length > 2)
+                                                        formatted = `${formatted.slice(0, 2)}:${formatted.slice(2, 4)}`;
+                                                    setStartDate(formatted);
+                                                }}
                                                 keyboardType="numeric"
-
+                                                maxLength={5}
                                             />
                                         </View>
 
+                                        {/* End Time */}
                                         <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
                                             <CustomText>End Time</CustomText>
                                             <TextInput
                                                 style={styles.input}
-                                                placeholder="hh:mm"
+                                                placeholder="HH:MM"
                                                 value={endTime}
-                                                onChangeText={setEndTime}
+                                                onChangeText={(text) => {
+                                                    let formatted = text.replace(/[^0-9]/g, '');
+                                                    if (formatted.length > 2)
+                                                        formatted = `${formatted.slice(0, 2)}:${formatted.slice(2, 4)}`;
+                                                    setEndTime(formatted);
+                                                }}
                                                 keyboardType="numeric"
+                                                maxLength={5}
                                             />
                                         </View>
                                     </View>
 
+                                    {/* Expiry Date */}
                                     <View style={{ paddingLeft: 16, marginTop: 20 }}>
                                         <CustomText>Expiry Date</CustomText>
                                         <TextInput
                                             style={styles.input}
-                                            placeholder="dd-mm-yy"
+                                            placeholder="DD-MM-YY"
                                             value={endDate}
-                                            onChangeText={setEndDate}
+                                            onChangeText={(text) => {
+                                                let formatted = text.replace(/[^0-9]/g, '');
+                                                if (formatted.length > 2 && formatted.length <= 4)
+                                                    formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
+                                                else if (formatted.length > 4)
+                                                    formatted = `${formatted.slice(0, 2)}-${formatted.slice(2, 4)}-${formatted.slice(4, 6)}`;
+                                                setEndDate(formatted);
+                                            }}
                                             keyboardType="numeric"
                                             maxLength={8}
                                         />
                                     </View>
                                 </View>
                             )}
-
-
                         </View>
-
-
-
-
-
-
                     </View>
 
                     <View style={{ paddingBottom: 100 }}>

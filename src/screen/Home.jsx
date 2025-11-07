@@ -255,12 +255,6 @@ const Home = ({ navigation, route }) => {
                       </CustomText>
 
 
-                      {/* ✅ Temporary Tag */}
-                      {item.isTemporary && (
-                        <CustomText style={{ color: '#ef4444', marginBottom: 8 }}>
-                          ⏳ Temporary Hive (expires on {item.expiryDate})
-                        </CustomText>
-                      )}
 
                       <View style={{ flexDirection: 'row', gap: 20 }}>
                         <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
@@ -273,9 +267,19 @@ const Home = ({ navigation, route }) => {
                           <CustomText style={{ color: '#6B7280' }}>{item.count}</CustomText>
                         </View>
 
-                        <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                          <Clock5 width={14} height={14} color="#ea580c" />
-                          <CustomText style={{ color: '#ea580c' }}>3</CustomText>
+                        <View style={{ flexDirection: 'row', gap: 4, alignContent: 'center' }}>
+
+
+                          {/*  Temporary Tag */}
+                          {item.isTemporary && (
+                            <>
+                              <Clock5 width={14} height={14} color="#ea580c" />
+                              <CustomText style={{ color: '#ef4444', marginBottom: 8 }}>
+                                expires on {item.expiryDate}
+                              </CustomText>
+
+                            </>
+                          )}
                         </View>
                       </View>
                     </View>
@@ -324,46 +328,7 @@ const Home = ({ navigation, route }) => {
             )}
 
 
-            {/* Recent Activity */}
-            {/* <View style={{ paddingBottom: 150 }}>
-            <View style={styles.eventHeader}>
-              <CustomText weight="bold" style={styles.eventSection}>
-                Recent Activity
-              </CustomText>
-            </View>
-            {[picnic1].map((img, i) => (
-              <TouchableOpacity key={i} onPress={() =>
-                navigation.navigate('PhotoFolder', {
-                  eventPhotos: item.photos,
-                })
-              }>
 
-                <View style={styles.eventRow} >
-                  <Image source={img} style={styles.cardImg} />
-                  <View style={styles.eventRowInformation}>
-                    <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>rajasthan</CustomText>
-                    <CustomText weight="medium" style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}>I travel rajasthan</CustomText>
-                    <View style={{ flexDirection: 'row', gap: 20 }}>
-                      <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                        <Users width={14} height={14} color='#6B7280' />
-                        <CustomText style={{ color: '#6B7280' }}>1</CustomText>
-                      </View>
-
-                      <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', }}>
-                        <FileImage width={14} height={14} color='#6B7280' />
-                        <CustomText style={{ color: '#6B7280' }}>2</CustomText>
-                      </View>
-
-                      <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', }}>
-                        <Clock5 width={14} height={14} color='#ea580c' />
-                        <CustomText style={{ color: '#ea580c' }}>3</CustomText>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View> */}
           </View>
 
 

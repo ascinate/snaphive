@@ -35,7 +35,10 @@ const { width, height } = Dimensions.get('window');
 const CreateHive = ({ navigation, route }) => {
     const [uploadedImage, setUploadedImage] = useState(null);
     const [hiveName, setHiveName] = useState("");
-
+    const [date, setDate] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endTime, setEndTime] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [hiveDescription, setHiveDescription] = useState("");
     const { addEvent } = useContext(EventContext);
     const [isEnabled, setIsEnabled] = useState(false);
@@ -70,6 +73,21 @@ const CreateHive = ({ navigation, route }) => {
         navigation.goBack();
 
     };
+
+
+    const handleChange = (text) => {
+        // Optional: auto-add dashes for format dd-mm-yy
+        let formatted = text.replace(/[^0-9]/g, '');
+        if (formatted.length > 2 && formatted.length <= 4)
+            formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
+        else if (formatted.length > 4)
+            formatted = `${formatted.slice(0, 2)}-${formatted.slice(2, 4)}-${formatted.slice(4, 6)}`;
+
+        setDate(formatted);
+    }
+
+
+
 
     return (
         <SafeAreaProvider>
@@ -194,20 +212,84 @@ const CreateHive = ({ navigation, route }) => {
                                 <CustomText weight='medium' style={{ color: '#374151' }}>Media must be reviewed by authorized members. Best for formal events.</CustomText>
                             </View>
                         </View>
+                        <View style={styles.privacyContainer}>
+                            <View style={{}}>
+                                <View style={{ flexDirection: 'row', marginLeft: 12, justifyContent: 'space-between' }}>
+                                    <CustomText weight='bold' style={{ fontSize: 16 }}>Temporary Event Hive</CustomText>
+                                    <Switch
+                                        trackColor={{ false: '#767577', true: '#81b0ff' }}
+                                        thumbColor={isEnabled ? '#4b5cf5ff' : '#f4f3f4'}
+                                        ios_backgroundColor="#3e3e3e"
+                                        onValueChange={toggleSwitch}
+                                        value={isEnabled}
+                                    />
+                                </View>
 
-                        <View style={styles.privacy}>
-                            <View style={{ flex: 1, marginLeft: 12 }}>
-                                <CustomText weight='bold' style={{ fontSize: 16 }}>Temporary Event Hive</CustomText>
-                                <CustomText weight='medium' style={{ color: '#374151' }}>Set dates for this event</CustomText>
+                                <CustomText weight='medium' style={{ color: '#374151', paddingLeft: 16 }}>Set dates for this event</CustomText>
                             </View>
-                            <Switch
-                                trackColor={{ false: '#767577', true: '#81b0ff' }}
-                                thumbColor={isEnabled ? '#4b5cf5ff' : '#f4f3f4'}
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={toggleSwitch}
-                                value={isEnabled}
-                            />
+
+                            <View style={{ paddingLeft: 16, marginTop: 20 }}>
+                                <CustomText>Event Date</CustomText>
+
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="dd-mm-yy"
+                                    value={date}
+                                    onChangeText={handleChange}
+                                    keyboardType="numeric"
+                                    maxLength={8}
+                                />
+                            </View>
+
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
+                                    <CustomText>Start Time</CustomText>
+
+                                    <TextInput
+                                        style={[styles.input,]}
+                                        placeholder="dd-mm-yy"
+                                        value={date}
+                                        onChangeText={handleChange}
+                                        keyboardType="numeric"
+                                        maxLength={8}
+                                    />
+                                </View>
+
+                                <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
+                                    <CustomText>End Time</CustomText>
+
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="dd-mm-yy"
+                                        value={endDate}
+                                        onChangeText={handleChange}
+                                        keyboardType="numeric"
+                                        maxLength={8}
+                                    />
+                                </View>
+
+                            </View>
+
+
+                            <View style={{ paddingLeft: 16, marginTop: 20 }}>
+                                <CustomText>Expiry Date</CustomText>
+
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="dd-mm-yy"
+                                    value={date}
+                                    onChangeText={handleChange}
+                                    keyboardType="numeric"
+                                    maxLength={8}
+                                />
+                            </View>
+
                         </View>
+
+
+
+
+
 
                     </View>
 
@@ -254,6 +336,17 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
         fontSize: 16,
     },
+
+    privacyContainer: {
+        backgroundColor: '#ffffff',
+        borderRadius: 12,
+        padding: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 6,
+        elevation: 3,
+    },
     privacy: {
         flexDirection: 'row',
         backgroundColor: '#ffffff',
@@ -266,6 +359,14 @@ const styles = StyleSheet.create({
         elevation: 3,
         marginTop: 8,
         marginBottom: 10,
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 10,
+        fontSize: 16,
+        width: '100%'
     },
 });
 

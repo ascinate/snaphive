@@ -1,20 +1,10 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
-import {
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
-  Platform,
-  Animated
-} from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Animated } from 'react-native';
 import { RefreshControl } from 'react-native';
 import { Sparkles, Users, FileImage, Clock5, ImagePlus, MoveRight } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import LinearGradient from 'react-native-linear-gradient';
-import { EventContext } from '../context/EventContext';
 
+import { EventContext } from '../context/EventContext';
 
 // components
 import TopNav from '../components/TopNavbar';
@@ -31,26 +21,36 @@ const Home = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [showImportBanner, setShowImportBanner] = useState(true);
   const { events, setEvents } = useContext(EventContext);
-  const slideAnim = useRef(new Animated.Value(0)).current; // for slide
-  const opacityAnim = useRef(new Animated.Value(1)).current; // for fade out
+  const slideAnim = useRef(new Animated.Value(0)).current;
+  const opacityAnim = useRef(new Animated.Value(1)).current;
 
   const [user, setUser] = useState(null);
   useEffect(() => {
-    // 🕒 Remove expired temporary events
-    const now = new Date();
+    const removeExpiredEvents = () => {
+      const now = new Date();
 
-    setEvents(prevEvents =>
-      prevEvents.filter(event => {
-        if (!event.isTemporary) return true; // keep permanent
-        if (!event.expiryDate) return true;
+      setEvents(prevEvents =>
+        prevEvents.filter(event => {
+          if (!event.isTemporary) return true;
+          if (!event.expiryDate) return true;
 
-        const [day, month, year] = event.expiryDate.split('-');
-        const eventExpiry = new Date(`20${year}-${month}-${day}`); // convert dd-mm-yy → yyyy-mm-dd
+          const [day, month, year] = event.expiryDate.split('-');
+          const eventExpiry = new Date(`20${year}-${month}-${day}T23:59:59`); // same day till midnight
 
-        return eventExpiry >= now; // keep if not expired
-      })
-    );
-  }, []);
+          return eventExpiry >= now;
+        })
+      );
+    };
+
+    // Run immediately when component mounts
+    removeExpiredEvents();
+
+    // ✅ Also run every minute to auto-remove expired events
+    const interval = setInterval(removeExpiredEvents, 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [setEvents]);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -86,11 +86,20 @@ const Home = ({ navigation, route }) => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+
     setTimeout(() => {
-      setEvents(prev => [...prev]);
+      setEvents(prevEvents => prevEvents.filter(event => {
+        if (!event.isTemporary) return true;
+        if (!event.expiryDate) return true;
+
+        const [day, month, year] = event.expiryDate.split('-');
+        const eventExpiry = new Date(`20${year}-${month}-${day}T23:59:59`);
+        return eventExpiry >= new Date();
+      }));
       setRefreshing(false);
     }, 1000);
   }, []);
+
 
 
   const handleLater = () => {
@@ -108,8 +117,6 @@ const Home = ({ navigation, route }) => {
     ]).start(() => setShowImportBanner(false));
   };
 
-
-
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -123,7 +130,6 @@ const Home = ({ navigation, route }) => {
           }
         >
           {/* Hero Section */}
-
           <View
             style={styles.ImportSection}
           >
@@ -159,7 +165,6 @@ const Home = ({ navigation, route }) => {
                 gap: width * 0.02,
               }}
             >
-
             </View>
           </View>
 
@@ -205,9 +210,6 @@ const Home = ({ navigation, route }) => {
                 </CustomText>
               </View>
             </View>
-
-
-
           </View>
 
           {/* Events Section */}
@@ -253,9 +255,6 @@ const Home = ({ navigation, route }) => {
                       >
                         {item.description || 'No description'}
                       </CustomText>
-
-
-
                       <View style={{ flexDirection: 'row', gap: 20 }}>
                         <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
                           <Users width={14} height={14} color="#6B7280" />
@@ -326,12 +325,7 @@ const Home = ({ navigation, route }) => {
                 </View>
               </View>
             )}
-
-
-
           </View>
-
-
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>

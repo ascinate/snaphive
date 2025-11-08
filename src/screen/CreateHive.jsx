@@ -12,6 +12,7 @@ import TopNav from '../components/TopNavbar';
 import CustomText from '../components/CustomText';
 import ThemeButton from '../components/ThemeButton';
 import MaskedView from '@react-native-masked-view/masked-view';
+import { colors } from '../Theme/theme';
 
 // assets
 const hero = require('../../assets/hero.png');
@@ -94,25 +95,11 @@ const CreateHive = ({ navigation, route }) => {
                     style={styles.container}
                     showsVerticalScrollIndicator={false}
                 >
-                    <MaskedView
-                        maskElement={
-                            <CustomText weight="bold" style={styles.snapText}>
-                                Create New Hive
-                            </CustomText>
-                        }
-                    >
-                        <LinearGradient
-                            colors={[
-                                '#a131d3', '#b128c4', '#bd22b5', '#c61fa7', '#cc2199',
-                                '#d71f8c', '#df227f', '#e52a73', '#ef3462', '#f44250',
-                                '#f5533d', '#f36529',
-                            ]}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 1 }}
-                        >
-                            <CustomText weight="bold" style={[styles.snapText, { opacity: 0 }]} />
-                        </LinearGradient>
-                    </MaskedView>
+                 <View> 
+                     <CustomText weight="bold" style={styles.snapText}>
+                         Create New Hive
+                     </CustomText>
+                 </View>
                     <CustomText weight='regular ' style={{ color: '#374151' }}>Start sharing memories with your group</CustomText>
                     <CustomText weight='medium' style={{ marginTop: 18, marginBottom: 4, color: '#374151' }}>Cover Image</CustomText>
 
@@ -145,7 +132,7 @@ const CreateHive = ({ navigation, route }) => {
                                 </View>
                             ) : (
                                 <>
-                                    <Image color='#c084fc' width={48} height={48} />
+                                    <Image color='#feaa00' width={48} height={48} />
                                     <CustomText weight='mideum' style={{ marginTop: 8 }}>Tap to upload cover</CustomText>
                                     <CustomText weight='mideum' style={{ marginTop: 4, color: '#67696b' }}>JPG, PNG up to 10MB</CustomText>
                                 </>
@@ -188,8 +175,8 @@ const CreateHive = ({ navigation, route }) => {
                         </CustomText>
                         <View style={styles.privacy}>
                             <View >
-                                <View style={{ width: 35, height: 35, backgroundColor: '#e9d5ff', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
-                                    <LockOpen color='#9E48ED' />
+                                <View style={{ width: 35, height: 35, backgroundColor: '#FFF1DF', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
+                                    <LockOpen color='#feaa00' />
                                 </View>
                             </View>
                             <View style={{ flex: 1, marginLeft: 12 }}>
@@ -199,8 +186,8 @@ const CreateHive = ({ navigation, route }) => {
                         </View>
                         <View style={styles.privacy}>
                             <View >
-                                <View style={{ width: 35, height: 35, backgroundColor: '#e9d5ff', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
-                                    <Lock color='#9E48ED' />
+                                <View style={{ width: 35, height: 35, backgroundColor: '#FFF1DF', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
+                                    <Lock color='#feaa00' />
                                 </View>
                             </View>
                             <View style={{ flex: 1, marginLeft: 12 }}>
@@ -346,12 +333,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: width * 0.05,
-        backgroundColor: '#fdf2f8',
+        backgroundColor: '#fff',
     },
     snapText: {
         fontSize: 30,
         marginTop: 10,
-
+color: colors.primary,
     },
     uploadContainer: {
         width: '100%',

@@ -116,7 +116,7 @@ const Login = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#FDF3F9", padding: 20 },
+    container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#fff", padding: 20 },
     flex: { flexDirection: "row", justifyContent: "center", alignItems: 'center', marginBottom: 24 },
     logo: { width: 50, height: 50, resizeMode: "contain", marginRight: 10 },
     title: { fontSize: 35, color: '#000', fontWeight: '700', textAlign: 'center', },

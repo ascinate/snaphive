@@ -3,9 +3,8 @@ import { View, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Plat
 import { RefreshControl } from 'react-native';
 import { Sparkles, Users, FileImage, Clock5, ImagePlus, MoveRight } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-
 import { EventContext } from '../context/EventContext';
-
+import { colors } from '../Theme/theme';
 // components
 import TopNav from '../components/TopNavbar';
 import CustomText from '../components/CustomText';
@@ -230,7 +229,7 @@ const Home = ({ navigation, route }) => {
           >
             <View style={styles.dashCard}>
               <View>
-                <CustomText weight="bold" style={[styles.cardText, { color: '#9f31d8' }]}>
+                <CustomText weight="bold" style={[styles.cardText, { color: '#000000' }]}>
                   {events.length}
                 </CustomText>
                 <CustomText weight="medium" style={styles.dashText}>
@@ -241,7 +240,7 @@ const Home = ({ navigation, route }) => {
 
             <View style={styles.dashCard}>
               <View>
-                <CustomText weight="bold" style={[styles.cardText, { color: '#d92779' }]}>
+                <CustomText weight="bold" style={[styles.cardText, { color: '#000000' }]}>
                   {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
                 </CustomText>
                 <CustomText weight="medium" style={styles.dashText}>
@@ -251,7 +250,7 @@ const Home = ({ navigation, route }) => {
             </View>
             <View style={styles.dashCard}>
               <View>
-                <CustomText weight="bold" style={[styles.cardText, { color: '#f56824' }]}>
+                <CustomText weight="bold" style={[styles.cardText, { color: '#000000' }]}>
                   1
                 </CustomText>
 
@@ -344,13 +343,13 @@ const Home = ({ navigation, route }) => {
                   style={{
                     width: 60,
                     height: 60,
-                    backgroundColor: '#f1e4ff',
+                    backgroundColor: '#fecd6bff',
                     alignItems: 'center',
                     justifyContent: 'center',
                     borderRadius: 50,
                   }}
                 >
-                  <ImagePlus color="#C084FC" size={28} />
+                  <ImagePlus color="#ffffff" size={28} />
                 </View>
 
                 <CustomText weight="medium" style={{ color: '#6B7280' }}>
@@ -360,12 +359,12 @@ const Home = ({ navigation, route }) => {
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   <CustomText
                     weight="bold"
-                    style={{ color: '#C084FC' }}
+                    style={{ color: '#feaa00' }}
                     onPress={() => navigation.navigate('CreateHive')}
                   >
                     Create your first hive
                   </CustomText>
-                  <MoveRight color="#C084FC" />
+                  <MoveRight color="#feaa00" />
                 </View>
               </View>
             )}
@@ -380,8 +379,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: width * 0.05,
-    backgroundColor: '#fdf2f8',
-
+    backgroundColor: "#fff",
   },
   heroSection: {
     justifyContent: 'center',
@@ -439,7 +437,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   ImportSection: {
-    backgroundColor: '#a131d3',
+    backgroundColor: '#feaa00',
     marginTop: height * 0.025,
     borderRadius: 24,
     padding: width * 0.06,
@@ -456,8 +454,6 @@ const styles = StyleSheet.create({
       },
     }),
   },
-
-
   cameraIcon: {
     width: width * 0.13,
     height: width * 0.13,
@@ -516,7 +512,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: "30%",
     padding: width * 0.045,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.secondary,
     borderRadius: 12,
     alignItems: 'center',
     marginTop: height * 0.02,
@@ -549,7 +545,7 @@ const styles = StyleSheet.create({
   newEvent: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#9333EA',
+    color: '#feaa00',
   },
   eventSection: {
     fontSize: 20,
@@ -562,8 +558,6 @@ const styles = StyleSheet.create({
     marginTop: height * 0.03,
 
   },
-
-
   eventRow: {
     marginTop: 16,
     width: '100%',
@@ -571,33 +565,25 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     overflow: 'hidden',
     backgroundColor: '#fff',
-
     // 💡 Shadow for iOS
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
-
     // 💡 Shadow for Android
     elevation: 1,
   },
-
-
   cardImg: {
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
   },
-
   eventRowInformation: {
     position: 'absolute',
     bottom: 0,
     backgroundColor: '#ffffffff',
     width: '100%',
     padding: 16,
-
   }
-
 });
-
 export default Home;

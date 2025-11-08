@@ -6,7 +6,7 @@ import CustomText from './CustomText';
 const ThemeButton = ({ text, icon, onPress, style, textStyle, iconPosition = 'left' }) => {
   return (
     <LinearGradient
-      colors={['#9333EA', '#d6277e']}
+      colors={['#ffd503', '#feaa00']}
       start={{ x: 0, y: 0 }}
       end={{ x: 1.6, y: 0 }}
       style={[styles.continueBtn, style]}

@@ -110,8 +110,6 @@ const Signup = ({ navigation }) => {
         />
       </View>
 
-
-
       {/* Continue Button */}
       <ThemeButton
         text="Sign up →"
@@ -192,7 +190,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FDF3F9',
+    backgroundColor: '#fff',
   },
   description: {
     color: '#646464',
@@ -202,7 +200,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-     borderColor: '#ccc',
+    borderColor: '#ccc',
 
     borderWidth: 1,
     borderRadius: 16,

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
+import { colors } from '../Theme/theme';
 import {
     View,
     Image,
@@ -95,25 +96,28 @@ const MyHives = ({ navigation, route }) => {
                             justifyContent: 'space-between',
                             flexWrap: 'wrap',
                         }}>
-                        <View style={styles.dashCard}>
+                       <View style={styles.dashCard}>
+  <View>
+    <CustomText weight="bold" style={styles.cardText}>
+      {events.length}
+    </CustomText>
+    <CustomText weight="medium" style={{ color: '#fff' }}>
+      Total Hives
+    </CustomText>
+  </View>
+</View>
 
-                            <View>
-                                <CustomText weight="bold" style={styles.cardText}>
-                                    11
-                                </CustomText>
-                                <CustomText weight="medium">Total Hives</CustomText>
-                            </View>
-                        </View>
+<View style={styles.dashCard}>
+  <View>
+    <CustomText weight="bold" style={styles.cardText}>
+      {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
+    </CustomText>
+    <CustomText weight="medium" style={{ color: '#fff' }}>
+      Total Photos
+    </CustomText>
+  </View>
+</View>
 
-                        <View style={styles.dashCard}>
-
-                            <View>
-                                <CustomText weight="bold" style={styles.cardText}>
-                                    257
-                                </CustomText>
-                                <CustomText weight="medium">Total Photos</CustomText>
-                            </View>
-                        </View>
                     </View>
 
                     {/* Example Event Row */}
@@ -181,13 +185,13 @@ const MyHives = ({ navigation, route }) => {
                                     style={{
                                         width: 60,
                                         height: 60,
-                                        backgroundColor: '#f1e4ff',
+                                        backgroundColor: '#ffde9bff',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         borderRadius: 50,
                                     }}
                                 >
-                                    <ImagePlus color="#C084FC" size={28} />
+                                    <ImagePlus color="#fff" size={28} />
                                 </View>
 
                                 <CustomText weight="medium" style={{ color: '#6B7280' }}>
@@ -199,7 +203,7 @@ const MyHives = ({ navigation, route }) => {
                                             flexDirection: 'row',
                                             alignItems: 'center',
                                             gap: 6,
-                                            backgroundColor: '#AE54F0',
+                                            backgroundColor: colors.primary,
                                             padding: 15,
                                             borderRadius: 12,
                                             marginTop: 8,
@@ -208,7 +212,7 @@ const MyHives = ({ navigation, route }) => {
                                         <CustomText weight="bold" style={{ color: '#ffffff' }}>
                                             Create your first hive
                                         </CustomText>
-                                        <CirclePlus color="#ffffffff" />
+                                        <CirclePlus color="#ffffff" />
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -257,7 +261,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: width * 0.05,
-        backgroundColor: '#fdf2f8',
+        backgroundColor: '#fff',
     },
     headerSection: {
         marginVertical: 20,
@@ -265,7 +269,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 22,
         fontWeight: '700',
-        color: '#111827',
+        color: colors.primary,
     },
     subtitle: {
         fontSize: 14,
@@ -330,7 +334,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '48%',
         padding: width * 0.045,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.primary,
         borderRadius: 12,
         alignItems: 'center',
         shadowColor: '#000',
@@ -341,7 +345,7 @@ const styles = StyleSheet.create({
     },
     cardText: {
         fontSize: 18,
-        color: '#111827',
+        color: '#fff',
     },
 });
 

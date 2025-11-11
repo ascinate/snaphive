@@ -370,16 +370,18 @@ const Home = ({ navigation, route }) => {
 
               </View>
               {/* here the event list show */}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  justifyContent: 'space-between',
+                }}
+              >
               {events.length > 0 ? (
                 events.map((item, index) => (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}
-                  >
                     <TouchableOpacity
                       key={index}
+                      style={{ width: '48%' }}
                       onPress={() =>
                         navigation.navigate('FolderLayout', {
                           image: item.img,
@@ -390,7 +392,7 @@ const Home = ({ navigation, route }) => {
                         })
                       }
                     >
-                      <View style={[styles.eventCard, { width: 180 }]}>   
+                      <View style={[styles.eventCard, ]}>   
                         <Image source={item.img} style={styles.eventImage} />
 
                         <View style={styles.eventInfo}>
@@ -427,7 +429,6 @@ const Home = ({ navigation, route }) => {
                         </View>
                       </View>
                     </TouchableOpacity>
-                  </View>
 
 
                 ))
@@ -439,6 +440,7 @@ const Home = ({ navigation, route }) => {
                     justifyContent: 'center',
                     gap: 10,
                     marginTop: 60,
+                    width: '100%',
                     marginBottom: 80,
                   }}
                 >
@@ -471,6 +473,7 @@ const Home = ({ navigation, route }) => {
                   </View>
                 </View>
               )}
+              </View>
             </View>
 
 

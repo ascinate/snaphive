@@ -461,7 +461,62 @@ const Home = ({ navigation, route }) => {
                 </View>
               )}
             </View>
-            
+            <View style={{ marginBottom: 200 }}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('FolderLayout', {
+                    image: item.img,
+                    folderName: item.title,
+                    date: item.createdAt,
+                    owner: 'Pritam',
+                    photos: item.photos,
+                  })
+                }
+              >
+                <View style={styles.eventCard}>
+                  <Image source={picnic1} style={styles.eventImage} />
+
+                  <View style={styles.eventInfo}>
+                    <CustomText weight="bold" style={styles.eventTitle}>
+                      Drama Event
+                    </CustomText>
+
+                    <View style={styles.eventTimeRow}>
+                      <Clock5 width={16} height={16} color="#F98935" />
+                      <CustomText weight="medium" style={styles.eventTimeText}>
+                        22:18 – 00:18
+                      </CustomText>
+                    </View>
+
+                    <CustomText
+                      weight="medium"
+                      style={styles.eventDescription}
+                    >
+                      It is a long established fact that.
+                    </CustomText>
+
+                    <View style={styles.memberRow}>
+                      <View style={styles.memberBadge}>
+                        <CustomText weight="bold" style={styles.memberCount}>
+                          +5
+                        </CustomText>
+                      </View>
+                      <CustomText weight="bold" style={styles.memberText}>
+                        +2 Members
+                      </CustomText>
+                    </View>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+
+
+
+
+
+
+
           </View>
 
 
@@ -680,6 +735,85 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 16,
   },
-  
+
+
+
+
+  eventCard: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    overflow: 'hidden',
+    width: 210,
+    marginTop: 16,
+    padding: 8,
+    // shadows
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+
+  eventImage: {
+    width: '100%',
+    height: 140,
+    resizeMode: 'cover',
+    borderRadius: 8,
+  },
+
+  eventInfo: {
+    padding: 14,
+    backgroundColor: '#fff',
+  },
+
+  eventTitle: {
+    fontSize: 16,
+    color: '#000',
+    marginBottom: 4,
+  },
+
+  eventTimeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 4,
+  },
+
+  eventTimeText: {
+    fontSize: 14,
+    color: '#6B7280',
+  },
+
+  eventDescription: {
+    fontSize: 13,
+    color: '#6B7280',
+    marginBottom: 12,
+  },
+
+  memberRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+
+  memberBadge: {
+    backgroundColor: '#F98935',
+    borderRadius: 50,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  memberCount: {
+    color: '#fff',
+    fontSize: 12,
+  },
+
+  memberText: {
+    color: '#000',
+    fontSize: 14,
+  },
+
 });
 export default Home;

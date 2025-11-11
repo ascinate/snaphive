@@ -372,53 +372,64 @@ const Home = ({ navigation, route }) => {
               {/* here the event list show */}
               {events.length > 0 ? (
                 events.map((item, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() =>
-                      navigation.navigate('FolderLayout', {
-                        image: item.img,
-                        folderName: item.title,
-                        date: item.createdAt,
-                        owner: "Pritam",
-                        photos: item.photos,
-                      })
-                    }
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}
                   >
-                    <View style={styles.eventRow}>
-                      <Image source={item.img} style={styles.cardImg} />
-                      <View style={styles.eventRowInformation}>
-                        <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>
-                          {item.title}
-                        </CustomText>
-                        <CustomText
-                          weight="medium"
-                          style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}
-                        >
-                          {item.description || 'No description'}
-                        </CustomText>
-                        <View style={{ flexDirection: 'row', gap: 20 }}>
-                          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                            <Users width={14} height={14} color="#6B7280" />
-                            <CustomText style={{ color: '#6B7280' }}>1</CustomText>
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() =>
+                        navigation.navigate('FolderLayout', {
+                          image: item.img,
+                          folderName: item.title,
+                          date: item.createdAt,
+                          owner: 'Pritam',
+                          photos: item.photos,
+                        })
+                      }
+                    >
+                      <View style={[styles.eventCard, { width: 180 }]}>   
+                        <Image source={item.img} style={styles.eventImage} />
+
+                        <View style={styles.eventInfo}>
+                          <CustomText weight="bold" style={styles.eventTitle}>
+                            {item.title}
+                          </CustomText>
+
+                          <View style={styles.eventTimeRow}>
+                            <CalendarDays width={16} height={16} color="#F98935" />
+                            <CustomText weight="medium" style={styles.eventTimeText}>
+                              {item.endTime} - {item.expiryDate}
+                            </CustomText>
                           </View>
 
-                          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                            <FileImage width={14} height={14} color="#6B7280" />
-                            <CustomText style={{ color: '#6B7280' }}>{item.count}</CustomText>
-                          </View>
+                          <CustomText weight="medium" style={styles.eventDescription}>
+                            {item.description || 'No description'}
+                          </CustomText>
 
-                          {item.isTemporary && (
-                            <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                              <Clock5 width={14} height={14} color="#ea580c" />
-                              <CustomText style={{ color: '#ef4444', }}>
-                                {item.endTime} - {item.expiryDate}
+                          <View style={styles.memberRow}>
+                            <View style={styles.memberAvatar}>
+                              <Image source={picnic1} style={styles.memberDP} />
+                            </View>
+
+                            <View style={styles.memberBadge}>
+                              <CustomText weight="bold" style={styles.memberCount}>
+                                10+
                               </CustomText>
                             </View>
-                          )}
+
+                            <CustomText weight="bold" style={{ marginLeft: 20 }}>
+                              +10 Members
+                            </CustomText>
+                          </View>
                         </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
+                    </TouchableOpacity>
+                  </View>
+
+
                 ))
               ) : (
 
@@ -470,128 +481,7 @@ const Home = ({ navigation, route }) => {
 
 
 
-            <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 16, }}>
-              <View style={{ marginBottom: 200, flexDirection: 'row', gap: 16, justifyContent: 'flex-start', }}>
 
-
-
-
-
-
-
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('FolderLayout', {
-                      image: item.img,
-                      folderName: item.title,
-                      date: item.createdAt,
-                      owner: 'Pritam',
-                      photos: item.photos,
-                    })
-                  }
-                >
-                  <View style={styles.eventCard}>
-                    <Image source={picnic1} style={styles.eventImage} />
-
-                    <View style={styles.eventInfo}>
-                      <CustomText weight="bold" style={styles.eventTitle}>
-                        Drama Event
-                      </CustomText>
-
-                      <View style={styles.eventTimeRow}>
-                        <CalendarDays width={16} height={16} color="#F98935" />
-                        <CustomText weight="medium" style={styles.eventTimeText}>
-                          22:18 – 00:18
-                        </CustomText>
-                      </View>
-
-                      <CustomText
-                        weight="medium"
-                        style={styles.eventDescription}
-                      >
-                        It is a long established fact that.
-                      </CustomText>
-
-                      <View style={styles.memberRow}>
-                        {/* Profile Image */}
-                        <View style={styles.memberAvatar}>
-                          <Image source={picnic1} style={styles.memberDP} />
-                        </View>
-
-                        {/* Overlapping Count Badge */}
-                        <View style={styles.memberBadge}>
-                          <CustomText weight="bold" style={styles.memberCount}>
-                            10+
-                          </CustomText>
-
-                        </View>
-                        <CustomText weight="bold" style={{ marginLeft: 20 }}>
-                          +10 Members
-                        </CustomText>
-                      </View>
-
-                    </View>
-                  </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('FolderLayout', {
-                      image: item.img,
-                      folderName: item.title,
-                      date: item.createdAt,
-                      owner: 'Pritam',
-                      photos: item.photos,
-                    })
-                  }
-                >
-                  <View style={styles.eventCard}>
-                    <Image source={picnic1} style={styles.eventImage} />
-
-                    <View style={styles.eventInfo}>
-                      <CustomText weight="bold" style={styles.eventTitle}>
-                        Drama Event
-                      </CustomText>
-
-                      <View style={styles.eventTimeRow}>
-                        <CalendarDays width={16} height={16} color="#F98935" />
-                        <CustomText weight="medium" style={styles.eventTimeText}>
-                          22:18 – 00:18
-                        </CustomText>
-                      </View>
-
-                      <CustomText
-                        weight="medium"
-                        style={styles.eventDescription}
-                      >
-                        It is a long established fact that.
-                      </CustomText>
-
-                      <View style={styles.memberRow}>
-                        {/* Profile Image */}
-                        <View style={styles.memberAvatar}>
-                          <Image source={picnic1} style={styles.memberDP} />
-                        </View>
-
-                        {/* Overlapping Count Badge */}
-                        <View style={styles.memberBadge}>
-                          <CustomText weight="bold" style={styles.memberCount}>
-                            10+
-                          </CustomText>
-
-                        </View>
-                        <CustomText weight="bold" style={{ marginLeft: 20 }}>
-                          +10 Members
-                        </CustomText>
-                      </View>
-
-                    </View>
-                  </View>
-                </TouchableOpacity>
-
-
-              </View>
-            </View>
 
 
 
@@ -827,9 +717,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     overflow: 'hidden',
-    width: 180,
-    marginTop: 16,
-    padding: 8,
+    padding: 12,
+    marginBottom: 16,   // ✅ spacing between rows
     // shadows
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -837,6 +726,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
   },
+
 
   eventImage: {
     width: '100%',

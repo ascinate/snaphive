@@ -364,15 +364,10 @@ const Home = ({ navigation, route }) => {
                 <CustomText weight="medium" style={styles.eventSection}>
                   Your Hives
                 </CustomText>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('CreateEvent');
-                  }}
-                >
-                  <CustomText weight="bold" style={styles.newEvent}>
-                    See all
-                  </CustomText>
-                </TouchableOpacity>
+                <CustomText weight="medium" style={{ color: colors.textGray, marginTop: 4 }} >
+                  Manage your photo collections
+                </CustomText>
+
               </View>
               {/* here the event list show */}
               {events.length > 0 ? (
@@ -466,6 +461,7 @@ const Home = ({ navigation, route }) => {
                 </View>
               )}
             </View>
+            
           </View>
 
 
@@ -655,11 +651,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   eventHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginTop: height * 0.03,
-
   },
   eventRow: {
     marginTop: 16,
@@ -687,6 +679,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffffff',
     width: '100%',
     padding: 16,
-  }
+  },
+  
 });
 export default Home;

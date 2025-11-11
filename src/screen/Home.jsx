@@ -253,8 +253,8 @@ const Home = ({ navigation, route }) => {
               <View style={styles.dashCard}>
                 <View
                   style={{
-                    alignItems: 'center',   
-                    justifyContent: 'center', 
+                    alignItems: 'center',   // centers horizontally
+                    justifyContent: 'center', // centers vertically
                   }}
                 >
                   <View
@@ -270,25 +270,29 @@ const Home = ({ navigation, route }) => {
 
                   <CustomText
                     weight="bold"
-                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]} 
+                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]} // center text
                   >
                     {events.length}
                   </CustomText>
 
                   <CustomText
                     weight="medium"
-                    style={[styles.dashText, { textAlign: 'center' }]}
+                    style={[styles.dashText, { textAlign: 'center' }]} // center text
                   >
                     Total Hives
                   </CustomText>
                 </View>
               </View>
 
+
+
+
+
               <View style={styles.dashCard}>
                 <View
                   style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    alignItems: 'center',   // centers horizontally
+                    justifyContent: 'center', // centers vertically
                   }}
                 >
                   <View
@@ -299,29 +303,24 @@ const Home = ({ navigation, route }) => {
                       marginBottom: 6,
                     }}
                   >
-                <FileImage color="#ffffff" />
+                    <FileImage color="#ffffff" />
                   </View>
 
                   <CustomText
                     weight="bold"
-                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]}
+                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]} // center text
                   >
                     {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
                   </CustomText>
 
                   <CustomText
                     weight="medium"
-                    style={[styles.dashText, { textAlign: 'center' }]}
+                    style={[styles.dashText, { textAlign: 'center' }]} // center text
                   >
                     Photos
                   </CustomText>
                 </View>
               </View>
-
-
-
-
-
 
 
               <View style={styles.dashCard}>
@@ -339,19 +338,19 @@ const Home = ({ navigation, route }) => {
                       marginBottom: 6,
                     }}
                   >
-           <Users  color="#ffffff" />
+                    <Users color="#ffffff" />
                   </View>
 
                   <CustomText
                     weight="bold"
-                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]} 
+                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]} // center text
                   >
-                    {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
+                    1
                   </CustomText>
 
                   <CustomText
                     weight="medium"
-                    style={[styles.dashText, { textAlign: 'center' }]} 
+                    style={[styles.dashText, { textAlign: 'center' }]} // center text
                   >
                     Member
                   </CustomText>

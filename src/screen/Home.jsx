@@ -245,7 +245,7 @@ const Home = ({ navigation, route }) => {
 
                 <TouchableOpacity
                   style={styles.importBtnWhite}
-                  onPress={() => navigation.navigate('ImportPhotos')}
+                  onPress={() => navigation.navigate('CreateHive')}
                 >
                   <View>
                     <Plus color="#EA580B" size={20} />

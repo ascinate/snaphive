@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Animated } from 'react-native';
 import { RefreshControl } from 'react-native';
-import { Sparkles, Users, FileImage, Clock5, ImagePlus, MoveRight } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, ImagePlus, MoveRight, Plus, FolderOpen } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { EventContext } from '../context/EventContext';
 import { colors } from '../Theme/theme';
@@ -179,196 +179,298 @@ const Home = ({ navigation, route }) => {
           }
         >
           {/* Hero Section */}
-          <View
-            style={styles.ImportSection}
-          >
+          <View style={[styles.ImportSection, {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }]}>
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
                 gap: width * 0.03,
               }}
             >
-
-              <View style={{ flex: 1 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  {/* <Sparkles color='#ffffff' size={22} /> */}
-                  <CustomText weight="medium" style={styles.importHeading}>Welcome</CustomText>
-                  <CustomText weight="bold" style={[styles.importHeading,]}>{user ? user.name : "Loading..."}!</CustomText>
+              <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignContent: 'center',
+                    alignSelf: 'center',
+                    gap: 8,
+                    backgroundColor: 'rgba(255, 219, 186, 0.5)',
+                    borderRadius: 25,
+                    paddingHorizontal: 16,
+                    paddingVertical: 6,
+                  }}
+                >
+                  <Sparkles color="#ffffff" size={22} />
+                  <CustomText weight="medium" style={styles.importHeading}>
+                    Welcome
+                  </CustomText>
+                  <CustomText weight="bold" style={styles.importHeading}>
+                    {user ? user.name : 'Loading...'}!
+                  </CustomText>
                 </View>
-                <CustomText weight="bold" style={styles.importSub}>
+
+                <CustomText weight="bold" style={[styles.importSub, { textAlign: 'center' }]}>
                   Capture your moments with hives
                 </CustomText>
 
-                <CustomText weight="medium" style={styles.importSubLine}>
+                <CustomText weight="medium" style={[styles.importSubLine, { textAlign: 'center' }]}>
                   Let the memories flow! ✨
                 </CustomText>
+
+                <TouchableOpacity
+                  style={styles.importBtnWhite}
+                  onPress={() => navigation.navigate('ImportPhotos')}
+                >
+                  <View>
+                    <Plus color="#EA580B" size={20} />
+                  </View>
+                  <CustomText weight="bold" style={{ color: '#EA580B', fontSize: 14, }}>
+                    Create new hive
+                  </CustomText>
+                </TouchableOpacity>
+
+
               </View>
             </View>
+          </View>
 
+
+          <View style={{ paddingHorizontal: width * 0.05, }}>
+            {/* Dashboard Cards */}
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                gap: width * 0.02,
+                flexWrap: 'wrap',
+                marginTop: height * 0.01,
               }}
             >
-            </View>
-          </View>
-
-
-          {/* Dashboard Cards */}
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              marginTop: height * 0.01,
-            }}
-          >
-            <View style={styles.dashCard}>
-              <View>
-                <CustomText weight="bold" style={[styles.cardText, { color: '#000000' }]}>
-                  {events.length}
-                </CustomText>
-                <CustomText weight="medium" style={styles.dashText}>
-                  Hives
-                </CustomText>
-              </View>
-            </View>
-
-            <View style={styles.dashCard}>
-              <View>
-                <CustomText weight="bold" style={[styles.cardText, { color: '#000000' }]}>
-                  {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
-                </CustomText>
-                <CustomText weight="medium" style={styles.dashText}>
-                  Photos
-                </CustomText>
-              </View>
-            </View>
-            <View style={styles.dashCard}>
-              <View>
-                <CustomText weight="bold" style={[styles.cardText, { color: '#000000' }]}>
-                  1
-                </CustomText>
-
-                <CustomText weight="medium" style={styles.dashText}>
-                  Members
-                </CustomText>
-              </View>
-            </View>
-          </View>
-
-          {/* Events Section */}
-          <View style={{ paddingBottom: 100, }}>
-            <View style={styles.eventHeader}>
-              <CustomText weight="medium" style={styles.eventSection}>
-                Your Hives
-              </CustomText>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('CreateEvent');
-                }}
-              >
-                <CustomText weight="bold" style={styles.newEvent}>
-                  See all
-                </CustomText>
-              </TouchableOpacity>
-            </View>
-            {/* here the event list show */}
-            {events.length > 0 ? (
-              events.map((item, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() =>
-                    navigation.navigate('FolderLayout', {
-                      image: item.img,
-                      folderName: item.title,
-                      date: item.createdAt,
-                      owner: "Pritam",
-                      photos: item.photos,
-                    })
-                  }
-                >
-                  <View style={styles.eventRow}>
-                    <Image source={item.img} style={styles.cardImg} />
-                    <View style={styles.eventRowInformation}>
-                      <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>
-                        {item.title}
-                      </CustomText>
-                      <CustomText
-                        weight="medium"
-                        style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}
-                      >
-                        {item.description || 'No description'}
-                      </CustomText>
-                      <View style={{ flexDirection: 'row', gap: 20 }}>
-                        <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                          <Users width={14} height={14} color="#6B7280" />
-                          <CustomText style={{ color: '#6B7280' }}>1</CustomText>
-                        </View>
-
-                        <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                          <FileImage width={14} height={14} color="#6B7280" />
-                          <CustomText style={{ color: '#6B7280' }}>{item.count}</CustomText>
-                        </View>
-
-                        {item.isTemporary && (
-                          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                            <Clock5 width={14} height={14} color="#ea580c" />
-                            <CustomText style={{ color: '#ef4444', }}>
-                              {item.endTime} - {item.expiryDate}
-                            </CustomText>
-                          </View>
-                        )}
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              ))
-            ) : (
-
-              <View
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 10,
-                  marginTop: 60,
-                  marginBottom: 80,
-                }}
-              >
+              <View style={styles.dashCard}>
                 <View
                   style={{
-                    width: 60,
-                    height: 60,
-                    backgroundColor: '#fecd6bff',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 50,
+                    alignItems: 'center',   
+                    justifyContent: 'center', 
                   }}
                 >
-                  <ImagePlus color="#ffffff" size={28} />
-                </View>
+                  <View
+                    style={{
+                      backgroundColor: '#F98935',
+                      borderRadius: 8,
+                      padding: 10,
+                      marginBottom: 6,
+                    }}
+                  >
+                    <FolderOpen color="#ffffff" />
+                  </View>
 
-                <CustomText weight="medium" style={{ color: '#6B7280' }}>
-                  No hives yet
-                </CustomText>
-
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   <CustomText
                     weight="bold"
-                    style={{ color: '#feaa00' }}
-                    onPress={() => navigation.navigate('CreateHive')}
+                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]} 
                   >
-                    Create your first hive
+                    {events.length}
                   </CustomText>
-                  <MoveRight color="#feaa00" />
+
+                  <CustomText
+                    weight="medium"
+                    style={[styles.dashText, { textAlign: 'center' }]}
+                  >
+                    Total Hives
+                  </CustomText>
                 </View>
               </View>
-            )}
+
+              <View style={styles.dashCard}>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <View
+                    style={{
+                      backgroundColor: '#F4B11E',
+                      borderRadius: 8,
+                      padding: 10,
+                      marginBottom: 6,
+                    }}
+                  >
+                <FileImage color="#ffffff" />
+                  </View>
+
+                  <CustomText
+                    weight="bold"
+                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]}
+                  >
+                    {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
+                  </CustomText>
+
+                  <CustomText
+                    weight="medium"
+                    style={[styles.dashText, { textAlign: 'center' }]}
+                  >
+                    Photos
+                  </CustomText>
+                </View>
+              </View>
+
+
+
+
+
+
+
+              <View style={styles.dashCard}>
+                <View
+                  style={{
+                    alignItems: 'center',   // centers horizontally
+                    justifyContent: 'center', // centers vertically
+                  }}
+                >
+                  <View
+                    style={{
+                      backgroundColor: '#B674F9',
+                      borderRadius: 8,
+                      padding: 10,
+                      marginBottom: 6,
+                    }}
+                  >
+           <Users  color="#ffffff" />
+                  </View>
+
+                  <CustomText
+                    weight="bold"
+                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]} 
+                  >
+                    {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
+                  </CustomText>
+
+                  <CustomText
+                    weight="medium"
+                    style={[styles.dashText, { textAlign: 'center' }]} 
+                  >
+                    Member
+                  </CustomText>
+                </View>
+              </View>
+            </View>
+
+            {/* Events Section */}
+            <View style={{ paddingBottom: 100, }}>
+              <View style={styles.eventHeader}>
+                <CustomText weight="medium" style={styles.eventSection}>
+                  Your Hives
+                </CustomText>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('CreateEvent');
+                  }}
+                >
+                  <CustomText weight="bold" style={styles.newEvent}>
+                    See all
+                  </CustomText>
+                </TouchableOpacity>
+              </View>
+              {/* here the event list show */}
+              {events.length > 0 ? (
+                events.map((item, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() =>
+                      navigation.navigate('FolderLayout', {
+                        image: item.img,
+                        folderName: item.title,
+                        date: item.createdAt,
+                        owner: "Pritam",
+                        photos: item.photos,
+                      })
+                    }
+                  >
+                    <View style={styles.eventRow}>
+                      <Image source={item.img} style={styles.cardImg} />
+                      <View style={styles.eventRowInformation}>
+                        <CustomText weight="bold" style={{ fontSize: 18, marginBottom: 4 }}>
+                          {item.title}
+                        </CustomText>
+                        <CustomText
+                          weight="medium"
+                          style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}
+                        >
+                          {item.description || 'No description'}
+                        </CustomText>
+                        <View style={{ flexDirection: 'row', gap: 20 }}>
+                          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                            <Users width={14} height={14} color="#6B7280" />
+                            <CustomText style={{ color: '#6B7280' }}>1</CustomText>
+                          </View>
+
+                          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                            <FileImage width={14} height={14} color="#6B7280" />
+                            <CustomText style={{ color: '#6B7280' }}>{item.count}</CustomText>
+                          </View>
+
+                          {item.isTemporary && (
+                            <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                              <Clock5 width={14} height={14} color="#ea580c" />
+                              <CustomText style={{ color: '#ef4444', }}>
+                                {item.endTime} - {item.expiryDate}
+                              </CustomText>
+                            </View>
+                          )}
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                ))
+              ) : (
+
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 10,
+                    marginTop: 60,
+                    marginBottom: 80,
+                  }}
+                >
+                  <View
+                    style={{
+                      width: 60,
+                      height: 60,
+                      backgroundColor: '#fecd6bff',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 50,
+                    }}
+                  >
+                    <ImagePlus color="#ffffff" size={28} />
+                  </View>
+
+                  <CustomText weight="medium" style={{ color: '#6B7280' }}>
+                    No hives yet
+                  </CustomText>
+
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                    <CustomText
+                      weight="bold"
+                      style={{ color: '#feaa00' }}
+                      onPress={() => navigation.navigate('CreateHive')}
+                    >
+                      Create your first hive
+                    </CustomText>
+                    <MoveRight color="#feaa00" />
+                  </View>
+                </View>
+              )}
+            </View>
           </View>
+
+
+
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -378,7 +480,7 @@ const Home = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: width * 0.05,
+
     backgroundColor: "#fff",
   },
   heroSection: {
@@ -437,9 +539,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   ImportSection: {
-    backgroundColor: '#feaa00',
+
+    backgroundColor: '#ec9e00ff',
     marginTop: height * 0.025,
-    borderRadius: 24,
     padding: width * 0.06,
     overflow: 'hidden',
     ...Platform.select({
@@ -483,10 +585,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: width * 0.02,
+    gap: width * 0.025,
     backgroundColor: '#FFFFFF',
     paddingVertical: height * 0.015,
-    borderRadius: 6,
+    paddingHorizontal: width * 0.1,
+    borderRadius: 14,
     marginVertical: 10,
     ...Platform.select({
       ios: {
@@ -509,10 +612,11 @@ const styles = StyleSheet.create({
   },
   dashCard: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItem: 'center',
+    justifyContent: 'center',
     width: "30%",
     padding: width * 0.045,
-    backgroundColor: colors.secondary,
+    backgroundColor: '#fff',
     borderRadius: 12,
     alignItems: 'center',
     marginTop: height * 0.02,
@@ -524,7 +628,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
       },
       android: {
-        elevation: 1,
+        elevation: 3,
       },
     }),
   },

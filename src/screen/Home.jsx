@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Animated } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Animated, TextInput } from 'react-native';
 import { RefreshControl } from 'react-native';
-import { Sparkles, Users, FileImage, Clock5, ImagePlus, MoveRight, Plus, FolderOpen, CalendarDays } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, ImagePlus, MoveRight, Plus, FolderOpen, CalendarDays, Search } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { EventContext } from '../context/EventContext';
 import { colors } from '../Theme/theme';
@@ -22,6 +22,7 @@ const Home = ({ navigation, route }) => {
   const { events, setEvents } = useContext(EventContext);
   const slideAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [user, setUser] = useState(null);
 
@@ -166,9 +167,15 @@ const Home = ({ navigation, route }) => {
     ]).start(() => setShowImportBanner(false));
   };
 
+  // Filter events based on search query
+  const filteredEvents = events.filter(event =>
+    event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (event.description && event.description.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#FAFAF9' }}>
         <TopNav />
 
         <ScrollView
@@ -178,6 +185,20 @@ const Home = ({ navigation, route }) => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
+
+            {/* Search Bar */}
+              <View style={[styles.searchContainer, { marginHorizontal: width * 0.05 }]}>
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Search"
+                  placeholderTextColor="#9CA3AF"
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                />
+                <Search color="#6B7280" size={20} style={styles.searchIcon} />
+              </View>
+
+
           {/* Hero Section */}
           <View style={[styles.ImportSection, {
             flex: 1,
@@ -369,16 +390,20 @@ const Home = ({ navigation, route }) => {
                 </CustomText>
 
               </View>
+
+  
+
               {/* here the event list show */}
               <View
                 style={{
                   flexDirection: 'row',
                   flexWrap: 'wrap',
                   justifyContent: 'space-between',
+                  marginTop: 16,
                 }}
               >
-              {events.length > 0 ? (
-                events.map((item, index) => (
+              {filteredEvents.length > 0 ? (
+                filteredEvents.map((item, index) => (
                     <TouchableOpacity
                       key={index}
                       style={{ width: '48%' }}
@@ -440,8 +465,8 @@ const Home = ({ navigation, route }) => {
                     justifyContent: 'center',
                     gap: 10,
                     marginTop: 60,
-                    width: '100%',
                     marginBottom: 80,
+                    width: '100%',
                   }}
                 >
                   <View
@@ -458,19 +483,21 @@ const Home = ({ navigation, route }) => {
                   </View>
 
                   <CustomText weight="medium" style={{ color: '#6B7280' }}>
-                    No hives yet
+                    {searchQuery ? 'No hives found' : 'No hives yet'}
                   </CustomText>
 
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                    <CustomText
-                      weight="bold"
-                      style={{ color: '#feaa00' }}
-                      onPress={() => navigation.navigate('CreateHive')}
-                    >
-                      Create your first hive
-                    </CustomText>
-                    <MoveRight color="#feaa00" />
-                  </View>
+                  {!searchQuery && (
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                      <CustomText
+                        weight="bold"
+                        style={{ color: '#feaa00' }}
+                        onPress={() => navigation.navigate('CreateHive')}
+                      >
+                        Create your first hive
+                      </CustomText>
+                      <MoveRight color="#feaa00" />
+                    </View>
+                  )}
                 </View>
               )}
               </View>
@@ -805,6 +832,28 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 10,
     fontWeight: 'bold',
+  },
+
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F6F6F6',
+    borderRadius: 25,
+    paddingHorizontal: 24,
+    paddingVertical: 18,
+    marginTop: 16,
+    marginBottom: 8,
+  },
+
+  searchIcon: {
+    marginRight: 10,
+  },
+
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000',
+    padding: 0,
   },
 
 

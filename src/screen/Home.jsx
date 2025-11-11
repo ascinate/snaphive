@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Animated } from 'react-native';
 import { RefreshControl } from 'react-native';
-import { Sparkles, Users, FileImage, Clock5, ImagePlus, MoveRight, Plus, FolderOpen } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, ImagePlus, MoveRight, Plus, FolderOpen, CalendarDays } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { EventContext } from '../context/EventContext';
 import { colors } from '../Theme/theme';
@@ -461,54 +461,138 @@ const Home = ({ navigation, route }) => {
                 </View>
               )}
             </View>
-            <View style={{ marginBottom: 200 }}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('FolderLayout', {
-                    image: item.img,
-                    folderName: item.title,
-                    date: item.createdAt,
-                    owner: 'Pritam',
-                    photos: item.photos,
-                  })
-                }
-              >
-                <View style={styles.eventCard}>
-                  <Image source={picnic1} style={styles.eventImage} />
 
-                  <View style={styles.eventInfo}>
-                    <CustomText weight="bold" style={styles.eventTitle}>
-                      Drama Event
-                    </CustomText>
 
-                    <View style={styles.eventTimeRow}>
-                      <Clock5 width={16} height={16} color="#F98935" />
-                      <CustomText weight="medium" style={styles.eventTimeText}>
-                        22:18 – 00:18
+
+
+
+
+
+
+
+            <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 16, }}>
+              <View style={{ marginBottom: 200, flexDirection: 'row', gap: 16, justifyContent: 'flex-start', }}>
+
+
+
+
+
+
+
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('FolderLayout', {
+                      image: item.img,
+                      folderName: item.title,
+                      date: item.createdAt,
+                      owner: 'Pritam',
+                      photos: item.photos,
+                    })
+                  }
+                >
+                  <View style={styles.eventCard}>
+                    <Image source={picnic1} style={styles.eventImage} />
+
+                    <View style={styles.eventInfo}>
+                      <CustomText weight="bold" style={styles.eventTitle}>
+                        Drama Event
                       </CustomText>
-                    </View>
 
-                    <CustomText
-                      weight="medium"
-                      style={styles.eventDescription}
-                    >
-                      It is a long established fact that.
-                    </CustomText>
-
-                    <View style={styles.memberRow}>
-                      <View style={styles.memberBadge}>
-                        <CustomText weight="bold" style={styles.memberCount}>
-                          +5
+                      <View style={styles.eventTimeRow}>
+                        <CalendarDays width={16} height={16} color="#F98935" />
+                        <CustomText weight="medium" style={styles.eventTimeText}>
+                          22:18 – 00:18
                         </CustomText>
                       </View>
-                      <CustomText weight="bold" style={styles.memberText}>
-                        +2 Members
+
+                      <CustomText
+                        weight="medium"
+                        style={styles.eventDescription}
+                      >
+                        It is a long established fact that.
                       </CustomText>
+
+                      <View style={styles.memberRow}>
+                        {/* Profile Image */}
+                        <View style={styles.memberAvatar}>
+                          <Image source={picnic1} style={styles.memberDP} />
+                        </View>
+
+                        {/* Overlapping Count Badge */}
+                        <View style={styles.memberBadge}>
+                          <CustomText weight="bold" style={styles.memberCount}>
+                            10+
+                          </CustomText>
+
+                        </View>
+                        <CustomText weight="bold" style={{ marginLeft: 20 }}>
+                          +10 Members
+                        </CustomText>
+                      </View>
+
                     </View>
                   </View>
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('FolderLayout', {
+                      image: item.img,
+                      folderName: item.title,
+                      date: item.createdAt,
+                      owner: 'Pritam',
+                      photos: item.photos,
+                    })
+                  }
+                >
+                  <View style={styles.eventCard}>
+                    <Image source={picnic1} style={styles.eventImage} />
+
+                    <View style={styles.eventInfo}>
+                      <CustomText weight="bold" style={styles.eventTitle}>
+                        Drama Event
+                      </CustomText>
+
+                      <View style={styles.eventTimeRow}>
+                        <CalendarDays width={16} height={16} color="#F98935" />
+                        <CustomText weight="medium" style={styles.eventTimeText}>
+                          22:18 – 00:18
+                        </CustomText>
+                      </View>
+
+                      <CustomText
+                        weight="medium"
+                        style={styles.eventDescription}
+                      >
+                        It is a long established fact that.
+                      </CustomText>
+
+                      <View style={styles.memberRow}>
+                        {/* Profile Image */}
+                        <View style={styles.memberAvatar}>
+                          <Image source={picnic1} style={styles.memberDP} />
+                        </View>
+
+                        {/* Overlapping Count Badge */}
+                        <View style={styles.memberBadge}>
+                          <CustomText weight="bold" style={styles.memberCount}>
+                            10+
+                          </CustomText>
+
+                        </View>
+                        <CustomText weight="bold" style={{ marginLeft: 20 }}>
+                          +10 Members
+                        </CustomText>
+                      </View>
+
+                    </View>
+                  </View>
+                </TouchableOpacity>
+
+
+              </View>
             </View>
+
 
 
 
@@ -743,7 +827,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     overflow: 'hidden',
-    width: 210,
+    width: 180,
     marginTop: 16,
     padding: 8,
     // shadows
@@ -793,27 +877,43 @@ const styles = StyleSheet.create({
   memberRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    position: 'relative',
+    height: 28, // ensure space for overlap
+  },
+
+  memberAvatar: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    overflow: 'hidden',
+    zIndex: 2,
+  },
+
+  memberDP: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
 
   memberBadge: {
+    position: 'absolute',
+    left: 16, // controls overlap distance
+    width: 26,
+    height: 26,
+    borderRadius: 13,
     backgroundColor: '#F98935',
-    borderRadius: 50,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 3,
+
   },
 
   memberCount: {
     color: '#fff',
-    fontSize: 12,
+    fontSize: 10,
+    fontWeight: 'bold',
   },
 
-  memberText: {
-    color: '#000',
-    fontSize: 14,
-  },
 
 });
 export default Home;

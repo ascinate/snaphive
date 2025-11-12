@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView, Dimensions, PlatformAnimated, Text, TextInput, TouchableWithoutFeedback, Switch, Keyboard, Animated } from 'react-native';
 import { navigate } from '../navigation/RootNavigation';
-import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff, Plus, Upload, CalendarDays, Shield } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff, Plus, Upload, CalendarDays, Shield, Info } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
@@ -154,7 +154,7 @@ const CreateHive = ({ navigation, route }) => {
                     <CustomText weight='regular ' style={{ color: '#374151' }}>Set up your photo collection in seconds</CustomText>
 
 
-                    <View style={styles.createHiveCard}>
+                    <View style={[styles.createHiveCard, { marginBottom: 120, }]}>
                         <LinearGradient
                             colors={['#E1711C', '#E5B925']}
                             start={{ x: 0, y: 0 }}
@@ -397,10 +397,10 @@ const CreateHive = ({ navigation, route }) => {
 
 
 
-                                <CustomText weight="medium" style={{ marginBottom: 4, color: colors.textGray }}>
+                                <CustomText weight="medium" style={{ marginBottom: 4, color: colors.textGray, marginTop: 16 }}>
                                     Or choose form stock options based on event type
                                 </CustomText>
-                                <View style={[styles.radiobuttonContainer, { borderColor: '#FFBCE1', backgroundColor: '#FDF2F8', }]}>
+                                <View style={[styles.radiobuttonContainer, { borderColor: '#FFBCE1', backgroundColor: '#FDF2F8', marginTop: 20 }]}>
 
                                     <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 12 }}>
                                         <Shield color='#5B0064' />
@@ -433,7 +433,7 @@ const CreateHive = ({ navigation, route }) => {
                                         </View>
                                         <View style={{ flex: 1, marginLeft: 12 }}>
                                             <CustomText weight='bold' style={{ fontSize: 16 }}>Automatic Upload</CustomText>
-                                            <CustomText weight='medium' style={{ color: colors.textGray,fontSize: 12 }}>All members can upload instantly. Best for casual events.</CustomText>
+                                            <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>All members can upload instantly. Best for casual events.</CustomText>
                                         </View>
                                     </TouchableOpacity>
 
@@ -464,7 +464,7 @@ const CreateHive = ({ navigation, route }) => {
                                         </View>
                                         <View style={{ flex: 1, marginLeft: 12 }}>
                                             <CustomText weight='bold' style={{ fontSize: 16 }}>Approval Required</CustomText>
-                                            <CustomText weight='medium' style={{ color: colors.textGray,fontSize: 12 }}>Uploaded media must be reviewed and approved by authorized members. Best for formal events.</CustomText>
+                                            <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>Uploaded media must be reviewed and approved by authorized members. Best for formal events.</CustomText>
                                         </View>
                                     </TouchableOpacity>
 
@@ -502,20 +502,20 @@ const CreateHive = ({ navigation, route }) => {
                                         </View>
                                         <View style={{ flex: 1, marginLeft: 12 }}>
 
-                                            <CustomText weight='medium' style={{ color: colors.textGray,fontSize: 12}}>I understand that I am responsible for all media automatically uploaded to this Hive. Members will be able to upload photos and videos without my approval.
+                                            <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>I understand that I am responsible for all media automatically uploaded to this Hive. Members will be able to upload photos and videos without my approval.
                                             </CustomText>
                                         </View>
                                     </TouchableOpacity>
                                 </View>
 
                                 <View style={[styles.radiobuttonContainer, { borderColor: '#5AAF9A', backgroundColor: '#F0FCF9', }]}>
-                                    
+
                                     <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 12 }}>
                                         <Shield color='#5B0064' />
                                         <CustomText weight='bold' style={{ fontSize: 16, }}>Messaging & Comments</CustomText>
                                     </View>
                                     <View style={styles.privacy}>
-                                        
+
                                         <View style={{ flex: 1, marginLeft: 12 }}>
                                             <CustomText weight='bold' style={{ fontSize: 16 }}>Enable Messaging</CustomText>
                                             <CustomText weight='medium' style={{ color: '#374151' }}>Allow members to post messages and comment on photos</CustomText>
@@ -523,10 +523,18 @@ const CreateHive = ({ navigation, route }) => {
                                     </View>
 
                                     <View style={styles.privacy}>
-                                        
+
                                         <View style={{ flex: 1, marginLeft: 12 }}>
                                             <CustomText weight='bold' style={{ fontSize: 16 }}>Admin Message Control</CustomText>
                                             <CustomText weight='medium' style={{ color: '#374151' }}>Allow admin to remove messages posted by members</CustomText>
+                                        </View>
+                                    </View>
+
+                                    <View style={[styles.privacy, { backgroundColor: 'transparent', borderColor: '#5AAF9A', }]}>
+                                        <Info color='#5AAF9A' />
+                                        <View style={{ flex: 1, marginLeft: 12 }}>
+
+                                            <CustomText weight='medium' style={{ color: '#5AAF9A' }}>Members will be able to react with emojis and post comments on photos and in the general chat.</CustomText>
                                         </View>
                                     </View>
 
@@ -536,6 +544,13 @@ const CreateHive = ({ navigation, route }) => {
 
 
 
+                                <View style={{}}>
+                                    <ThemeButton
+                                        text="Create Hive"
+                                        onPress={handleCreateHive}
+                                        style={{ width: "100%" }}
+                                    />
+                                </View>
 
 
                             </View>
@@ -611,13 +626,6 @@ const CreateHive = ({ navigation, route }) => {
 
 
 
-                    <View style={{ paddingBottom: 100 }}>
-                        <ThemeButton
-                            text="Create Hive"
-                            onPress={handleCreateHive}
-                            style={{ width: "100%" }}
-                        />
-                    </View>
                 </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider>

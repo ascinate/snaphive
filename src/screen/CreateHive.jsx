@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView, Dimensions, PlatformAnimated, Text, TextInput, TouchableWithoutFeedback, Switch, Keyboard, Animated } from 'react-native';
 import { navigate } from '../navigation/RootNavigation';
-import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff, Plus, Upload } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
 import { launchImageLibrary } from 'react-native-image-picker';
-
+import { Dropdown } from 'react-native-element-dropdown';
 // components
 import TopNav from '../components/TopNavbar';
 import CustomText from '../components/CustomText';
@@ -32,6 +32,15 @@ const CreateHive = ({ navigation, route }) => {
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
+
+
+    const data = [
+        { label: 'Invite Only', value: '1' },
+        { label: 'Item 2', value: '2' },
+        { label: 'Item 3', value: '3' },
+        { label: 'Item 4', value: '4' },
+
+    ];
     const handleCreateHive = () => {
         if (!hiveName.trim()) {
             alert('Please enter a hive name');
@@ -95,226 +104,387 @@ const CreateHive = ({ navigation, route }) => {
                     style={styles.container}
                     showsVerticalScrollIndicator={false}
                 >
-                 <View> 
-                     <CustomText weight="bold" style={styles.snapText}>
-                         Create New Hive
-                     </CustomText>
-                 </View>
-                    <CustomText weight='regular ' style={{ color: '#374151' }}>Start sharing memories with your group</CustomText>
-                    <CustomText weight='medium' style={{ marginTop: 18, marginBottom: 4, color: '#374151' }}>Cover Image</CustomText>
 
-                    <TouchableWithoutFeedback onPress={() => {
-                        const options = {
-                            mediaType: "photo",
-                            quality: 1,
-                        };
 
-                        launchImageLibrary(options, (response) => {
-                            if (response.didCancel) {
-                                console.log("User cancelled image picker");
-                            } else if (response.errorCode) {
-                                console.log("ImagePicker Error: ", response.errorMessage);
-                            } else if (response.assets && response.assets.length > 0) {
-                                const selectedImage = response.assets[0];
-                                console.log("Selected image:", selectedImage.uri);
-                                setUploadedImage(selectedImage.uri);
-                            }
-                        });
-                    }}>
-                        <View style={styles.uploadContainer}>
-                            {uploadedImage ? (
-                                <View style={{ width: '100%', height: '100%', borderRadius: 8, overflow: 'hidden' }}>
-                                    <Animated.Image
-                                        source={{ uri: uploadedImage }}
-                                        style={{ width: '100%', height: '100%' }}
-                                        resizeMode="cover"
-                                    />
-                                </View>
-                            ) : (
-                                <>
-                                    <Image color='#feaa00' width={48} height={48} />
-                                    <CustomText weight='mideum' style={{ marginTop: 8 }}>Tap to upload cover</CustomText>
-                                    <CustomText weight='mideum' style={{ marginTop: 4, color: '#67696b' }}>JPG, PNG up to 10MB</CustomText>
-                                </>
-                            )}
+
+
+
+
+
+
+                    <View style={{ alignItems: 'flex-start', marginTop: 12 }}>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                alignSelf: 'flex-start', // ensures the bubble itself stays left
+                                gap: 8,
+                                backgroundColor: 'rgba(255, 219, 186, 0.5)',
+                                borderRadius: 25,
+                                paddingHorizontal: 16,
+                                paddingVertical: 6,
+                            }}
+                        >
+                            <Sparkles color="#FFAD60" size={14} />
+                            <CustomText weight="medium" style={styles.importHeading}>
+                                Create a new
+                            </CustomText>
+                            <CustomText weight="bold" style={styles.importHeading}>
+                                Hive
+                            </CustomText>
                         </View>
-                    </TouchableWithoutFeedback>
-
-                    <View style={{ marginBottom: 16 }}>
-                        <CustomText weight='medium' style={{ marginBottom: 4, color: '#374151' }}>Hive Name *</CustomText>
-                        <TextInput
-                            placeholder='Summer Vacation 2024'
-                            style={styles.inputType}
-                            keyboardType="default"
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            value={hiveName}
-                            onChangeText={setHiveName}
-                            onSubmitEditing={() => Keyboard.dismiss()}
-                        />
                     </View>
 
-                    <View style={{ marginBottom: 16 }}>
-                        <CustomText weight="medium" style={{ marginBottom: 4, color: '#374151' }}>
-                            Description
+
+
+
+
+
+
+
+
+
+
+                    <View>
+                        <CustomText weight="bold" style={styles.snapText}>
+                            Start Sharing Memories
                         </CustomText>
-                        <TextInput
-                            placeholder="Share details about your hive..."
-                            style={[styles.inputType, { textAlignVertical: 'top', height: 100 }]}
-                            multiline={true}
-                            numberOfLines={4}
-                            value={hiveDescription}
-                            onChangeText={setHiveDescription}
-                            onSubmitEditing={() => Keyboard.dismiss()}
-                        />
                     </View>
+                    <CustomText weight='regular ' style={{ color: '#374151' }}>Set up your photo collection in seconds</CustomText>
 
-                    <View style={{ marginBottom: 0, }}>
-                        <CustomText weight="medium" style={{ marginBottom: 4, color: '#374151' }}>
-                            Privacy Mode
-                        </CustomText>
-                        <View style={styles.privacy}>
-                            <View >
-                                <View style={{ width: 35, height: 35, backgroundColor: '#FFF1DF', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
-                                    <LockOpen color='#feaa00' />
+
+                    <View style={styles.createHiveCard}>
+                        <LinearGradient
+                            colors={['#E1711C', '#E5B925']}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1.6, y: 0 }}
+                            style={styles.continueBtn}
+                        >
+                            <View style={styles.touchable}>
+                                <View style={styles.content}>
+
+                                    <CustomText weight="Bold" style={styles.continueTxt}>
+                                        Hive Details
+                                    </CustomText>
+                                    <View style={styles.icon}>dsds</View>
                                 </View>
                             </View>
-                            <View style={{ flex: 1, marginLeft: 12 }}>
-                                <CustomText weight='bold' style={{ fontSize: 16 }}>Automatic Upload</CustomText>
-                                <CustomText weight='medium' style={{ color: '#374151' }}>All members can upload instantly. Best for casual events.</CustomText>
-                            </View>
-                        </View>
-                        <View style={styles.privacy}>
-                            <View >
-                                <View style={{ width: 35, height: 35, backgroundColor: '#FFF1DF', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
-                                    <Lock color='#feaa00' />
-                                </View>
-                            </View>
-                            <View style={{ flex: 1, marginLeft: 12 }}>
-                                <CustomText weight='bold' style={{ fontSize: 16 }}>Approval Required</CustomText>
-                                <CustomText weight='medium' style={{ color: '#374151' }}>Media must be reviewed by authorized members. Best for formal events.</CustomText>
-                            </View>
-                        </View>
+                        </LinearGradient>
 
 
-                        <View style={styles.privacyContainer}>
-                            <View style={{}}>
-                                <View style={{ flexDirection: 'row', marginLeft: 12, justifyContent: 'space-between' }}>
-                                    <CustomText weight='bold' style={{ fontSize: 16 }}>Temporary Event Hive</CustomText>
 
-                                    {/*this is toggle when swtich on  */}
-                                    <Switch
-                                        trackColor={{ false: '#767577', true: '#81b0ff' }}
-                                        thumbColor={isEnabled ? '#4b5cf5ff' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={toggleSwitch}
-                                        value={isEnabled}
-                                    />
-                                </View>
-                                <CustomText weight='medium' style={{ color: '#374151', paddingLeft: 14 }}>Set dates for this event</CustomText>
+                        <View style={{ paddingHorizontal: 20, }}>
+
+
+
+                            <View style={{ marginBottom: 16, marginTop: 16 }}>
+                                <CustomText weight='bold' style={{ marginBottom: 4, color: '#374151' }}>Hive Name *</CustomText>
+                                <TextInput
+                                    placeholder='Summer Wedding, Family Vacation'
+                                    style={styles.inputType}
+                                    keyboardType="default"
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    value={hiveName}
+                                    onChangeText={setHiveName}
+                                    onSubmitEditing={() => Keyboard.dismiss()}
+                                />
                             </View>
 
-                            {/* that tome only show this View */}
-                            {isEnabled && (
-                                <View style={{ paddingInline: 6 }}>
-                                    {/* Event Date */}
+                            <View style={{ marginBottom: 16 }}>
+                                <CustomText weight="bold" style={{ marginBottom: 4, color: '#374151' }}>
+                                    Description
+                                </CustomText>
+                                <TextInput
+                                    placeholder="Share details about your hive..."
+                                    style={[styles.inputType, { textAlignVertical: 'top', height: 100 }]}
+                                    multiline={true}
+                                    numberOfLines={4}
+                                    value={hiveDescription}
+                                    onChangeText={setHiveDescription}
+                                    onSubmitEditing={() => Keyboard.dismiss()}
+                                />
+                            </View>
 
-                                    <View style={{ marginTop: 15 }}>
-                                        <View style={{ backgroundColor: '#ccc', height: 0.4, width: '100%', }} />
+                            <CustomText weight='bold' style={{ marginBottom: 4, color: '#374151' }}>Cover Image</CustomText>
 
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5, marginTop: 15 }}>
-                                            <Calendar width={16} />
-                                            <CustomText weight="semiBold" color="#374151">Event Date</CustomText>
+                            <TouchableWithoutFeedback onPress={() => {
+                                const options = {
+                                    mediaType: "photo",
+                                    quality: 1,
+                                };
 
-
-                                        </View>
-                                        <TextInput
-                                            style={styles.input}
-                                            placeholder="DD-MM-YY"
-                                            value={date}
-                                            onChangeText={(text) => {
-                                                let formatted = text.replace(/[^0-9]/g, '');
-                                                if (formatted.length > 2 && formatted.length <= 4)
-                                                    formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
-                                                else if (formatted.length > 4)
-                                                    formatted = `${formatted.slice(0, 2)}-${formatted.slice(2, 4)}-${formatted.slice(4, 6)}`;
-                                                setDate(formatted);
-                                            }}
-                                            keyboardType="numeric"
-                                            maxLength={8}
-                                        />
-                                    </View>
-
-                                    {/* Start Time */}
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                                        <View style={{ marginTop: 20, width: '50%' }}>
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
-                                                <Timer width={16} />
-                                                <CustomText weight="semiBold" color="#374151">Start Time</CustomText>
-                                            </View>
-                                            <TextInput
-                                                style={styles.input}
-                                                placeholder="HH:MM"
-                                                value={startDate}
-                                                onChangeText={(text) => {
-                                                    let formatted = text.replace(/[^0-9]/g, '');
-                                                    if (formatted.length > 2)
-                                                        formatted = `${formatted.slice(0, 2)}:${formatted.slice(2, 4)}`;
-                                                    setStartDate(formatted);
-                                                }}
-                                                keyboardType="numeric"
-                                                maxLength={5}
+                                launchImageLibrary(options, (response) => {
+                                    if (response.didCancel) {
+                                        console.log("User cancelled image picker");
+                                    } else if (response.errorCode) {
+                                        console.log("ImagePicker Error: ", response.errorMessage);
+                                    } else if (response.assets && response.assets.length > 0) {
+                                        const selectedImage = response.assets[0];
+                                        console.log("Selected image:", selectedImage.uri);
+                                        setUploadedImage(selectedImage.uri);
+                                    }
+                                });
+                            }}>
+                                <View style={styles.uploadContainer}>
+                                    {uploadedImage ? (
+                                        <View style={{ width: '100%', height: '100%', borderRadius: 8, overflow: 'hidden' }}>
+                                            <Animated.Image
+                                                source={{ uri: uploadedImage }}
+                                                style={{ width: '100%', height: '100%' }}
+                                                resizeMode="cover"
                                             />
                                         </View>
+                                    ) : (
+                                        <>
+                                            <Upload color='#9B9B9B' width={28} height={28} />
 
-                                        {/* End Time */}
-                                        <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
-                                                <TimerOff width={16} />
-                                                <CustomText weight="semiBold" color="#374151">End Time</CustomText>
-                                            </View>
-                                            <TextInput
-                                                style={styles.input}
-                                                placeholder="HH:MM"
-                                                value={endTime}
-                                                onChangeText={(text) => {
-                                                    let formatted = text.replace(/[^0-9]/g, '');
-                                                    if (formatted.length > 2)
-                                                        formatted = `${formatted.slice(0, 2)}:${formatted.slice(2, 4)}`;
-                                                    setEndTime(formatted);
-                                                }}
-                                                keyboardType="numeric"
-                                                maxLength={5}
-                                            />
+                                            <CustomText weight='mideum' style={{ marginTop: 4, color: '#67696b' }}>Upload your own image</CustomText>
+                                        </>
+                                    )}
+                                </View>
+                            </TouchableWithoutFeedback>
+
+
+                            <View style={{ marginBottom: 16 }}>
+                                <CustomText weight="bold" style={{ marginBottom: 4, color: '#374151' }}>
+                                    Privacy Mode
+                                </CustomText>
+                                <Dropdown
+                                    style={[styles.inputType]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    data={data}
+                                    search
+                                    maxHeight={300}
+                                    labelField="label"
+                                    valueField="value"
+                                    searchPlaceholder="Search..."
+                                    placeholder="Hive Type"
+                                />
+                            </View>
+
+
+
+
+
+                            <View style={{ marginBottom: 0, }}>
+
+                                <CustomText weight="medium" style={{ marginBottom: 4, color: '#374151' }}>
+                                    Privacy Mode
+                                </CustomText>
+                                <View style={styles.privacy}>
+                                    <View >
+                                        <View style={{ width: 35, height: 35, backgroundColor: '#FFF1DF', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
+                                            <LockOpen color='#feaa00' />
                                         </View>
                                     </View>
-
-                                    {/* Expiry Date */}
-                                    <View style={{ marginTop: 20 }}>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
-                                            <CalendarOff width={16} />
-                                            <CustomText weight="semiBold" color="#374151">Expiry Date</CustomText>
-                                        </View>
-                                        <TextInput
-                                            style={styles.input}
-                                            placeholder="DD-MM-YY"
-                                            value={endDate}
-                                            onChangeText={(text) => {
-                                                let formatted = text.replace(/[^0-9]/g, '');
-                                                if (formatted.length > 2 && formatted.length <= 4)
-                                                    formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
-                                                else if (formatted.length > 4)
-                                                    formatted = `${formatted.slice(0, 2)}-${formatted.slice(2, 4)}-${formatted.slice(4, 6)}`;
-                                                setEndDate(formatted);
-                                            }}
-                                            keyboardType="numeric"
-                                            maxLength={8}
-                                        />
+                                    <View style={{ flex: 1, marginLeft: 12 }}>
+                                        <CustomText weight='bold' style={{ fontSize: 16 }}>Automatic Upload</CustomText>
+                                        <CustomText weight='medium' style={{ color: '#374151' }}>All members can upload instantly. Best for casual events.</CustomText>
                                     </View>
                                 </View>
-                            )}
+                                <View style={styles.privacy}>
+                                    <View >
+                                        <View style={{ width: 35, height: 35, backgroundColor: '#FFF1DF', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
+                                            <Lock color='#feaa00' />
+                                        </View>
+                                    </View>
+                                    <View style={{ flex: 1, marginLeft: 12 }}>
+                                        <CustomText weight='bold' style={{ fontSize: 16 }}>Approval Required</CustomText>
+                                        <CustomText weight='medium' style={{ color: '#374151' }}>Media must be reviewed by authorized members. Best for formal events.</CustomText>
+                                    </View>
+                                </View>
+
+
+                                <View style={styles.privacyContainer}>
+                                    <View style={{}}>
+                                        <View style={{ flexDirection: 'row', marginLeft: 12, justifyContent: 'space-between' }}>
+                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Temporary Event Hive</CustomText>
+
+                                            {/*this is toggle when swtich on  */}
+                                            <Switch
+                                                trackColor={{ false: '#767577', true: '#81b0ff' }}
+                                                thumbColor={isEnabled ? '#4b5cf5ff' : '#f4f3f4'}
+                                                ios_backgroundColor="#3e3e3e"
+                                                onValueChange={toggleSwitch}
+                                                value={isEnabled}
+                                            />
+                                        </View>
+                                        <CustomText weight='medium' style={{ color: '#374151', paddingLeft: 14 }}>Set dates for this event</CustomText>
+                                    </View>
+
+                                    {/* that tome only show this View */}
+                                    {isEnabled && (
+                                        <View style={{ paddingInline: 6 }}>
+                                            {/* Event Date */}
+
+                                            <View style={{ marginTop: 15 }}>
+                                                <View style={{ backgroundColor: '#ccc', height: 0.4, width: '100%', }} />
+
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5, marginTop: 15 }}>
+                                                    <Calendar width={16} />
+                                                    <CustomText weight="semiBold" color="#374151">Event Date</CustomText>
+
+
+                                                </View>
+                                                <TextInput
+                                                    style={styles.input}
+                                                    placeholder="DD-MM-YY"
+                                                    value={date}
+                                                    onChangeText={(text) => {
+                                                        let formatted = text.replace(/[^0-9]/g, '');
+                                                        if (formatted.length > 2 && formatted.length <= 4)
+                                                            formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
+                                                        else if (formatted.length > 4)
+                                                            formatted = `${formatted.slice(0, 2)}-${formatted.slice(2, 4)}-${formatted.slice(4, 6)}`;
+                                                        setDate(formatted);
+                                                    }}
+                                                    keyboardType="numeric"
+                                                    maxLength={8}
+                                                />
+                                            </View>
+
+                                            {/* Start Time */}
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                                                <View style={{ marginTop: 20, width: '50%' }}>
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                                                        <Timer width={16} />
+                                                        <CustomText weight="semiBold" color="#374151">Start Time</CustomText>
+                                                    </View>
+                                                    <TextInput
+                                                        style={styles.input}
+                                                        placeholder="HH:MM"
+                                                        value={startDate}
+                                                        onChangeText={(text) => {
+                                                            let formatted = text.replace(/[^0-9]/g, '');
+                                                            if (formatted.length > 2)
+                                                                formatted = `${formatted.slice(0, 2)}:${formatted.slice(2, 4)}`;
+                                                            setStartDate(formatted);
+                                                        }}
+                                                        keyboardType="numeric"
+                                                        maxLength={5}
+                                                    />
+                                                </View>
+
+                                                {/* End Time */}
+                                                <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                                                        <TimerOff width={16} />
+                                                        <CustomText weight="semiBold" color="#374151">End Time</CustomText>
+                                                    </View>
+                                                    <TextInput
+                                                        style={styles.input}
+                                                        placeholder="HH:MM"
+                                                        value={endTime}
+                                                        onChangeText={(text) => {
+                                                            let formatted = text.replace(/[^0-9]/g, '');
+                                                            if (formatted.length > 2)
+                                                                formatted = `${formatted.slice(0, 2)}:${formatted.slice(2, 4)}`;
+                                                            setEndTime(formatted);
+                                                        }}
+                                                        keyboardType="numeric"
+                                                        maxLength={5}
+                                                    />
+                                                </View>
+                                            </View>
+
+                                            {/* Expiry Date */}
+                                            <View style={{ marginTop: 20 }}>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                                                    <CalendarOff width={16} />
+                                                    <CustomText weight="semiBold" color="#374151">Expiry Date</CustomText>
+                                                </View>
+                                                <TextInput
+                                                    style={styles.input}
+                                                    placeholder="DD-MM-YY"
+                                                    value={endDate}
+                                                    onChangeText={(text) => {
+                                                        let formatted = text.replace(/[^0-9]/g, '');
+                                                        if (formatted.length > 2 && formatted.length <= 4)
+                                                            formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
+                                                        else if (formatted.length > 4)
+                                                            formatted = `${formatted.slice(0, 2)}-${formatted.slice(2, 4)}-${formatted.slice(4, 6)}`;
+                                                        setEndDate(formatted);
+                                                    }}
+                                                    keyboardType="numeric"
+                                                    maxLength={8}
+                                                />
+                                            </View>
+                                        </View>
+                                    )}
+                                </View>
+                            </View>
+
                         </View>
                     </View>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                     <View style={{ paddingBottom: 100 }}>
                         <ThemeButton
@@ -338,12 +508,12 @@ const styles = StyleSheet.create({
     snapText: {
         fontSize: 30,
         marginTop: 10,
-color: colors.primary,
+        color: '#000',
     },
     uploadContainer: {
         width: '100%',
-        height: 188,
-        borderWidth: 2,
+        height: 100,
+        borderWidth: 1.8,
         borderColor: '#E5E7EB',
         borderStyle: 'dashed',
         borderRadius: 8,
@@ -353,9 +523,10 @@ color: colors.primary,
     },
     inputType: {
         borderWidth: 1,
-        borderColor: '#E5E7EB',
-        borderRadius: 16,
-        paddingLeft: 10,
+        borderColor: '#F6F6F6',
+        backgroundColor: '#F6F6F6',
+        borderRadius: 10,
+        paddingLeft: 18,
         paddingVertical: 16,
         fontSize: 16,
     },
@@ -364,22 +535,14 @@ color: colors.primary,
         backgroundColor: '#ffffff',
         borderRadius: 12,
         padding: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 6,
-        elevation: 3,
+
     },
     privacy: {
         flexDirection: 'row',
         backgroundColor: '#ffffff',
         borderRadius: 12,
         padding: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 6,
-        elevation: 3,
+
         marginTop: 8,
         marginBottom: 10,
     },
@@ -391,6 +554,83 @@ color: colors.primary,
         fontSize: 16,
         width: '100%'
     },
+
+    importHeading: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#E3761B',
+        marginBottom: 4,
+        lineHeight: 20,
+    },
+
+
+
+
+
+
+    continueBtn: {
+        width: '100%',
+
+        overflow: 'hidden',
+    },
+    touchable: {
+        paddingVertical: 21,
+        paddingHorizontal: 20,
+
+    },
+    content: {
+        flexDirection: 'row',
+
+        gap: 8,
+    },
+
+    continueTxt: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#ffffff',
+    },
+
+
+
+
+
+
+
+    createHiveCard: {
+        backgroundColor: '#fff',
+        borderRadius: 16,
+        overflow: 'hidden',
+        marginTop: 20,
+
+        paddingBottom: 16,
+
+
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 6,
+        elevation: 6,
+    },
+
+    dropdown: {
+        borderWidth: 1,
+        borderColor: '#F6F6F6',
+        backgroundColor: '#F6F6F6',
+        borderRadius: 10,
+        paddingHorizontal: 18,
+        paddingVertical: 16,
+        fontSize: 16,
+        color: '#800b0bff',
+    },
+
+    placeholderStyle: {
+        color: '#999',
+        fontSize: 16,
+    },
+
+
+
+
 });
 
 export default CreateHive;

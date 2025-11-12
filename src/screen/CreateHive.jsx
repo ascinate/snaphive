@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView, Dimensions, PlatformAnimated, Text, TextInput, TouchableWithoutFeedback, Switch, Keyboard, Animated } from 'react-native';
 import { navigate } from '../navigation/RootNavigation';
-import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff, Plus, Upload } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff, Plus, Upload, CalendarDays, Shield } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
@@ -30,8 +30,9 @@ const CreateHive = ({ navigation, route }) => {
     const [hiveDescription, setHiveDescription] = useState("");
     const { addEvent } = useContext(EventContext);
     const [isEnabled, setIsEnabled] = useState(false);
+    const [selected, setSelected] = useState('automatic');
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
+    const [uploadType, setUploadType] = useState('automatic');
 
 
     const data = [
@@ -269,49 +270,27 @@ const CreateHive = ({ navigation, route }) => {
 
                             <View style={{ marginBottom: 0, }}>
 
-                                <CustomText weight="medium" style={{ marginBottom: 4, color: '#374151' }}>
-                                    Privacy Mode
-                                </CustomText>
-                                <View style={styles.privacy}>
-                                    <View >
-                                        <View style={{ width: 35, height: 35, backgroundColor: '#FFF1DF', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
-                                            <LockOpen color='#feaa00' />
-                                        </View>
-                                    </View>
-                                    <View style={{ flex: 1, marginLeft: 12 }}>
-                                        <CustomText weight='bold' style={{ fontSize: 16 }}>Automatic Upload</CustomText>
-                                        <CustomText weight='medium' style={{ color: '#374151' }}>All members can upload instantly. Best for casual events.</CustomText>
-                                    </View>
-                                </View>
-                                <View style={styles.privacy}>
-                                    <View >
-                                        <View style={{ width: 35, height: 35, backgroundColor: '#FFF1DF', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
-                                            <Lock color='#feaa00' />
-                                        </View>
-                                    </View>
-                                    <View style={{ flex: 1, marginLeft: 12 }}>
-                                        <CustomText weight='bold' style={{ fontSize: 16 }}>Approval Required</CustomText>
-                                        <CustomText weight='medium' style={{ color: '#374151' }}>Media must be reviewed by authorized members. Best for formal events.</CustomText>
-                                    </View>
-                                </View>
-
 
                                 <View style={styles.privacyContainer}>
-                                    <View style={{}}>
-                                        <View style={{ flexDirection: 'row', marginLeft: 12, justifyContent: 'space-between' }}>
-                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Temporary Event Hive</CustomText>
 
-                                            {/*this is toggle when swtich on  */}
-                                            <Switch
-                                                trackColor={{ false: '#767577', true: '#81b0ff' }}
-                                                thumbColor={isEnabled ? '#4b5cf5ff' : '#f4f3f4'}
-                                                ios_backgroundColor="#3e3e3e"
-                                                onValueChange={toggleSwitch}
-                                                value={isEnabled}
-                                            />
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                                            <CalendarDays />
+                                            <View style={{ marginLeft: 12 }}>
+                                                <CustomText weight='bold' style={{ fontSize: 16 }}>Temporary Event Hive</CustomText>
+                                                <CustomText weight='regular' style={{ color: '#374151', fontSize: 12 }}>Set dates for this event</CustomText>
+                                            </View>
                                         </View>
-                                        <CustomText weight='medium' style={{ color: '#374151', paddingLeft: 14 }}>Set dates for this event</CustomText>
+                                        <Switch
+                                            trackColor={{ false: '#767577', true: '#81b0ff' }}
+                                            thumbColor={isEnabled ? '#4b5cf5ff' : '#f4f3f4'}
+                                            ios_backgroundColor="#3e3e3e"
+                                            onValueChange={toggleSwitch}
+                                            value={isEnabled}
+                                        />
                                     </View>
+
+
 
                                     {/* that tome only show this View */}
                                     {isEnabled && (
@@ -413,6 +392,143 @@ const CreateHive = ({ navigation, route }) => {
                                         </View>
                                     )}
                                 </View>
+
+
+
+
+
+                                <CustomText weight="medium" style={{ marginBottom: 4, color: colors.textGray }}>
+                                    Or choose form stock options based on event type
+                                </CustomText>
+                                <View style={[styles.radiobuttonContainer, { borderColor: '#FFBCE1', backgroundColor: '#FDF2F8', }]}>
+
+                                    <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 12 }}>
+                                        <Shield color='#5B0064' />
+                                        <CustomText weight='bold' style={{ fontSize: 16, }}>Media Upload Settings</CustomText>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={styles.privacy}
+                                        onPress={() => setUploadType('automatic')}
+                                        activeOpacity={0.7}
+                                    >
+                                        <View >
+                                            <View style={{
+                                                height: 20,
+                                                width: 20,
+                                                borderRadius: 10,
+                                                borderWidth: 2,
+                                                borderColor: uploadType === 'automatic' ? '#EC4899' : '#D1D5DB',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}>
+                                                {uploadType === 'automatic' && (
+                                                    <View style={{
+                                                        height: 10,
+                                                        width: 10,
+                                                        borderRadius: 5,
+                                                        backgroundColor: '#EC4899',
+                                                    }} />
+                                                )}
+                                            </View>
+                                        </View>
+                                        <View style={{ flex: 1, marginLeft: 12 }}>
+                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Automatic Upload</CustomText>
+                                            <CustomText weight='medium' style={{ color: colors.textGray,fontSize: 12 }}>All members can upload instantly. Best for casual events.</CustomText>
+                                        </View>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={styles.privacy}
+                                        onPress={() => setUploadType('approval')}
+                                        activeOpacity={0.7}
+                                    >
+                                        <View >
+                                            <View style={{
+                                                height: 20,
+                                                width: 20,
+                                                borderRadius: 10,
+                                                borderWidth: 2,
+                                                borderColor: uploadType === 'approval' ? '#EC4899' : '#D1D5DB',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}>
+                                                {uploadType === 'approval' && (
+                                                    <View style={{
+                                                        height: 10,
+                                                        width: 10,
+                                                        borderRadius: 5,
+                                                        backgroundColor: '#EC4899',
+                                                    }} />
+                                                )}
+                                            </View>
+                                        </View>
+                                        <View style={{ flex: 1, marginLeft: 12 }}>
+                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Approval Required</CustomText>
+                                            <CustomText weight='medium' style={{ color: colors.textGray,fontSize: 12 }}>Media must be reviewed by authorized members. Best for formal events.</CustomText>
+                                        </View>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={{
+                                            flexDirection: 'row',
+                                            backgroundColor: '#FFF0CF',
+                                            borderRadius: 12,
+                                            padding: 16,
+                                            marginTop: 8,
+                                            marginBottom: 10,
+                                        }}
+                                        onPress={() => setUploadType('acknowledge')}
+                                        activeOpacity={0.7}
+                                    >
+                                        <View >
+                                            <View style={{
+                                                height: 20,
+                                                width: 20,
+                                                borderRadius: 10,
+                                                borderWidth: 2,
+                                                borderColor: uploadType === 'acknowledge' ? '#EC4899' : '#D1D5DB',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}>
+                                                {uploadType === 'acknowledge' && (
+                                                    <View style={{
+                                                        height: 10,
+                                                        width: 10,
+                                                        borderRadius: 5,
+                                                        backgroundColor: '#EC4899',
+                                                    }} />
+                                                )}
+                                            </View>
+                                        </View>
+                                        <View style={{ flex: 1, marginLeft: 12 }}>
+
+                                            <CustomText weight='medium' style={{ color: colors.textGray,fontSize: 12}}>I understand that I am responsible for all media automatically uploaded to this Hive. Members will be able to upload photos and videos without my approval.
+                                            </CustomText>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+
+                                <View style={[styles.radiobuttonContainer, { borderColor: '#5AAF9A', backgroundColor: '#F0FCF9', }]}>
+                                    <View style={styles.privacy}>
+                                        <View >
+                                            <View style={{ width: 35, height: 35, backgroundColor: '#FFF1DF', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
+                                                <Lock color='#feaa00' />
+                                            </View>
+                                        </View>
+                                        <View style={{ flex: 1, marginLeft: 12 }}>
+                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Approval Required</CustomText>
+                                            <CustomText weight='medium' style={{ color: '#374151' }}>Media must be reviewed by authorized members. Best for formal events.</CustomText>
+                                        </View>
+                                    </View>
+
+                                </View>
+
+
+
+
+
+
+
                             </View>
 
                         </View>
@@ -542,7 +658,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         borderRadius: 12,
         padding: 16,
-
+        borderWidth: 1,
+        borderColor: '#D9D9D9',
         marginTop: 8,
         marginBottom: 10,
     },
@@ -628,7 +745,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 
+    radiobuttonContainer: {
+        borderWidth: 1,
 
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        paddingVertical: 15,
+        marginBottom: 16,
+    }
 
 
 });

@@ -62,6 +62,7 @@ const MyHives = ({ navigation, route }) => {
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                     }>
                     {/* Header Section */}
+
                     <View style={styles.headerSection}>
                         <Text style={styles.title}>My Hives</Text>
                         <CustomText style={styles.subtitle}>
@@ -85,40 +86,53 @@ const MyHives = ({ navigation, route }) => {
                                 placeholderTextColor="#9CA3AF"
                             />
                         </View>
-
-
                     </View>
 
-                    {/* Dashboard Cards */}
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            flexWrap: 'wrap',
-                        }}>
-                       <View style={styles.dashCard}>
-  <View>
-    <CustomText weight="bold" style={styles.cardText}>
-      {events.length}
-    </CustomText>
-    <CustomText weight="medium" style={{ color: '#fff' }}>
-      Total Hives
-    </CustomText>
-  </View>
-</View>
+                    {/* Dashboard Cards Section */}
 
-<View style={styles.dashCard}>
-  <View>
-    <CustomText weight="bold" style={styles.cardText}>
-      {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
-    </CustomText>
-    <CustomText weight="medium" style={{ color: '#fff' }}>
-      Total Photos
-    </CustomText>
-  </View>
-</View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <LinearGradient
+                        colors={['#E1711C', '#E5B925']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1.6, y: 0 }}
+                        style={[styles.dashCard]}
+                    >
+                        <View >
+                            <View>
+                                <CustomText weight="bold" style={styles.cardText}>
+                                    {events.length}
+                                </CustomText>
+                                <CustomText weight="medium" style={{ color: '#fff' }}>
+                                    Total Hives
+                                </CustomText>
+                            </View>
+                        </View>
+                    </LinearGradient>
 
+                    <LinearGradient
+                        colors={['#E1711C', '#E5B925']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1.6, y: 0 }}
+                        style={[styles.dashCard]}
+                    >
+
+
+                        <View >
+                            <View>
+                                <CustomText weight="bold" style={styles.cardText}>
+                                      {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
+                                </CustomText>
+                                <CustomText weight="medium" style={{ color: '#fff' }}>
+                                   Photos
+                                </CustomText>
+                            </View>
+                        </View>
+                    </LinearGradient>
                     </View>
+
+
+
+
 
                     {/* Example Event Row */}
 
@@ -162,7 +176,7 @@ const MyHives = ({ navigation, route }) => {
                                                     <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
                                                         <Clock5 width={14} height={14} color="#ea580c" />
                                                         <CustomText style={{ color: '#ea580c' }}>
-                                                           {item.expiryDate}
+                                                            {item.expiryDate}
                                                         </CustomText>
                                                     </View>
                                                 )}
@@ -219,36 +233,7 @@ const MyHives = ({ navigation, route }) => {
                         )}
                     </View>
 
-                    {/*                     
-                    <TouchableOpacity
-                        style={styles.eventRow}
-                        onPress={() => navigation.navigate('FolderLayout')}>
-                        <Image source={picnic1} style={styles.eventImg} />
-                        <View style={{ flex: 1, marginLeft: width * 0.03 }}>
-                            <CustomText weight="bold" style={styles.eventTitle}>
-                                Rajashthan
-                            </CustomText>
-                            <CustomText weight="medium" style={styles.mtop}>
-                                I travel Rajashthan
-                            </CustomText>
-                            <View style={{ flexDirection: 'row', gap: 20, marginTop: 6 }}>
-                                <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                                    <Users width={14} height={14} color='#6B7280' />
-                                    <CustomText style={{ color: '#6B7280' }}>1</CustomText>
-                                </View>
 
-                                <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', }}>
-                                    <FileImage width={14} height={14} color='#6B7280' />
-                                    <CustomText style={{ color: '#6B7280' }}>2</CustomText>
-                                </View>
-
-                                <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', }}>
-                                    <Clock5 width={14} height={14} color='#ea580c' />
-                                    <CustomText style={{ color: '#ea580c' }}>3</CustomText>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity> */}
                 </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider>
@@ -334,7 +319,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '48%',
         padding: width * 0.045,
-        backgroundColor: colors.primary,
         borderRadius: 12,
         alignItems: 'center',
         shadowColor: '#000',

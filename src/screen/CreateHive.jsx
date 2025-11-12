@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView, Dimensions, PlatformAnimated, Text, TextInput, TouchableWithoutFeedback, Switch, Keyboard, Animated } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Animated, Text, TextInput, TouchableWithoutFeedback, Switch, Keyboard } from 'react-native';
 import { navigate } from '../navigation/RootNavigation';
-import { Sparkles, Users, FileImage, Clock5, RotateCwSquar, Image, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff, Plus, Upload, CalendarDays, Shield, Info } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, RotateCwSquare, Image, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff, Plus, Upload, CalendarDays, Shield, Info } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
@@ -11,7 +11,6 @@ import { Dropdown } from 'react-native-element-dropdown';
 import TopNav from '../components/TopNavbar';
 import CustomText from '../components/CustomText';
 import ThemeButton from '../components/ThemeButton';
-import MaskedView from '@react-native-masked-view/masked-view';
 import { colors } from '../Theme/theme';
 
 // assets
@@ -33,15 +32,16 @@ const CreateHive = ({ navigation, route }) => {
     const [selected, setSelected] = useState('automatic');
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const [uploadType, setUploadType] = useState('automatic');
+    const [hiveType, setHiveType] = useState(null); // Add state for dropdown
 
 
     const data = [
         { label: 'Invite Only', value: '1' },
-        { label: 'Item 2', value: '2' },
-        { label: 'Item 3', value: '3' },
-        { label: 'Item 4', value: '4' },
-
+        { label: 'Public', value: '2' },
+        { label: 'Private', value: '3' },
+        { label: 'Friends Only', value: '4' },
     ];
+
     const handleCreateHive = () => {
         if (!hiveName.trim()) {
             alert('Please enter a hive name');
@@ -72,6 +72,7 @@ const CreateHive = ({ navigation, route }) => {
             startTime: startDate,
             endTime: endTime,
             expiryDate: endDate,
+            hiveType: hiveType,
         };
 
         addEvent(newEvent);
@@ -84,6 +85,7 @@ const CreateHive = ({ navigation, route }) => {
         setEndTime('');
         setEndDate('');
         setIsEnabled(false);
+        setHiveType(null);
         navigation.goBack() // redirect to Home
     };
 
@@ -105,14 +107,6 @@ const CreateHive = ({ navigation, route }) => {
                     style={styles.container}
                     showsVerticalScrollIndicator={false}
                 >
-
-
-
-
-
-
-
-
                     <View style={{ alignItems: 'flex-start', marginTop: 12 }}>
                         <View
                             style={{
@@ -136,23 +130,12 @@ const CreateHive = ({ navigation, route }) => {
                         </View>
                     </View>
 
-
-
-
-
-
-
-
-
-
-
                     <View>
                         <CustomText weight="bold" style={styles.snapText}>
                             Start Sharing Memories
                         </CustomText>
                     </View>
-                    <CustomText weight='regular ' style={{ color: '#374151' }}>Set up your photo collection in seconds</CustomText>
-
+                    <CustomText weight='regular' style={{ color: '#374151' }}>Set up your photo collection in seconds</CustomText>
 
                     <View style={[styles.createHiveCard, { marginBottom: 120, }]}>
                         <LinearGradient
@@ -172,12 +155,7 @@ const CreateHive = ({ navigation, route }) => {
                             </View>
                         </LinearGradient>
 
-
-
                         <View style={{ paddingHorizontal: 20, }}>
-
-
-
                             <View style={{ marginBottom: 16, marginTop: 16 }}>
                                 <CustomText weight='bold' style={{ marginBottom: 4, color: '#374151' }}>Hive Name *</CustomText>
                                 <TextInput
@@ -240,12 +218,11 @@ const CreateHive = ({ navigation, route }) => {
                                         <>
                                             <Upload color='#9B9B9B' width={28} height={28} />
 
-                                            <CustomText weight='mideum' style={{ marginTop: 4, color: '#67696b' }}>Upload your own image</CustomText>
+                                            <CustomText weight='medium' style={{ marginTop: 4, color: '#67696b' }}>Upload your own image</CustomText>
                                         </>
                                     )}
                                 </View>
                             </TouchableWithoutFeedback>
-
 
                             <View style={{ marginBottom: 16 }}>
                                 <CustomText weight="bold" style={{ marginBottom: 4, color: '#374151' }}>
@@ -254,6 +231,7 @@ const CreateHive = ({ navigation, route }) => {
                                 <Dropdown
                                     style={[styles.inputType]}
                                     placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
                                     data={data}
                                     search
                                     maxHeight={300}
@@ -261,18 +239,14 @@ const CreateHive = ({ navigation, route }) => {
                                     valueField="value"
                                     searchPlaceholder="Search..."
                                     placeholder="Hive Type"
+                                    value={hiveType}
+                                    onChange={item => {
+                                        setHiveType(item.value);
+                                    }}
                                 />
                             </View>
-
-
-
-
-
                             <View style={{ marginBottom: 0, }}>
-
-
                                 <View style={styles.privacyContainer}>
-
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                                             <CalendarDays />
@@ -289,10 +263,7 @@ const CreateHive = ({ navigation, route }) => {
                                             value={isEnabled}
                                         />
                                     </View>
-
-
-
-                                    {/* that tome only show this View */}
+                                    {/* that time only show this View */}
                                     {isEnabled && (
                                         <View style={{ paddingInline: 6 }}>
                                             {/* Event Date */}
@@ -393,12 +364,8 @@ const CreateHive = ({ navigation, route }) => {
                                     )}
                                 </View>
 
-
-
-
-
                                 <CustomText weight="medium" style={{ marginBottom: 4, color: colors.textGray, marginTop: 16 }}>
-                                    Or choose form stock options based on event type
+                                    Or choose from stock options based on event type
                                 </CustomText>
                                 <View style={[styles.radiobuttonContainer, { borderColor: '#FFBCE1', backgroundColor: '#FDF2F8', marginTop: 20 }]}>
 
@@ -537,13 +504,7 @@ const CreateHive = ({ navigation, route }) => {
                                             <CustomText weight='medium' style={{ color: '#5AAF9A' }}>Members will be able to react with emojis and post comments on photos and in the general chat.</CustomText>
                                         </View>
                                     </View>
-
                                 </View>
-
-
-
-
-
                                 <View style={{}}>
                                     <ThemeButton
                                         text="Create Hive"
@@ -551,81 +512,9 @@ const CreateHive = ({ navigation, route }) => {
                                         style={{ width: "100%" }}
                                     />
                                 </View>
-
-
                             </View>
-
                         </View>
                     </View>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider>
@@ -696,12 +585,6 @@ const styles = StyleSheet.create({
         marginBottom: 4,
         lineHeight: 20,
     },
-
-
-
-
-
-
     continueBtn: {
         width: '100%',
 
@@ -714,38 +597,25 @@ const styles = StyleSheet.create({
     },
     content: {
         flexDirection: 'row',
-
         gap: 8,
     },
-
     continueTxt: {
         fontSize: 16,
         fontWeight: '600',
         color: '#ffffff',
     },
-
-
-
-
-
-
-
     createHiveCard: {
         backgroundColor: '#fff',
         borderRadius: 16,
         overflow: 'hidden',
         marginTop: 20,
-
         paddingBottom: 16,
-
-
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 6,
         elevation: 6,
     },
-
     dropdown: {
         borderWidth: 1,
         borderColor: '#F6F6F6',
@@ -756,12 +626,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#800b0bff',
     },
-
     placeholderStyle: {
         color: '#999',
         fontSize: 16,
     },
-
+    selectedTextStyle: {
+        color: '#000',
+        fontSize: 16,
+    },
     radiobuttonContainer: {
         borderWidth: 1,
 
@@ -770,8 +642,6 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         marginBottom: 16,
     }
-
-
 });
 
 export default CreateHive;

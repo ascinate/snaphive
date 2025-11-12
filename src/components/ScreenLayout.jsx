@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Back from "../../assets/svg/back.svg";
 
@@ -9,19 +15,18 @@ const ScreenLayout = ({
   folderName,
   date,
   owner,
-  inviteText,
-  onInvitePress,
   children,
   showOverlay = true,
   RightIcon,
+  OverlayContent,
 }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={styles.imageWrapper}>
-        {/* Header Image */}
+        {/* Background Image */}
         <Image source={image} style={styles.folderImage} />
 
-        {/* Top bar with back & dynamic right icon */}
+        {/* Header Bar */}
         <View style={styles.topBar}>
           <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
             <View style={styles.iconButton}>
@@ -35,43 +40,35 @@ const ScreenLayout = ({
             </TouchableWithoutFeedback>
           )}
         </View>
-
-        {/* Bottom overlay */}
-        {showOverlay && (folderName || date || owner || inviteText) && (
+        {showOverlay && (
           <View style={styles.bottomOverlay}>
-            <View>
-              {folderName && <Text style={styles.folderHeading}>{folderName}</Text>}
-              {date && <Text style={styles.folderHeadingDate}>{date}</Text>}
-              {owner && (
-                <View style={styles.profileIcon}>
-                  <Text style={{ color: "#FFFFFF" }}>{owner}</Text>
+            {OverlayContent ? (
+              OverlayContent
+            ) : (
+              <>
+                <View>
+                  <Text style={styles.folderHeading}>{folderName}</Text>
+                  <Text style={styles.folderHeadingDate}>{date}</Text>
                 </View>
-              )}
-            </View>
-
-            {inviteText && (
-              <TouchableWithoutFeedback onPress={onInvitePress}>
-                <View style={styles.inviteButton}>
-                  <Text style={styles.inviteText}>{inviteText}</Text>
-                </View>
-              </TouchableWithoutFeedback>
+              </>
             )}
           </View>
         )}
       </View>
-
-      {/* Dynamic content */}
+      {/* Main Content */}
       <View style={styles.container}>{children}</View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: -60,
-    padding: 20,
-    backgroundColor: "#fff",
+  imageWrapper: {
+    position: "relative",
+  },
+  folderImage: {
+    width: "100%",
+    height: 220,
+    resizeMode: "cover",
   },
   topBar: {
     position: "absolute",
@@ -80,62 +77,26 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 20,
-    zIndex: 10,
+    zIndex: 2,
   },
   iconButton: {
-    backgroundColor: "#D9D9D9C7",
-    padding: 8,
-    borderRadius: 20,
-  },
-  imageWrapper: {
-    position: "relative",
-  },
-  folderImage: {
-    width: "100%",
-    height: 250,
-    resizeMode: "cover",
+    padding: 10,
+    borderRadius: 50,
+    backgroundColor: "rgba(255,255,255,0.3)",
   },
   bottomOverlay: {
     position: "absolute",
-    bottom: 90,
-    left: 20,
-    right: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-  },
-  folderHeading: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "700",
-    marginBottom: 4,
-  },
-  folderHeadingDate: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "400",
-    marginBottom: 8,
-  },
-  profileIcon: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: "#ED3C50",
-    justifyContent: "center",
+    bottom: 0,
+    left: 0,
+    right: 0,
     alignItems: "center",
-  },
-  inviteButton: {
-    backgroundColor: "rgba(0,0,0,0.4)",
-    paddingVertical: 6,
-    paddingHorizontal: 13,
-    borderRadius: 15,
-  },
-  inviteText: {
-    color: "#fff",
-    fontSize: 15,
-    fontWeight: "600",
+    justifyContent: "center",
+    paddingVertical: 20,
+
   },
 });
+
 
 export default ScreenLayout;

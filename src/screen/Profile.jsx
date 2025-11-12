@@ -404,38 +404,30 @@
 
 
 
-
 import React, { useState } from "react";
 import {
   View,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  Image,
   Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LogOut } from "lucide-react-native";
 
-// svg imports
-import QR from "../../assets/svg/qr.svg";
-import Language from "../../assets/svg/language.svg";
-import Premium from "../../assets/svg/premium.svg";
-import RightArrow from "../../assets/svg/rightArrow.svg";
-import NavMessage from "../../assets/svg/navMessage.svg";
-import Heart from "../../assets/svg/heart.svg";
-import Share from "../../assets/svg/share.svg";
+// SVGs
 import Pencil from "../../assets/svg/pencil.svg";
 
-// components
+// Components
 import ScreenLayout from "../components/ScreenLayout";
-import PremiumModal from "../components/PremiumModal";
 import CustomText from "../components/CustomText";
-import { LogOut } from "lucide-react-native";
-import ThemeButton from "../components/ThemeButton";
 
-// images
+// Images
 const createEvent = require("../../assets/background.png");
+const profilePic = require("../../assets/picnic3.jpg"); 
 
-const CreateEventFive = ({ navigation }) => {
+const Profile = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleLogout = async () => {
@@ -447,7 +439,6 @@ const CreateEventFive = ({ navigation }) => {
         {
           text: "OK",
           onPress: () => {
-            // Reset navigation so user cannot go back
             navigation.reset({
               index: 0,
               routes: [{ name: "Landing" }],
@@ -472,12 +463,25 @@ const CreateEventFive = ({ navigation }) => {
           <Pencil height={16} width={16} />
         </TouchableOpacity>
       }
+    
+      OverlayContent={
+        <View style={styles.profileOverlay}>
+          <Image source={profilePic} style={styles.profileImage} />
+          <View>
+            <CustomText weight="bold" style={styles.profileName}>
+              Janifer Danis
+            </CustomText>
+            <CustomText style={styles.profileNumber}>
+              +91 1841 510 1450
+            </CustomText>
+          </View>
+        </View>
+      }
     >
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
       >
-        {/* Account Section */}
         <CustomText weight="medium" style={styles.category}>
           Account
         </CustomText>
@@ -536,11 +540,27 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#1C1C1C",
   },
-  subtitle: {
-    fontSize: 13,
-    color: "#888",
-    marginTop: 2,
+  profileOverlay: {
+    alignItems: "center",
+ 
+  },
+  profileImage: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    borderWidth: 2,
+    borderColor: "#fff",
+  },
+  profileName: {
+    color: "#fff",
+    fontSize: 20,
+  },
+  profileNumber: {
+    color: "#f0f0f0",
+    fontSize: 14,
   },
 });
 
-export default CreateEventFive;
+export default Profile;
+
+

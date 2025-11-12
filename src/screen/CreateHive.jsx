@@ -464,7 +464,7 @@ const CreateHive = ({ navigation, route }) => {
                                         </View>
                                         <View style={{ flex: 1, marginLeft: 12 }}>
                                             <CustomText weight='bold' style={{ fontSize: 16 }}>Approval Required</CustomText>
-                                            <CustomText weight='medium' style={{ color: colors.textGray,fontSize: 12 }}>Media must be reviewed by authorized members. Best for formal events.</CustomText>
+                                            <CustomText weight='medium' style={{ color: colors.textGray,fontSize: 12 }}>Uploaded media must be reviewed and approved by authorized members. Best for formal events.</CustomText>
                                         </View>
                                     </TouchableOpacity>
 
@@ -509,15 +509,24 @@ const CreateHive = ({ navigation, route }) => {
                                 </View>
 
                                 <View style={[styles.radiobuttonContainer, { borderColor: '#5AAF9A', backgroundColor: '#F0FCF9', }]}>
+                                    
+                                    <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 12 }}>
+                                        <Shield color='#5B0064' />
+                                        <CustomText weight='bold' style={{ fontSize: 16, }}>Messaging & Comments</CustomText>
+                                    </View>
                                     <View style={styles.privacy}>
-                                        <View >
-                                            <View style={{ width: 35, height: 35, backgroundColor: '#FFF1DF', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
-                                                <Lock color='#feaa00' />
-                                            </View>
-                                        </View>
+                                        
                                         <View style={{ flex: 1, marginLeft: 12 }}>
-                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Approval Required</CustomText>
-                                            <CustomText weight='medium' style={{ color: '#374151' }}>Media must be reviewed by authorized members. Best for formal events.</CustomText>
+                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Enable Messaging</CustomText>
+                                            <CustomText weight='medium' style={{ color: '#374151' }}>Allow members to post messages and comment on photos</CustomText>
+                                        </View>
+                                    </View>
+
+                                    <View style={styles.privacy}>
+                                        
+                                        <View style={{ flex: 1, marginLeft: 12 }}>
+                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Admin Message Control</CustomText>
+                                            <CustomText weight='medium' style={{ color: '#374151' }}>Allow admin to remove messages posted by members</CustomText>
                                         </View>
                                     </View>
 

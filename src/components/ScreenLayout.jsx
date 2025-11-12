@@ -5,9 +5,11 @@ import {
   StyleSheet,
   Image,
   TouchableWithoutFeedback,
+  ScrollView
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Back from "../../assets/svg/back.svg";
+
 
 const ScreenLayout = ({
   navigation,
@@ -56,7 +58,7 @@ const ScreenLayout = ({
         )}
       </View>
       {/* Main Content */}
-      <View style={styles.container}>{children}</View>
+      <ScrollView style={styles.container}>{children}</ScrollView>
     </SafeAreaView>
   );
 };
@@ -94,7 +96,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 20,
-
   },
 });
 

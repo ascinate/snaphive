@@ -322,9 +322,9 @@
 //             style={styles.logoutButton}
 //           /> */}
 
-//           <TouchableOpacity style={[styles.rowProfile,{borderBottomWidth: 0}]} onPress={handleLogout}>
-//             <View style={[styles.iconBox,{backgroundColor: '#ffe2e2ff'}]}>
-//          <LogOut size={20} color="#ff1f1fff" />
+//           <TouchableOpacity style={[styles.rowProfile, { borderBottomWidth: 0 }]} onPress={handleLogout}>
+//             <View style={[styles.iconBox, { backgroundColor: '#ffe2e2ff' }]}>
+//               <LogOut size={20} color="#ff1f1fff" />
 //             </View>
 //             <View style={styles.textBox}>
 //               <CustomText weight="bold" style={styles.title}>
@@ -414,7 +414,12 @@ import {
   Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { LogOut } from "lucide-react-native";
+import {
+  ChevronRight, Crown, Languages, LogOut, Share2,
+  QrCode,
+  MessageCircle,
+  Heart,
+} from "lucide-react-native";
 
 // SVGs
 import Pencil from "../../assets/svg/pencil.svg";
@@ -422,12 +427,13 @@ import Pencil from "../../assets/svg/pencil.svg";
 // Components
 import ScreenLayout from "../components/ScreenLayout";
 import CustomText from "../components/CustomText";
+import PremiumModal from "../components/PremiumModal";
 
 // Images
 const createEvent = require("../../assets/background.png");
-const profilePic = require("../../assets/picnic3.jpg"); 
+const profilePic = require("../../assets/picnic3.jpg");
 
-const Profile = ({ navigation }) => {
+const Profile = ({ navigation, }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleLogout = async () => {
@@ -463,7 +469,7 @@ const Profile = ({ navigation }) => {
           <Pencil height={16} width={16} />
         </TouchableOpacity>
       }
-    
+
       OverlayContent={
         <View style={styles.profileOverlay}>
           <Image source={profilePic} style={styles.profileImage} />
@@ -478,43 +484,152 @@ const Profile = ({ navigation }) => {
         </View>
       }
     >
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        <CustomText weight="medium" style={styles.category}>
-          Account
-        </CustomText>
 
-        <TouchableOpacity
-          style={[styles.rowProfile, { borderBottomWidth: 0 }]}
-          onPress={handleLogout}
+
+
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContainer}
         >
-          <View style={[styles.iconBox, { backgroundColor: "#ffe2e2ff" }]}>
-            <LogOut size={20} color="#ff1f1fff" />
-          </View>
-          <View style={styles.textBox}>
-            <CustomText weight="bold" style={styles.title}>
-              Logout
-            </CustomText>
-          </View>
-        </TouchableOpacity>
-      </ScrollView>
+ 
+          <CustomText weight="medium" style={styles.category}>
+            Account
+          </CustomText>
+
+          <TouchableOpacity
+            style={styles.rowProfile}
+            onPress={() => navigation.navigate('Language')}
+          >
+            <View style={styles.iconBox}>
+              <Languages size={20} color="#F98935" />
+            </View>
+            <View style={styles.textBox}>
+              <CustomText weight="bold" style={styles.title}>
+                Language
+              </CustomText>
+              <CustomText weight="medium" style={styles.subtitle}>
+                English
+              </CustomText>
+            </View>
+            <ChevronRight color="#B0B0B0" size={18} />
+          </TouchableOpacity>
+
+          <CustomText weight="medium" style={styles.category}>
+            Benefit
+          </CustomText>
+
+          <TouchableOpacity
+            style={styles.rowProfile}
+            onPress={() => setModalVisible(true)} 
+          >
+            <View style={styles.iconBox}>
+              <Crown size={20} color="#F98935" />
+            </View>
+            <View style={styles.textBox}>
+              <CustomText weight="bold" style={styles.title}>
+                Premium
+              </CustomText>
+              <CustomText weight="medium" style={styles.subtitle}>
+                Unlock all features
+              </CustomText>
+            </View>
+            <ChevronRight color="#B0B0B0" size={18} />
+          </TouchableOpacity>
+
+
+          <CustomText weight="medium" style={styles.category}>
+            Other
+          </CustomText>
+
+          <TouchableOpacity
+            style={styles.rowProfile}
+            onPress={() => navigation.navigate('ContactUs')}
+          >
+            <View style={styles.iconBox}>
+              <MessageCircle size={20} color="#F98935" />
+            </View>
+            <View style={styles.textBox}>
+              <CustomText weight="bold" style={styles.title}>
+                Contact Us
+              </CustomText>
+              <CustomText weight="medium" style={styles.subtitle}>
+                Get support anytime
+              </CustomText>
+            </View>
+            <ChevronRight color="#B0B0B0" size={18} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.rowProfile}
+            onPress={() => navigation.navigate('YourOpinion')}
+          >
+            <View style={styles.iconBox}>
+              <Heart size={20} color="#F98935" />
+            </View>
+            <View style={styles.textBox}>
+              <CustomText weight="bold" style={styles.title}>
+                Give us feedback
+              </CustomText>
+              <CustomText weight="medium" style={styles.subtitle}>
+                Love the app? Leave us a review
+              </CustomText>
+            </View>
+            <ChevronRight color="#B0B0B0" size={18} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.rowProfile}
+            onPress={() => navigation.navigate('NewPage')}
+          >
+            <View style={styles.iconBox}>
+              <Share2 size={20} color="#F98935" />
+            </View>
+            <View style={styles.textBox}>
+              <CustomText weight="bold" style={styles.title}>
+                Share the app
+              </CustomText>
+              <CustomText weight="medium" style={styles.subtitle}>
+                Invite your friends to try Airbum
+              </CustomText>
+            </View>
+            <ChevronRight color="#B0B0B0" size={18} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.rowProfile, { borderBottomWidth: 0 }]}
+            onPress={handleLogout}
+          >
+            <View style={[styles.iconBox, { backgroundColor: "#ffe2e2ff" }]}>
+              <LogOut size={20} color="#ff1f1fff" />
+            </View>
+            <View style={styles.textBox}>
+              <CustomText weight="bold" style={styles.title}>
+                Logout
+              </CustomText>
+            </View>
+          </TouchableOpacity>
+
+               <PremiumModal
+          visible={modalVisible}
+           onClose={() => setModalVisible(false)}
+        />
+        </ScrollView>
     </ScreenLayout>
   );
 };
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    padding: 20,
-    paddingBottom: 80,
+    paddingHorizontal: 20,
+    paddingBottom: 120,
   },
   category: {
     fontSize: 14,
     fontWeight: "600",
     color: "#666",
     marginBottom: 12,
-    marginTop: 20,
+    marginTop: 0,
     textTransform: "uppercase",
   },
   rowProfile: {
@@ -542,7 +657,7 @@ const styles = StyleSheet.create({
   },
   profileOverlay: {
     alignItems: "center",
- 
+
   },
   profileImage: {
     width: 70,
@@ -558,6 +673,50 @@ const styles = StyleSheet.create({
   profileNumber: {
     color: "#f0f0f0",
     fontSize: 14,
+  },
+
+
+  category: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#F98935',
+    marginTop: 25,
+    marginBottom: 10,
+    textTransform: 'uppercase',
+  },
+  rowProfile: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F2F2F2',
+  },
+  iconBox: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#FFF3E6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  textBox: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 16,
+    color: '#111',
+  },
+  subtitle: {
+    fontSize: 13,
+    color: '#777',
+    marginTop: 2,
+  },
+  logoutButton: {
+    marginTop: 40,
+    marginBottom: 60,
+    width: '60%',
+    alignSelf: 'center',
   },
 });
 

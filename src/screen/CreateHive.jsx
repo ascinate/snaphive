@@ -32,7 +32,7 @@ const CreateHive = ({ navigation, route }) => {
     const [selected, setSelected] = useState('automatic');
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const [uploadType, setUploadType] = useState('automatic');
-    const [hiveType, setHiveType] = useState(null); // Add state for dropdown
+    const [hiveType, setHiveType] = useState(null); 
 
 
     const data = [
@@ -76,7 +76,6 @@ const CreateHive = ({ navigation, route }) => {
         };
 
         addEvent(newEvent);
-        // reset fields
         setUploadedImage(null);
         setHiveName("");
         setHiveDescription("");
@@ -86,11 +85,10 @@ const CreateHive = ({ navigation, route }) => {
         setEndDate('');
         setIsEnabled(false);
         setHiveType(null);
-        navigation.goBack() // redirect to Home
+        navigation.goBack() 
     };
 
     const handleChange = (text) => {
-        // Optional: auto-add dashes for format dd-mm-yy
         let formatted = text.replace(/[^0-9]/g, '');
         if (formatted.length > 2 && formatted.length <= 4)
             formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
@@ -112,7 +110,7 @@ const CreateHive = ({ navigation, route }) => {
                             style={{
                                 flexDirection: 'row',
                                 alignItems: 'center',
-                                alignSelf: 'flex-start', // ensures the bubble itself stays left
+                                alignSelf: 'flex-start',
                                 gap: 8,
                                 backgroundColor: 'rgba(255, 219, 186, 0.5)',
                                 borderRadius: 25,
@@ -150,7 +148,6 @@ const CreateHive = ({ navigation, route }) => {
                                     <CustomText weight="Bold" style={styles.continueTxt}>
                                         Hive Details
                                     </CustomText>
-                                    <View style={styles.icon}>dsds</View>
                                 </View>
                             </View>
                         </LinearGradient>

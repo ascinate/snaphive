@@ -488,133 +488,133 @@ const Profile = ({ navigation, }) => {
 
 
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContainer}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
+      >
+
+        <CustomText weight="medium" style={styles.category}>
+          Account
+        </CustomText>
+
+        <TouchableOpacity
+          style={styles.rowProfile}
+          onPress={() => navigation.navigate('Language')}
         >
- 
-          <CustomText weight="medium" style={styles.category}>
-            Account
-          </CustomText>
+          <View style={styles.iconBox}>
+            <Languages size={20} color="#F98935" />
+          </View>
+          <View style={styles.textBox}>
+            <CustomText weight="bold" style={styles.title}>
+              Language
+            </CustomText>
+            <CustomText weight="medium" style={styles.subtitle}>
+              English
+            </CustomText>
+          </View>
+          <ChevronRight color="#B0B0B0" size={18} />
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.rowProfile}
-            onPress={() => navigation.navigate('Language')}
-          >
-            <View style={styles.iconBox}>
-              <Languages size={20} color="#F98935" />
-            </View>
-            <View style={styles.textBox}>
-              <CustomText weight="bold" style={styles.title}>
-                Language
-              </CustomText>
-              <CustomText weight="medium" style={styles.subtitle}>
-                English
-              </CustomText>
-            </View>
-            <ChevronRight color="#B0B0B0" size={18} />
-          </TouchableOpacity>
+        <CustomText weight="medium" style={styles.category}>
+          Benefit
+        </CustomText>
 
-          <CustomText weight="medium" style={styles.category}>
-            Benefit
-          </CustomText>
-
-          <TouchableOpacity
-            style={styles.rowProfile}
-            onPress={() => setModalVisible(true)} 
-          >
-            <View style={styles.iconBox}>
-              <Crown size={20} color="#F98935" />
-            </View>
-            <View style={styles.textBox}>
-              <CustomText weight="bold" style={styles.title}>
-                Premium
-              </CustomText>
-              <CustomText weight="medium" style={styles.subtitle}>
-                Unlock all features
-              </CustomText>
-            </View>
-            <ChevronRight color="#B0B0B0" size={18} />
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.rowProfile}
+          onPress={() => setModalVisible(true)}
+        >
+          <View style={styles.iconBox}>
+            <Crown size={20} color="#F98935" />
+          </View>
+          <View style={styles.textBox}>
+            <CustomText weight="bold" style={styles.title}>
+              Premium
+            </CustomText>
+            <CustomText weight="medium" style={styles.subtitle}>
+              Unlock all features
+            </CustomText>
+          </View>
+          <ChevronRight color="#B0B0B0" size={18} />
+        </TouchableOpacity>
 
 
-          <CustomText weight="medium" style={styles.category}>
-            Other
-          </CustomText>
+        <CustomText weight="medium" style={styles.category}>
+          Other
+        </CustomText>
 
-          <TouchableOpacity
-            style={styles.rowProfile}
-            onPress={() => navigation.navigate('ContactUs')}
-          >
-            <View style={styles.iconBox}>
-              <MessageCircle size={20} color="#F98935" />
-            </View>
-            <View style={styles.textBox}>
-              <CustomText weight="bold" style={styles.title}>
-                Contact Us
-              </CustomText>
-              <CustomText weight="medium" style={styles.subtitle}>
-                Get support anytime
-              </CustomText>
-            </View>
-            <ChevronRight color="#B0B0B0" size={18} />
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.rowProfile}
+          onPress={() => navigation.navigate('ContactUs')}
+        >
+          <View style={styles.iconBox}>
+            <MessageCircle size={20} color="#F98935" />
+          </View>
+          <View style={styles.textBox}>
+            <CustomText weight="bold" style={styles.title}>
+              Contact Us
+            </CustomText>
+            <CustomText weight="medium" style={styles.subtitle}>
+              Get support anytime
+            </CustomText>
+          </View>
+          <ChevronRight color="#B0B0B0" size={18} />
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.rowProfile}
-            onPress={() => navigation.navigate('YourOpinion')}
-          >
-            <View style={styles.iconBox}>
-              <Heart size={20} color="#F98935" />
-            </View>
-            <View style={styles.textBox}>
-              <CustomText weight="bold" style={styles.title}>
-                Give us feedback
-              </CustomText>
-              <CustomText weight="medium" style={styles.subtitle}>
-                Love the app? Leave us a review
-              </CustomText>
-            </View>
-            <ChevronRight color="#B0B0B0" size={18} />
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.rowProfile}
+          onPress={() => navigation.navigate('YourOpinion')}
+        >
+          <View style={styles.iconBox}>
+            <Heart size={20} color="#F98935" />
+          </View>
+          <View style={styles.textBox}>
+            <CustomText weight="bold" style={styles.title}>
+              Give us feedback
+            </CustomText>
+            <CustomText weight="medium" style={styles.subtitle}>
+              Love the app? Leave us a review
+            </CustomText>
+          </View>
+          <ChevronRight color="#B0B0B0" size={18} />
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.rowProfile}
-            onPress={() => navigation.navigate('NewPage')}
-          >
-            <View style={styles.iconBox}>
-              <Share2 size={20} color="#F98935" />
-            </View>
-            <View style={styles.textBox}>
-              <CustomText weight="bold" style={styles.title}>
-                Share the app
-              </CustomText>
-              <CustomText weight="medium" style={styles.subtitle}>
-                Invite your friends to try Airbum
-              </CustomText>
-            </View>
-            <ChevronRight color="#B0B0B0" size={18} />
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.rowProfile}
+          onPress={() => navigation.navigate('NewPage')}
+        >
+          <View style={styles.iconBox}>
+            <Share2 size={20} color="#F98935" />
+          </View>
+          <View style={styles.textBox}>
+            <CustomText weight="bold" style={styles.title}>
+              Share the app
+            </CustomText>
+            <CustomText weight="medium" style={styles.subtitle}>
+              Invite your friends to try Airbum
+            </CustomText>
+          </View>
+          <ChevronRight color="#B0B0B0" size={18} />
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.rowProfile, { borderBottomWidth: 0 }]}
-            onPress={handleLogout}
-          >
-            <View style={[styles.iconBox, { backgroundColor: "#ffe2e2ff" }]}>
-              <LogOut size={20} color="#ff1f1fff" />
-            </View>
-            <View style={styles.textBox}>
-              <CustomText weight="bold" style={styles.title}>
-                Logout
-              </CustomText>
-            </View>
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.rowProfile, { borderBottomWidth: 0 }]}
+          onPress={handleLogout}
+        >
+          <View style={[styles.iconBox, { backgroundColor: "#ffe2e2ff" }]}>
+            <LogOut size={20} color="#ff1f1fff" />
+          </View>
+          <View style={styles.textBox}>
+            <CustomText weight="bold" style={styles.title}>
+              Logout
+            </CustomText>
+          </View>
+        </TouchableOpacity>
 
-               <PremiumModal
+        <PremiumModal
           visible={modalVisible}
-           onClose={() => setModalVisible(false)}
+          onClose={() => setModalVisible(false)}
         />
-        </ScrollView>
+      </ScrollView>
     </ScreenLayout>
   );
 };

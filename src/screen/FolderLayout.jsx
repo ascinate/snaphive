@@ -551,34 +551,32 @@ const FolderLayout = ({ navigation, route }) => {
             contentContainerStyle={styles.scrollContainer}
             showsVerticalScrollIndicator={false}
           >
-            {selectedTab === "Gallery" && (
-              <View style={styles.grid}>
-                {uploadedImages.length === 0 ? (
-                  <Text style={styles.infoText}>No photos</Text>
-                ) : (
-                  <View style={styles.imageWrapperRow}>
-                    {uploadedImages.map((uri, index) => {
-                      let styleToApply = {};
+    {selectedTab === "Gallery" && (
+  <View style={styles.grid}>
+    {uploadedImages.length === 0 ? (
+      <Text style={styles.infoText}>No photos</Text>
+    ) : (
+      <View style={styles.imageWrapperRow}>
+        {uploadedImages.map((uri, index) => {
+          let styleToApply = {};
+          // Loop positions using modulo 4
+          const pos = index % 4;
+          
+          if (pos === 0) styleToApply = styles.imageGridOne;
+          else if (pos === 1) styleToApply = styles.imageGridTwo;
+          else if (pos === 2) styleToApply = styles.imageGridThree;
+          else if (pos === 3) styleToApply = styles.imageGridFour;
 
-                      // Loop positions using modulo 4
-                      const pos = index % 4;
-
-                      if (pos === 0) styleToApply = styles.imageGridOne;
-                      else if (pos === 1) styleToApply = styles.imageGridTwo;
-                      else if (pos === 2) styleToApply = styles.imageGridThree;
-                      else if (pos === 3) styleToApply = styles.imageGridFour;
-
-                      return (
-                        <View key={`uploaded-${index}`} style={styleToApply}>
-                          <Image source={{ uri }} style={styles.photo} />
-                        </View>
-                      );
-                    })}
-
-                  </View>
-                )}
-              </View>
-            )}
+          return (
+            <View key={`uploaded-${index}`} style={styleToApply}>
+              <Image source={{ uri }} style={styles.photo} />
+            </View>
+          );
+        })}
+      </View>
+    )}
+  </View>
+)}
 
             {selectedTab === "Chat" && (
               <Text style={styles.infoText}>Chat feature coming soon 💬</Text>
@@ -694,40 +692,44 @@ const styles = StyleSheet.create({
     gap: 15,
     width: '100%',
   },
-
+  imageWrapperRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
   imageGridOne: {
-    width: '45%',
-    aspectRatio: 1,
+    width: '48%',
+    height: 160,
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
+    marginBottom: 15,
   },
   imageGridTwo: {
-    width: '45%',
-    height: 218,
+    width: '48%',
+    height: 240,
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
+    marginBottom: 15,
   },
   imageGridThree: {
-    position: 'relative',
-    top: -60,
-    width: '45%',
-    height: 218,
+    width: '48%',
+    height: 240,
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
+    marginBottom: 15,
+    marginTop: -80,
   },
-
   imageGridFour: {
-    position: 'relative',
-    top: 0,
-    aspectRatio: 1,
-    width: '45%',
-    height: 218,
+    width: '48%',
+    height: 160,
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
+    marginBottom: 15,
   },
   photo: {
     width: '100%',

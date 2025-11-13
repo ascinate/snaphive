@@ -1,408 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert} from "react-native";
-
-// // svg
-// import QR from "../../assets/svg/qr.svg";
-// import Language from "../../assets/svg/language.svg";
-// import Premium from "../../assets/svg/premium.svg";
-// import RightArrow from "../../assets/svg/rightArrow.svg";
-// import NavMessage from "../../assets/svg/navMessage.svg";
-// import Heart from "../../assets/svg/heart.svg";
-// import Share from "../../assets/svg/share.svg";
-// import Pencil from "../../assets/svg/pencil.svg";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-// // components
-// import FolderLayout from "../components/FolderLayout";
-// import PremiumModal from "../components/PremiumModal";
-// import CustomText from '../components/CustomText';
-// const createEvent = require("../../assets/profile.jpg");
-// const beforeImage = require("../../assets/selfie.jpg");
-// const afterImage = require("../../assets/dp3.jpg");
-
-// const CreateEventFive = ({ navigation,state }) => {
-// const [modalVisible, setModalVisible] = useState(false);
-//   const [user, setUser] = useState(null);
-//    useEffect(() => {
-//     const fetchUser = async () => {
-//       try {
-//         const storedUser = await AsyncStorage.getItem("user");
-//         if (storedUser) {
-//           setUser(JSON.parse(storedUser));
-//           console.log("Loaded user:", JSON.parse(storedUser));
-//         }
-//       } catch (error) {
-//         console.log("Error loading user:", error);
-//       }
-//     };
-//     fetchUser();
-//   }, []);
-
-//  const handleLogout = async () => {
-//     try {
-//       await AsyncStorage.removeItem("token");
-//       await AsyncStorage.removeItem("user");
-//       Alert.alert("Logout", "You have been logged out.", [
-//         { text: "OK", onPress: () => navigation.navigate("Landing") },
-//       ]);
-//     } catch (err) {
-//       Alert.alert("Error", "Failed to logout. Please try again.");
-//     }
-//   };
-
-
-//   return (
-//     <FolderLayout
-//       navigation={navigation}
-//       image={createEvent}
-//       folderName={user ? user.name : "Loading..."}
-//       date={user ? user.email : ""}
-//       RightIcon={<Pencil height={16} width={16} onPress={() => navigation.navigate("EditProfile")} />}
-//     >
-//       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-//         {/* Account Section */}
-//         <CustomText weight="medium" style={styles.category}>Account</CustomText>
-//         <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("Language")}>
-//           <View style={styles.iconBox}><Language width={20} height={20} /></View>
-//           <View style={styles.textBox}>
-//             <CustomText weight="bold" style={styles.title}>Language</CustomText>
-//             <CustomText weight="medium" style={styles.subtitle}>English</CustomText>
-//           </View>
-//           <RightArrow />
-//         </TouchableOpacity>
-
-
-
-//         <TouchableOpacity style={styles.rowProfile} onPress={handleLogout}>
-//           <View style={styles.iconBox}><QR width={20} height={20} /></View>
-//           <View style={styles.textBox}>
-//             <CustomText weight="bold" style={styles.title}>Logout</CustomText>
-//             <CustomText weight="medium" style={styles.subtitle}>redirect to landing page</CustomText>
-//           </View>
-//           <RightArrow />
-//         </TouchableOpacity>
-
-//         {/* Benefit Section */}
-//         <CustomText weight="medium" style={styles.category}>Benefit</CustomText>
-//         <TouchableOpacity style={styles.rowProfile} onPress={() => setModalVisible(true)}>
-//           <View style={styles.iconBox}><Premium width={20} height={20} /></View>
-//           <View style={styles.textBox}>
-//             <CustomText weight="bold" style={styles.title}>Premium</CustomText>
-//             <CustomText weight="medium" style={styles.subtitle}>Unlock all features</CustomText>
-//           </View>
-//           <RightArrow />
-//         </TouchableOpacity>
-
-//         {/* Other Section */}
-//         <CustomText weight="medium" style={styles.category}>Other</CustomText>
-//         <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("ContactUs")}>
-//           <View style={styles.iconBox}><NavMessage width={20} height={20} /></View>
-//           <View style={styles.textBox}>
-//             <CustomText weight="bold" style={styles.title}>Contact Us</CustomText>
-//             <CustomText weight="medium" style={styles.subtitle}>Get support anytime</CustomText>
-//           </View>
-//           <RightArrow />
-//         </TouchableOpacity>
-
-//         <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("YourOpinion")}>
-//           <View style={styles.iconBox}><Heart width={20} height={20} /></View>
-//           <View style={styles.textBox}>
-//             <CustomText weight="bold" style={styles.title}>Give us feedback</CustomText>
-//             <CustomText weight="medium" style={styles.subtitle}>Love the app? Leave us a review</CustomText>
-//           </View>
-//           <RightArrow />
-//         </TouchableOpacity>
-
-//         <TouchableOpacity style={styles.rowProfile} onPress={() => navigation.navigate("NewPage")}>
-//           <View style={styles.iconBox}><Share width={20} height={20} /></View>
-//           <View style={styles.textBox}>
-//             <CustomText weight="bold" style={styles.title}>Share the app</CustomText>
-//             <CustomText weight="medium" style={styles.subtitle}>Invite your friends to try Airbum</CustomText>
-//           </View>
-//           <RightArrow />
-//         </TouchableOpacity>
-
-
-
-
-//         {/* Modal */}
-//         <PremiumModal
-//           visible={modalVisible}
-//           onClose={() => setModalVisible(false)}
-//           beforeImage={beforeImage}
-//           afterImage={afterImage}
-//         />
-
-//       </ScrollView>
-//     </FolderLayout>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   scrollContainer: { padding: 20, paddingBottom: 80 },
-//   category: { fontSize: 14, fontWeight: "600", color: "#666", marginBottom: 12, marginTop: 20, textTransform: "uppercase" },
-//   rowProfile: { flexDirection: "row", alignItems: "center", paddingVertical: 14, borderRadius: 12, marginBottom: 15 },
-//   iconBox: { width: 32, height: 32, borderRadius: 16, justifyContent: "center", alignItems: "center", marginRight: 12 },
-//   textBox: { flex: 1 },
-//   title: { fontSize: 16, fontWeight: "500", color: "#1C1C1C" },
-//   subtitle: { fontSize: 13, color: "#888", marginTop: 2 },
-// });
-
-// export default CreateEventFive;
-
-// import React, { useState } from 'react';
-// import {
-//   StyleSheet,
-//   ScrollView,
-//   Dimensions,
-//   Alert,
-//   TouchableOpacity,
-//   View,
-// } from 'react-native';
-// import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-// import { useNavigation } from '@react-navigation/native';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// // components
-// import TopNav from '../components/TopNavbar';
-// import ThemeButton from '../components/ThemeButton';
-// import CustomText from '../components/CustomText';
-// import PremiumModal from '../components/PremiumModal';
-
-// // icons from lucide-react-native
-// import {
-//   Languages,
-//   QrCode,
-//   Crown,
-//   MessageCircle,
-//   Heart,
-//   Share2,
-//   ChevronRight,
-//   LogOut,
-// } from 'lucide-react-native';
-
-// const { width } = Dimensions.get('window');
-
-// const Profile = () => {
-//   const navigation = useNavigation();
-
-//   // 🧩 Modal State
-//   const [modalVisible, setModalVisible] = useState(false);
-
-//   const handleLogout = async () => {
-//     try {
-//       await AsyncStorage.removeItem('token');
-//       await AsyncStorage.removeItem('user');
-//       Alert.alert('Logout', 'You have been logged out.', [
-//         { text: 'OK', onPress: () => navigation.navigate('Landing') },
-//       ]);
-//     } catch (err) {
-//       Alert.alert('Error', 'Failed to logout. Please try again.');
-//     }
-//   };
-
-//   return (
-//     <SafeAreaProvider>
-//       <SafeAreaView style={styles.safeArea}>
-//         <TopNav />
-
-//         <ScrollView
-//           showsVerticalScrollIndicator={false}
-//           contentContainerStyle={styles.scrollContainer}
-//         >
-//           {/* 🧭 Account Section */}
-//           <CustomText weight="medium" style={styles.category}>
-//             Account
-//           </CustomText>
-
-//           <TouchableOpacity
-//             style={styles.rowProfile}
-//             onPress={() => navigation.navigate('Language')}
-//           >
-//             <View style={styles.iconBox}>
-//               <Languages size={20} color="#F98935" />
-//             </View>
-//             <View style={styles.textBox}>
-//               <CustomText weight="bold" style={styles.title}>
-//                 Language
-//               </CustomText>
-//               <CustomText weight="medium" style={styles.subtitle}>
-//                 English
-//               </CustomText>
-//             </View>
-//             <ChevronRight color="#B0B0B0" size={18} />
-//           </TouchableOpacity>
-
-
-
-//           {/* 💎 Benefit Section */}
-//           <CustomText weight="medium" style={styles.category}>
-//             Benefit
-//           </CustomText>
-
-//           <TouchableOpacity
-//             style={styles.rowProfile}
-//             onPress={() => setModalVisible(true)} // ✅ open Premium modal
-//           >
-//             <View style={styles.iconBox}>
-//               <Crown size={20} color="#F98935" />
-//             </View>
-//             <View style={styles.textBox}>
-//               <CustomText weight="bold" style={styles.title}>
-//                 Premium
-//               </CustomText>
-//               <CustomText weight="medium" style={styles.subtitle}>
-//                 Unlock all features
-//               </CustomText>
-//             </View>
-//             <ChevronRight color="#B0B0B0" size={18} />
-//           </TouchableOpacity>
-
-//           {/* 💬 Other Section */}
-//           <CustomText weight="medium" style={styles.category}>
-//             Other
-//           </CustomText>
-
-//           <TouchableOpacity
-//             style={styles.rowProfile}
-//             onPress={() => navigation.navigate('ContactUs')}
-//           >
-//             <View style={styles.iconBox}>
-//               <MessageCircle size={20} color="#F98935" />
-//             </View>
-//             <View style={styles.textBox}>
-//               <CustomText weight="bold" style={styles.title}>
-//                 Contact Us
-//               </CustomText>
-//               <CustomText weight="medium" style={styles.subtitle}>
-//                 Get support anytime
-//               </CustomText>
-//             </View>
-//             <ChevronRight color="#B0B0B0" size={18} />
-//           </TouchableOpacity>
-
-//           <TouchableOpacity
-//             style={styles.rowProfile}
-//             onPress={() => navigation.navigate('YourOpinion')}
-//           >
-//             <View style={styles.iconBox}>
-//               <Heart size={20} color="#F98935" />
-//             </View>
-//             <View style={styles.textBox}>
-//               <CustomText weight="bold" style={styles.title}>
-//                 Give us feedback
-//               </CustomText>
-//               <CustomText weight="medium" style={styles.subtitle}>
-//                 Love the app? Leave us a review
-//               </CustomText>
-//             </View>
-//             <ChevronRight color="#B0B0B0" size={18} />
-//           </TouchableOpacity>
-
-//           <TouchableOpacity
-//             style={styles.rowProfile}
-//             onPress={() => navigation.navigate('NewPage')}
-//           >
-//             <View style={styles.iconBox}>
-//               <Share2 size={20} color="#F98935" />
-//             </View>
-//             <View style={styles.textBox}>
-//               <CustomText weight="bold" style={styles.title}>
-//                 Share the app
-//               </CustomText>
-//               <CustomText weight="medium" style={styles.subtitle}>
-//                 Invite your friends to try Airbum
-//               </CustomText>
-//             </View>
-//             <ChevronRight color="#B0B0B0" size={18} />
-//           </TouchableOpacity>
-
-//           {/* <ThemeButton
-//             text="Logout"
-//             onPress={handleLogout}
-//             style={styles.logoutButton}
-//           /> */}
-
-//           <TouchableOpacity style={[styles.rowProfile, { borderBottomWidth: 0 }]} onPress={handleLogout}>
-//             <View style={[styles.iconBox, { backgroundColor: '#ffe2e2ff' }]}>
-//               <LogOut size={20} color="#ff1f1fff" />
-//             </View>
-//             <View style={styles.textBox}>
-//               <CustomText weight="bold" style={styles.title}>
-//                 Logout
-//               </CustomText>
-//             </View>
-
-//           </TouchableOpacity>
-//         </ScrollView>
-
-//         {/* 🪟 Premium Modal */}
-//         <PremiumModal
-//           visible={modalVisible}
-//           onClose={() => setModalVisible(false)}
-//         />
-//       </SafeAreaView>
-//     </SafeAreaProvider>
-//   );
-// };
-
-// // 🎨 STYLES
-// const styles = StyleSheet.create({
-//   safeArea: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//   },
-//   scrollContainer: {
-//     paddingVertical: 20,
-//     paddingHorizontal: width * 0.06,
-//     backgroundColor: '#fff',
-//   },
-//   category: {
-//     fontSize: 14,
-//     fontWeight: '600',
-//     color: '#F98935',
-//     marginTop: 25,
-//     marginBottom: 10,
-//     textTransform: 'uppercase',
-//   },
-//   rowProfile: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     paddingVertical: 14,
-//     borderBottomWidth: 1,
-//     borderBottomColor: '#F2F2F2',
-//   },
-//   iconBox: {
-//     width: 36,
-//     height: 36,
-//     borderRadius: 18,
-//     backgroundColor: '#FFF3E6',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     marginRight: 12,
-//   },
-//   textBox: {
-//     flex: 1,
-//   },
-//   title: {
-//     fontSize: 16,
-//     color: '#111',
-//   },
-//   subtitle: {
-//     fontSize: 13,
-//     color: '#777',
-//     marginTop: 2,
-//   },
-//   logoutButton: {
-//     marginTop: 40,
-//     marginBottom: 60,
-//     width: '60%',
-//     alignSelf: 'center',
-//   },
-// });
-
-// export default Profile;
-
-
 import React, { useState } from "react";
 import {
   View,
@@ -439,6 +34,14 @@ import SearchBar from "../components/SearchBar";
 // Images
 const createEvent = require("../../assets/background.png");
 const profilePic = require("../../assets/picnic1.jpg");
+const dp = require("../../assets/dp.jpg");
+const dp2 = require("../../assets/dp2.webp");
+const dp3 = require("../../assets/dp3.jpg");
+const dp4 = require("../../assets/dp4.jpg");
+const dp5 = require("../../assets/dp5.jpg");
+const dp6 = require("../../assets/dp6.jpg");
+const dp7 = require("../../assets/dp7.jpg");
+const dp8 = require("../../assets/dp8.jpg");
 
 const FolderLayout = ({ navigation, route }) => {
   const { image, folderName, date, owner, photos = [] } = route.params || {};
@@ -464,7 +67,20 @@ const FolderLayout = ({ navigation, route }) => {
       }
     });
   };
-
+  const members = [
+    { id: 1, name: "Demola Aoki", dp: dp },
+    { id: 2, name: "Sofia Carrington", dp: dp3 },
+    // { id: 3, name: "Quincy Thoreau", dp: dp4 },
+    // { id: 4, name: "Demola Aoki", dp: dp5 },
+    // { id: 5, name: "Emma Andreas", dp: dp2 },
+    // { id: 6, name: "Sofia Carrington", dp: dp6 },
+    // { id: 7, name: "Chloe Dumont", dp: dp7 },
+    // { id: 8, name: "Quincy Thoreau", dp: dp8 },
+    // { id: 9, name: "Emma Andreas", dp: dp2 },
+    // { id: 10, name: "Sofia Carrington", dp: dp6 },
+    // { id: 11, name: "Chloe Dumont", dp: dp7 },
+    // { id: 12, name: "Quincy Thoreau", dp: dp8 },
+  ];
 
   return (
     <ScreenLayout
@@ -511,17 +127,13 @@ const FolderLayout = ({ navigation, route }) => {
         </View>
       }
     >
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}
       >
-
         {/* Content Area */}
         <View style={styles.container}>
           {/* Upload + Add Member */}
-
-
           {/* Tabs */}
           <View style={styles.tabsContainer}>
             {[
@@ -544,8 +156,6 @@ const FolderLayout = ({ navigation, route }) => {
             ))}
           </View>
 
-          {/* Tab Content */}
-          {/* Tab Content */}
           <ScrollView
             style={{ flex: 1 }}
             contentContainerStyle={styles.scrollContainer}
@@ -577,12 +187,38 @@ const FolderLayout = ({ navigation, route }) => {
                 )}
               </View>
             )}
-
             {selectedTab === "Chat" && (
               <>
                 <SearchBar />
-         
-
+                <View style={styles.chatList}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Chat", { memberId: member.id, memberName: member.name })}
+                  >
+                    <View style={styles.chatListItem}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
+                        <Image source={profilePic} style={styles.dp} />
+                        <View>
+                          <CustomText weight="bold">User name</CustomText>
+                          <CustomText weight="medium" >It is a long established.</CustomText>
+                        </View>
+                      </View>
+                      <View style={{ alignItems: 'flex-end' }}>
+                        <CustomText weight="medium" style={{ fontSize: 12 }}>5 Hours ago</CustomText>
+                        <View style={{
+                          backgroundColor: '#FF0800',
+                          width: 20,
+                          height: 20,
+                          borderRadius: 10,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginTop: 6
+                        }}>
+                          <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </>
             )}
 
@@ -590,21 +226,7 @@ const FolderLayout = ({ navigation, route }) => {
               <Text style={styles.infoText}>Members list will appear here 👥</Text>
             )}
           </ScrollView>
-
         </View>
-
-
-
-
-
-
-
-
-
-
-
-
-
       </ScrollView>
     </ScreenLayout>
   );
@@ -755,6 +377,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.050,
     borderRadius: 14,
     marginVertical: 10,
+  },
+  chatList: {
+    marginTop: 20,
+  },
+  chatListItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15,
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EDEDED',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    paddingLeft: 20,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    shadowColor: '#000000ff',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+
+  dp: {
+    width: 51,
+    height: 51,
+    borderRadius: 25.5,
+    resizeMode: "cover",
   },
 });
 

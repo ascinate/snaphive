@@ -190,12 +190,46 @@ const FolderLayout = ({ navigation, route }) => {
             {selectedTab === "Chat" && (
               <>
                 <SearchBar />
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{ flexDirection: 'row', gap: 10, paddingHorizontal: 15, paddingVertical: 10 }}>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                </ScrollView>
+
                 <View style={styles.chatList}>
                   <TouchableOpacity
                     onPress={() => navigation.navigate("Chat")}
                   >
 
                     <View style={styles.shadowWrapper}>
+
+
+
+
 
                       <View style={styles.chatListItem}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
@@ -224,6 +258,8 @@ const FolderLayout = ({ navigation, route }) => {
                           </View>
                         </View>
                       </View>
+
+
                       <View style={styles.chatListItem}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
                           <Image source={profilePic} style={styles.dp} />
@@ -259,7 +295,27 @@ const FolderLayout = ({ navigation, route }) => {
             )}
 
             {selectedTab === "Members" && (
-              <Text style={styles.infoText}>Members list will appear here 👥</Text>
+              <View style={[styles.feedItem, { marginTop: 20 }]}>
+                <View >
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
+                    <Image source={profilePic} style={styles.dp} />
+                    <View>
+                      <View>
+                        <CustomText weight="bold">User name</CustomText>
+                        <CustomText weight="medium" style={{ maxWidth: 280, fontSize: 12, color: '#6B7280' }}>Nov 10 at 06:45 AM</CustomText>
+                      </View>
+                      <View>
+                        <CustomText weight="medium"
+                          numberOfLines={3}
+                          ellipsizeMode="tail"
+                          style={{ maxWidth: 280, fontSize: 12, color: '#6B7280' }}
+                        >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
+                      </View>
+                    </View>
+                  </View>
+
+                </View>
+              </View>
             )}
           </ScrollView>
         </View>
@@ -435,6 +491,26 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 12,
   },
+  feedItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EDEDED',
+    paddingVertical: 15,
+    paddingHorizontal: 12,
+    backgroundColor: '#fff',
+    borderRadius: 6,
+    shadowColor: '#acacacff',
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 12,
+  },
+
+
 
 
   dp: {
@@ -443,6 +519,32 @@ const styles = StyleSheet.create({
     borderRadius: 25.5,
     resizeMode: "cover",
   },
+  allMembarDp: {
+    width: 55,
+    height: 55,
+    borderRadius: 25.5,
+    resizeMode: "cover",
+    borderWidth: 2,
+    borderColor: '#ffffff',
+  },
+
+
+
+
+  allMembarShadowWrapper: {
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#7a7979ff',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.20,
+    shadowRadius: 6,
+    elevation: 6,
+  },
+
 });
 
 export default FolderLayout;

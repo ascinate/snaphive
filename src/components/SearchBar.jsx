@@ -1,10 +1,10 @@
-import { View, StyleSheet, TextInput,Dimensions } from 'react-native'
+import { View, StyleSheet, TextInput, Dimensions } from 'react-native'
 import React from 'react'
 import { Search } from 'lucide-react-native';
 const { width, height } = Dimensions.get('window');
 const SearchBar = () => {
     return (
-        <View style={[styles.searchContainer, { marginHorizontal: width * 0.05 }]}>
+        <View style={[styles.searchContainer]}>
             <TextInput
                 style={styles.searchInput}
                 placeholder="Search"
@@ -28,12 +28,12 @@ const styles = StyleSheet.create({
         marginTop: 16,
         marginBottom: 8,
     },
- searchInput: {
-    flex: 1,
-    fontSize: 16,
-    color: '#000',
-    padding: 0,
-  },
+    searchInput: {
+        flex: 1,
+        fontSize: 16,
+        color: '#000',
+        padding: 0,
+    },
 
 })
 

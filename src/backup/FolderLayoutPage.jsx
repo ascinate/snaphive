@@ -147,6 +147,7 @@ const FolderLayout = ({ navigation, route }) => {
           )}
 
           {selectedTab === "Chat" && (
+            
             <Text style={styles.infoText}>Chat feature coming soon 💬</Text>
           )}
 

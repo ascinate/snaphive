@@ -434,7 +434,7 @@ import Pencil from "../../assets/svg/pencil.svg";
 // Components
 import ScreenLayout from "../components/ScreenLayout";
 import CustomText from "../components/CustomText";
-
+import SearchBar from "../components/SearchBar";
 
 // Images
 const createEvent = require("../../assets/background.png");
@@ -551,35 +551,39 @@ const FolderLayout = ({ navigation, route }) => {
             contentContainerStyle={styles.scrollContainer}
             showsVerticalScrollIndicator={false}
           >
-    {selectedTab === "Gallery" && (
-  <View style={styles.grid}>
-    {uploadedImages.length === 0 ? (
-      <Text style={styles.infoText}>No photos</Text>
-    ) : (
-      <View style={styles.imageWrapperRow}>
-        {uploadedImages.map((uri, index) => {
-          let styleToApply = {};
-          // Loop positions using modulo 4
-          const pos = index % 4;
-          
-          if (pos === 0) styleToApply = styles.imageGridOne;
-          else if (pos === 1) styleToApply = styles.imageGridTwo;
-          else if (pos === 2) styleToApply = styles.imageGridThree;
-          else if (pos === 3) styleToApply = styles.imageGridFour;
+            {selectedTab === "Gallery" && (
+              <View style={styles.grid}>
+                {uploadedImages.length === 0 ? (
+                  <Text style={styles.infoText}>No photos</Text>
+                ) : (
+                  <View style={styles.imageWrapperRow}>
+                    {uploadedImages.map((uri, index) => {
+                      let styleToApply = {};
+                      // Loop positions using modulo 4
+                      const pos = index % 4;
 
-          return (
-            <View key={`uploaded-${index}`} style={styleToApply}>
-              <Image source={{ uri }} style={styles.photo} />
-            </View>
-          );
-        })}
-      </View>
-    )}
-  </View>
-)}
+                      if (pos === 0) styleToApply = styles.imageGridOne;
+                      else if (pos === 1) styleToApply = styles.imageGridTwo;
+                      else if (pos === 2) styleToApply = styles.imageGridThree;
+                      else if (pos === 3) styleToApply = styles.imageGridFour;
+
+                      return (
+                        <View key={`uploaded-${index}`} style={styleToApply}>
+                          <Image source={{ uri }} style={styles.photo} />
+                        </View>
+                      );
+                    })}
+                  </View>
+                )}
+              </View>
+            )}
 
             {selectedTab === "Chat" && (
-              <Text style={styles.infoText}>Chat feature coming soon 💬</Text>
+              <>
+                <SearchBar />
+         
+
+              </>
             )}
 
             {selectedTab === "Members" && (

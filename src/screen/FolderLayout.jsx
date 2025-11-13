@@ -434,12 +434,11 @@ import Pencil from "../../assets/svg/pencil.svg";
 // Components
 import ScreenLayout from "../components/ScreenLayout";
 import CustomText from "../components/CustomText";
-import PremiumModal from "../components/PremiumModal";
-import ThemeButton from "../components/ThemeButton";
+
 
 // Images
 const createEvent = require("../../assets/background.png");
-const profilePic = require("../../assets/picnic3.jpg");
+const profilePic = require("../../assets/picnic1.jpg");
 
 const FolderLayout = ({ navigation, route }) => {
   const { image, folderName, date, owner, photos = [] } = route.params || {};
@@ -546,6 +545,7 @@ const FolderLayout = ({ navigation, route }) => {
           </View>
 
           {/* Tab Content */}
+          {/* Tab Content */}
           <ScrollView
             style={{ flex: 1 }}
             contentContainerStyle={styles.scrollContainer}
@@ -557,14 +557,24 @@ const FolderLayout = ({ navigation, route }) => {
                   <Text style={styles.infoText}>No photos</Text>
                 ) : (
                   <View style={styles.imageWrapperRow}>
+                    {uploadedImages.map((uri, index) => {
+                      let styleToApply = {};
 
+                      // Loop positions using modulo 4
+                      const pos = index % 4;
 
-                    {/* Uploaded images - same grid style */}
-                    {uploadedImages.map((uri, index) => (
-                      <View key={`uploaded-${index}`} style={styles.imageGrid}>
-                        <Image source={{ uri }} style={styles.photo} />
-                      </View>
-                    ))}
+                      if (pos === 0) styleToApply = styles.imageGridOne;
+                      else if (pos === 1) styleToApply = styles.imageGridTwo;
+                      else if (pos === 2) styleToApply = styles.imageGridThree;
+                      else if (pos === 3) styleToApply = styles.imageGridFour;
+
+                      return (
+                        <View key={`uploaded-${index}`} style={styleToApply}>
+                          <Image source={{ uri }} style={styles.photo} />
+                        </View>
+                      );
+                    })}
+
                   </View>
                 )}
               </View>
@@ -578,6 +588,7 @@ const FolderLayout = ({ navigation, route }) => {
               <Text style={styles.infoText}>Members list will appear here 👥</Text>
             )}
           </ScrollView>
+
         </View>
 
 
@@ -603,102 +614,15 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
     backgroundColor: "#FAFAF9",
   },
-  category: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#666",
-    marginBottom: 12,
-    marginTop: 0,
-    textTransform: "uppercase",
-  },
-  rowProfile: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 14,
-    borderRadius: 12,
-    marginBottom: 15,
-  },
-  iconBox: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 12,
-  },
+
   textBox: {
     flex: 1,
   },
-  title: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#1C1C1C",
-  },
+
   profileOverlay: {
     alignItems: "center",
 
   },
-  profileImage: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    borderWidth: 2,
-    borderColor: "#fff",
-  },
-  profileName: {
-    color: "#fff",
-    fontSize: 20,
-  },
-  profileNumber: {
-    color: "#f0f0f0",
-    fontSize: 14,
-  },
-
-
-  category: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#F98935',
-    marginTop: 25,
-    marginBottom: 10,
-    textTransform: 'uppercase',
-  },
-  rowProfile: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F2',
-  },
-  iconBox: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#FFF3E6',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  textBox: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 16,
-    color: '#111',
-  },
-  subtitle: {
-    fontSize: 13,
-    color: '#777',
-    marginTop: 2,
-  },
-  logoutButton: {
-    marginTop: 40,
-    marginBottom: 60,
-    width: '60%',
-    alignSelf: 'center',
-  },
-
-
 
   rowBetween: {
     flexDirection: "row",
@@ -706,29 +630,7 @@ const styles = StyleSheet.create({
     gap: 20,
     justifyContent: "space-between",
   },
-  topBar: {
-    position: "absolute",
-    top: 20,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    zIndex: 10,
-  },
-  iconButton: {
-    backgroundColor: "#D9D9D9C7",
-    padding: 8,
-    borderRadius: 20,
-  },
-  imageWrapper: {
-    position: "relative",
-  },
-  folderImage: {
-    width: "100%",
-    height: 250,
-    resizeMode: "cover",
-  },
+
   bottomOverlay: {
     position: "absolute",
     bottom: 90,
@@ -738,36 +640,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "flex-end",
   },
-  folderHeading: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "700",
-    marginBottom: 4,
-  },
-  folderHeadingDate: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "400",
-    marginBottom: 8,
-  },
-  profileIcon: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-  },
-  addMemberBtn: {
-    paddingVertical: 21,
-    paddingHorizontal: 25,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 2,
-  },
+
   tabsContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -822,9 +695,36 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 
-  imageGrid: {
-    width: '30%',
+  imageGridOne: {
+    width: '45%',
     aspectRatio: 1,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#e5e7eb',
+  },
+  imageGridTwo: {
+    width: '45%',
+    height: 218,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#e5e7eb',
+  },
+  imageGridThree: {
+    position: 'relative',
+    top: -60,
+    width: '45%',
+    height: 218,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#e5e7eb',
+  },
+
+  imageGridFour: {
+    position: 'relative',
+    top: 0,
+    aspectRatio: 1,
+    width: '45%',
+    height: 218,
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
@@ -834,8 +734,6 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'cover',
   },
-
-
   infoText: {
     textAlign: "center",
     color: "#6B7280",
@@ -851,7 +749,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.050,
     borderRadius: 14,
     marginVertical: 10,
-
   },
 });
 

@@ -18,6 +18,10 @@ import {
   UserPlus,
   Plus,
   Users,
+  SmilePlus,
+  Images,
+  Video,
+  MessagesSquare,
 } from "lucide-react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import { Dimensions } from "react-native";
@@ -137,9 +141,9 @@ const FolderLayout = ({ navigation, route }) => {
           {/* Tabs */}
           <View style={styles.tabsContainer}>
             {[
-              { label: "Gallery", icon: <Upload width={16} height={16} color="#000" /> },
-              { label: "Chat", icon: <MessageCircle width={16} height={16} color="#000" /> },
-              { label: "Members", icon: <UserPlus width={16} height={16} color="#000" /> },
+              { label: "Gallery", icon: <Images width={16} height={16}     stroke={selectedTab === "Gallery" ? "#fff" : "#000"}/> },
+              { label: "Chat", icon: <Video width={16} height={16}  stroke={selectedTab === "Chat" ? "#fff" : "#000"}/> },
+              { label: "Members", icon: <MessagesSquare width={16} height={16} stroke={selectedTab === "Members" ? "#fff" : "#000"}/> },
             ].map((tab, i) => (
               <TouchableOpacity
                 key={i}
@@ -239,7 +243,7 @@ const FolderLayout = ({ navigation, route }) => {
                             <CustomText weight="medium"
                               numberOfLines={1}
                               ellipsizeMode="tail"
-                              style={{ maxWidth: 160 }}
+                              style={{ maxWidth: 160, fontSize: 12, color: '#888888' }}
                             >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
                           </View>
                         </View>
@@ -268,7 +272,7 @@ const FolderLayout = ({ navigation, route }) => {
                             <CustomText weight="medium"
                               numberOfLines={1}
                               ellipsizeMode="tail"
-                              style={{ maxWidth: 160 }}
+                              style={{ maxWidth: 160, fontSize: 12, color: '#888888' }}
                             >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
                           </View>
                         </View>
@@ -295,27 +299,66 @@ const FolderLayout = ({ navigation, route }) => {
             )}
 
             {selectedTab === "Members" && (
-              <View style={[styles.feedItem, { marginTop: 20 }]}>
-                <View >
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-                    <Image source={profilePic} style={styles.dp} />
-                    <View>
+              <>
+                <View style={[styles.feedItem, { marginTop: 20 }]}>
+                  <View >
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15, marginBottom: 10 }}>
+                      <Image source={profilePic} style={styles.feedDp} />
                       <View>
-                        <CustomText weight="bold">User name</CustomText>
-                        <CustomText weight="medium" style={{ maxWidth: 280, fontSize: 12, color: '#6B7280' }}>Nov 10 at 06:45 AM</CustomText>
-                      </View>
-                      <View>
-                        <CustomText weight="medium"
-                          numberOfLines={3}
-                          ellipsizeMode="tail"
-                          style={{ maxWidth: 280, fontSize: 12, color: '#6B7280' }}
-                        >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
+                        <View>
+                          <CustomText weight="bold">User name</CustomText>
+                          <CustomText weight="medium" style={{ maxWidth: 280, fontSize: 12, color: '#888888' }}>Nov 10 at 06:45 AM</CustomText>
+                        </View>
+
                       </View>
                     </View>
+                    <View>
+                      <CustomText weight="medium"
+                        numberOfLines={3}
+                        ellipsizeMode="tail"
+                        style={{ maxWidth: 320, fontSize: 12, color: '#888888' }}
+                      >It is a long established fact that a reader will be distracted by the readable content.It is a long established fact.</CustomText>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', marginTop: 15, paddingRight: 10 }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 25, gap: 6 }}>
+                        <SmilePlus size={16} />
+                        <CustomText weight="bold" style={{ fontSize: 12 }}>React</CustomText>
+                      </View>
+                      <CustomText weight="bold" style={{ fontSize: 12 }}>Reply</CustomText>
+                    </View>
                   </View>
-
                 </View>
-              </View>
+
+                <View style={[styles.feedItem, { marginTop: 0 }]}>
+                  <View >
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15, marginBottom: 10 }}>
+                      <Image source={profilePic} style={styles.feedDp} />
+                      <View>
+                        <View>
+                          <CustomText weight="bold">User name</CustomText>
+                          <CustomText weight="medium" style={{ maxWidth: 280, fontSize: 12, color: '#888888' }}>Nov 10 at 06:45 AM</CustomText>
+                        </View>
+
+                      </View>
+                    </View>
+                    <View>
+                      <CustomText weight="medium"
+                        numberOfLines={3}
+                        ellipsizeMode="tail"
+                        style={{ maxWidth: 320, fontSize: 12, color: '#888888' }}
+                      >It is a long established fact that a reader will be distracted by the readable content.It is a long established fact.</CustomText>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', marginTop: 15, paddingRight: 10 }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 25, gap: 6 }}>
+                        <SmilePlus size={16} />
+                        <CustomText weight="bold" style={{ fontSize: 12 }}>React</CustomText>
+                      </View>
+                      <CustomText weight="bold" style={{ fontSize: 12 }}>Reply</CustomText>
+                    </View>
+                  </View>
+                </View>
+              </>
+
             )}
           </ScrollView>
         </View>
@@ -386,7 +429,7 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   tabText: {
-    color: "#6B7280",
+    color: "#888888",
     fontSize: 15,
     fontWeight: "500",
   },
@@ -394,7 +437,12 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: "700",
   },
-
+  iconInactive:{
+color:'#000'
+},
+iconActive:{
+color:'#fff'
+},
 
   grid: {
     width: '100%',
@@ -456,7 +504,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     textAlign: "center",
-    color: "#6B7280",
+    color: "#888888",
     marginTop: 20,
   },
   importBtnWhite: {
@@ -500,7 +548,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#EDEDED',
     paddingVertical: 15,
-    paddingHorizontal: 12,
+    paddingHorizontal: 13,
     backgroundColor: '#fff',
     borderRadius: 6,
     shadowColor: '#acacacff',
@@ -544,7 +592,12 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 6,
   },
-
+  feedDp: {
+    width: 41,
+    height: 41,
+    borderRadius: 25.5,
+    resizeMode: "cover",
+  },
 });
 
 export default FolderLayout;

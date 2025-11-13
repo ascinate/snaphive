@@ -421,8 +421,12 @@ import {
   Heart,
   Upload,
   UserPlus,
+  Plus,
+  Users,
 } from "lucide-react-native";
 import { launchImageLibrary } from "react-native-image-picker";
+import { Dimensions } from "react-native";
+const { width, height } = Dimensions.get("window");
 
 // SVGs
 import Pencil from "../../assets/svg/pencil.svg";
@@ -477,19 +481,33 @@ const FolderLayout = ({ navigation, route }) => {
 
       OverlayContent={
         <View style={styles.profileOverlay}>
-
+          <CustomText weight="bold" style={{ color: '#fff', fontSize: 30 }}>2025 Picnic</CustomText>
+          <CustomText weight="medium" style={{ color: '#fff', fontSize: 14, marginBottom: 20 }}>It is a long established fact that</CustomText>
           <View style={styles.rowBetween}>
-            <ThemeButton
-              text="Upload"
-              icon={<Upload color="#fff" size={18} />}
+
+            <TouchableOpacity
+              style={styles.importBtnWhite}
               onPress={handleUpload}
-              style={{ width: "78%" }}
-            />
-            <TouchableOpacity>
-              <View style={styles.addMemberBtn}>
-                <UserPlus width={20} height={20} />
+            >
+              <View>
+                <Plus color="#EA580B" size={20} />
               </View>
+              <CustomText weight="bold" style={{ color: '#EA580B', fontSize: 14, }}>
+                Uplaod Media
+              </CustomText>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.importBtnWhite, { backgroundColor: '#000000ff' }]}
+              onPress={handleUpload}
+            >
+              <View>
+                <Users color="#ffffff" size={20} />
+              </View>
+              <CustomText weight="bold" style={{ color: '#ffffff', fontSize: 14, }}>
+                Members (10)
+              </CustomText>
+            </TouchableOpacity>
+
           </View>
         </View>
       }
@@ -685,6 +703,7 @@ const styles = StyleSheet.create({
   rowBetween: {
     flexDirection: "row",
     alignItems: "center",
+    gap: 20,
     justifyContent: "space-between",
   },
   topBar: {
@@ -821,6 +840,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#6B7280",
     marginTop: 20,
+  },
+  importBtnWhite: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: width * 0.02,
+    backgroundColor: '#FFFFFF',
+    paddingVertical: height * 0.012,
+    paddingHorizontal: width * 0.050,
+    borderRadius: 14,
+    marginVertical: 10,
+
   },
 });
 

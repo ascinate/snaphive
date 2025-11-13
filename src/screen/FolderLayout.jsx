@@ -192,30 +192,66 @@ const FolderLayout = ({ navigation, route }) => {
                 <SearchBar />
                 <View style={styles.chatList}>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("Chat", { memberId: member.id, memberName: member.name })}
+                    onPress={() => navigation.navigate("Chat")}
                   >
-                    <View style={styles.chatListItem}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-                        <Image source={profilePic} style={styles.dp} />
-                        <View>
-                          <CustomText weight="bold">User name</CustomText>
-                          <CustomText weight="medium" >It is a long established.</CustomText>
+
+                    <View style={styles.shadowWrapper}>
+
+                      <View style={styles.chatListItem}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
+                          <Image source={profilePic} style={styles.dp} />
+                          <View>
+                            <CustomText weight="bold">User name</CustomText>
+                            <CustomText weight="medium"
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                              style={{ maxWidth: 160 }}
+                            >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
+                          </View>
+                        </View>
+                        <View style={{ alignItems: 'flex-end', minWidth: 60 }}>
+                          <CustomText weight="medium" style={{ fontSize: 12 }}>5 Hours ago</CustomText>
+                          <View style={{
+                            backgroundColor: '#FF0800',
+                            width: 20,
+                            height: 20,
+                            borderRadius: 10,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: 6
+                          }}>
+                            <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
+                          </View>
                         </View>
                       </View>
-                      <View style={{ alignItems: 'flex-end' }}>
-                        <CustomText weight="medium" style={{ fontSize: 12 }}>5 Hours ago</CustomText>
-                        <View style={{
-                          backgroundColor: '#FF0800',
-                          width: 20,
-                          height: 20,
-                          borderRadius: 10,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          marginTop: 6
-                        }}>
-                          <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
+                      <View style={styles.chatListItem}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
+                          <Image source={profilePic} style={styles.dp} />
+                          <View>
+                            <CustomText weight="bold">User name</CustomText>
+                            <CustomText weight="medium"
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                              style={{ maxWidth: 160 }}
+                            >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
+                          </View>
+                        </View>
+                        <View style={{ alignItems: 'flex-end', minWidth: 60 }}>
+                          <CustomText weight="medium" style={{ fontSize: 12 }}>5 Hours ago</CustomText>
+                          <View style={{
+                            backgroundColor: '#FF0800',
+                            width: 20,
+                            height: 20,
+                            borderRadius: 10,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: 6
+                          }}>
+                            <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
+                          </View>
                         </View>
                       </View>
+
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -384,21 +420,22 @@ const styles = StyleSheet.create({
   chatListItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 15,
+    justifyContent: 'space-between',
+    width: '100%',
     marginBottom: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#EDEDED',
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    paddingLeft: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 12,
     backgroundColor: '#fff',
-    borderRadius: 12,
-    shadowColor: '#000000ff',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 2,
+    borderRadius: 6,
+    shadowColor: '#acacacff',
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 12,
   },
+
 
   dp: {
     width: 51,

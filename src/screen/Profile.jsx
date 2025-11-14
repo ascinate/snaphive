@@ -544,7 +544,7 @@ const Profile = ({ navigation, }) => {
 
         <TouchableOpacity
           style={styles.rowProfile}
-          onPress={() => navigation.navigate('ContactUs')}
+          onPress={() => navigation.navigate('Home')}
         >
           <View style={styles.iconBox}>
             <MessageCircle size={20} color="#F98935" />
@@ -562,7 +562,7 @@ const Profile = ({ navigation, }) => {
 
         <TouchableOpacity
           style={styles.rowProfile}
-          onPress={() => navigation.navigate('YourOpinion')}
+          onPress={() => navigation.navigate('Home')}
         >
           <View style={styles.iconBox}>
             <Heart size={20} color="#F98935" />
@@ -580,7 +580,7 @@ const Profile = ({ navigation, }) => {
 
         <TouchableOpacity
           style={styles.rowProfile}
-          onPress={() => navigation.navigate('NewPage')}
+          onPress={() => navigation.navigate('Home')}
         >
           <View style={styles.iconBox}>
             <Share2 size={20} color="#F98935" />

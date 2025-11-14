@@ -10,12 +10,6 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
-  ChevronRight, Crown, Languages, LogOut, Share2,
-  QrCode,
-  MessageCircle,
-  Heart,
-  Upload,
-  UserPlus,
   Plus,
   Users,
   SmilePlus,
@@ -75,16 +69,7 @@ const FolderLayout = ({ navigation, route }) => {
   const members = [
     { id: 1, name: "Demola Aoki", dp: dp },
     { id: 2, name: "Sofia Carrington", dp: dp3 },
-    // { id: 3, name: "Quincy Thoreau", dp: dp4 },
-    // { id: 4, name: "Demola Aoki", dp: dp5 },
-    // { id: 5, name: "Emma Andreas", dp: dp2 },
-    // { id: 6, name: "Sofia Carrington", dp: dp6 },
-    // { id: 7, name: "Chloe Dumont", dp: dp7 },
-    // { id: 8, name: "Quincy Thoreau", dp: dp8 },
-    // { id: 9, name: "Emma Andreas", dp: dp2 },
-    // { id: 10, name: "Sofia Carrington", dp: dp6 },
-    // { id: 11, name: "Chloe Dumont", dp: dp7 },
-    // { id: 12, name: "Quincy Thoreau", dp: dp8 },
+
   ];
 
   return (
@@ -118,7 +103,7 @@ const FolderLayout = ({ navigation, route }) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.importBtnWhite, { backgroundColor: '#000000ff' }]}
-                  onPress={() => setModalVisible(true)}
+              onPress={() => setModalVisible(true)}
             >
               <View>
                 <Users color="#ffffff" size={20} />
@@ -127,9 +112,6 @@ const FolderLayout = ({ navigation, route }) => {
                 Members (10)
               </CustomText>
             </TouchableOpacity>
-
-
-
 
             {/* <TouchableOpacity
           style={styles.rowProfile}
@@ -280,7 +262,7 @@ const FolderLayout = ({ navigation, route }) => {
                       </View>
                     </View>
 
-                    
+
                   </TouchableOpacity>
                 </View>
               </>
@@ -349,10 +331,10 @@ const FolderLayout = ({ navigation, route }) => {
 
             )}
           </ScrollView>
-                  <MembersModal
-          visible={modalVisible}
-          onClose={() => setModalVisible(false)}
-        />
+          <MembersModal
+            visible={modalVisible}
+            onClose={() => setModalVisible(false)}
+          />
         </View>
       </ScrollView>
     </ScreenLayout>

@@ -7,29 +7,37 @@ import TopNavbar from '../components/TopNavbar'
 import LeftArrow from '../../assets/svg/leftArrow.svg'
 import CameraIcon from '../../assets/svg/cameraIcon.svg'
 import VoiceMesssage from '../../assets/svg/voiceMesssage.svg'
-import Send from '../../assets/svg/send.svg'
+
 import MultiImage from '../../assets/svg/multiImage.svg'
 import CustomText from '../components/CustomText'
+import { ArrowLeft, Ellipsis, MoveLeft, Send, SendHorizonal } from "lucide-react-native";
 // image
 const dp = require("../../assets/dp.jpg");
 const picnic1 = require("../../assets/picnic1.jpg");
 
-const Chat = ({navigation}) => {
+const Chat = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
-            <TopNavbar />
-            {/* Header Section */}
-            <View style={styles.header} >
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <LeftArrow width={24} height={24} />
-                </TouchableOpacity>
 
-                <View style={styles.profileContainer}>
-                    <View style={styles.displayPictureContainer}>
-                        <Image source={dp} style={styles.displayPicture} />
+            {/* Header Section */}
+            <View style={styles.header}>
+                <View style={{flexDirection:'row', alignItems:'center',gap:10}} >
+
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <ArrowLeft />
+                    </TouchableOpacity>
+
+                    <View style={styles.profileContainer}>
+                        <View style={styles.displayPictureContainer}>
+                            <Image source={dp} style={styles.displayPicture} />
+                        </View>
+                        <View>
+                            <CustomText weight="bold" style={styles.userName}>James Danis</CustomText>
+                            <CustomText weight="medium" style={{ fontSize: 12, color: '#00A236' }}>Online</CustomText>
+                        </View>
                     </View>
-                    <CustomText weight="bold" style={styles.userName}>User Name</CustomText>
                 </View>
+                    <Ellipsis />
             </View>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
 
@@ -38,9 +46,6 @@ const Chat = ({navigation}) => {
                 <View style={styles.messagesContainer}>
                     {/* Message Box */}
                     <View style={styles.userOneMessageBox}>
-                        <View style={styles.messageDpContainer}>
-                            <Image source={dp} style={styles.messageDp} />
-                        </View>
 
                         <View style={styles.messageContent}>
                             <View style={styles.messageImageContainer}>
@@ -51,50 +56,40 @@ const Chat = ({navigation}) => {
                                     <Image source={picnic1} style={styles.messageImage} />
                                 </View>
                                 <View style={styles.messageImageContainerMore}>
-                                      <CustomText weight="medium" style={{ fontSize: 25, color: '#5F636E' }}>50+ </CustomText>
+                                    <CustomText weight="medium" style={{ fontSize: 25, color: '#5F636E' }}>50+ </CustomText>
                                 </View>
                             </View>
 
                         </View>
-
+                        <CustomText weight="medium" style={{ fontSize: 10 }} >01:00 am</CustomText>
                     </View>
 
                     <View style={styles.userTwoMessageBox}>
-                        <View style={styles.messageDpContainer}>
-                            <Image source={dp} style={styles.messageDp} />
-                        </View>
+
                         <View style={styles.messageText}>
-                              <CustomText weight="medium"  style={styles.text}>Hey Tobi, are you join our
+                            <CustomText weight="medium" style={[styles.text, { color: '#636363', fontSize: 12 }]}>Hey Tobi, are you join our
                                 new Hive?
 
                             </CustomText>
                             <View style={styles.messageArrowRight} />
                         </View>
-
+                        <CustomText weight="medium" style={{ fontSize: 10 }} >01:00 am</CustomText>
                     </View>
 
                     <View style={styles.userOneMessageBox}>
-                        <View style={styles.messageDpContainer}>
-                            <Image source={dp} style={styles.messageDp} />
-                        </View>
                         <View style={styles.messageTextLeft}>
-                             <CustomText weight="medium"  style={styles.textLeft}>Hey Tobi, are you join our
+                            <CustomText weight="medium" style={[styles.textLeft, { color: '#636363', fontSize: 12 }]}>Hey Tobi, are you join our
                                 new Hive?
-
                             </CustomText>
                             <View style={styles.messageArrowLeft} />
                         </View>
+                        <CustomText weight="medium" style={{ fontSize: 10 }} >01:00 am</CustomText>
                     </View>
 
                     <View style={styles.userOneMessageBox}>
-                        <View style={styles.messageDpContainer}>
-                            <Image source={dp} style={styles.messageDp} />
-                        </View>
+
 
                         <View style={styles.messageContent}>
-                            <View style={styles.messageImageContainer}>
-                                <Image source={picnic1} style={styles.messageImage} />
-                            </View>
                             <View style={{ flexDirection: 'row', gap: 10 }}>
                                 <View style={styles.messageImageContainerTwo}>
                                     <Image source={picnic1} style={styles.messageImage} />
@@ -105,26 +100,35 @@ const Chat = ({navigation}) => {
                             </View>
 
                         </View>
-
+                        <CustomText weight="medium" style={{ fontSize: 10, margin: 0 }} >01:00 am</CustomText>
                     </View>
 
                 </View>
             </ScrollView>
 
             <View style={{ flexDirection: 'row', gap: 10, paddingVertical: 16, paddingHorizontal: 25, alignItems: 'center', justifyContent: 'space-between' }}>
-                <View style={{ backgroundColor: '#000000', height: 40, width: 40, borderRadius: 50, alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{ backgroundColor: '#E1711C', height: 40, width: 40, borderRadius: 50, alignItems: 'center', justifyContent: 'center' }}>
                     <CameraIcon height={24} width={24} />
                 </View>
                 <View style={{ position: 'relative' }}>
-                    <TextInput style={styles.inputType} placeholder='type here..' />
-                    <VoiceMesssage height={24} width={24} style={styles.voiceMesssage} />
-                    <Send height={24} width={24} style={styles.send} />
+                    <TextInput style={styles.inputType} placeholder='Type here..' placeholderTextColor="#AAAAAA" />
 
+                    <MultiImage height={24} width={24} style={styles.send} />
                 </View>
 
-                <View>
-                    <MultiImage height={30} width={30} />
+                <View
+                    style={{
+                        width: 44,
+                        height: 44,
+                        backgroundColor: '#E1711C',
+                        borderRadius: 12,
+                        justifyContent: 'center',
+                        alignItems: 'center',   // <-- FIX
+                    }}
+                >
+                    <SendHorizonal size={24} color="#ffffff" />
                 </View>
+
             </View>
         </SafeAreaView>
     )
@@ -133,7 +137,7 @@ const Chat = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#FAFAF9',
 
     },
     scrollContainer: {
@@ -143,9 +147,10 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
         gap: 12,
         marginBottom: 20,
-                paddingVertical: 16,
+        paddingVertical: 16,
         paddingHorizontal: 25,
     },
     profileContainer: {
@@ -154,9 +159,9 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     displayPictureContainer: {
-        width: 35,
-        height: 35,
-        borderRadius: 17.5,
+        width: 44,
+        height: 44,
+        borderRadius: 50,
         overflow: 'hidden',
     },
     displayPicture: {
@@ -175,14 +180,15 @@ const styles = StyleSheet.create({
     },
     userOneMessageBox: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
+
         gap: 18,
         marginBlock: 16,
         maxWidth: '80%',
     },
     userTwoMessageBox: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         gap: 18,
         marginBlock: 16,
         maxWidth: '80%',
@@ -235,19 +241,29 @@ const styles = StyleSheet.create({
     },
     messageText: {
         borderRadius: 10,
-        backgroundColor: '#ffc240',
-        paddingVertical: 18,
+        backgroundColor: '#FFE49A',
+        paddingVertical: 11,
         paddingHorizontal: 28,
         maxWidth: 265,
-        height: 'auto'
+        height: 'auto',
+        shadowColor: '#acacacff',
+        shadowOpacity: 0.25,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 12,
+        elevation: 12,
     },
     messageTextLeft: {
         borderRadius: 10,
-        backgroundColor: '#000000',
-        paddingVertical: 18,
+        backgroundColor: '#fff',
+        paddingVertical: 11,
         paddingHorizontal: 28,
         maxWidth: 265,
-        height: 'auto'
+        height: 'auto',
+        shadowColor: '#acacacff',
+        shadowOpacity: 0.25,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 12,
+        elevation: 12,
     },
     text: {
         color: '#000000',
@@ -268,7 +284,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 8,
         borderBottomColor: 'transparent',
         borderLeftWidth: 8,
-        borderLeftColor: '#ffc240',
+        borderLeftColor: '#FFE49A',
     },
     messageArrowLeft: {
         position: 'absolute',
@@ -281,14 +297,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 8,
         borderBottomColor: 'transparent',
         borderRightWidth: 8,
-        borderRightColor: '#000000ff',
+        borderRightColor: '#fff',
     },
     inputType: {
         borderWidth: 1,
         borderColor: '#D9D9D9',
         borderRadius: 50,
         paddingLeft: 20,
-        width: 250,
+        width: 280,
+
     },
     voiceMesssage: {
         position: 'absolute',

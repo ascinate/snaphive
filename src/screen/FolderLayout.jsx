@@ -141,9 +141,9 @@ const FolderLayout = ({ navigation, route }) => {
           {/* Tabs */}
           <View style={styles.tabsContainer}>
             {[
-              { label: "Gallery", icon: <Images width={16} height={16}     stroke={selectedTab === "Gallery" ? "#fff" : "#000"}/> },
-              { label: "Chat", icon: <Video width={16} height={16}  stroke={selectedTab === "Chat" ? "#fff" : "#000"}/> },
-              { label: "Members", icon: <MessagesSquare width={16} height={16} stroke={selectedTab === "Members" ? "#fff" : "#000"}/> },
+              { label: "Gallery", icon: <Images width={16} height={16} stroke={selectedTab === "Gallery" ? "#fff" : "#000"} /> },
+              { label: "Chat", icon: <Video width={16} height={16} stroke={selectedTab === "Chat" ? "#fff" : "#000"} /> },
+              { label: "Members", icon: <MessagesSquare width={16} height={16} stroke={selectedTab === "Members" ? "#fff" : "#000"} /> },
             ].map((tab, i) => (
               <TouchableOpacity
                 key={i}
@@ -228,13 +228,7 @@ const FolderLayout = ({ navigation, route }) => {
                   <TouchableOpacity
                     onPress={() => navigation.navigate("Chat")}
                   >
-
                     <View style={styles.shadowWrapper}>
-
-
-
-
-
                       <View style={styles.chatListItem}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
                           <Image source={profilePic} style={styles.dp} />
@@ -262,37 +256,9 @@ const FolderLayout = ({ navigation, route }) => {
                           </View>
                         </View>
                       </View>
-
-
-                      <View style={styles.chatListItem}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-                          <Image source={profilePic} style={styles.dp} />
-                          <View>
-                            <CustomText weight="bold">User name</CustomText>
-                            <CustomText weight="medium"
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                              style={{ maxWidth: 160, fontSize: 12, color: '#888888' }}
-                            >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
-                          </View>
-                        </View>
-                        <View style={{ alignItems: 'flex-end', minWidth: 60 }}>
-                          <CustomText weight="medium" style={{ fontSize: 12 }}>5 Hours ago</CustomText>
-                          <View style={{
-                            backgroundColor: '#FF0800',
-                            width: 20,
-                            height: 20,
-                            borderRadius: 10,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginTop: 6
-                          }}>
-                            <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
-                          </View>
-                        </View>
-                      </View>
-
                     </View>
+
+                    
                   </TouchableOpacity>
                 </View>
               </>
@@ -437,12 +403,12 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: "700",
   },
-  iconInactive:{
-color:'#000'
-},
-iconActive:{
-color:'#fff'
-},
+  iconInactive: {
+    color: '#000'
+  },
+  iconActive: {
+    color: '#fff'
+  },
 
   grid: {
     width: '100%',

@@ -80,14 +80,14 @@ const FolderLayout = ({ navigation, route }) => {
       date="+91 1841 510 1450"
       RightIcon={
         <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
-          <Pencil height={16} width={16} />
+          <Pencil height={width * 0.04} width={width * 0.04} />
         </TouchableOpacity>
       }
 
       OverlayContent={
         <View style={styles.profileOverlay}>
-          <CustomText weight="bold" style={{ color: '#fff', fontSize: 30 }}>2025 Picnic</CustomText>
-          <CustomText weight="medium" style={{ color: '#fff', fontSize: 14, marginBottom: 20 }}>It is a long established fact that</CustomText>
+          <CustomText weight="bold" style={{ color: '#fff', fontSize: width * 0.075 }}>2025 Picnic</CustomText>
+          <CustomText weight="medium" style={{ color: '#fff', fontSize: width * 0.035, marginBottom: height * 0.025 }}>It is a long established fact that</CustomText>
           <View style={styles.rowBetween}>
 
             <TouchableOpacity
@@ -95,9 +95,9 @@ const FolderLayout = ({ navigation, route }) => {
               onPress={handleUpload}
             >
               <View>
-                <Plus color="#EA580B" size={20} />
+                <Plus color="#EA580B" size={width * 0.05} />
               </View>
-              <CustomText weight="bold" style={{ color: '#EA580B', fontSize: 14, }}>
+              <CustomText weight="bold" style={{ color: '#EA580B', fontSize: width * 0.035 }}>
                 Uplaod Media
               </CustomText>
             </TouchableOpacity>
@@ -106,30 +106,12 @@ const FolderLayout = ({ navigation, route }) => {
               onPress={() => setModalVisible(true)}
             >
               <View>
-                <Users color="#ffffff" size={20} />
+                <Users color="#ffffff" size={width * 0.05} />
               </View>
-              <CustomText weight="bold" style={{ color: '#ffffff', fontSize: 14, }}>
+              <CustomText weight="bold" style={{ color: '#ffffff', fontSize: width * 0.035 }}>
                 Members (10)
               </CustomText>
             </TouchableOpacity>
-
-            {/* <TouchableOpacity
-          style={styles.rowProfile}
-          onPress={() => setModalVisible(true)}
-        >
-          <View style={styles.iconBox}>
-            <Crown size={20} color="#F98935" />
-          </View>
-          <View style={styles.textBox}>
-            <CustomText weight="bold" style={styles.title}>
-              Premium
-            </CustomText>
-            <CustomText weight="medium" style={styles.subtitle}>
-              Unlock all features
-            </CustomText>
-          </View>
-          <ChevronRight color="#B0B0B0" size={18} />
-        </TouchableOpacity> */}
 
           </View>
         </View>
@@ -145,9 +127,9 @@ const FolderLayout = ({ navigation, route }) => {
           {/* Tabs */}
           <View style={styles.tabsContainer}>
             {[
-              { label: "Gallery", icon: <Images width={16} height={16} stroke={selectedTab === "Gallery" ? "#fff" : "#000"} /> },
-              { label: "Chat", icon: <Video width={16} height={16} stroke={selectedTab === "Chat" ? "#fff" : "#000"} /> },
-              { label: "Members", icon: <MessagesSquare width={16} height={16} stroke={selectedTab === "Members" ? "#fff" : "#000"} /> },
+              { label: "Gallery", icon: <Images width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Gallery" ? "#fff" : "#000"} /> },
+              { label: "Chat", icon: <Video width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Chat" ? "#fff" : "#000"} /> },
+              { label: "Members", icon: <MessagesSquare width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Members" ? "#fff" : "#000"} /> },
             ].map((tab, i) => (
               <TouchableOpacity
                 key={i}
@@ -201,7 +183,7 @@ const FolderLayout = ({ navigation, route }) => {
                 <ScrollView
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{ flexDirection: 'row', gap: 10, paddingHorizontal: 15, paddingVertical: 10 }}>
+                  contentContainerStyle={{ flexDirection: 'row', gap: width * 0.025, paddingHorizontal: width * 0.0375, paddingVertical: height * 0.0125 }}>
                   <View style={styles.allMembarShadowWrapper}>
                     <Image source={profilePic} style={styles.allMembarDp} />
                   </View>
@@ -234,27 +216,27 @@ const FolderLayout = ({ navigation, route }) => {
                   >
                     <View style={styles.shadowWrapper}>
                       <View style={styles.chatListItem}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: width * 0.0375 }}>
                           <Image source={profilePic} style={styles.dp} />
                           <View>
                             <CustomText weight="bold">User name</CustomText>
                             <CustomText weight="medium"
                               numberOfLines={1}
                               ellipsizeMode="tail"
-                              style={{ maxWidth: 160, fontSize: 12, color: '#888888' }}
+                              style={{ maxWidth: width * 0.4, fontSize: width * 0.03, color: '#888888' }}
                             >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
                           </View>
                         </View>
-                        <View style={{ alignItems: 'flex-end', minWidth: 60 }}>
-                          <CustomText weight="medium" style={{ fontSize: 12 }}>5 Hours ago</CustomText>
+                        <View style={{ alignItems: 'flex-end', minWidth: width * 0.15 }}>
+                          <CustomText weight="medium" style={{ fontSize: width * 0.03 }}>5 Hours ago</CustomText>
                           <View style={{
                             backgroundColor: '#FF0800',
-                            width: 20,
-                            height: 20,
-                            borderRadius: 10,
+                            width: width * 0.05,
+                            height: width * 0.05,
+                            borderRadius: width * 0.025,
                             justifyContent: 'center',
                             alignItems: 'center',
-                            marginTop: 6
+                            marginTop: height * 0.0075
                           }}>
                             <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
                           </View>
@@ -343,8 +325,8 @@ const FolderLayout = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 120,
+    paddingHorizontal: width * 0.05,
+    paddingBottom: height * 0.15,
     backgroundColor: "#FAFAF9",
   },
 
@@ -360,15 +342,15 @@ const styles = StyleSheet.create({
   rowBetween: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 20,
+    gap: width * 0.05,
     justifyContent: "space-between",
   },
 
   bottomOverlay: {
     position: "absolute",
-    bottom: 90,
-    left: 20,
-    right: 20,
+    bottom: height * 0.1125,
+    left: width * 0.05,
+    right: width * 0.05,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
@@ -378,16 +360,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    marginTop: 20,
+    marginTop: height * 0.025,
     borderRadius: 40,
-    paddingVertical: 8,
+    paddingVertical: height * 0.01,
   },
   tabButton: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
-    paddingHorizontal: 22,
-    paddingVertical: 6,
+    gap: width * 0.015,
+    paddingHorizontal: width * 0.055,
+    paddingVertical: height * 0.0075,
     borderWidth: 1,
     borderColor: '#D0CACA',
     borderRadius: 4,
@@ -404,7 +386,7 @@ const styles = StyleSheet.create({
   },
   tabText: {
     color: "#888888",
-    fontSize: 15,
+    fontSize: width * 0.0375,
     fontWeight: "500",
   },
   tabTextActive: {
@@ -420,18 +402,10 @@ const styles = StyleSheet.create({
 
   grid: {
     width: '100%',
-    marginTop: 10,
+    marginTop: height * 0.0125,
     alignItems: 'center',
   },
 
-  imageWrapperRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    gap: 15,
-    width: '100%',
-  },
   imageWrapperRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -440,36 +414,36 @@ const styles = StyleSheet.create({
   },
   imageGridOne: {
     width: '48%',
-    height: 160,
+    height: height * 0.2,
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
-    marginBottom: 15,
+    marginBottom: height * 0.0187,
   },
   imageGridTwo: {
     width: '48%',
-    height: 240,
+    height: height * 0.3,
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
-    marginBottom: 15,
+    marginBottom: height * 0.0187,
   },
   imageGridThree: {
     width: '48%',
-    height: 240,
+    height: height * 0.3,
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
-    marginBottom: 15,
-    marginTop: -80,
+    marginBottom: height * 0.0187,
+    marginTop: height * -0.1,
   },
   imageGridFour: {
     width: '48%',
-    height: 160,
+    height: height * 0.2,
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
-    marginBottom: 15,
+    marginBottom: height * 0.0187,
   },
   photo: {
     width: '100%',
@@ -479,7 +453,7 @@ const styles = StyleSheet.create({
   infoText: {
     textAlign: "center",
     color: "#888888",
-    marginTop: 20,
+    marginTop: height * 0.025,
   },
   importBtnWhite: {
     flexDirection: 'row',
@@ -490,21 +464,21 @@ const styles = StyleSheet.create({
     paddingVertical: height * 0.012,
     paddingHorizontal: width * 0.050,
     borderRadius: 14,
-    marginVertical: 10,
+    marginVertical: height * 0.0125,
   },
   chatList: {
-    marginTop: 20,
+    marginTop: height * 0.025,
   },
   chatListItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 20,
+    marginBottom: height * 0.025,
     borderBottomWidth: 1,
     borderBottomColor: '#EDEDED',
-    paddingVertical: 15,
-    paddingHorizontal: 12,
+    paddingVertical: height * 0.0187,
+    paddingHorizontal: width * 0.03,
     backgroundColor: '#fff',
     borderRadius: 6,
     shadowColor: '#acacacff',
@@ -518,11 +492,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 20,
+    marginBottom: height * 0.025,
     borderBottomWidth: 1,
     borderBottomColor: '#EDEDED',
-    paddingVertical: 15,
-    paddingHorizontal: 13,
+    paddingVertical: height * 0.0187,
+    paddingHorizontal: width * 0.0325,
     backgroundColor: '#fff',
     borderRadius: 6,
     shadowColor: '#acacacff',
@@ -536,15 +510,15 @@ const styles = StyleSheet.create({
 
 
   dp: {
-    width: 51,
-    height: 51,
-    borderRadius: 25.5,
+    width: width * 0.1275,
+    height: width * 0.1275,
+    borderRadius: width * 0.06375,
     resizeMode: "cover",
   },
   allMembarDp: {
-    width: 55,
-    height: 55,
-    borderRadius: 25.5,
+    width: width * 0.1375,
+    height: width * 0.1375,
+    borderRadius: width * 0.06875,
     resizeMode: "cover",
     borderWidth: 2,
     borderColor: '#ffffff',
@@ -554,8 +528,8 @@ const styles = StyleSheet.create({
 
 
   allMembarShadowWrapper: {
-    width: 60,
-    height: 60,
+    width: width * 0.15,
+    height: width * 0.15,
     borderRadius: 50,
     backgroundColor: '#fff',
     alignItems: 'center',
@@ -567,12 +541,11 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   feedDp: {
-    width: 41,
-    height: 41,
-    borderRadius: 25.5,
+    width: width * 0.1025,
+    height: width * 0.1025,
+    borderRadius: width * 0.05125,
     resizeMode: "cover",
   },
 });
 
 export default FolderLayout;
-

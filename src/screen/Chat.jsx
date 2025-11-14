@@ -1,7 +1,9 @@
-import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, TextInput, Dimensions } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import TopNavbar from '../components/TopNavbar'
+
+const { width, height } = Dimensions.get("window");
 
 // svg
 import LeftArrow from '../../assets/svg/leftArrow.svg'
@@ -21,10 +23,10 @@ const Chat = ({ navigation }) => {
 
             {/* Header Section */}
             <View style={styles.header}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }} >
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: width * 0.025 }} >
 
                     <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <ArrowLeft />
+                        <ArrowLeft size={width * 0.06} />
                     </TouchableOpacity>
 
                     <View style={styles.profileContainer}>
@@ -33,11 +35,11 @@ const Chat = ({ navigation }) => {
                         </View>
                         <View>
                             <CustomText weight="bold" style={styles.userName}>James Danis</CustomText>
-                            <CustomText weight="medium" style={{ fontSize: 12, color: '#00A236' }}>Online</CustomText>
+                            <CustomText weight="medium" style={{ fontSize: width * 0.03, color: '#00A236' }}>Online</CustomText>
                         </View>
                     </View>
                 </View>
-                <Ellipsis />
+                <Ellipsis size={width * 0.06} />
             </View>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
 
@@ -51,46 +53,46 @@ const Chat = ({ navigation }) => {
                             <View style={styles.messageImageContainer}>
                                 <Image source={picnic1} style={styles.messageImage} />
                             </View>
-                            <View style={{ flexDirection: 'row', gap: 10 }}>
+                            <View style={{ flexDirection: 'row', gap: width * 0.025 }}>
                                 <View style={styles.messageImageContainerTwo}>
                                     <Image source={picnic1} style={styles.messageImage} />
                                 </View>
                                 <View style={styles.messageImageContainerMore}>
-                                    <CustomText weight="medium" style={{ fontSize: 25, color: '#5F636E' }}>50+ </CustomText>
+                                    <CustomText weight="medium" style={{ fontSize: width * 0.0625, color: '#5F636E' }}>50+ </CustomText>
                                 </View>
                             </View>
 
                         </View>
-                        <CustomText weight="medium" style={{ fontSize: 10 }} >01:00 am</CustomText>
+                        <CustomText weight="medium" style={{ fontSize: width * 0.025 }} >01:00 am</CustomText>
                     </View>
 
                     <View style={styles.userTwoMessageBox}>
 
                         <View style={styles.messageText}>
-                            <CustomText weight="medium" style={[styles.text, { color: '#636363', fontSize: 12 }]}>Hey Tobi, are you join our
+                            <CustomText weight="medium" style={[styles.text, { color: '#636363', fontSize: width * 0.03 }]}>Hey Tobi, are you join our
                                 new Hive?
 
                             </CustomText>
                             <View style={styles.messageArrowRight} />
                         </View>
-                        <CustomText weight="medium" style={{ fontSize: 10 }} >01:00 am</CustomText>
+                        <CustomText weight="medium" style={{ fontSize: width * 0.025 }} >01:00 am</CustomText>
                     </View>
 
                     <View style={styles.userOneMessageBox}>
                         <View style={styles.messageTextLeft}>
-                            <CustomText weight="medium" style={[styles.textLeft, { color: '#636363', fontSize: 12 }]}>Hey Tobi, are you join our
+                            <CustomText weight="medium" style={[styles.textLeft, { color: '#636363', fontSize: width * 0.03 }]}>Hey Tobi, are you join our
                                 new Hive?
                             </CustomText>
                             <View style={styles.messageArrowLeft} />
                         </View>
-                        <CustomText weight="medium" style={{ fontSize: 10 }} >01:00 am</CustomText>
+                        <CustomText weight="medium" style={{ fontSize: width * 0.025 }} >01:00 am</CustomText>
                     </View>
 
                     <View style={styles.userOneMessageBox}>
 
 
                         <View style={styles.messageContent}>
-                            <View style={{ flexDirection: 'row', gap: 10 }}>
+                            <View style={{ flexDirection: 'row', gap: width * 0.025 }}>
                                 <View style={styles.messageImageContainerTwo}>
                                     <Image source={picnic1} style={styles.messageImage} />
                                 </View>
@@ -100,33 +102,33 @@ const Chat = ({ navigation }) => {
                             </View>
 
                         </View>
-                        <CustomText weight="medium" style={{ fontSize: 10, margin: 0 }} >01:00 am</CustomText>
+                        <CustomText weight="medium" style={{ fontSize: width * 0.025, margin: 0 }} >01:00 am</CustomText>
                     </View>
 
                 </View>
             </ScrollView>
 
-            <View style={{ flexDirection: 'row', gap: 10, paddingVertical: 16, paddingHorizontal: 25, alignItems: 'center', justifyContent: 'space-between' }}>
-                <View style={{ backgroundColor: '#E1711C', height: 40, width: 40, borderRadius: 50, alignItems: 'center', justifyContent: 'center' }}>
-                    <CameraIcon height={24} width={24} />
+            <View style={{ flexDirection: 'row', gap: width * 0.025, paddingVertical: height * 0.02, paddingHorizontal: width * 0.0625, alignItems: 'center', justifyContent: 'space-between' }}>
+                <View style={{ backgroundColor: '#E1711C', height: width * 0.1, width: width * 0.1, borderRadius: 50, alignItems: 'center', justifyContent: 'center' }}>
+                    <CameraIcon height={width * 0.06} width={width * 0.06} />
                 </View>
                 <View style={{ position: 'relative' }}>
                     <TextInput style={styles.inputType} placeholder='Type here..' placeholderTextColor="#AAAAAA" />
 
-                    <ImagePlus size={24} color='#575757' style={styles.send} />
+                    <ImagePlus size={width * 0.06} color='#575757' style={styles.send} />
                 </View>
 
                 <View
                     style={{ 
-                        width: 44,
-                        height: 44,
+                        width: width * 0.11,
+                        height: width * 0.11,
                         backgroundColor: '#E1711C',
                         borderRadius: 50,
                         justifyContent: 'center',
-                        alignItems: 'center',   // <-- FIX
+                        alignItems: 'center',
                     }}
                 >
-                    <SendHorizonal size={24} color="#ffffff" />
+                    <SendHorizonal size={width * 0.06} color="#ffffff" />
                 </View>
 
             </View>
@@ -141,26 +143,26 @@ const styles = StyleSheet.create({
 
     },
     scrollContainer: {
-        paddingVertical: 16,
-        paddingHorizontal: 25,
+        paddingVertical: height * 0.00,
+        paddingHorizontal: width * 0.0625,
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: 12,
-        marginBottom: 20,
-        paddingVertical: 16,
-        paddingHorizontal: 25,
+        gap: width * 0.03,
+        marginBottom: height * 0.025,
+        paddingVertical: height * 0.02,
+        paddingHorizontal: width * 0.0625,
     },
     profileContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 10,
+        gap: width * 0.025,
     },
     displayPictureContainer: {
-        width: 44,
-        height: 44,
+        width: width * 0.11,
+        height: width * 0.11,
         borderRadius: 50,
         overflow: 'hidden',
     },
@@ -170,35 +172,34 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
     userName: {
-        fontSize: 16,
+        fontSize: width * 0.04,
         fontWeight: '600',
         color: '#000',
     },
     messagesContainer: {
         flex: 1,
-        paddingTop: 10,
+        paddingTop: height * 0.0,
     },
     userOneMessageBox: {
         flexDirection: 'row',
         alignItems: 'center',
-
-        gap: 18,
-        marginBlock: 16,
+        gap: width * 0.045,
+        marginBlock: height * 0.02,
         maxWidth: '80%',
     },
     userTwoMessageBox: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 18,
-        marginBlock: 16,
+        gap: width * 0.045,
+        marginBlock: height * 0.02,
         maxWidth: '80%',
         alignSelf: 'flex-end',
         flexDirection: 'row-reverse',
     },
     messageDpContainer: {
-        width: 35,
-        height: 35,
-        borderRadius: 17.5,
+        width: width * 0.0875,
+        height: width * 0.0875,
+        borderRadius: width * 0.04375,
         overflow: 'hidden',
     },
     messageDp: {
@@ -208,11 +209,11 @@ const styles = StyleSheet.create({
     },
     messageContent: {
         flex: 1,
-        gap: 10,
+        gap: width * 0.025,
     },
     messageImageContainer: {
-        width: 215,
-        height: 120,
+        width: width * 0.5375,
+        height: height * 0.15,
         borderRadius: 12,
         overflow: 'hidden',
         backgroundColor: '#f0f0f0',
@@ -223,16 +224,16 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
     messageImageContainerTwo: {
-        width: 100,
-        height: 90,
+        width: width * 0.25,
+        height: height * 0.1125,
         borderRadius: 12,
         overflow: 'hidden',
         backgroundColor: '#f0f0f0',
     },
 
     messageImageContainerMore: {
-        width: 100,
-        height: 90,
+        width: width * 0.25,
+        height: height * 0.1125,
         borderRadius: 12,
         overflow: 'hidden',
         backgroundColor: '#f0f0f0',
@@ -242,9 +243,9 @@ const styles = StyleSheet.create({
     messageText: {
         borderRadius: 10,
         backgroundColor: '#FFE49A',
-        paddingVertical: 11,
-        paddingHorizontal: 28,
-        maxWidth: 265,
+        paddingVertical: height * 0.0137,
+        paddingHorizontal: width * 0.07,
+        maxWidth: width * 0.6625,
         height: 'auto',
         shadowColor: '#acacacff',
         shadowOpacity: 0.25,
@@ -255,9 +256,9 @@ const styles = StyleSheet.create({
     messageTextLeft: {
         borderRadius: 10,
         backgroundColor: '#fff',
-        paddingVertical: 11,
-        paddingHorizontal: 28,
-        maxWidth: 265,
+        paddingVertical: height * 0.0137,
+        paddingHorizontal: width * 0.07,
+        maxWidth: width * 0.6625,
         height: 'auto',
         shadowColor: '#acacacff',
         shadowOpacity: 0.25,
@@ -303,18 +304,18 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#D9D9D9',
         borderRadius: 50,
-        paddingLeft: 20,
-        width: 280,
-        height: 44
+        paddingLeft: width * 0.05,
+        width: width * 0.63,
+        height: width * 0.11
     },
     voiceMesssage: {
         position: 'absolute',
-        right: 40,
+        right: width * 0.1,
         top: '20%',
     },
     send: {
         position: 'absolute',
-        right: 12,
+        right: width * 0.03,
         top: '22%',
     }
 })

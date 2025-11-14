@@ -465,7 +465,7 @@ const Profile = ({ navigation, }) => {
       folderName="Janifer Danis"
       date="+91 1841 510 1450"
       RightIcon={
-        <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Pencil height={16} width={16} />
         </TouchableOpacity>
       }

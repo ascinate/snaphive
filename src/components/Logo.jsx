@@ -1,5 +1,5 @@
 import { View, Image,StyleSheet } from 'react-native'
-const logo = require("../../assets/logofour.png");
+const logo = require("../../assets/snaphive-logo.png");
 
 const Logo = ({ style }) => {
   return (
@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
-    width: 187,
-    height: 47,
+    width: 300,
+    height: 100,
   },
   logo: {
     width: '100%',

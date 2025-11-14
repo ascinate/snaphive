@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Logo from "../components/Logo";
+
 
 const { width, height } = Dimensions.get("window");
+const logo = require("../../assets/loader.png");
 
 const Landing = ({ navigation }) => {
   useEffect(() => {
@@ -44,7 +47,8 @@ const Landing = ({ navigation }) => {
         >
           {/* Centered Text */}
           <View style={styles.centerContainer}>
-            <Text style={styles.text}>SnapHive</Text>
+            <Image source={logo} style={{ width: 200, aspectRatio: 1, resizeMode: "contain" }} />
+
           </View>
         </LinearGradient>
       </SafeAreaView>

@@ -91,43 +91,38 @@ const MyHives = ({ navigation, route }) => {
                     {/* Dashboard Cards Section */}
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <LinearGradient
-                        colors={['#E1711C', '#E5B925']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1.6, y: 0 }}
-                        style={[styles.dashCard]}
-                    >
-                        <View >
-                            <View>
-                                <CustomText weight="bold" style={styles.cardText}>
-                                    {events.length}
-                                </CustomText>
-                                <CustomText weight="medium" style={{ color: '#fff' }}>
-                                    Total Hives
-                                </CustomText>
+                        <View
+                  
+                            style={[styles.dashCard]}
+                        >
+                            <View >
+                                <View>
+                                    <CustomText weight="bold" style={styles.cardText}>
+                                        {events.length}
+                                    </CustomText>
+                                    <CustomText weight="medium" style={{ color: '#fff' }}>
+                                        Total Hives
+                                    </CustomText>
+                                </View>
                             </View>
                         </View>
-                    </LinearGradient>
 
-                    <LinearGradient
-                        colors={['#E1711C', '#E5B925']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1.6, y: 0 }}
-                        style={[styles.dashCard]}
-                    >
+                        <View
+                            style={[styles.dashCard]}
+                        >
 
 
-                        <View >
-                            <View>
-                                <CustomText weight="bold" style={styles.cardText}>
-                                      {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
-                                </CustomText>
-                                <CustomText weight="medium" style={{ color: '#fff' }}>
-                                   Photos
-                                </CustomText>
+                            <View >
+                                <View>
+                                    <CustomText weight="bold" style={styles.cardText}>
+                                        {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
+                                    </CustomText>
+                                    <CustomText weight="medium" style={{ color: '#fff' }}>
+                                        Photos
+                                    </CustomText>
+                                </View>
                             </View>
                         </View>
-                    </LinearGradient>
                     </View>
 
 
@@ -317,6 +312,7 @@ const styles = StyleSheet.create({
     dashCard: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+      backgroundColor: colors.primary,
         width: '48%',
         padding: width * 0.045,
         borderRadius: 12,

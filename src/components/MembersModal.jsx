@@ -41,13 +41,13 @@ const MembersModal = ({ visible, onClose }) => {
                     <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
                         <CustomText weight="medium" style={styles.closeTxt}>✕</CustomText>
                     </TouchableOpacity>
-                    <View style={{ flexDirection: 'row', gap: 12, alignContent: 'center' }}>
-                        <Users color='#E1711C' size={20}/>
+                    <View style={{ flexDirection: 'row', gap: 12, alignContent: 'center', paddingHorizontal: 10 }}>
+                        <Users color='#E1711C' size={20} />
                         <CustomText weight="medium" style={styles.title}>Hive Members</CustomText>
                     </View>
-     
 
-  
+
+
                     <View style={styles.inviteRow}>
                         <TextInput
                             placeholder="exmaple@gmail.com"
@@ -61,6 +61,8 @@ const MembersModal = ({ visible, onClose }) => {
                             <CustomText weight="medium" style={styles.inviteText}>Invite</CustomText>
                         </TouchableOpacity>
                     </View>
+
+
 
 
                     <ScrollView
@@ -113,14 +115,16 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,0.5)",
         justifyContent: "center",
         alignItems: "center",
+
     },
 
     modalBox: {
         width: "100%",
         maxWidth: 380,
+
         backgroundColor: "#FAFAF9",
         borderRadius: 16,
-        padding: 20,
+        padding: 10,
         paddingTop: 35,
         position: "relative",
         minHeight: "75%",
@@ -152,6 +156,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "100%",
         marginBottom: 10,
+        paddingHorizontal: 5,
     },
 
     input: {
@@ -185,7 +190,7 @@ const styles = StyleSheet.create({
         padding: 12,
         borderRadius: 12,
         marginBottom: 12,
-        width: "100%",
+        width: "95%",
         shadowColor: "#7a7979ff",
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.20,

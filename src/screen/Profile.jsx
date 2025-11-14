@@ -656,6 +656,7 @@ const styles = StyleSheet.create({
     color: "#1C1C1C",
   },
   profileOverlay: {
+
     alignItems: "center",
 
   },

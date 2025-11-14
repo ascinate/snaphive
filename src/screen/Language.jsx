@@ -203,7 +203,7 @@ const flag4 = require("../../assets/flag4.png");
 // Images
 const createEvent = require("../../assets/background.png");
 const profilePic = require("../../assets/picnic3.jpg");
-const Profile = ({ navigation, route }) => {
+const Language = ({ navigation, route }) => {
 
     const [email, setEmail] = useState("");
     const [selectedLanguage, setSelectedLanguage] = useState("English");
@@ -226,22 +226,16 @@ const Profile = ({ navigation, route }) => {
             image={createEvent}
             folderName="Janifer Danis"
             date="+91 1841 510 1450"
-            RightIcon={
-                <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
-                    <Pencil height={16} width={16} />
-                </TouchableOpacity>
-            }
+
 
             OverlayContent={
                 <View style={styles.profileOverlay}>
-                    <Image source={profilePic} style={styles.profileImage} />
+
                     <View>
                         <CustomText weight="bold" style={styles.profileName}>
-                            Janifer Danis
+                            Select Language
                         </CustomText>
-                        <CustomText style={styles.profileNumber}>
-                            +91 1841 510 1450
-                        </CustomText>
+
                     </View>
                 </View>
             }
@@ -249,7 +243,7 @@ const Profile = ({ navigation, route }) => {
 
 
             <ScrollView style={{ paddingHorizontal: 20, paddingTop: 40, backgroundColor: '#FAFAF9' }}>
-                <CustomText weight="bold" style={{fontSize: 16}}>Select Language</CustomText>
+
                 {languages.map((lang, index) => (
                     <TouchableOpacity
                         key={index}
@@ -271,21 +265,21 @@ const Profile = ({ navigation, route }) => {
 
                         {/* Conditional tick or placeholder */}
                         {selectedLanguage === lang.name ? (
-                        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#E1711C',alignItems: 'center',justifyContent:'center' }}>
-                            <Check color='#ffffffff' size={16}/>
-                        </View>
-                     
+                            <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#E1711C', alignItems: 'center', justifyContent: 'center' }}>
+                                <Check color='#ffffffff' size={16} />
+                            </View>
+
 
                         ) : (
-                            <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#ffffff', borderWidth: 1,borderColor: '#bebebeff' }} />
+                            <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#ffffff', borderWidth: 1, borderColor: '#bebebeff' }} />
                         )}
                     </TouchableOpacity>
                 ))}
 
                 {/* Send Button */}
                 <ThemeButton
-                    text="Invite"
-                    onPress={() => navigation.navigate("MyFriend")}
+                    text="Save"
+                    onPress={() => navigation.navigate("MyTabs")}
                     style={{ width: "100%", marginTop: 100 }}
                 />
             </ScrollView>
@@ -303,6 +297,8 @@ const styles = StyleSheet.create({
     },
 
     profileOverlay: {
+        position: 'absolute',
+        top: -80,
         alignItems: "center",
     },
     profileImage: {
@@ -314,7 +310,7 @@ const styles = StyleSheet.create({
     },
     profileName: {
         color: "#fff",
-        fontSize: 20,
+        fontSize: 26,
     },
     profileNumber: {
         color: "#f0f0f0",
@@ -343,17 +339,17 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 8,
         backgroundColor: "#F7F7F7",
-   
-    shadowColor: '#7a7979ff',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.20,
-    shadowRadius: 6,
-    elevation: 1,
+
+        shadowColor: '#7a7979ff',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.20,
+        shadowRadius: 6,
+        elevation: 1,
     },
 });
 
 
-export default Profile;
+export default Language;
 
 
 

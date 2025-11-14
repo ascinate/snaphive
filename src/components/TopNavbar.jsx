@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useNotification } from "../context/NotificationContext";
 import MaskedView from "@react-native-masked-view/masked-view";
-const logo = require("../../assets/logo-snaphive.png");
+const logo = require("../../assets/snaphive-logo.png");
 
-import {Bell } from "lucide-react-native"; 
+import { Bell } from "lucide-react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomText from "./CustomText";
 
@@ -16,7 +16,7 @@ const TopNav = () => {
   return (
     <View style={styles.container}>
       <View style={styles.leftSection}>
-     <Image source={logo} style={{ width: 122, height: 30 }} />
+        <Image source={logo} style={{ width:100, height: 45, resizeMode: "contain", }} />
 
       </View>
 
@@ -26,21 +26,21 @@ const TopNav = () => {
       >
         <Bell width={28} height={28} />
         {unreadCount > 0 && (
-     
-                    <LinearGradient
-          colors={[
-            '#a131d3', '#b128c4', '#bd22b5', '#c61fa7', '#cc2199',
-            '#d71f8c', '#df227f', '#e52a73', '#ef3462', '#f44250',
-            '#f5533d', '#f36529',
-          ]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.badge}
-        >
+
+          <LinearGradient
+            colors={[
+              '#a131d3', '#b128c4', '#bd22b5', '#c61fa7', '#cc2199',
+              '#d71f8c', '#df227f', '#e52a73', '#ef3462', '#f44250',
+              '#f5533d', '#f36529',
+            ]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.badge}
+          >
 
             <Text style={styles.badgeText}>{unreadCount}</Text>
-        </LinearGradient>
-       
+          </LinearGradient>
+
         )}
       </TouchableOpacity>
     </View>

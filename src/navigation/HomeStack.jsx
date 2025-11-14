@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // screens
 import Home from "../screen/Home";
-import PhotoFolder from "../screen/PhotoFolder";
+import FolderLayout from "../screen/FolderLayout";
 import Notification from "../screen/Notification";
 
 const Stack = createNativeStackNavigator();
@@ -13,7 +13,7 @@ export default function HomeStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeMain" component={Home} />
-      <Stack.Screen name="PhotoFolder" component={PhotoFolder} />
+      <Stack.Screen name="FolderLayout" component={FolderLayout} />
       <Stack.Screen name="Notification" component={Notification} />
     </Stack.Navigator>
   );

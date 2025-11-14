@@ -10,7 +10,7 @@ import VoiceMesssage from '../../assets/svg/voiceMesssage.svg'
 
 import MultiImage from '../../assets/svg/multiImage.svg'
 import CustomText from '../components/CustomText'
-import { ArrowLeft, Ellipsis, MoveLeft, Send, SendHorizonal } from "lucide-react-native";
+import { ArrowLeft, Ellipsis, ImagePlus, MoveLeft, Send, SendHorizonal } from "lucide-react-native";
 // image
 const dp = require("../../assets/dp.jpg");
 const picnic1 = require("../../assets/picnic1.jpg");
@@ -21,7 +21,7 @@ const Chat = ({ navigation }) => {
 
             {/* Header Section */}
             <View style={styles.header}>
-                <View style={{flexDirection:'row', alignItems:'center',gap:10}} >
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }} >
 
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <ArrowLeft />
@@ -37,7 +37,7 @@ const Chat = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
-                    <Ellipsis />
+                <Ellipsis />
             </View>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
 
@@ -113,15 +113,15 @@ const Chat = ({ navigation }) => {
                 <View style={{ position: 'relative' }}>
                     <TextInput style={styles.inputType} placeholder='Type here..' placeholderTextColor="#AAAAAA" />
 
-                    <MultiImage height={24} width={24} style={styles.send} />
+                    <ImagePlus size={24} color='#575757' style={styles.send} />
                 </View>
 
                 <View
-                    style={{
+                    style={{ 
                         width: 44,
                         height: 44,
                         backgroundColor: '#E1711C',
-                        borderRadius: 12,
+                        borderRadius: 50,
                         justifyContent: 'center',
                         alignItems: 'center',   // <-- FIX
                     }}
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         paddingLeft: 20,
         width: 280,
-
+        height: 44
     },
     voiceMesssage: {
         position: 'absolute',
@@ -314,8 +314,8 @@ const styles = StyleSheet.create({
     },
     send: {
         position: 'absolute',
-        right: 10,
-        top: '20%',
+        right: 12,
+        top: '22%',
     }
 })
 

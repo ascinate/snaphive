@@ -34,6 +34,7 @@ import Pencil from "../../assets/svg/pencil.svg";
 import ScreenLayout from "../components/ScreenLayout";
 import CustomText from "../components/CustomText";
 import SearchBar from "../components/SearchBar";
+import MembersModal from "../components/MembersModal";
 
 // Images
 const createEvent = require("../../assets/background.png");
@@ -51,7 +52,7 @@ const FolderLayout = ({ navigation, route }) => {
   const { image, folderName, date, owner, photos = [] } = route.params || {};
   const [selectedTab, setSelectedTab] = useState("Gallery");
   const [uploadedImages, setUploadedImages] = useState([]);
-
+  const [modalVisible, setModalVisible] = useState(false);
   const handleUpload = () => {
     const options = {
       mediaType: "photo",
@@ -117,7 +118,7 @@ const FolderLayout = ({ navigation, route }) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.importBtnWhite, { backgroundColor: '#000000ff' }]}
-              onPress={handleUpload}
+                  onPress={() => setModalVisible(true)}
             >
               <View>
                 <Users color="#ffffff" size={20} />
@@ -126,6 +127,27 @@ const FolderLayout = ({ navigation, route }) => {
                 Members (10)
               </CustomText>
             </TouchableOpacity>
+
+
+
+
+            {/* <TouchableOpacity
+          style={styles.rowProfile}
+          onPress={() => setModalVisible(true)}
+        >
+          <View style={styles.iconBox}>
+            <Crown size={20} color="#F98935" />
+          </View>
+          <View style={styles.textBox}>
+            <CustomText weight="bold" style={styles.title}>
+              Premium
+            </CustomText>
+            <CustomText weight="medium" style={styles.subtitle}>
+              Unlock all features
+            </CustomText>
+          </View>
+          <ChevronRight color="#B0B0B0" size={18} />
+        </TouchableOpacity> */}
 
           </View>
         </View>
@@ -327,6 +349,10 @@ const FolderLayout = ({ navigation, route }) => {
 
             )}
           </ScrollView>
+                  <MembersModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+        />
         </View>
       </ScrollView>
     </ScreenLayout>

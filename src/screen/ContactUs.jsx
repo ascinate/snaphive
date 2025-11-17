@@ -225,7 +225,7 @@ const ContactUs = ({ navigation, route }) => {
 
                     <View>
                         <CustomText weight="bold" style={{fontSize: 24, color: '#FFFFFF'}}>
-                    Invite Member
+                    Invite Member via email 
                         </CustomText>
 
                     </View>

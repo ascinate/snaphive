@@ -79,7 +79,7 @@ const FolderLayout = ({ navigation, route }) => {
       folderName="Janifer Danis"
       date="+91 1841 510 1450"
       RightIcon={
-        <TouchableOpacity onPress={() => navigation.navigate("AddMember")}>
+        <TouchableOpacity onPress={() => navigation.navigate("InviteMember")}>
           <QR height={width * 0.04} width={width * 0.04} />
         </TouchableOpacity>
       }

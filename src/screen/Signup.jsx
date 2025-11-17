@@ -15,7 +15,7 @@ import { registerUser } from "../API/API";
 import CustomText from '../components/CustomText';
 import ThemeButton from '../components/ThemeButton';
 import Logo from '../components/Logo';
-
+import PrivacyPolicyModal from '../components/PrivacyPolicyModal'; //
 // svg
 import Igoogle from "../../assets/Igoogle.svg";
 
@@ -23,6 +23,7 @@ const Signup = ({ navigation }) => {
   const [userID, setUserID] = useState('');
   const [password, setPassword] = useState('');
   const { width, height } = useWindowDimensions();
+const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
 
   const isValidEmail = (text) => /\S+@\S+\.\S+/.test(text);
@@ -162,25 +163,29 @@ const Signup = ({ navigation }) => {
       </View>
 
       {/* Terms & Privacy */}
-      <CustomText style={[styles.description, { fontSize: width * 0.035, position: 'fixed', top: 100 }]}>
-        By continuing I accept Selfso's Terms of Use and
-        <TouchableWithoutFeedback>
-          <CustomText
-            weight='medium'
-            style={[
-              styles.continueTxt,
-              {
-                fontWeight: '600',
-                textDecorationLine: 'underline',
-                color: '#000',
-                fontSize: width * 0.035,
-              },
-            ]}
-          >
-            {' '}Privacy Policy
-          </CustomText>
-        </TouchableWithoutFeedback>
-      </CustomText>
+<CustomText style={[styles.description, { fontSize: width * 0.035, position: 'fixed', top: 20 }]}>
+  By continuing I accept Selfso's Terms of Use and
+ <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
+    <CustomText
+      weight='medium'
+      style={[
+        styles.continueTxt,
+        {
+          fontWeight: '600',
+          textDecorationLine: 'underline',
+          color: '#000',
+          fontSize: width * 0.035,
+        },
+      ]}
+    >
+      {' '}Privacy Policy
+    </CustomText>
+  </TouchableWithoutFeedback>
+</CustomText>
+    <PrivacyPolicyModal
+      visible={showPrivacyModal}
+      onClose={() => setShowPrivacyModal(false)}
+    />
     </SafeAreaProvider>
   );
 };

@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Logo from '../components/Logo';
 import ThemeButton from '../components/ThemeButton';
 import CustomText from '../components/CustomText';
-
+import PrivacyPolicyModal from '../components/PrivacyPolicyModal'; //
 const logo = require("../../assets/logo.png");
 
 const Login = ({ navigation }) => {
@@ -15,7 +15,7 @@ const Login = ({ navigation }) => {
     const [userID, setUserID] = useState('');
     const [password, setPassword] = useState('');
 
-
+const [showPrivacyModal, setShowPrivacyModal] = useState(false);
     const isValidEmail = (text) => /\S+@\S+\.\S+/.test(text);
     const isValidPhone = (text) => /^[0-9]{10,15}$/.test(text);
 
@@ -106,11 +106,14 @@ const Login = ({ navigation }) => {
             <CustomText weight='medium' style={[styles.description, { position: 'absolute', bottom: 20, textAlign: 'center', fontSize: 14 }]}>
                 By continuing I accept Selfso's Terms of Use
                 and
-                <TouchableWithoutFeedback >
+    <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
                     <CustomText weight='medium' style={[styles.continueTxt, { fontWeight: 600, textDecorationLine: "underline", color: "#000000ff" }]}> Privacy Policy</CustomText>
                 </TouchableWithoutFeedback>
             </CustomText>
-
+    <PrivacyPolicyModal
+      visible={showPrivacyModal}
+      onClose={() => setShowPrivacyModal(false)}
+    />
         </SafeAreaProvider>
     );
 };

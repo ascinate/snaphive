@@ -544,7 +544,7 @@ const Profile = ({ navigation, }) => {
 
         <TouchableOpacity
           style={styles.rowProfile}
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.navigate('ContactUs')}
         >
           <View style={styles.iconBox}>
             <MessageCircle size={20} color="#F98935" />

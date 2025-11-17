@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Plus, Trash2, Users } from "lucide-react-native";
 import CustomText from "./CustomText";
+import { navigate } from "../navigation/RootNavigation";
 
 const MembersModal = ({ visible, onClose }) => {
     const [email, setEmail] = useState("");
@@ -57,7 +58,7 @@ const MembersModal = ({ visible, onClose }) => {
                             style={styles.input}
                         />
 
-                        <TouchableOpacity style={styles.inviteBtn}>
+                        <TouchableOpacity style={styles.inviteBtn} onPress={() => { navigate('ContactUs');  }}>
                             <CustomText weight="medium" style={styles.inviteText}>Invite</CustomText>
                         </TouchableOpacity>
                     </View>

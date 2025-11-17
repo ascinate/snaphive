@@ -22,7 +22,7 @@ import { Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 // SVGs
-import Pencil from "../../assets/svg/pencil.svg";
+import QR from "../../assets/svg/qr.svg";
 
 // Components
 import ScreenLayout from "../components/ScreenLayout";
@@ -79,8 +79,8 @@ const FolderLayout = ({ navigation, route }) => {
       folderName="Janifer Danis"
       date="+91 1841 510 1450"
       RightIcon={
-        <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
-          <Pencil height={width * 0.04} width={width * 0.04} />
+        <TouchableOpacity onPress={() => navigation.navigate("AddMember")}>
+          <QR height={width * 0.04} width={width * 0.04} />
         </TouchableOpacity>
       }
 

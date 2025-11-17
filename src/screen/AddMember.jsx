@@ -14,7 +14,7 @@ const AddMember = ({ navigation }) => {
                 <LeftArrow width={24} height={24} style={{ marginLeft: 20, marginTop: 20 }} onPress={() => navigation.goBack()} />
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <Text style={{ fontSize: 30, fontWeight: 600 }}>Add Member</Text>
-                    <Text style={{ width: '60%', textAlign: 'center', marginTop: 10 }}>Automatically share photos taken by members of your group</Text>
+                    <Text style={{ width: '60%', textAlign: 'center', marginTop: 10 }}>Scan QR code or copy link to share and invite members</Text>
                     <QR width={300} height={300} />
                 </View>
 

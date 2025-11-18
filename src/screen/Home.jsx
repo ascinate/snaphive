@@ -9,7 +9,7 @@ import { colors } from '../Theme/theme';
 import TopNav from '../components/TopNavbar';
 import CustomText from '../components/CustomText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { ImageBackground } from "react-native";
 // assets
 const hero = require('../../assets/hero.png');
 const picnic1 = require('../../assets/picnic1.jpg');
@@ -186,25 +186,27 @@ const Home = ({ navigation, route }) => {
           }
         >
 
-            {/* Search Bar */}
-              <View style={[styles.searchContainer, { marginHorizontal: width * 0.05 }]}>
-                <TextInput
-                  style={styles.searchInput}
-                  placeholder="Search"
-                  placeholderTextColor="#9CA3AF"
-                  value={searchQuery}
-                  onChangeText={setSearchQuery}
-                />
-                <Search color="#6B7280" size={20} style={styles.searchIcon} />
-              </View>
+          {/* Search Bar */}
+          <View style={[styles.searchContainer, { marginHorizontal: width * 0.05 }]}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search"
+              placeholderTextColor="#9CA3AF"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+            <Search color="#6B7280" size={20} style={styles.searchIcon} />
+          </View>
 
 
           {/* Hero Section */}
-          <View style={[styles.ImportSection, {
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }]}>
+          <ImageBackground
+            source={require("../../assets/background.png")}
+            style={[styles.ImportSection, {
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }]}>
             <View
               style={{
                 flexDirection: 'row',
@@ -258,7 +260,7 @@ const Home = ({ navigation, route }) => {
 
               </View>
             </View>
-          </View>
+          </ImageBackground>
 
 
           <View style={{ paddingHorizontal: width * 0.05, }}>
@@ -391,7 +393,7 @@ const Home = ({ navigation, route }) => {
 
               </View>
 
-  
+
 
               {/* here the event list show */}
               <View
@@ -402,8 +404,8 @@ const Home = ({ navigation, route }) => {
                   marginTop: 16,
                 }}
               >
-              {filteredEvents.length > 0 ? (
-                filteredEvents.map((item, index) => (
+                {filteredEvents.length > 0 ? (
+                  filteredEvents.map((item, index) => (
                     <TouchableOpacity
                       key={index}
                       style={{ width: '48%' }}
@@ -417,7 +419,7 @@ const Home = ({ navigation, route }) => {
                         })
                       }
                     >
-                      <View style={[styles.eventCard, ]}>   
+                      <View style={[styles.eventCard,]}>
                         <Image source={item.img} style={styles.eventImage} />
 
                         <View style={styles.eventInfo}>
@@ -456,50 +458,50 @@ const Home = ({ navigation, route }) => {
                     </TouchableOpacity>
 
 
-                ))
-              ) : (
+                  ))
+                ) : (
 
-                <View
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 10,
-                    marginTop: 60,
-                    marginBottom: 80,
-                    width: '100%',
-                  }}
-                >
                   <View
                     style={{
-                      width: 60,
-                      height: 60,
-                      backgroundColor: '#fecd6bff',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      borderRadius: 50,
+                      gap: 10,
+                      marginTop: 60,
+                      marginBottom: 80,
+                      width: '100%',
                     }}
                   >
-                    <ImagePlus color="#ffffff" size={28} />
-                  </View>
-
-                  <CustomText weight="medium" style={{ color: '#6B7280' }}>
-                    {searchQuery ? 'No hives found' : 'No hives yet'}
-                  </CustomText>
-
-                  {!searchQuery && (
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                      <CustomText
-                        weight="bold"
-                        style={{ color: '#feaa00' }}
-                        onPress={() => navigation.navigate('CreateHive')}
-                      >
-                        Create your first hive
-                      </CustomText>
-                      <MoveRight color="#feaa00" />
+                    <View
+                      style={{
+                        width: 60,
+                        height: 60,
+                        backgroundColor: '#fecd6bff',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 50,
+                      }}
+                    >
+                      <ImagePlus color="#ffffff" size={28} />
                     </View>
-                  )}
-                </View>
-              )}
+
+                    <CustomText weight="medium" style={{ color: '#6B7280' }}>
+                      {searchQuery ? 'No hives found' : 'No hives yet'}
+                    </CustomText>
+
+                    {!searchQuery && (
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                        <CustomText
+                          weight="bold"
+                          style={{ color: '#feaa00' }}
+                          onPress={() => navigation.navigate('CreateHive')}
+                        >
+                          Create your first hive
+                        </CustomText>
+                        <MoveRight color="#feaa00" />
+                      </View>
+                    )}
+                  </View>
+                )}
               </View>
             </View>
 

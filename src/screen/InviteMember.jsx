@@ -237,10 +237,14 @@ const ContactUs = ({ navigation, route }) => {
     >
 
 
-      <ScrollView style={{ paddingHorizontal: 20, paddingTop: 40, backgroundColor: '#FAFAF9' }}>
+      <ScrollView style={{ paddingHorizontal: 30, paddingTop: 40, backgroundColor: '#FAFAF9' }}>
 
 
-        {/* Code Section */}
+
+
+
+
+
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Code</Text>
@@ -250,7 +254,7 @@ const ContactUs = ({ navigation, route }) => {
         </View>
 
         {/* Link Section */}
-        <View style={{ flexDirection: 'row', gap: 12, alignContent: 'center', justifyContent:'space-between', paddingHorizontal: 10 }}>
+        <View style={{ flexDirection: 'row', gap: 12, alignContent: 'center', justifyContent: 'space-between', paddingHorizontal: 10 }}>
           <TouchableOpacity>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <View style={styles.badgeBtn}>
@@ -259,29 +263,38 @@ const ContactUs = ({ navigation, route }) => {
               </View>
             </View>
           </TouchableOpacity>
-                <TouchableOpacity
-          onPress={() => setModalVisible(true)}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(true)}>
 
-          <View style={styles.badgeBtn}>
-            <Text style={styles.badgeText}>QR Code</Text>
-            <QrCode width={16} height={16} />
+            <View style={styles.badgeBtn}>
+              <Text style={styles.badgeText}>QR Code</Text>
+              <QrCode width={16} height={16} />
 
-          </View>
-        </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
         </View>
-  
+
 
         <View style={styles.orLine}>
           <View style={styles.line} />
           <Text style={styles.text}>Or</Text>
           <View style={styles.line} />
         </View>
+
+        <View style={[styles.section, { borderBottomWidth: 0, marginTop: 10 }]}>
+
+
+          <TextInput style={styles.inviteMember} placeholder="example@gmail.com" />
+
+
+
+        </View>
         {/* Buttons */}
         <View style={styles.buttonRow}>
           <ThemeButton
-            text="Copy Links"
+            text="Send invite"
             onPress={() => navigation.navigate("MyTabs")}
-            style={{ width: "100%" }}
+            style={{ width: "100%", margin: 0 }}
           />
         </View>
       </ScrollView>
@@ -367,6 +380,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
   },
+  inviteMember: {
+    marginTop: 30,
+    borderWidth: 1,
+    borderColor: "#EFEFEF",
+    backgroundColor: '#F7F7F7',
+    borderRadius: 8,
+    color: "#000",
+    width: '100%',
+    paddingHorizontal: 20,
+    paddingVertical: 18,
+
+  }
 });
 
 

@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../screen/Home";
 import FolderLayout from "../screen/FolderLayout";
 import Notification from "../screen/Notification";
-
+import InviteMember from "../screen/InviteMember";
 const Stack = createNativeStackNavigator();
 
 export default function HomeStack() {
@@ -15,6 +15,7 @@ export default function HomeStack() {
       <Stack.Screen name="HomeMain" component={Home} />
       <Stack.Screen name="FolderLayout" component={FolderLayout} />
       <Stack.Screen name="Notification" component={Notification} />
+      <Stack.Screen name="InviteMember" component={InviteMember} />
     </Stack.Navigator>
   );
 }

@@ -240,9 +240,7 @@ const ContactUs = ({ navigation, route }) => {
 
                 {/* unique screen content */}
                 <View style={{ paddingInline: 20, marginTop: 40 }}>
-                    <Text style={{
-                        fontSize: 16, fontWeight: 600, lineHeight: 25, textAlign: 'center'
-                    }}>We'd love to know how we can improve. Feel free if you have any suggestions, ideas or comment!</Text>
+
 
 
                     <View style={styles.inputRow}>

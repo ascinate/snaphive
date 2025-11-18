@@ -71,9 +71,9 @@ const Signup = ({ navigation }) => {
       <Logo />
 
       {/* Description */}
-      <Text style={[styles.description, { fontSize: width * 0.04, paddingInline: 32 }]}>
+      <CustomText weight='medium' style={[styles.description, { fontSize: width * 0.04, paddingInline: 32 }]}>
         Automatically share photos taken by members of your group
-      </Text>
+      </CustomText>
 
       {/* Email or Phone Field */}
       <View style={{ width: '100%', marginTop: 36 }}>
@@ -121,7 +121,7 @@ const Signup = ({ navigation }) => {
       {/* OR line */}
       <View style={styles.orLine}>
         <View style={[styles.line, { width: width * 0.35 }]} />
-        <Text style={[styles.text, { fontSize: width * 0.04 }]}>Or</Text>
+        <CustomText weight='medium' style={[styles.text, { fontSize: width * 0.04 }]}>Or</CustomText>
         <View style={[styles.line, { width: width * 0.35 }]} />
       </View>
 
@@ -131,11 +131,11 @@ const Signup = ({ navigation }) => {
           <View style={styles.iconContainer}>
             <Igoogle width={width * 0.06} height={width * 0.06} />
           </View>
-          <Text
+          <CustomText weight='bold'
             style={[
               styles.continueTxt,
               {
-                fontSize: width * 0.04,
+                fontSize: width * 0.03,
                 fontFamily: 'Montserrat-Medium',
                 fontWeight: '500',
                 color: '#000',
@@ -143,19 +143,18 @@ const Signup = ({ navigation }) => {
             ]}
           >
             Continue with Google
-          </Text>
+          </CustomText>
         </View>
       </TouchableWithoutFeedback>
 
       {/* Already a user */}
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-        <CustomText style={{ fontSize: width * 0.04 }}>Already have an account ? </CustomText>
+        <CustomText weight='medium' style={{}}>Already have an account ? </CustomText>
         <TouchableWithoutFeedback onPress={() => navigation.navigate('Login')}>
           <View>
             <CustomText
               weight="bold"
-              style={[styles.continueTxt, { fontWeight: '500', fontSize: width * 0.04 }]}
-            >
+              style={[styles.continueTxt, { fontWeight: '500', color: '#111a94' }]}>
               Log in
             </CustomText>
           </View>
@@ -163,7 +162,8 @@ const Signup = ({ navigation }) => {
       </View>
 
       {/* Terms & Privacy */}
-      <CustomText style={[styles.description, { fontSize: width * 0.035, position: 'fixed', top: 20 }]}>
+
+      <CustomText weight='medium' style={[styles.description, { position: 'absolute', bottom: 20, textAlign: 'center', fontSize: 14 }]}>
         By continuing I accept Selfso's Terms of Use and
         <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
           <CustomText

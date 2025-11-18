@@ -222,6 +222,7 @@
 
 
 
+
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -363,11 +364,7 @@ const EditScreen = ({ navigation, }) => {
       image={createEvent}
       folderName="Janifer Danis"
       date="+91 1841 510 1450"
-      RightIcon={
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-          <Pencil height={16} width={16} />
-        </TouchableOpacity>
-      }
+
 
       OverlayContent={
         <View style={styles.profileOverlay}>
@@ -448,7 +445,6 @@ const EditScreen = ({ navigation, }) => {
           style={{ marginTop: 50 }}
           disabled={loading}
         />
-
 
       </ScrollView>
     </ScreenLayout>

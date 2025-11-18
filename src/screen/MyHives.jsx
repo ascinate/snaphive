@@ -28,7 +28,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
 import { useNavigation } from '@react-navigation/native';
-
+import { ImageBackground } from "react-native";
 // components
 import TopNav from '../components/TopNavbar';
 import CustomText from '../components/CustomText';
@@ -90,12 +90,12 @@ const MyHives = ({ navigation, route }) => {
 
                     {/* Dashboard Cards Section */}
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <View
-                  
-                            style={[styles.dashCard]}
-                        >
-                            <View >
+                    <View style={styles.row}>
+                        <View style={styles.cardWrap}>
+                            <ImageBackground
+                                style={styles.dashCard}
+                                source={require("../../assets/background.png")}
+                            >
                                 <View>
                                     <CustomText weight="bold" style={styles.cardText}>
                                         {events.length}
@@ -104,15 +104,14 @@ const MyHives = ({ navigation, route }) => {
                                         Total Hives
                                     </CustomText>
                                 </View>
-                            </View>
+                            </ImageBackground>
                         </View>
 
-                        <View
-                            style={[styles.dashCard]}
-                        >
-
-
-                            <View >
+                        <View style={styles.cardWrap}>
+                            <ImageBackground
+                                style={styles.dashCard}
+                                source={require("../../assets/background.png")}
+                            >
                                 <View>
                                     <CustomText weight="bold" style={styles.cardText}>
                                         {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
@@ -121,9 +120,10 @@ const MyHives = ({ navigation, route }) => {
                                         Photos
                                     </CustomText>
                                 </View>
-                            </View>
+                            </ImageBackground>
                         </View>
                     </View>
+
 
 
 
@@ -231,7 +231,7 @@ const MyHives = ({ navigation, route }) => {
 
                 </ScrollView>
             </SafeAreaView>
-        </SafeAreaProvider>
+        </SafeAreaProvider >
     );
 };
 
@@ -309,20 +309,29 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    row: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: "100%",
+    },
+
+    cardWrap: {
+        width: "48%",
+    },
+
     dashCard: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-      backgroundColor: colors.primary,
-        width: '48%',
         padding: width * 0.045,
         borderRadius: 12,
-        alignItems: 'center',
+        // alignItems: 'center',
+        justifyContent: "center",
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 1,
         elevation: 2,
+        overflow: "hidden",
     },
+
     cardText: {
         fontSize: 18,
         color: '#fff',

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useNotification } from "../context/NotificationContext"; // Import context
+import { useNotification } from "../context/NotificationContext"; 
 import TopNav from "../components/TopNavbar";
 import BackNavigator from "../../assets/svg/backNavigator.svg";
 import CreateAlbum from "../../assets/svg/createAlbum.svg";
@@ -9,9 +9,9 @@ import CreateFolder from "../../assets/svg/createFolder.svg";
 
 // Local images
 const NotificationScreen = ({ navigation }) => {
-  const { notifications, markAllAsRead } = useNotification();; // Use global context only
+  const { notifications, markAllAsRead } = useNotification();
   useEffect(() => {
-    markAllAsRead(); // clear notification count when page opens
+    markAllAsRead(); 
   }, []);
   return (
     <SafeAreaProvider>
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   scrollContainer: { paddingHorizontal: 20, paddingVertical: 10 },
   badge: { backgroundColor: "gray", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 5 },
   badgeText: { color: "white", fontSize: 14, fontWeight: "600" },
-  badgeActive: { backgroundColor: "black" },
+  badgeActive: { backgroundColor: "#E1711C", borderRadius: 12 },
   chatList: { marginBottom: 20 },
   chatListItem: {
     flexDirection: "row",

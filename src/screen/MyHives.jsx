@@ -85,6 +85,7 @@ const MyHives = ({ navigation, route }) => {
                                 placeholder="Search hive..."
                                 placeholderTextColor="#9CA3AF"
                             />
+                            
                         </View>
                     </View>
 

@@ -23,10 +23,7 @@ const Home = ({ navigation, route }) => {
   const slideAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
   const [searchQuery, setSearchQuery] = useState('');
-
   const [user, setUser] = useState(null);
-
-
   const parseExpiryDate = (dateString, timeString) => {
     try {
       if (!dateString) return null;
@@ -185,7 +182,6 @@ const Home = ({ navigation, route }) => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
-
           {/* Search Bar */}
           <View style={[styles.searchContainer, { marginHorizontal: width * 0.05 }]}>
             <TextInput
@@ -197,7 +193,6 @@ const Home = ({ navigation, route }) => {
             />
             <Search color="#6B7280" size={20} style={styles.searchIcon} />
           </View>
-
 
           {/* Hero Section */}
           <ImageBackground
@@ -256,13 +251,9 @@ const Home = ({ navigation, route }) => {
                     Create new hive
                   </CustomText>
                 </TouchableOpacity>
-
-
               </View>
             </View>
           </ImageBackground>
-
-
           <View style={{ paddingHorizontal: width * 0.05, }}>
             {/* Dashboard Cards */}
             <View
@@ -276,8 +267,8 @@ const Home = ({ navigation, route }) => {
               <View style={styles.dashCard}>
                 <View
                   style={{
-                    alignItems: 'center',   // centers horizontally
-                    justifyContent: 'center', // centers vertically
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <View
@@ -293,29 +284,25 @@ const Home = ({ navigation, route }) => {
 
                   <CustomText
                     weight="bold"
-                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]} // center text
+                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]}
                   >
                     {events.length}
                   </CustomText>
 
                   <CustomText
                     weight="medium"
-                    style={[styles.dashText, { textAlign: 'center' }]} // center text
+                    style={[styles.dashText, { textAlign: 'center' }]}
                   >
                     Total Hives
                   </CustomText>
                 </View>
               </View>
 
-
-
-
-
               <View style={styles.dashCard}>
                 <View
                   style={{
-                    alignItems: 'center',   // centers horizontally
-                    justifyContent: 'center', // centers vertically
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <View
@@ -390,10 +377,7 @@ const Home = ({ navigation, route }) => {
                 <CustomText weight="medium" style={{ color: colors.textGray, marginTop: 4 }} >
                   Manage your photo collections
                 </CustomText>
-
               </View>
-
-
 
               {/* here the event list show */}
               <View
@@ -457,7 +441,6 @@ const Home = ({ navigation, route }) => {
                       </View>
                     </TouchableOpacity>
 
-
                   ))
                 ) : (
 
@@ -504,29 +487,7 @@ const Home = ({ navigation, route }) => {
                 )}
               </View>
             </View>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </View>
-
-
-
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -721,12 +682,11 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     overflow: 'hidden',
     backgroundColor: '#fff',
-    // 💡 Shadow for iOS
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
-    // 💡 Shadow for Android
+
     elevation: 1,
   },
   cardImg: {
@@ -742,15 +702,12 @@ const styles = StyleSheet.create({
     padding: 16,
   },
 
-
-
-
   eventCard: {
     backgroundColor: '#fff',
     borderRadius: 8,
     overflow: 'hidden',
     padding: 12,
-    marginBottom: 16,   // ✅ spacing between rows
+    marginBottom: 16,
     // shadows
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -768,7 +725,10 @@ const styles = StyleSheet.create({
   },
 
   eventInfo: {
-    padding: 14,
+    paddingTop: 14,
+    paddingBottom: 14,
+    paddingLeft: 4,
+    paddingRight: 4,
     backgroundColor: '#fff',
   },
 

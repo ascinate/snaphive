@@ -16,6 +16,7 @@ import {
   Images,
   Video,
   MessagesSquare,
+  Share,
 } from "lucide-react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import { Dimensions } from "react-native";
@@ -80,7 +81,7 @@ const FolderLayout = ({ navigation, route }) => {
       date="+91 1841 510 1450"
       RightIcon={
         <TouchableOpacity onPress={() => navigation.navigate("InviteMember")}>
-          <QR height={width * 0.04} width={width * 0.04} />
+          <Share height={width * 0.04} width={width * 0.04} />
         </TouchableOpacity>
       }
 

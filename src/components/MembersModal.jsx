@@ -58,7 +58,7 @@ const MembersModal = ({ visible, onClose }) => {
                             style={styles.input}
                         />
 
-                        <TouchableOpacity style={styles.inviteBtn} onPress={() => { navigate('ContactUs');  }}>
+                        <TouchableOpacity style={styles.inviteBtn} >
                             <CustomText weight="medium" style={styles.inviteText}>Invite</CustomText>
                         </TouchableOpacity>
                     </View>

@@ -202,36 +202,36 @@ const PhotoShare = ({ navigation, route }) => {
             </View>
           </TouchableOpacity>
         </View>
-        
+
 
         {/* Image Grid */}
         {images.length > 0 ? (
           <View style={styles.gridContainer}>
-       {images.map((img, index) => (
-  <TouchableOpacity
-    key={img.uri}
-    style={[
-      styles.imgContainer,
-      {
-        marginRight: (index + 1) % 3 === 0 ? 0 : width * 0.015, // no gap after 3rd image
-        borderWidth: 4,
-        borderColor: selectedImages.some((i) => i.uri === img.uri)
-          ? '#007AFF'
-          : 'transparent',
-      },
-    ]}
-    onPress={() => {
-      if (selectedImages.some((i) => i.uri === img.uri)) {
-        setSelectedImages((prevSelected) =>
-          prevSelected.filter((i) => i.uri !== img.uri)
-        );
-      }
-    }}
-    onLongPress={() => handleLongPress(img)}
-  >
-    <Image source={{ uri: img.uri }} style={styles.img} />
-  </TouchableOpacity>
-))}
+            {images.map((img, index) => (
+              <TouchableOpacity
+                key={img.uri}
+                style={[
+                  styles.imgContainer,
+                  {
+                    marginRight: (index + 1) % 3 === 0 ? 0 : width * 0.015, // no gap after 3rd image
+                    borderWidth: 4,
+                    borderColor: selectedImages.some((i) => i.uri === img.uri)
+                      ? '#007AFF'
+                      : 'transparent',
+                  },
+                ]}
+                onPress={() => {
+                  if (selectedImages.some((i) => i.uri === img.uri)) {
+                    setSelectedImages((prevSelected) =>
+                      prevSelected.filter((i) => i.uri !== img.uri)
+                    );
+                  }
+                }}
+                onLongPress={() => handleLongPress(img)}
+              >
+                <Image source={{ uri: img.uri }} style={styles.img} />
+              </TouchableOpacity>
+            ))}
 
           </View>
         ) : (
@@ -244,11 +244,11 @@ const PhotoShare = ({ navigation, route }) => {
       </ScrollView>
       <ThemeButton
         style={styles.continueBtn}
-        
-       text={`Continue → (${selectedImages.length})`}
-        onPress={() =>
-          navigation.navigate('CreateEvent', { selectedImages })
-        }
+
+        text={`Continue → (${selectedImages.length})`}
+      // onPress={() =>
+      //   navigation.navigate('CreateEvent', { selectedImages })
+      // }
       />
 
 
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   cancelButton: {
-    backgroundColor: '#d6277e',
+    backgroundColor: '#E1711C',
     paddingHorizontal: width * 0.05,
     paddingVertical: height * 0.01,
     borderRadius: 6,
@@ -289,21 +289,21 @@ const styles = StyleSheet.create({
     fontSize: width * 0.04,
     fontWeight: '500',
   },
-gridContainer: {
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  justifyContent: 'flex-start',
-},
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+  },
 
-imgContainer: {
-  width: (width - width * 0.09) / 3, // 3 images per row
-  height: (width - width * 0.09) / 3, // square shape
-  marginBottom: width * 0.015, // spacing between rows
-  marginRight: width * 0.015, // spacing between columns
-  borderRadius: 8,
-  overflow: 'hidden',
-  backgroundColor: '#f5f5f5',
-},
+  imgContainer: {
+    width: (width - width * 0.09) / 3,
+    height: (width - width * 0.09) / 3,
+    marginBottom: width * 0.015,
+    marginRight: width * 0.015,
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#f5f5f5',
+  },
 
 
 

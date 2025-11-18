@@ -97,11 +97,12 @@ const ClickPhoto = ({ navigation }) => {
                     flash: 'off',
                 });
 
+                const photoPath = Platform.OS === 'ios' ? photo.path : `file://${photo.path}`;
                 const photoUri = `file://${photo.path}`;
                 setPhoto(photoUri);
                 setOriginalPhoto(photoUri);
                 setShowCamera(false);
-                await savePhotoToGallery(photoUri);
+                await savePhotoToGallery(photoPath);
             } catch (error) {
                 console.error('Failed to take photo:', error);
                 Alert.alert('Error', 'Failed to capture photo');
@@ -109,6 +110,7 @@ const ClickPhoto = ({ navigation }) => {
         }
     };
 
+    
     const retakePhoto = () => {
         setPhoto(null);
         setOriginalPhoto(null);

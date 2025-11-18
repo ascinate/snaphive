@@ -385,7 +385,7 @@ const EditScreen = ({ navigation, }) => {
               Janifer Danis
             </CustomText>
             <CustomText style={styles.profileNumber}>
-              +91 1841 510 1450
+              +91 1841 510 145
             </CustomText>
           </View>
         </View>

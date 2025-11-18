@@ -172,6 +172,8 @@
 
 // -----------------------------------------------------
 
+
+
 import React, { useState } from "react";
 import { View, TextInput, StyleSheet, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import FolderLayout from "./FolderLayout";
@@ -224,8 +226,8 @@ const ContactUs = ({ navigation, route }) => {
                 <View style={styles.profileOverlay}>
 
                     <View>
-                        <CustomText weight="bold" style={{fontSize: 24, color: '#FFFFFF'}}>
-                    Invite Member via email 
+                        <CustomText weight="bold" style={{ fontSize: 24, color: '#FFFFFF' }}>
+                            Contact US
                         </CustomText>
 
                     </View>
@@ -236,43 +238,43 @@ const ContactUs = ({ navigation, route }) => {
 
             <ScrollView style={{ paddingHorizontal: 20, paddingTop: 40, backgroundColor: '#FAFAF9' }}>
 
-               {/* unique screen content */}
-            <View style={{ paddingInline: 20, marginTop: 40 }}>
-                <Text style={{
-                    fontSize: 16, fontWeight: 600, lineHeight: 25, textAlign: 'center'
-                }}>We'd love to know how we can improve. Feel free if you have any suggestions, ideas or comment!</Text>
+                {/* unique screen content */}
+                <View style={{ paddingInline: 20, marginTop: 40 }}>
+                    <Text style={{
+                        fontSize: 16, fontWeight: 600, lineHeight: 25, textAlign: 'center'
+                    }}>We'd love to know how we can improve. Feel free if you have any suggestions, ideas or comment!</Text>
 
 
-                <View style={styles.inputRow}>
-                    <Mail width={18} height={18} style={{ marginRight: 8 }} />
+                    <View style={styles.inputRow}>
+                        <Mail width={18} height={18} style={{ marginRight: 8 }} />
+
+                        <TextInput
+                            style={styles.emailInput}
+                            value={email}
+                            onChangeText={setEmail}
+                            placeholder="exmaple@gmail.com"
+                        />
+
+                        <TouchableOpacity>
+                            <View style={styles.copyButton}>
+                                <Text style={{ color: '#000000', fontWeight: 500 }}>Copy</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
 
                     <TextInput
-                        style={styles.emailInput}
-                        value={email}
-                        onChangeText={setEmail}
-                        placeholder="exmaple@gmail.com"
+                        style={styles.textArea}
+                        multiline={true}
+                        numberOfLines={5}
+                        placeholder="Write your message here..."
                     />
 
-                    <TouchableOpacity>
-                        <View style={styles.copyButton}>
-                            <Text style={{color: '#000000', fontWeight: 500}}>Copy</Text>
-                        </View>
-                    </TouchableOpacity>
+                    <ThemeButton
+                        text="Send Message"
+                        onPress={() => navigation.navigate("InviteHiveMember")}
+                        style={{ width: "100%", marginTop: 28 }}
+                    />
                 </View>
-
-                <TextInput
-                    style={styles.textArea}
-                    multiline={true}
-                    numberOfLines={5}
-                    placeholder="Write your message here..."
-                />
-
-                <ThemeButton
-                    text="Send Message"
-                    onPress={() => navigation.navigate("InviteHiveMember")}
-                    style={{ width: "100%", marginTop:28 }}
-                />
-            </View>
             </ScrollView>
 
 
@@ -332,13 +334,13 @@ const styles = StyleSheet.create({
     //     fontSize: 16,
     //     textAlign: 'left',
     //     paddingLeft: 27,
-
     // },
+
     inputRow: {
         flexDirection: "row",
         alignItems: "center",
         borderWidth: 1,
-        borderColor: "#ccc",
+        borderColor: "#E5E5E5",
         borderRadius: 8,
         paddingHorizontal: 15,
         marginTop: 30,
@@ -362,17 +364,16 @@ const styles = StyleSheet.create({
     },
     textArea: {
         borderWidth: 1,
-        borderColor: "#ccc",
+        borderColor: "#E5E5E5",
         borderRadius: 8,
         paddingHorizontal: 18,
         paddingVertical: 12,
         fontSize: 14,
-        textAlignVertical: "top", 
+        textAlignVertical: "top",
         marginTop: 20,
         minHeight: 120,
     },
 });
-
 
 export default ContactUs;
 

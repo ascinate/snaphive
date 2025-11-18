@@ -23,7 +23,7 @@ const Signup = ({ navigation }) => {
   const [userID, setUserID] = useState('');
   const [password, setPassword] = useState('');
   const { width, height } = useWindowDimensions();
-const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
 
   const isValidEmail = (text) => /\S+@\S+\.\S+/.test(text);
@@ -163,29 +163,29 @@ const [showPrivacyModal, setShowPrivacyModal] = useState(false);
       </View>
 
       {/* Terms & Privacy */}
-<CustomText style={[styles.description, { fontSize: width * 0.035, position: 'fixed', top: 20 }]}>
-  By continuing I accept Selfso's Terms of Use and
- <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
-    <CustomText
-      weight='medium'
-      style={[
-        styles.continueTxt,
-        {
-          fontWeight: '600',
-          textDecorationLine: 'underline',
-          color: '#000',
-          fontSize: width * 0.035,
-        },
-      ]}
-    >
-      {' '}Privacy Policy
-    </CustomText>
-  </TouchableWithoutFeedback>
-</CustomText>
-    <PrivacyPolicyModal
-      visible={showPrivacyModal}
-      onClose={() => setShowPrivacyModal(false)}
-    />
+      <CustomText style={[styles.description, { fontSize: width * 0.035, position: 'fixed', top: 20 }]}>
+        By continuing I accept Selfso's Terms of Use and
+        <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
+          <CustomText
+            weight='medium'
+            style={[
+              styles.continueTxt,
+              {
+                fontWeight: '600',
+                textDecorationLine: 'underline',
+                color: '#000',
+                fontSize: width * 0.035,
+              },
+            ]}
+          >
+            {' '}Privacy Policy
+          </CustomText>
+        </TouchableWithoutFeedback>
+      </CustomText>
+      <PrivacyPolicyModal
+        visible={showPrivacyModal}
+        onClose={() => setShowPrivacyModal(false)}
+      />
     </SafeAreaProvider>
   );
 };

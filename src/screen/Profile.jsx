@@ -14,6 +14,8 @@ import {
   MessageCircle,
   Heart,
 } from "lucide-react-native";
+import { Linking } from "react-native";
+import { Share } from "react-native";
 
 // SVGs
 import Pencil from "../../assets/svg/pencil.svg";
@@ -29,6 +31,32 @@ const profilePic = require("../../assets/picnic3.jpg");
 
 const Profile = ({ navigation, }) => {
   const [modalVisible, setModalVisible] = useState(false);
+
+
+  const openStore = () => {
+    const playStoreUrl = "https://play.google.com/store/apps/details?id=com.snaphive";
+    const appStoreUrl = "https://apps.apple.com/app/id1234567890";
+
+    const url = Platform.OS === "ios" ? appStoreUrl : playStoreUrl;
+
+    Linking.openURL(url).catch(() =>
+      Alert.alert("Error", "Unable to open the store")
+    );
+  };
+
+  const shareApp = async () => {
+    try {
+      const message =
+        "Try the Airbum app! Download now:\n\n" +
+        "Android: https://play.google.com/store/apps/details?id=com.snaphive\n" +
+        "iOS: https://apps.apple.com/app/id1234567890";
+
+      await Share.share({ message });
+    } catch (error) {
+      console.log("Share Error:", error);
+    }
+  };
+
 
   const handleLogout = async () => {
     try {
@@ -156,7 +184,7 @@ const Profile = ({ navigation, }) => {
 
         <TouchableOpacity
           style={styles.rowProfile}
-          onPress={() => navigation.navigate('Home')}
+          onPress={openStore}
         >
           <View style={styles.iconBox}>
             <Heart size={20} color="#F98935" />
@@ -174,7 +202,7 @@ const Profile = ({ navigation, }) => {
 
         <TouchableOpacity
           style={styles.rowProfile}
-          onPress={() => navigation.navigate('Home')}
+          onPress={shareApp}
         >
           <View style={styles.iconBox}>
             <Share2 size={20} color="#F98935" />

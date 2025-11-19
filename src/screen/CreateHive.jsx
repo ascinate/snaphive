@@ -12,6 +12,7 @@ import TopNav from '../components/TopNavbar';
 import CustomText from '../components/CustomText';
 import ThemeButton from '../components/ThemeButton';
 import { colors } from '../Theme/theme';
+import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
 
 // assets
 const hero = require('../../assets/hero.png');
@@ -34,7 +35,7 @@ const CreateHive = ({ navigation, route }) => {
     const [uploadType, setUploadType] = useState('automatic');
     const [hiveType, setHiveType] = useState(null);
     const [checked, setChecked] = useState(false);
-
+    const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
     const data = [
         { label: 'Invite Only', value: '1' },
@@ -539,13 +540,14 @@ const CreateHive = ({ navigation, route }) => {
                                             />
                                         )}
                                     </TouchableOpacity>
+                                    <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
+                                        <View style={{ paddingHorizontal: 30 }}>
 
-                                    <View style={{ paddingHorizontal: 30 }}>
-
-                                        <CustomText weight="medium" style={{ color: '#646464' }}>
-                                            I have read the Content Responsibility & Privacy Policy and agree that I am responsible for all content uploaded to my event hive.
-                                        </CustomText>
-                                    </View>
+                                            <CustomText weight="medium" style={{ color: '#646464' }}>
+                                                I have read the Content Responsibility & Privacy Policy and agree that I am responsible for all content uploaded to my event hive.
+                                            </CustomText>
+                                        </View>
+                                    </TouchableWithoutFeedback>
                                 </View>
 
 
@@ -560,6 +562,10 @@ const CreateHive = ({ navigation, route }) => {
                             </View>
                         </View>
                     </View>
+                    <PrivacyPolicyModal
+                        visible={showPrivacyModal}
+                        onClose={() => setShowPrivacyModal(false)}
+                    />
                 </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider>

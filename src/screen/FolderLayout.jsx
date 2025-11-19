@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   ScrollView,
@@ -48,25 +48,46 @@ const FolderLayout = ({ navigation, route }) => {
   const [selectedTab, setSelectedTab] = useState("Gallery");
   const [uploadedImages, setUploadedImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const handleUpload = () => {
+
+  useEffect(() => {
+    loadSavedImages();
+  }, []);
+
+  const loadSavedImages = async () => {
+    try {
+      const saved = await AsyncStorage.getItem(`folder_${folderName}`);
+      if (saved) {
+        setUploadedImages(JSON.parse(saved));
+      }
+    } catch (e) {
+      console.log("Failed to load images", e);
+    }
+  };
+
+
+  const handleUpload = async () => {
     const options = {
       mediaType: "photo",
       includeBase64: false,
       quality: 0.8,
     };
 
-    launchImageLibrary(options, (response) => {
-      if (response.didCancel) {
-        console.log("User cancelled image picker");
-      } else if (response.errorCode) {
-        console.log("ImagePicker Error: ", response.errorMessage);
-      } else if (response.assets && response.assets.length > 0) {
-        const selectedImage = response.assets[0];
-        console.log("Selected image:", selectedImage.uri);
-        setUploadedImages((prev) => [...prev, selectedImage.uri]);
+    launchImageLibrary(options, async (response) => {
+      if (response.didCancel || response.errorCode) return;
+
+      if (response.assets && response.assets.length > 0) {
+        const uri = response.assets[0].uri;
+
+        const newImages = [...uploadedImages, uri];
+        setUploadedImages(newImages);
+
+        // SAVE to storage with key = folderName
+        await AsyncStorage.setItem(`folder_${folderName}`, JSON.stringify(newImages));
+        console.log("Images saved");
       }
     });
   };
+
   const members = [
     { id: 1, name: "Demola Aoki", dp: dp },
     { id: 2, name: "Sofia Carrington", dp: dp3 },

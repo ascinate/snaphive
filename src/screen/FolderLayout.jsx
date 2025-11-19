@@ -49,7 +49,7 @@ const FolderLayout = ({ navigation, route }) => {
   const [selectedTab, setSelectedTab] = useState("Gallery");
   const [uploadedImages, setUploadedImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-const [menuVisible, setMenuVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   useEffect(() => {
     loadSavedImages();
@@ -102,11 +102,11 @@ const [menuVisible, setMenuVisible] = useState(false);
       image={createEvent}
       folderName="Janifer Danis"
       date="+91 1841 510 1450"
-RightIcon={
-  <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)}>
-    <EllipsisVertical height={width * 0.04} width={width * 0.04} />
-  </TouchableOpacity>
-}
+      RightIcon={
+        <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)}>
+          <EllipsisVertical height={width * 0.04} width={width * 0.04} />
+        </TouchableOpacity>
+      }
 
 
       OverlayContent={
@@ -123,7 +123,7 @@ RightIcon={
                 <Plus color="#EA580B" size={width * 0.05} />
               </View>
               <CustomText weight="bold" style={{ color: '#EA580B', fontSize: width * 0.035 }}>
-                Uplaod Media
+              My Images
               </CustomText>
             </TouchableOpacity>
             <TouchableOpacity
@@ -140,51 +140,50 @@ RightIcon={
 
           </View>
 
+          {menuVisible && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 25,
+                right: -5,
+                backgroundColor: '#fff',
+                paddingVertical: 10,
+                borderRadius: 10,
+                width: 180,
+                elevation: 10,
+                shadowColor: '#000',
+                shadowOpacity: 0.2,
+                shadowRadius: 4,
+                shadowOffset: { width: 0, height: 2 },
+                zIndex: 999,
+              }}
+            >
+              {/* Manage Permissions */}
+              <TouchableOpacity
+                onPress={() => {
+                  setMenuVisible(false);
+                  navigation.navigate("ManagePermissions");
+                }}
+                style={{ paddingVertical: 12, paddingHorizontal: 16 }}
+              >
+                <CustomText weight="medium">Manage Permissions</CustomText>
+              </TouchableOpacity>
 
-        {menuVisible && (
-  <View
-    style={{
-      position: 'absolute',
-      top: 25,               // adjust based on your header height
-      right: -5,
-      backgroundColor: '#fff',
-      paddingVertical: 10,
-      borderRadius: 10,
-      width: 180,
-      elevation: 10,
-      shadowColor: '#000',
-      shadowOpacity: 0.2,
-      shadowRadius: 4,
-      shadowOffset: { width: 0, height: 2 },
-      zIndex: 999,
-    }}
-  >
-    {/* Manage Permissions */}
-    <TouchableOpacity
-      onPress={() => {
-        setMenuVisible(false);
-        navigation.navigate("ManagePermissionScreen");
-      }}
-      style={{ paddingVertical: 12, paddingHorizontal: 16 }}
-    >
-      <CustomText weight="medium">Manage Permissions</CustomText>
-    </TouchableOpacity>
+              {/* Divider */}
+              <View style={{ height: 1, backgroundColor: '#E5E7EB' }} />
 
-    {/* Divider */}
-    <View style={{ height: 1, backgroundColor: '#E5E7EB' }} />
-
-    {/* Invite Member */}
-    <TouchableOpacity
-      onPress={() => {
-        setMenuVisible(false);
-        navigation.navigate("InviteMember");
-      }}
-      style={{ paddingVertical: 12, paddingHorizontal: 16 }}
-    >
-      <CustomText weight="medium">Invite Member</CustomText>
-    </TouchableOpacity>
-  </View>
-)}
+              {/* Invite Member */}
+              <TouchableOpacity
+                onPress={() => {
+                  setMenuVisible(false);
+                  navigation.navigate("InviteMember");
+                }}
+                style={{ paddingVertical: 12, paddingHorizontal: 16 }}
+              >
+                <CustomText weight="medium">Invite Member</CustomText>
+              </TouchableOpacity>
+            </View>
+          )}
 
         </View>
       }

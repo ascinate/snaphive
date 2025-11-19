@@ -55,9 +55,9 @@ function CustomTabBar({ state, descriptors, navigation }) {
                   {isFocused ? (
                     <LinearGradient
                       colors={[
-                        '#E1711C',
-                        '#EF9818',
-                        '#E5B925'
+                        '#DA3C84',
+                        '#DA3C84',
+                        '#FEE8A3'
                       ]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
@@ -81,9 +81,9 @@ function CustomTabBar({ state, descriptors, navigation }) {
                   {isFocused ? (
                     <LinearGradient
                        colors={[
-                        '#E1711C',
-                        '#EF9818',
-                        '#E5B925'
+                        '#DA3C84',
+                        '#DA3C84',
+                        '#FEE8A3'
                       ]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
@@ -107,9 +107,9 @@ function CustomTabBar({ state, descriptors, navigation }) {
                   {isFocused ? (
                     <LinearGradient
                        colors={[
-                        '#E1711C',
-                        '#EF9818',
-                        '#E5B925'
+                        '#DA3C84',
+                        '#DA3C84',
+                        '#FEE8A3'
                       ]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
@@ -133,9 +133,9 @@ function CustomTabBar({ state, descriptors, navigation }) {
                   {isFocused ? (
                     <LinearGradient
                        colors={[
-                        '#E1711C',
-                        '#EF9818',
-                        '#E5B925'
+                        '#DA3C84',
+                        '#DA3C84',
+                        '#FEE8A3'
                       ]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
@@ -159,9 +159,9 @@ function CustomTabBar({ state, descriptors, navigation }) {
                   {isFocused ? (
                     <LinearGradient
                        colors={[
-                        '#E1711C',
-                        '#EF9818',
-                        '#E5B925'
+                        '#DA3C84',
+                        '#DA3C84',
+                        '#FEE8A3'
                       ]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}

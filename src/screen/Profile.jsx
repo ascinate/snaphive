@@ -107,9 +107,6 @@ const Profile = ({ navigation, }) => {
       }
     >
 
-
-
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}

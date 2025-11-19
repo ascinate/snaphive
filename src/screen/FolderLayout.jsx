@@ -67,28 +67,33 @@ const FolderLayout = ({ navigation, route }) => {
   };
 
 
-  const handleUpload = async () => {
-    const options = {
-      mediaType: "photo",
-      includeBase64: false,
-      quality: 0.8,
-    };
-
-    launchImageLibrary(options, async (response) => {
-      if (response.didCancel || response.errorCode) return;
-
-      if (response.assets && response.assets.length > 0) {
-        const uri = response.assets[0].uri;
-
-        const newImages = [...uploadedImages, uri];
-        setUploadedImages(newImages);
-
-        // SAVE to storage with key = folderName
-        await AsyncStorage.setItem(`folder_${folderName}`, JSON.stringify(newImages));
-        console.log("Images saved");
-      }
-    });
+const handleUpload = async () => {
+  const options = {
+    mediaType: "photo",
+    includeBase64: false,
+    quality: 0.8,
+    selectionLimit: 0,   
   };
+
+  launchImageLibrary(options, async (response) => {
+    if (response.didCancel || response.errorCode) return;
+
+    if (response.assets && response.assets.length > 0) {
+      const newUris = response.assets.map(item => item.uri);
+
+      const newImages = [...uploadedImages, ...newUris];
+      setUploadedImages(newImages);
+
+      await AsyncStorage.setItem(
+        `folder_${folderName}`,
+        JSON.stringify(newImages)
+      );
+
+      console.log("Images saved:", newImages.length);
+    }
+  });
+};
+
 
   const members = [
     { id: 1, name: "Demola Aoki", dp: dp },

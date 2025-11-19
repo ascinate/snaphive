@@ -33,7 +33,7 @@ const CreateHive = ({ navigation, route }) => {
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const [uploadType, setUploadType] = useState('automatic');
     const [hiveType, setHiveType] = useState(null);
-const [checked, setChecked] = useState(false);
+    const [checked, setChecked] = useState(false);
 
 
     const data = [
@@ -513,40 +513,40 @@ const [checked, setChecked] = useState(false);
                                 </View>
 
 
-<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-    <TouchableOpacity
-        onPress={() => setChecked(!checked)}
-        style={{
-            height: 20,
-            width: 20,
-            borderRadius: 4,
-            borderWidth: 2,
-            borderColor: checked ? '#69ec48ff' : '#9CA3AF',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginRight: 8,
-        }}
-        activeOpacity={0.7}
-    >
-        {checked && (
-            <View
-                style={{
-                    height: 12,
-                    width: 12,
-                    backgroundColor: '#5bec48ff',
-                    borderRadius: 2,
-                }}
-            />
-        )}
-    </TouchableOpacity>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <TouchableOpacity
+                                        onPress={() => setChecked(!checked)}
+                                        style={{
+                                            height: 20,
+                                            width: 20,
+                                            borderRadius: 4,
+                                            borderWidth: 2,
+                                            borderColor: checked ? '#69ec48ff' : '#9CA3AF',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginRight: 8,
+                                        }}
+                                        activeOpacity={0.7}
+                                    >
+                                        {checked && (
+                                            <View
+                                                style={{
+                                                    height: 12,
+                                                    width: 12,
+                                                    backgroundColor: '#5bec48ff',
+                                                    borderRadius: 2,
+                                                }}
+                                            />
+                                        )}
+                                    </TouchableOpacity>
 
-    <View style={{ flexDirection: 'row' }}>
+                                    <View style={{ paddingHorizontal: 30 }}>
 
-        <CustomText weight="bold" style={{ color: '#000000ff' }}>
-       I agree to the Privacy Policy
-        </CustomText>
-    </View>
-</View>
+                                        <CustomText weight="medium" style={{ color: '#646464' }}>
+                                            I have read the Content Responsibility & Privacy Policy and agree that I am responsible for all content uploaded to my event hive.
+                                        </CustomText>
+                                    </View>
+                                </View>
 
 
 

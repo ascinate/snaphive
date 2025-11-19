@@ -236,7 +236,7 @@
 
 
 
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     View,
     ScrollView,
@@ -269,6 +269,7 @@ import ScreenLayout from "../components/ScreenLayout";
 import CustomText from "../components/CustomText";
 import SearchBar from "../components/SearchBar";
 import MembersModal from "../components/MembersModal";
+import ThemeButton from "../components/ThemeButton";
 
 // Images
 const createEvent = require("../../assets/background.png");
@@ -283,9 +284,10 @@ const dp7 = require("../../assets/dp7.jpg");
 const dp8 = require("../../assets/dp8.jpg");
 
 const CreateEvent = ({ navigation, route }) => {
-const [email, setEmail] = useState("");
+    const [email, setEmail] = useState("");
     const [isEnabled, setIsEnabled] = useState(false);
-    const [selected, setSelected] = useState("left"); 
+    const [selected, setSelected] = useState("left");
+    const [menuVisible, setMenuVisible] = useState('false')
     const { folderName, date, owner } = route.params || {
         folderName: "Untitled Folder",
         date: "Unknown Date",
@@ -298,88 +300,16 @@ const [email, setEmail] = useState("");
             image={createEvent}
             folderName="Janifer Danis"
             date="+91 1841 510 1450"
-            RightIcon={
-                <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)}>
-                    <EllipsisVertical height={width * 0.04} width={width * 0.04} />
-                </TouchableOpacity>
-            }
+
 
 
             OverlayContent={
                 <View style={styles.profileOverlay}>
-                    <CustomText weight="bold" style={{ color: '#fff', fontSize: width * 0.075 }}>2025 Picnic</CustomText>
-                    <CustomText weight="medium" style={{ color: '#fff', fontSize: width * 0.035, marginBottom: height * 0.025 }}>It is a long established fact that</CustomText>
+                    <CustomText weight="bold" style={{ color: '#fff', fontSize: width * 0.075, marginBottom: 50 }}>Manage Permissions</CustomText>
                     <View style={styles.rowBetween}>
-
-                        <TouchableOpacity
-                            style={styles.importBtnWhite}
-                            onPress={handleUpload}
-                        >
-                            <View>
-                                <Plus color="#EA580B" size={width * 0.05} />
-                            </View>
-                            <CustomText weight="bold" style={{ color: '#EA580B', fontSize: width * 0.035 }}>
-                                Uplaod Media
-                            </CustomText>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.importBtnWhite, { backgroundColor: '#000000ff' }]}
-                            onPress={() => setModalVisible(true)}
-                        >
-                            <View>
-                                <Users color="#ffffff" size={width * 0.05} />
-                            </View>
-                            <CustomText weight="bold" style={{ color: '#ffffff', fontSize: width * 0.035 }}>
-                                Members (10)
-                            </CustomText>
-                        </TouchableOpacity>
 
                     </View>
 
-                    {menuVisible && (
-                        <View
-                            style={{
-                                position: 'absolute',
-                                top: 25,
-                                right: -5,
-                                backgroundColor: '#fff',
-                                paddingVertical: 10,
-                                borderRadius: 10,
-                                width: 180,
-                                elevation: 10,
-                                shadowColor: '#000',
-                                shadowOpacity: 0.2,
-                                shadowRadius: 4,
-                                shadowOffset: { width: 0, height: 2 },
-                                zIndex: 999,
-                            }}
-                        >
-                            {/* Manage Permissions */}
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setMenuVisible(false);
-                                    navigation.navigate("ManagePermissionScreen");
-                                }}
-                                style={{ paddingVertical: 12, paddingHorizontal: 16 }}
-                            >
-                                <CustomText weight="medium">Manage Permissions</CustomText>
-                            </TouchableOpacity>
-
-                            {/* Divider */}
-                            <View style={{ height: 1, backgroundColor: '#E5E7EB' }} />
-
-                            {/* Invite Member */}
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setMenuVisible(false);
-                                    navigation.navigate("InviteMember");
-                                }}
-                                style={{ paddingVertical: 12, paddingHorizontal: 16 }}
-                            >
-                                <CustomText weight="medium">Invite Member</CustomText>
-                            </TouchableOpacity>
-                        </View>
-                    )}
 
                 </View>
             }
@@ -516,27 +446,12 @@ const [email, setEmail] = useState("");
                         </TouchableOpacity>
                     </View>
                 </View>
+
                 <ThemeButton
-                    text="Send Message"
+                    text="Save"
                     onPress={() => navigation.navigate("Language")}
                     style={{ width: "100%", marginTop: 90 }}
                 />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             </ScrollView>
         </ScreenLayout>

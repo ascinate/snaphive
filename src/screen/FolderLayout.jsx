@@ -125,9 +125,9 @@ const handleUpload = async () => {
               onPress={handleUpload}
             >
               <View>
-                <Plus color="#EA580B" size={width * 0.05} />
+                <Plus color="#DA3C84" size={width * 0.05} />
               </View>
-              <CustomText weight="bold" style={{ color: '#EA580B', fontSize: width * 0.035 }}>
+              <CustomText weight="bold" style={{ color: '#DA3C84', fontSize: width * 0.035 }}>
               My Images
               </CustomText>
             </TouchableOpacity>
@@ -453,9 +453,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   tabButtonActive: {
-    backgroundColor: "#E1711C",
+    backgroundColor: "#DA3C84",
     borderWidth: 1,
-    borderColor: '#E1711C',
+    borderColor: '#DA3C84',
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

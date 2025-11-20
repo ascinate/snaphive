@@ -195,7 +195,7 @@ const MyHives = ({ navigation, route }) => {
                                     style={{
                                         width: 60,
                                         height: 60,
-                                        backgroundColor: '#ffde9bff',
+                                        backgroundColor: '#ff9dc9',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         borderRadius: 50,

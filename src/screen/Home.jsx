@@ -182,7 +182,7 @@ const Home = ({ navigation, route }) => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
-          {/* Search Bar */}
+
           <View style={[styles.searchContainer, { marginHorizontal: width * 0.05 }]}>
             <TextInput
               style={styles.searchInput}
@@ -194,7 +194,6 @@ const Home = ({ navigation, route }) => {
             <Search color="#6B7280" size={20} style={styles.searchIcon} />
           </View>
 
-          {/* Hero Section */}
           <ImageBackground
             source={require("../../assets/background.png")}
             style={[styles.ImportSection, {
@@ -325,7 +324,7 @@ const Home = ({ navigation, route }) => {
 
                   <CustomText
                     weight="medium"
-                    style={[styles.dashText, { textAlign: 'center' }]} // center text
+                    style={[styles.dashText, { textAlign: 'center' }]}
                   >
                     Photos
                   </CustomText>
@@ -336,8 +335,8 @@ const Home = ({ navigation, route }) => {
               <View style={styles.dashCard}>
                 <View
                   style={{
-                    alignItems: 'center',   // centers horizontally
-                    justifyContent: 'center', // centers vertically
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <View
@@ -353,14 +352,14 @@ const Home = ({ navigation, route }) => {
 
                   <CustomText
                     weight="bold"
-                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]} // center text
+                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]}
                   >
                     1
                   </CustomText>
 
                   <CustomText
                     weight="medium"
-                    style={[styles.dashText, { textAlign: 'center' }]} // center text
+                    style={[styles.dashText, { textAlign: 'center' }]}
                   >
                     Member
                   </CustomText>
@@ -368,7 +367,7 @@ const Home = ({ navigation, route }) => {
               </View>
             </View>
 
-            {/* Events Section */}
+
             <View style={{ paddingBottom: 100, }}>
               <View style={styles.eventHeader}>
                 <CustomText weight="medium" style={styles.eventSection}>
@@ -379,7 +378,6 @@ const Home = ({ navigation, route }) => {
                 </CustomText>
               </View>
 
-              {/* here the event list show */}
               <View
                 style={{
                   flexDirection: 'row',
@@ -458,7 +456,7 @@ const Home = ({ navigation, route }) => {
                       style={{
                         width: 60,
                         height: 60,
-                        backgroundColor: '#fecd6bff',
+                        backgroundColor: '#f7a0c7ff',
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: 50,
@@ -475,12 +473,12 @@ const Home = ({ navigation, route }) => {
                       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                         <CustomText
                           weight="bold"
-                          style={{ color: '#feaa00' }}
+                          style={{ color: '#DA3C84' }}
                           onPress={() => navigation.navigate('CreateHive')}
                         >
                           Create your first hive
                         </CustomText>
-                        <MoveRight color="#feaa00" />
+                        <MoveRight color="#DA3C84" />
                       </View>
                     )}
                   </View>
@@ -708,7 +706,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: 12,
     marginBottom: 16,
-    // shadows
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
@@ -760,7 +757,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
-    height: 28, // ensure space for overlap
+    height: 28,
   },
 
   memberAvatar: {
@@ -779,7 +776,7 @@ const styles = StyleSheet.create({
 
   memberBadge: {
     position: 'absolute',
-    left: 16, // controls overlap distance
+    left: 16,
     width: 26,
     height: 26,
     borderRadius: 13,

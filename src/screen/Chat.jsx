@@ -109,7 +109,7 @@ const Chat = ({ navigation }) => {
             </ScrollView>
 
             <View style={{ flexDirection: 'row', gap: width * 0.025, paddingVertical: height * 0.02, paddingHorizontal: width * 0.0625, alignItems: 'center', justifyContent: 'space-between' }}>
-                <View style={{ backgroundColor: '#E1711C', height: width * 0.1, width: width * 0.1, borderRadius: 50, alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{ backgroundColor: '#DA3C84', height: width * 0.1, width: width * 0.1, borderRadius: 50, alignItems: 'center', justifyContent: 'center' }}>
                     <CameraIcon height={width * 0.06} width={width * 0.06} />
                 </View>
                 <View style={{ position: 'relative' }}>
@@ -122,7 +122,7 @@ const Chat = ({ navigation }) => {
                     style={{ 
                         width: width * 0.11,
                         height: width * 0.11,
-                        backgroundColor: '#E1711C',
+                        backgroundColor: '#DA3C84',
                         borderRadius: 50,
                         justifyContent: 'center',
                         alignItems: 'center',

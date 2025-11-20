@@ -43,7 +43,7 @@ const MembersModal = ({ visible, onClose }) => {
                         <CustomText weight="medium" style={styles.closeTxt}>✕</CustomText>
                     </TouchableOpacity>
                     <View style={{ flexDirection: 'row', gap: 12, alignContent: 'center', paddingHorizontal: 10 }}>
-                        <Users color='#E1711C' size={20} />
+                        <Users color='#DA3C84' size={20} />
                         <CustomText weight="medium" style={styles.title}>Hive Members</CustomText>
                     </View>
 
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     },
 
     inviteBtn: {
-        backgroundColor: "#E1711C",
+        backgroundColor: "#DA3C84",
         paddingHorizontal: 18,
         paddingVertical: 10,
         borderRadius: 10,
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     addBtn: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#E1711C",
+        backgroundColor: "#DA3C84",
         paddingVertical: 6,
         paddingHorizontal: 14,
         borderRadius: 10,

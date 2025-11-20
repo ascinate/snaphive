@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#f0f0f0",
     },
     selectedOption: {
-        backgroundColor: "#FFA500", // active color (orange/yellow)
+        backgroundColor: "#DA3C84", // active color (orange/yellow)
     },
     optionText: {
         fontSize: 14,

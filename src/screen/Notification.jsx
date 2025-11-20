@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   scrollContainer: { paddingHorizontal: 20, paddingVertical: 10 },
   badge: { backgroundColor: "gray", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 5 },
   badgeText: { color: "white", fontSize: 14, fontWeight: "600" },
-  badgeActive: { backgroundColor: "#E1711C", borderRadius: 12 },
+  badgeActive: { backgroundColor: "#DA3C84", borderRadius: 12 },
   chatList: { marginBottom: 20 },
   chatListItem: {
     flexDirection: "row",

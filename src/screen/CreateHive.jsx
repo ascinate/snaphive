@@ -112,7 +112,7 @@ const CreateHive = ({ navigation, route }) => {
                                 alignItems: 'center',
                                 alignSelf: 'flex-start',
                                 gap: 8,
-                                backgroundColor: 'rgba(255, 219, 186, 0.5)',
+                                backgroundColor: 'rgba(255, 186, 243, 0.5)',
                                 borderRadius: 25,
                                 paddingHorizontal: 16,
                                 paddingVertical: 6,

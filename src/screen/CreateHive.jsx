@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Dropdown } from 'react-native-element-dropdown';
+import DatePicker from 'react-native-date-picker'
 // components
 import TopNav from '../components/TopNavbar';
 import CustomText from '../components/CustomText';
@@ -23,10 +24,8 @@ const CreateHive = ({ navigation, route }) => {
 
     const [uploadedImage, setUploadedImage] = useState(null);
     const [hiveName, setHiveName] = useState("");
-    const [date, setDate] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endTime, setEndTime] = useState('');
-    const [endDate, setEndDate] = useState('');
+
+
     const [hiveDescription, setHiveDescription] = useState("");
     const { addEvent } = useContext(EventContext);
     const [isEnabled, setIsEnabled] = useState(false);
@@ -37,11 +36,39 @@ const CreateHive = ({ navigation, route }) => {
     const [checked, setChecked] = useState(false);
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
+    const [startDate, setStartDate] = useState(new Date());
+    const [startTime, setStartTime] = useState(new Date());
+    const [endTime, setEndTime] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+
+    const [openStartDate, setOpenStartDate] = useState(false);
+    const [openStartTime, setOpenStartTime] = useState(false);
+    const [openEndTime, setOpenEndTime] = useState(false);
+    const [openEndDate, setOpenEndDate] = useState(false);
+    // Format date → DD/MM/YYYY
+    const formatDate = (date) => {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    // Format time → HH:MM AM/PM
+    const formatTime = (date) => {
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        let ampm = hours >= 12 ? 'PM' : 'AM';
+
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+
+        return `${hours}:${minutes} ${ampm}`;
+    };
     const data = [
         { label: 'Invite Only', value: '1' },
         { label: 'Public', value: '2' },
     ];
-
     const handleCreateHive = () => {
         if (!hiveName.trim()) {
             alert('Please enter a hive name');
@@ -54,7 +81,7 @@ const CreateHive = ({ navigation, route }) => {
         }
 
         if (isEnabled) {
-            if (!date || !startDate || !endTime || !endDate) {
+            if (!startDate || !startTime || !endTime || !endDate) {
                 alert('Please fill all date and time fields for temporary event');
                 return;
             }
@@ -68,8 +95,8 @@ const CreateHive = ({ navigation, route }) => {
             photos: [],
             createdAt: new Date().toISOString(),
             isTemporary: isEnabled,
-            eventDate: date,
-            startTime: startDate,
+            eventDate: startDate,
+            startTime: startTime,
             endTime: endTime,
             expiryDate: endDate,
             hiveType: hiveType,
@@ -79,497 +106,517 @@ const CreateHive = ({ navigation, route }) => {
         setUploadedImage(null);
         setHiveName("");
         setHiveDescription("");
-        setDate('');
-        setStartDate('');
-        setEndTime('');
-        setEndDate('');
+        setStartDate(new Date());
+        setStartTime(new Date());
+        setEndTime(new Date());
+        setEndDate(new Date());
         setIsEnabled(false);
         setHiveType(null);
-        navigation.goBack()
+        navigation.goBack();
     };
 
-    const handleChange = (text) => {
-        let formatted = text.replace(/[^0-9]/g, '');
-        if (formatted.length > 2 && formatted.length <= 4)
-            formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
-        else if (formatted.length > 4)
-            formatted = `${formatted.slice(0, 2)}-${formatted.slice(2, 4)}-${formatted.slice(4, 6)}`;
-        setDate(formatted);
-    }
 
-    return (
-        <SafeAreaProvider>
-            <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-                <TopNav />
-                <ScrollView
-                    style={styles.container}
-                    showsVerticalScrollIndicator={false}
-                >
-                    <View style={{ alignItems: 'flex-start', marginTop: 12 }}>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                alignSelf: 'flex-start',
-                                gap: 8,
-                                backgroundColor: 'rgba(255, 227, 186, 0.5)',
-                                borderRadius: 25,
-                                paddingHorizontal: 16,
-                                paddingVertical: 6,
-                            }}
-                        >
-                            <Sparkles color="#FFAD60" size={14} />
-                            <CustomText weight="medium" style={styles.importHeading}>
-                                Create a new
-                            </CustomText>
-                            <CustomText weight="bold" style={styles.importHeading}>
-                                Hive
-                            </CustomText>
-                        </View>
-                    </View>
 
-                    <View>
-                        <CustomText weight="bold" style={styles.snapText}>
-                            Start Sharing Memories
+const handleChange = (text) => {
+    let formatted = text.replace(/[^0-9]/g, '');
+    if (formatted.length > 2 && formatted.length <= 4)
+        formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
+    else if (formatted.length > 4)
+        formatted = `${formatted.slice(0, 2)}-${formatted.slice(2, 4)}-${formatted.slice(4, 6)}`;
+    setDate(formatted);
+}
+
+return (
+    <SafeAreaProvider>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+            <TopNav />
+            <ScrollView
+                style={styles.container}
+                showsVerticalScrollIndicator={false}
+            >
+                <View style={{ alignItems: 'flex-start', marginTop: 12 }}>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            alignSelf: 'flex-start',
+                            gap: 8,
+                            backgroundColor: 'rgba(255, 227, 186, 0.5)',
+                            borderRadius: 25,
+                            paddingHorizontal: 16,
+                            paddingVertical: 6,
+                        }}
+                    >
+                        <Sparkles color="#FFAD60" size={14} />
+                        <CustomText weight="medium" style={styles.importHeading}>
+                            Create a new
+                        </CustomText>
+                        <CustomText weight="bold" style={styles.importHeading}>
+                            Hive
                         </CustomText>
                     </View>
-                    <CustomText weight='regular' style={{ color: '#374151' }}>Set up your photo collection in seconds</CustomText>
+                </View>
 
-                    <View style={[styles.createHiveCard, { marginBottom: 120, }]}>
-                        <LinearGradient
-                            colors={['#DA3C84', '#FEE8A3']}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1.6, y: 0 }}
-                            style={styles.continueBtn}
-                        >
-                            <View style={styles.touchable}>
-                                <View style={styles.content}>
+                <View>
+                    <CustomText weight="bold" style={styles.snapText}>
+                        Start Sharing Memories
+                    </CustomText>
+                </View>
+                <CustomText weight='regular' style={{ color: '#374151' }}>Set up your photo collection in seconds</CustomText>
 
-                                    <CustomText weight="Bold" style={styles.continueTxt}>
-                                        Hive Details
-                                    </CustomText>
-                                </View>
-                            </View>
-                        </LinearGradient>
+                <View style={[styles.createHiveCard, { marginBottom: 120, }]}>
+                    <LinearGradient
+                        colors={['#DA3C84', '#FEE8A3']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1.6, y: 0 }}
+                        style={styles.continueBtn}
+                    >
+                        <View style={styles.touchable}>
+                            <View style={styles.content}>
 
-                        <View style={{ paddingHorizontal: 20, }}>
-                            <View style={{ marginBottom: 16, marginTop: 16 }}>
-                                <CustomText weight='bold' style={{ marginBottom: 4, color: '#374151' }}>Hive Name *</CustomText>
-                                <TextInput
-                                    placeholder='Summer Wedding, Family Vacation'
-                                    style={styles.inputType}
-                                    keyboardType="default"
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    value={hiveName}
-                                    onChangeText={setHiveName}
-                                    onSubmitEditing={() => Keyboard.dismiss()}
-                                />
-                            </View>
-
-                            <View style={{ marginBottom: 16 }}>
-                                <CustomText weight="bold" style={{ marginBottom: 4, color: '#374151' }}>
-                                    Description
+                                <CustomText weight="Bold" style={styles.continueTxt}>
+                                    Hive Details
                                 </CustomText>
-                                <TextInput
-                                    placeholder="Share details about your hive..."
-                                    style={[styles.inputType, { textAlignVertical: 'top', height: 100 }]}
-                                    multiline={true}
-                                    numberOfLines={4}
-                                    value={hiveDescription}
-                                    onChangeText={setHiveDescription}
-                                    onSubmitEditing={() => Keyboard.dismiss()}
-                                />
                             </View>
+                        </View>
+                    </LinearGradient>
 
-                            <CustomText weight='bold' style={{ marginBottom: 4, color: '#374151' }}>Cover Image</CustomText>
+                    <View style={{ paddingHorizontal: 20, }}>
+                        <View style={{ marginBottom: 16, marginTop: 16 }}>
+                            <CustomText weight='bold' style={{ marginBottom: 4, color: '#374151' }}>Hive Name *</CustomText>
+                            <TextInput
+                                placeholder='Summer Wedding, Family Vacation'
+                                style={styles.inputType}
+                                keyboardType="default"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                value={hiveName}
+                                onChangeText={setHiveName}
+                                onSubmitEditing={() => Keyboard.dismiss()}
+                            />
+                        </View>
 
-                            <TouchableWithoutFeedback onPress={() => {
-                                const options = {
-                                    mediaType: "photo",
-                                    quality: 1,
-                                };
+                        <View style={{ marginBottom: 16 }}>
+                            <CustomText weight="bold" style={{ marginBottom: 4, color: '#374151' }}>
+                                Description
+                            </CustomText>
+                            <TextInput
+                                placeholder="Share details about your hive..."
+                                style={[styles.inputType, { textAlignVertical: 'top', height: 100 }]}
+                                multiline={true}
+                                numberOfLines={4}
+                                value={hiveDescription}
+                                onChangeText={setHiveDescription}
+                                onSubmitEditing={() => Keyboard.dismiss()}
+                            />
+                        </View>
 
-                                launchImageLibrary(options, (response) => {
-                                    if (response.didCancel) {
-                                        console.log("User cancelled image picker");
-                                    } else if (response.errorCode) {
-                                        console.log("ImagePicker Error: ", response.errorMessage);
-                                    } else if (response.assets && response.assets.length > 0) {
-                                        const selectedImage = response.assets[0];
-                                        console.log("Selected image:", selectedImage.uri);
-                                        setUploadedImage(selectedImage.uri);
-                                    }
-                                });
-                            }}>
-                                <View style={styles.uploadContainer}>
-                                    {uploadedImage ? (
-                                        <View style={{ width: '100%', height: '100%', borderRadius: 8, overflow: 'hidden' }}>
-                                            <Animated.Image
-                                                source={{ uri: uploadedImage }}
-                                                style={{ width: '100%', height: '100%' }}
-                                                resizeMode="cover"
+                        <CustomText weight='bold' style={{ marginBottom: 4, color: '#374151' }}>Cover Image</CustomText>
+
+                        <TouchableWithoutFeedback onPress={() => {
+                            const options = {
+                                mediaType: "photo",
+                                quality: 1,
+                            };
+
+                            launchImageLibrary(options, (response) => {
+                                if (response.didCancel) {
+                                    console.log("User cancelled image picker");
+                                } else if (response.errorCode) {
+                                    console.log("ImagePicker Error: ", response.errorMessage);
+                                } else if (response.assets && response.assets.length > 0) {
+                                    const selectedImage = response.assets[0];
+                                    console.log("Selected image:", selectedImage.uri);
+                                    setUploadedImage(selectedImage.uri);
+                                }
+                            });
+                        }}>
+                            <View style={styles.uploadContainer}>
+                                {uploadedImage ? (
+                                    <View style={{ width: '100%', height: '100%', borderRadius: 8, overflow: 'hidden' }}>
+                                        <Animated.Image
+                                            source={{ uri: uploadedImage }}
+                                            style={{ width: '100%', height: '100%' }}
+                                            resizeMode="cover"
+                                        />
+                                    </View>
+                                ) : (
+                                    <>
+                                        <Upload color='#9B9B9B' width={28} height={28} />
+
+                                        <CustomText weight='medium' style={{ marginTop: 4, color: '#67696b' }}>Upload your own image</CustomText>
+                                    </>
+                                )}
+                            </View>
+                        </TouchableWithoutFeedback>
+                        <CustomText weight="medium" style={{ marginBottom: 4, color: colors.textGray, marginTop: 16, marginBottom: 24 }}>
+                            Or choose from stock options based on event type
+                        </CustomText>
+
+                        <View style={{ marginBottom: 16 }}>
+                            <CustomText weight="bold" style={{ marginBottom: 4, color: '#374151' }}>
+                                Privacy Mode
+                            </CustomText>
+                            <Dropdown
+                                style={[styles.inputType]}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                data={data}
+                                search
+                                maxHeight={300}
+                                labelField="label"
+                                valueField="value"
+                                searchPlaceholder="Search..."
+                                placeholder="Hive Type"
+                                value={hiveType}
+                                onChange={item => {
+                                    setHiveType(item.value);
+                                }}
+                            />
+                        </View>
+
+                        <View style={[styles.radiobuttonContainer, { borderColor: '#FFBCE1', backgroundColor: '#FDF2F8', marginTop: 20 }]}>
+
+                            <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 12 }}>
+                                <Shield color='#5B0064' />
+                                <CustomText weight='bold' style={{ fontSize: 16, }}>Media Upload Settings</CustomText>
+                            </View>
+                            <TouchableOpacity
+                                style={styles.privacy}
+                                onPress={() => setUploadType('automatic')}
+                                activeOpacity={0.7}
+                            >
+                                <View >
+                                    <View style={{
+                                        height: 20,
+                                        width: 20,
+                                        borderRadius: 10,
+                                        borderWidth: 2,
+                                        borderColor: uploadType === 'automatic' ? '#EC4899' : '#D1D5DB',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}>
+                                        {uploadType === 'automatic' && (
+                                            <View style={{
+                                                height: 10,
+                                                width: 10,
+                                                borderRadius: 5,
+                                                backgroundColor: '#EC4899',
+                                            }} />
+                                        )}
+                                    </View>
+                                </View>
+
+                                <View style={{ flex: 1, marginLeft: 12 }}>
+                                    <CustomText weight='bold' style={{ fontSize: 16 }}>Automatic Upload</CustomText>
+                                    <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>All media is uploaded instantly. Only select if you trust your group and the content they'll share</CustomText>
+                                </View>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={styles.privacy}
+                                onPress={() => setUploadType('approval')}
+                                activeOpacity={0.7}
+                            >
+                                <View >
+                                    <View style={{
+                                        height: 20,
+                                        width: 20,
+                                        borderRadius: 10,
+                                        borderWidth: 2,
+                                        borderColor: uploadType === 'approval' ? '#EC4899' : '#D1D5DB',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}>
+                                        {uploadType === 'approval' && (
+                                            <View style={{
+                                                height: 10,
+                                                width: 10,
+                                                borderRadius: 5,
+                                                backgroundColor: '#EC4899',
+                                            }} />
+                                        )}
+                                    </View>
+                                </View>
+                                <View style={{ flex: 1, marginLeft: 12 }}>
+                                    <CustomText weight='bold' style={{ fontSize: 16 }}>Approval Required</CustomText>
+                                    <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>Uploaded media must be reviewed and approved by authorized members. Best for formal events.</CustomText>
+                                </View>
+                            </TouchableOpacity>
+
+                            {uploadType === 'automatic' && (
+                                <TouchableOpacity
+                                    style={{
+                                        flexDirection: 'row',
+                                        backgroundColor: '#FFF0CF',
+                                        borderRadius: 12,
+                                        padding: 16,
+                                        marginTop: 8,
+                                        marginBottom: 10,
+                                    }}
+                                    // onPress={() => setUploadType('acknowledge')}
+                                    activeOpacity={0.7}
+                                >
+                                    <View >
+                                        <View style={{
+                                            height: 20,
+                                            width: 20,
+                                            borderRadius: 10,
+                                            borderWidth: 2,
+                                            borderColor: uploadType === 'acknowledge' ? '#EC4899' : '#D1D5DB',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}>
+                                            {uploadType === 'acknowledge' && (
+                                                <View style={{
+                                                    height: 10,
+                                                    width: 10,
+                                                    borderRadius: 5,
+                                                    backgroundColor: '#EC4899',
+                                                }} />
+                                            )}
+                                        </View>
+                                    </View>
+
+                                    <View style={{ flex: 1, marginLeft: 12 }}>
+                                        <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>
+                                            I understand that I am responsible for all media automatically uploaded
+                                            to this Hive. Members will be able to upload photos and videos without
+                                            my approval.
+                                        </CustomText>
+                                    </View>
+                                </TouchableOpacity>
+                            )}
+
+                        </View>
+                        <View style={{ marginBottom: 0, }}>
+                            <View style={styles.privacyContainer}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                                        <CalendarDays />
+                                        <View style={{ marginLeft: 12 }}>
+                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Temporary Event Hive</CustomText>
+                                            <CustomText weight='regular' style={{ color: '#374151', fontSize: 12 }}>Set dates for this event</CustomText>
+                                        </View>
+                                    </View>
+                                    <Switch
+                                        trackColor={{ false: '#767577', true: '#81b0ff' }}
+                                        thumbColor={isEnabled ? '#4b5cf5ff' : '#f4f3f4'}
+                                        ios_backgroundColor="#3e3e3e"
+                                        onValueChange={toggleSwitch}
+                                        value={isEnabled}
+                                    />
+                                </View>
+                                {/* that time only show this View */}
+                                {isEnabled && (
+                                    <View style={{ paddingInline: 6 }}>
+                                        <View style={{ marginTop: 15 }}>
+                                            <View style={{ backgroundColor: '#ccc', height: 0.4, width: '100%' }} />
+
+                                            {/* Event Start Date */}
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5, marginTop: 15 }}>
+                                                <Calendar width={16} />
+                                                <CustomText weight="semiBold" color="#374151">Event Start Date</CustomText>
+                                            </View>
+                                            <TouchableOpacity onPress={() => setOpenStartDate(true)}>
+                                                <TextInput
+                                                    placeholder="Select Date"
+                                                    value={formatDate(startDate)}
+                                                    editable={false}
+                                                    style={styles.input}
+                                                />
+                                            </TouchableOpacity>
+                                            <DatePicker
+                                                modal
+                                                mode="date"
+                                                open={openStartDate}
+                                                date={startDate}
+                                                onConfirm={(selectedDate) => {
+                                                    setOpenStartDate(false);
+                                                    setStartDate(selectedDate);
+                                                }}
+                                                onCancel={() => setOpenStartDate(false)}
                                             />
                                         </View>
-                                    ) : (
-                                        <>
-                                            <Upload color='#9B9B9B' width={28} height={28} />
 
-                                            <CustomText weight='medium' style={{ marginTop: 4, color: '#67696b' }}>Upload your own image</CustomText>
-                                        </>
-                                    )}
-                                </View>
-                            </TouchableWithoutFeedback>
-                            <CustomText weight="medium" style={{ marginBottom: 4, color: colors.textGray, marginTop: 16, marginBottom: 24 }}>
-                                Or choose from stock options based on event type
-                            </CustomText>
+                                        {/* Start Time & End Time */}
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                            {/* Start Time */}
+                                            <View style={{ marginTop: 20, width: '50%' }}>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                                                    <Timer width={16} />
+                                                    <CustomText weight="semiBold" color="#374151">Start Time</CustomText>
+                                                </View>
+                                                <TouchableOpacity onPress={() => setOpenStartTime(true)}>
+                                                    <TextInput
+                                                        style={styles.input}
+                                                        placeholder="Select Time"
+                                                        value={formatTime(startTime)}
+                                                        editable={false}
+                                                    />
+                                                </TouchableOpacity>
+                                                <DatePicker
+                                                    modal
+                                                    mode="time"
+                                                    open={openStartTime}
+                                                    date={startTime}
+                                                    onConfirm={(selectedTime) => {
+                                                        setOpenStartTime(false);
+                                                        setStartTime(selectedTime);
+                                                    }}
+                                                    onCancel={() => setOpenStartTime(false)}
+                                                />
+                                            </View>
 
-                            <View style={{ marginBottom: 16 }}>
-                                <CustomText weight="bold" style={{ marginBottom: 4, color: '#374151' }}>
-                                    Privacy Mode
-                                </CustomText>
-                                <Dropdown
-                                    style={[styles.inputType]}
-                                    placeholderStyle={styles.placeholderStyle}
-                                    selectedTextStyle={styles.selectedTextStyle}
-                                    data={data}
-                                    search
-                                    maxHeight={300}
-                                    labelField="label"
-                                    valueField="value"
-                                    searchPlaceholder="Search..."
-                                    placeholder="Hive Type"
-                                    value={hiveType}
-                                    onChange={item => {
-                                        setHiveType(item.value);
-                                    }}
-                                />
+                                            {/* End Time */}
+                                            <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                                                    <TimerOff width={16} />
+                                                    <CustomText weight="semiBold" color="#374151">End Time</CustomText>
+                                                </View>
+                                                <TouchableOpacity onPress={() => setOpenEndTime(true)}>
+                                                    <TextInput
+                                                        style={styles.input}
+                                                        placeholder="Select Time"
+                                                        value={formatTime(endTime)}
+                                                        editable={false}
+                                                    />
+                                                </TouchableOpacity>
+                                                <DatePicker
+                                                    modal
+                                                    mode="time"
+                                                    open={openEndTime}
+                                                    date={endTime}
+                                                    onConfirm={(selectedTime) => {
+                                                        setOpenEndTime(false);
+                                                        setEndTime(selectedTime);
+                                                    }}
+                                                    onCancel={() => setOpenEndTime(false)}
+                                                />
+                                            </View>
+                                        </View>
+
+                                        {/* Event End Date */}
+                                        <View style={{ marginTop: 20 }}>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                                                <CalendarOff width={16} />
+                                                <CustomText weight="semiBold" color="#374151">Event End Date</CustomText>
+                                            </View>
+                                            <TouchableOpacity onPress={() => setOpenEndDate(true)}>
+                                                <TextInput
+                                                    placeholder="Select Date"
+                                                    value={formatDate(endDate)}
+                                                    editable={false}
+                                                    style={styles.input}
+                                                />
+                                            </TouchableOpacity>
+                                            <DatePicker
+                                                modal
+                                                mode="date"
+                                                open={openEndDate}
+                                                date={endDate}
+                                                onConfirm={(selectedDate) => {
+                                                    setOpenEndDate(false);
+                                                    setEndDate(selectedDate);
+                                                }}
+                                                onCancel={() => setOpenEndDate(false)}
+                                            />
+                                        </View>
+                                    </View>
+                                )}
                             </View>
 
-                            <View style={[styles.radiobuttonContainer, { borderColor: '#FFBCE1', backgroundColor: '#FDF2F8', marginTop: 20 }]}>
+
+
+
+                            <View style={[styles.radiobuttonContainer, { borderColor: '#5AAF9A', backgroundColor: '#F0FCF9', }]}>
 
                                 <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 12 }}>
                                     <Shield color='#5B0064' />
-                                    <CustomText weight='bold' style={{ fontSize: 16, }}>Media Upload Settings</CustomText>
+                                    <CustomText weight='bold' style={{ fontSize: 16, }}>Messaging & Comments</CustomText>
                                 </View>
-                                <TouchableOpacity
-                                    style={styles.privacy}
-                                    onPress={() => setUploadType('automatic')}
-                                    activeOpacity={0.7}
-                                >
-                                    <View >
-                                        <View style={{
-                                            height: 20,
-                                            width: 20,
-                                            borderRadius: 10,
-                                            borderWidth: 2,
-                                            borderColor: uploadType === 'automatic' ? '#EC4899' : '#D1D5DB',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                        }}>
-                                            {uploadType === 'automatic' && (
-                                                <View style={{
-                                                    height: 10,
-                                                    width: 10,
-                                                    borderRadius: 5,
-                                                    backgroundColor: '#EC4899',
-                                                }} />
-                                            )}
-                                        </View>
-                                    </View>
+                                <View style={styles.privacy}>
 
                                     <View style={{ flex: 1, marginLeft: 12 }}>
-                                        <CustomText weight='bold' style={{ fontSize: 16 }}>Automatic Upload</CustomText>
-                                        <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>All media is uploaded instantly. Only select if you trust your group and the content they'll share</CustomText>
+                                        <CustomText weight='bold' style={{ fontSize: 16 }}>Enable Messaging</CustomText>
+                                        <CustomText weight='medium' style={{ color: '#374151' }}>Allow members to post messages and comment on photos</CustomText>
                                     </View>
-                                </TouchableOpacity>
+                                </View>
 
-                                <TouchableOpacity
-                                    style={styles.privacy}
-                                    onPress={() => setUploadType('approval')}
-                                    activeOpacity={0.7}
-                                >
-                                    <View >
-                                        <View style={{
-                                            height: 20,
-                                            width: 20,
-                                            borderRadius: 10,
-                                            borderWidth: 2,
-                                            borderColor: uploadType === 'approval' ? '#EC4899' : '#D1D5DB',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                        }}>
-                                            {uploadType === 'approval' && (
-                                                <View style={{
-                                                    height: 10,
-                                                    width: 10,
-                                                    borderRadius: 5,
-                                                    backgroundColor: '#EC4899',
-                                                }} />
-                                            )}
-                                        </View>
-                                    </View>
+                                <View style={styles.privacy}>
+
                                     <View style={{ flex: 1, marginLeft: 12 }}>
-                                        <CustomText weight='bold' style={{ fontSize: 16 }}>Approval Required</CustomText>
-                                        <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>Uploaded media must be reviewed and approved by authorized members. Best for formal events.</CustomText>
+                                        <CustomText weight='bold' style={{ fontSize: 16 }}>Admin Message Control</CustomText>
+                                        <CustomText weight='medium' style={{ color: '#374151' }}>Allow admin to remove messages posted by members</CustomText>
                                     </View>
-                                </TouchableOpacity>
+                                </View>
 
-                                {uploadType === 'automatic' && (
-                                    <TouchableOpacity
-                                        style={{
-                                            flexDirection: 'row',
-                                            backgroundColor: '#FFF0CF',
-                                            borderRadius: 12,
-                                            padding: 16,
-                                            marginTop: 8,
-                                            marginBottom: 10,
-                                        }}
-                                        // onPress={() => setUploadType('acknowledge')}
-                                        activeOpacity={0.7}
-                                    >
-                                        <View >
-                                            <View style={{
-                                                height: 20,
-                                                width: 20,
-                                                borderRadius: 10,
-                                                borderWidth: 2,
-                                                borderColor: uploadType === 'acknowledge' ? '#EC4899' : '#D1D5DB',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }}>
-                                                {uploadType === 'acknowledge' && (
-                                                    <View style={{
-                                                        height: 10,
-                                                        width: 10,
-                                                        borderRadius: 5,
-                                                        backgroundColor: '#EC4899',
-                                                    }} />
-                                                )}
-                                            </View>
-                                        </View>
+                                <View style={[styles.privacy, { backgroundColor: 'transparent', borderColor: '#5AAF9A', }]}>
+                                    <Info color='#5AAF9A' />
+                                    <View style={{ flex: 1, marginLeft: 12 }}>
 
-                                        <View style={{ flex: 1, marginLeft: 12 }}>
-                                            <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>
-                                                I understand that I am responsible for all media automatically uploaded
-                                                to this Hive. Members will be able to upload photos and videos without
-                                                my approval.
-                                            </CustomText>
-                                        </View>
-                                    </TouchableOpacity>
-                                )}
-
+                                        <CustomText weight='medium' style={{ color: '#5AAF9A' }}>Members will be able to react with emojis and post comments on photos and in the general chat.</CustomText>
+                                    </View>
+                                </View>
                             </View>
-                            <View style={{ marginBottom: 0, }}>
-                                <View style={styles.privacyContainer}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                                            <CalendarDays />
-                                            <View style={{ marginLeft: 12 }}>
-                                                <CustomText weight='bold' style={{ fontSize: 16 }}>Temporary Event Hive</CustomText>
-                                                <CustomText weight='regular' style={{ color: '#374151', fontSize: 12 }}>Set dates for this event</CustomText>
-                                            </View>
-                                        </View>
-                                        <Switch
-                                            trackColor={{ false: '#767577', true: '#81b0ff' }}
-                                            thumbColor={isEnabled ? '#4b5cf5ff' : '#f4f3f4'}
-                                            ios_backgroundColor="#3e3e3e"
-                                            onValueChange={toggleSwitch}
-                                            value={isEnabled}
+
+
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <TouchableOpacity
+                                    onPress={() => setChecked(!checked)}
+                                    style={{
+                                        height: 20,
+                                        width: 20,
+                                        borderRadius: 4,
+                                        borderWidth: 2,
+                                        borderColor: checked ? '#69ec48ff' : '#9CA3AF',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        marginRight: 8,
+                                    }}
+                                    activeOpacity={0.7}
+                                >
+                                    {checked && (
+                                        <View
+                                            style={{
+                                                height: 12,
+                                                width: 12,
+                                                backgroundColor: '#5bec48ff',
+                                                borderRadius: 2,
+                                            }}
                                         />
-                                    </View>
-                                    {/* that time only show this View */}
-                                    {isEnabled && (
-                                        <View style={{ paddingInline: 6 }}>
-                                            {/* Event Date */}
-
-                                            <View style={{ marginTop: 15 }}>
-                                                <View style={{ backgroundColor: '#ccc', height: 0.4, width: '100%', }} />
-
-                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5, marginTop: 15 }}>
-                                                    <Calendar width={16} />
-                                                    <CustomText weight="semiBold" color="#374151">Event Start Date</CustomText>
-
-
-                                                </View>
-                                                <TextInput
-                                                    style={styles.input}
-                                                    placeholder="DD-MM-YY"
-                                                    value={date}
-                                                    onChangeText={(text) => {
-                                                        let formatted = text.replace(/[^0-9]/g, '');
-                                                        if (formatted.length > 2 && formatted.length <= 4)
-                                                            formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
-                                                        else if (formatted.length > 4)
-                                                            formatted = `${formatted.slice(0, 2)}-${formatted.slice(2, 4)}-${formatted.slice(4, 6)}`;
-                                                        setDate(formatted);
-                                                    }}
-                                                    keyboardType="numeric"
-                                                    maxLength={8}
-                                                />
-                                            </View>
-
-                                            {/* Start Time */}
-                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                                                <View style={{ marginTop: 20, width: '50%' }}>
-                                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
-                                                        <Timer width={16} />
-                                                        <CustomText weight="semiBold" color="#374151">Start Time</CustomText>
-                                                    </View>
-                                                    <TextInput
-                                                        style={styles.input}
-                                                        placeholder="HH:MM"
-                                                        value={startDate}
-                                                        onChangeText={(text) => {
-                                                            let formatted = text.replace(/[^0-9]/g, '');
-                                                            if (formatted.length > 2)
-                                                                formatted = `${formatted.slice(0, 2)}:${formatted.slice(2, 4)}`;
-                                                            setStartDate(formatted);
-                                                        }}
-                                                        keyboardType="numeric"
-                                                        maxLength={5}
-                                                    />
-                                                </View>
-
-                                                {/* End Time */}
-                                                <View style={{ paddingLeft: 16, marginTop: 20, width: '50%' }}>
-                                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
-                                                        <TimerOff width={16} />
-                                                        <CustomText weight="semiBold" color="#374151">End Time</CustomText>
-                                                    </View>
-                                                    <TextInput
-                                                        style={styles.input}
-                                                        placeholder="HH:MM"
-                                                        value={endTime}
-                                                        onChangeText={(text) => {
-                                                            let formatted = text.replace(/[^0-9]/g, '');
-                                                            if (formatted.length > 2)
-                                                                formatted = `${formatted.slice(0, 2)}:${formatted.slice(2, 4)}`;
-                                                            setEndTime(formatted);
-                                                        }}
-                                                        keyboardType="numeric"
-                                                        maxLength={5}
-                                                    />
-                                                </View>
-                                            </View>
-
-                                            {/* Expiry Date */}
-                                            <View style={{ marginTop: 20 }}>
-                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
-                                                    <CalendarOff width={16} />
-                                                    <CustomText weight="semiBold" color="#374151">Event End Date</CustomText>
-                                                </View>
-                                                <TextInput
-                                                    style={styles.input}
-                                                    placeholder="DD-MM-YY"
-                                                    value={endDate}
-                                                    onChangeText={(text) => {
-                                                        let formatted = text.replace(/[^0-9]/g, '');
-                                                        if (formatted.length > 2 && formatted.length <= 4)
-                                                            formatted = `${formatted.slice(0, 2)}-${formatted.slice(2)}`;
-                                                        else if (formatted.length > 4)
-                                                            formatted = `${formatted.slice(0, 2)}-${formatted.slice(2, 4)}-${formatted.slice(4, 6)}`;
-                                                        setEndDate(formatted);
-                                                    }}
-                                                    keyboardType="numeric"
-                                                    maxLength={8}
-                                                />
-                                            </View>
-                                        </View>
                                     )}
-                                </View>
+                                </TouchableOpacity>
+                                <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
+                                    <View style={{ paddingHorizontal: 30 }}>
 
-
-
-
-                                <View style={[styles.radiobuttonContainer, { borderColor: '#5AAF9A', backgroundColor: '#F0FCF9', }]}>
-
-                                    <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 12 }}>
-                                        <Shield color='#5B0064' />
-                                        <CustomText weight='bold' style={{ fontSize: 16, }}>Messaging & Comments</CustomText>
+                                        <CustomText weight="medium" style={{ color: '#646464' }}>
+                                            I have read the Content Responsibility & Privacy Policy and agree that I am responsible for all content uploaded to my event hive.
+                                        </CustomText>
                                     </View>
-                                    <View style={styles.privacy}>
-
-                                        <View style={{ flex: 1, marginLeft: 12 }}>
-                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Enable Messaging</CustomText>
-                                            <CustomText weight='medium' style={{ color: '#374151' }}>Allow members to post messages and comment on photos</CustomText>
-                                        </View>
-                                    </View>
-
-                                    <View style={styles.privacy}>
-
-                                        <View style={{ flex: 1, marginLeft: 12 }}>
-                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Admin Message Control</CustomText>
-                                            <CustomText weight='medium' style={{ color: '#374151' }}>Allow admin to remove messages posted by members</CustomText>
-                                        </View>
-                                    </View>
-
-                                    <View style={[styles.privacy, { backgroundColor: 'transparent', borderColor: '#5AAF9A', }]}>
-                                        <Info color='#5AAF9A' />
-                                        <View style={{ flex: 1, marginLeft: 12 }}>
-
-                                            <CustomText weight='medium' style={{ color: '#5AAF9A' }}>Members will be able to react with emojis and post comments on photos and in the general chat.</CustomText>
-                                        </View>
-                                    </View>
-                                </View>
-
-
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <TouchableOpacity
-                                        onPress={() => setChecked(!checked)}
-                                        style={{
-                                            height: 20,
-                                            width: 20,
-                                            borderRadius: 4,
-                                            borderWidth: 2,
-                                            borderColor: checked ? '#69ec48ff' : '#9CA3AF',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            marginRight: 8,
-                                        }}
-                                        activeOpacity={0.7}
-                                    >
-                                        {checked && (
-                                            <View
-                                                style={{
-                                                    height: 12,
-                                                    width: 12,
-                                                    backgroundColor: '#5bec48ff',
-                                                    borderRadius: 2,
-                                                }}
-                                            />
-                                        )}
-                                    </TouchableOpacity>
-                                    <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
-                                        <View style={{ paddingHorizontal: 30 }}>
-
-                                            <CustomText weight="medium" style={{ color: '#646464' }}>
-                                                I have read the Content Responsibility & Privacy Policy and agree that I am responsible for all content uploaded to my event hive.
-                                            </CustomText>
-                                        </View>
-                                    </TouchableWithoutFeedback>
-                                </View>
+                                </TouchableWithoutFeedback>
+                            </View>
 
 
 
-                                <View style={{}}>
-                                    <ThemeButton
-                                        text="Create Hive"
-                                        onPress={handleCreateHive}
-                                        style={{ width: "100%" }}
-                                    />
-                                </View>
+                            <View style={{}}>
+                                <ThemeButton
+                                    text="Create Hive"
+                                    onPress={handleCreateHive}
+                                    style={{ width: "100%" }}
+                                />
                             </View>
                         </View>
                     </View>
-                    <PrivacyPolicyModal
-                        visible={showPrivacyModal}
-                        onClose={() => setShowPrivacyModal(false)}
-                    />
-                </ScrollView>
-            </SafeAreaView>
-        </SafeAreaProvider>
-    );
+                </View>
+                <PrivacyPolicyModal
+                    visible={showPrivacyModal}
+                    onClose={() => setShowPrivacyModal(false)}
+                />
+            </ScrollView>
+        </SafeAreaView>
+    </SafeAreaProvider>
+);
 };
 
 const styles = StyleSheet.create({

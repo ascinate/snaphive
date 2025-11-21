@@ -32,7 +32,6 @@ const profilePic = require("../../assets/picnic3.jpg");
 const Profile = ({ navigation, }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
-
   const openStore = () => {
     const playStoreUrl = "https://play.google.com/store/apps/details?id=com.snaphive";
     const appStoreUrl = "https://apps.apple.com/app/id1234567890";
@@ -293,7 +292,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 
-
   category: {
     fontSize: 14,
     fontWeight: '600',
@@ -339,5 +337,3 @@ const styles = StyleSheet.create({
 });
 
 export default Profile;
-
-

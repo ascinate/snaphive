@@ -24,50 +24,35 @@ const Home = ({ navigation, route }) => {
   const opacityAnim = useRef(new Animated.Value(1)).current;
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState(null);
-  const parseExpiryDate = (dateString, timeString) => {
-    try {
-      if (!dateString) return null;
 
-      // Parse DD-MM-YY format
-      const [day, month, year] = dateString.split('-');
-      if (!day || !month || !year) return null;
-
-      // Convert 2-digit year to 4-digit (assuming 20XX)
-      const fullYear = year.length === 2 ? `20${year}` : year;
-
-      // Parse time if provided (HH:MM format)
-      let hours = 23, minutes = 59, seconds = 59;
-      if (timeString) {
-        const timeParts = timeString.split(':');
-        if (timeParts.length === 2) {
-          hours = parseInt(timeParts[0]) || 23;
-          minutes = parseInt(timeParts[1]) || 59;
-        }
-      }
-
-      // Create date object (month is 0-indexed in JS)
-      const expiryDate = new Date(
-        parseInt(fullYear),
-        parseInt(month) - 1,
-        parseInt(day),
-        hours,
-        minutes,
-        seconds
-      );
-
-      // Validate the date
-      if (isNaN(expiryDate.getTime())) {
-        console.warn('Invalid expiry date:', dateString);
-        return null;
-      }
-
-      return expiryDate;
-    } catch (error) {
-      console.error('Error parsing expiry date:', error);
-      return null;
-    }
+  // ADD THESE TWO FUNCTIONS HERE - RIGHT AFTER useState DECLARATIONS
+  // Format date → DD/MM/YYYY
+  const formatDisplayDate = (date) => {
+    if (!date) return 'N/A';
+    const dateObj = date instanceof Date ? date : new Date(date);
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const year = dateObj.getFullYear();
+    return `${day}/${month}/${year}`;
   };
 
+  // Format time → HH:MM AM/PM
+  const formatDisplayTime = (date) => {
+    if (!date) return 'N/A';
+    const dateObj = date instanceof Date ? date : new Date(date);
+    let hours = dateObj.getHours();
+    let minutes = dateObj.getMinutes();
+    let ampm = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+
+    return `${hours}:${minutes} ${ampm}`;
+  };
+
+  // REMOVE the old parseExpiryDate function completely
+  // REPLACE the removeExpiredEvents function with this:
   const removeExpiredEvents = useCallback(() => {
     const now = new Date();
 
@@ -79,17 +64,30 @@ const Home = ({ navigation, route }) => {
         // Keep events without expiry date (safety)
         if (!event.expiryDate) return true;
 
-        // Parse the expiry date with end time if available
-        const eventExpiry = parseExpiryDate(event.expiryDate, event.endTime);
+        // Convert to Date object if it's not already
+        const expiryDate = event.expiryDate instanceof Date
+          ? new Date(event.expiryDate)
+          : new Date(event.expiryDate);
 
-        // If parsing failed, keep the event (safety)
-        if (!eventExpiry) return true;
+        // If we have endTime, combine it with expiry date
+        if (event.endTime) {
+          const endTimeObj = event.endTime instanceof Date
+            ? event.endTime
+            : new Date(event.endTime);
+
+          expiryDate.setHours(endTimeObj.getHours());
+          expiryDate.setMinutes(endTimeObj.getMinutes());
+          expiryDate.setSeconds(endTimeObj.getSeconds());
+        } else {
+          // If no end time, set to end of day
+          expiryDate.setHours(23, 59, 59, 999);
+        }
 
         // Check if event has expired
-        const hasExpired = eventExpiry < now;
+        const hasExpired = expiryDate < now;
 
         if (hasExpired) {
-          console.log(`Removing expired event: ${event.title}, expired at: ${eventExpiry.toISOString()}`);
+          console.log(`Removing expired event: ${event.title}, expired at: ${expiryDate.toISOString()}`);
         }
 
         return !hasExpired;
@@ -244,9 +242,9 @@ const Home = ({ navigation, route }) => {
                   onPress={() => navigation.navigate('CreateHive')}
                 >
                   <View>
-                    <Plus color="#EA580B" size={20} />
+                    <Plus color="#DA3C84" size={20} />
                   </View>
-                  <CustomText weight="bold" style={{ color: '#EA580B', fontSize: 14, }}>
+                  <CustomText weight="bold" style={{ color: '#DA3C84', fontSize: 14, }}>
                     Create new hive
                   </CustomText>
                 </TouchableOpacity>
@@ -412,7 +410,7 @@ const Home = ({ navigation, route }) => {
                           <View style={styles.eventTimeRow}>
                             <CalendarDays width={16} height={16} color="#F98935" />
                             <CustomText weight="medium" style={styles.eventTimeText}>
-                              {item.endTime} - {item.expiryDate}
+                              {formatDisplayTime(item.endTime)} - {formatDisplayDate(item.expiryDate)}
                             </CustomText>
                           </View>
 

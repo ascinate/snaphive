@@ -49,7 +49,7 @@ import NewPassword from "./src/screen/NewPassword";
 import CreateHive from './src/screen/CreateHive'
 import FolderLayout from './src/screen/FolderLayout'
 import MyHives from './src/screen/MyHives'
-
+import Demo from './src/screen/Demo'
 
 
 // Demo camera UI
@@ -79,7 +79,7 @@ const App = () => {
               <Stack.Screen name="AddNote" component={AddNote} />
               <Stack.Screen name="NewPage" component={NewPage} />
               <Stack.Screen name="Home" component={MyTabs} />
-               <Stack.Screen name="CreateHive" component={CreateHive} />
+              <Stack.Screen name="CreateHive" component={CreateHive} />
               <Stack.Screen name="PhotoShare" component={PhotoShare} />
               <Stack.Screen name="AddMember" component={AddMember} />
               <Stack.Screen name="Notification" component={Notification} />
@@ -108,8 +108,9 @@ const App = () => {
               <Stack.Screen name="NewPassword" component={NewPassword} />
               <Stack.Screen name="ClickPhotoTwo" component={ClickPhotoTwo} />
               <Stack.Screen name="ClickPhotoThree" component={ClickPhotoThree} />
-                           <Stack.Screen name="FolderLayout" component={FolderLayout} />   
-                                              <Stack.Screen name="MyHives" component={MyHives} />         
+              <Stack.Screen name="FolderLayout" component={FolderLayout} />
+              <Stack.Screen name="MyHives" component={MyHives} />
+              <Stack.Screen name="Demo" component={Demo} />
             </Stack.Navigator>
           </NavigationContainer>
         </EventProvider>

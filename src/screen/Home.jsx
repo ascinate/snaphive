@@ -390,14 +390,18 @@ const Home = ({ navigation, route }) => {
                       key={index}
                       style={{ width: '48%' }}
                       onPress={() =>
-                        navigation.navigate('FolderLayout', {
-                          image: item.img,
-                          folderName: item.title,
-                          date: item.createdAt,
-                          owner: 'Pritam',
-                          photos: item.photos,
-                        })
-                      }
+        navigation.navigate('FolderLayout', {
+          image: item.img,
+          folderName: item.title,
+          date: item.createdAt,
+          owner: 'Pritam',
+          photos: item.photos,
+          eventTitle: item.title,
+          eventDescription: item.description,
+          eventEndTime: item.endTime,
+          eventExpiryDate: item.expiryDate,
+        })
+      }
                     >
                       <View style={[styles.eventCard,]}>
                         <Image source={item.img} style={styles.eventImage} />
@@ -740,9 +744,10 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
 
-  eventTimeText: {
-    fontSize: 14,
+  eventTimeText: { 
+    fontSize: 12,
     color: '#6B7280',
+    paddingRight: 4,
   },
 
   eventDescription: {

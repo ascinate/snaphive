@@ -18,7 +18,7 @@ import Logo from '../components/Logo';
 import PrivacyPolicyModal from '../components/PrivacyPolicyModal'; //
 // svg
 import Igoogle from "../../assets/Igoogle.svg";
-
+import Iapple from "../../assets/apple2.svg";
 const Signup = ({ navigation }) => {
   const [userID, setUserID] = useState('');
   const [password, setPassword] = useState('');
@@ -147,6 +147,39 @@ const Signup = ({ navigation }) => {
         </View>
       </TouchableWithoutFeedback>
 
+      {/* Continue with Apple */}
+      <TouchableWithoutFeedback>
+        <View
+          style={[
+            styles.outlineBtn,
+            {
+              paddingVertical: height * 0.02,
+              backgroundColor: '#000000',
+              marginBottom: 10,
+              borderWidth:1,
+              borderColor: '#000',
+            }
+          ]}
+        >
+          <View style={styles.iconContainer}>
+            <Iapple width={width * 0.06} height={width * 0.06} />
+          </View>
+          <CustomText
+            style={[
+              styles.continueTxt,
+              {
+                fontSize: width * 0.03,
+                fontFamily: 'Montserrat-Medium',
+                fontWeight: '600',
+                color: '#fff', // White text
+              },
+            ]}
+          >
+            Continue with Apple
+          </CustomText>
+        </View>
+      </TouchableWithoutFeedback>
+
       {/* Already a user */}
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         <CustomText weight='medium' style={{}}>Already have an account ? </CustomText>
@@ -221,7 +254,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 12,
     width: '100%',
-    marginVertical: 21,
+    marginTop: 21,
     position: 'relative',
   },
   iconContainer: {

@@ -281,7 +281,7 @@ const CreateHive = ({ navigation, route }) => {
                                     <Shield color='#5B0064' />
                                     <CustomText weight='bold' style={{ fontSize: 16, }}>Media Upload Settings</CustomText>
                                 </View>
-                                <TouchableOpacity
+                                {/* <TouchableOpacity
                                     style={styles.privacy}
                                     onPress={() => setUploadType('automatic')}
                                     activeOpacity={0.7}
@@ -311,7 +311,7 @@ const CreateHive = ({ navigation, route }) => {
                                         <CustomText weight='bold' style={{ fontSize: 16 }}>Automatic Upload</CustomText>
                                         <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>All media is uploaded instantly. Only select if you trust your group and the content they'll share</CustomText>
                                     </View>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
 
                                 <TouchableOpacity
                                     style={styles.privacy}
@@ -344,7 +344,7 @@ const CreateHive = ({ navigation, route }) => {
                                     </View>
                                 </TouchableOpacity>
 
-                                {uploadType === 'automatic' && (
+                           
                                     <TouchableOpacity
                                         style={{
                                             flexDirection: 'row',
@@ -386,10 +386,10 @@ const CreateHive = ({ navigation, route }) => {
                                             </CustomText>
                                         </View>
                                     </TouchableOpacity>
-                                )}
+                       
 
                             </View>
-                            <View style={{ marginBottom: 0, }}>
+                            <View style={{ marginBottom: 12, }}>
                                 <View style={styles.privacyContainer}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <View style={{ flexDirection: 'row', alignItems: 'center', }}>
@@ -409,7 +409,7 @@ const CreateHive = ({ navigation, route }) => {
                                     </View>
                                     {/* that time only show this View */}
                                     {isEnabled && (
-                                        <View style={{ paddingInline: 6 }}>
+                                        <View >
                                             <View style={{ marginTop: 15 }}>
                                                 <View style={{ backgroundColor: '#ccc', height: 0.4, width: '100%' }} />
 
@@ -572,7 +572,6 @@ const CreateHive = ({ navigation, route }) => {
                                             borderColor: checked ? '#69ec48ff' : '#9CA3AF',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            marginRight: 8,
                                         }}
                                         activeOpacity={0.7}
                                     >
@@ -588,7 +587,7 @@ const CreateHive = ({ navigation, route }) => {
                                         )}
                                     </TouchableOpacity>
                                     <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
-                                        <View style={{ paddingHorizontal: 30 }}>
+                                        <View style={{ paddingHorizontal: 20 }}>
                                             <CustomText weight="medium" style={{ color: '#646464' }}>
                                                 I have read the Content Responsibility &
                                                 <CustomText weight="bold" style={{ textDecorationLine: 'underline' }}> Privacy Policy </CustomText>
@@ -655,7 +654,9 @@ const styles = StyleSheet.create({
     privacyContainer: {
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        padding: 16,
+
+        marginVertical: 30,
+
 
     },
     privacy: {

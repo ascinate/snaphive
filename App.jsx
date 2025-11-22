@@ -49,7 +49,7 @@ import NewPassword from "./src/screen/NewPassword";
 import CreateHive from './src/screen/CreateHive'
 import FolderLayout from './src/screen/FolderLayout'
 import MyHives from './src/screen/MyHives'
-import Demo from './src/screen/Demo'
+
 
 
 // Demo camera UI
@@ -110,7 +110,6 @@ const App = () => {
               <Stack.Screen name="ClickPhotoThree" component={ClickPhotoThree} />
               <Stack.Screen name="FolderLayout" component={FolderLayout} />
               <Stack.Screen name="MyHives" component={MyHives} />
-              <Stack.Screen name="Demo" component={Demo} />
             </Stack.Navigator>
           </NavigationContainer>
         </EventProvider>

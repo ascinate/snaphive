@@ -45,11 +45,45 @@ const dp7 = require("../../assets/dp7.jpg");
 const dp8 = require("../../assets/dp8.jpg");
 
 const FolderLayout = ({ navigation, route }) => {
-  const { image, folderName, date, owner, photos = [] } = route.params || {};
+const { 
+    image, 
+    folderName, 
+    date, 
+    owner, 
+    photos = [],
+    eventTitle,
+    eventDescription,
+    eventEndTime,
+    eventExpiryDate
+  } = route.params || {};
+
   const [selectedTab, setSelectedTab] = useState("Gallery");
   const [uploadedImages, setUploadedImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
+    // ADD THESE FORMAT FUNCTIONS:
+  const formatDisplayDate = (date) => {
+    if (!date) return 'N/A';
+    const dateObj = date instanceof Date ? date : new Date(date);
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const year = dateObj.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const formatDisplayTime = (date) => {
+    if (!date) return 'N/A';
+    const dateObj = date instanceof Date ? date : new Date(date);
+    let hours = dateObj.getHours();
+    let minutes = dateObj.getMinutes();
+    let ampm = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+
+    return `${hours}:${minutes} ${ampm}`;
+  };
 
   useEffect(() => {
     loadSavedImages();
@@ -116,8 +150,18 @@ const handleUpload = async () => {
 
       OverlayContent={
         <View style={styles.profileOverlay}>
-          <CustomText weight="bold" style={{ color: '#fff', fontSize: width * 0.075 }}>2025 Picnic</CustomText>
-          <CustomText weight="medium" style={{ color: '#fff', fontSize: width * 0.035, marginBottom: height * 0.025 }}>It is a long established fact that</CustomText>
+             {/* REPLACE HARDCODED VALUES WITH DYNAMIC DATA: */}
+          <CustomText weight="bold" style={{ color: '#fff', fontSize: width * 0.075 }}>
+            {eventTitle || folderName || '2025 Picnic'}
+          </CustomText>
+          <CustomText weight="medium" style={{ color: '#fff', fontSize: width * 0.035, marginBottom: height * 0.025 }}>
+            {eventDescription || 'It is a long established fact that'}
+          </CustomText>
+           {/* {eventEndTime && eventExpiryDate && (
+            <CustomText weight="medium" style={{ color: '#ef0000', fontSize: width * 0.03, marginBottom: height * 0.015 }}>
+              {formatDisplayTime(eventEndTime)} - {formatDisplayDate(eventExpiryDate)}
+            </CustomText>
+          )} */}
           <View style={styles.rowBetween}>
 
             <TouchableOpacity

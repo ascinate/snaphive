@@ -195,7 +195,7 @@ const MyHives = ({ navigation, route }) => {
                                     style={{
                                         width: 60,
                                         height: 60,
-                                        backgroundColor: '#ff9dc9',
+                                        backgroundColor: '#fee8a3',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         borderRadius: 50,
@@ -204,7 +204,7 @@ const MyHives = ({ navigation, route }) => {
                                     <ImagePlus color="#fff" size={28} />
                                 </View>
 
-                                <CustomText weight="medium" style={{ color: '#6B7280' }}>
+                                <CustomText weight="medium" style={{ color: '#da3c84' }}>
                                     No hives yet
                                 </CustomText>
                                 <TouchableOpacity onPress={() => navigation.navigate('CreateHive')}>
@@ -213,7 +213,7 @@ const MyHives = ({ navigation, route }) => {
                                             flexDirection: 'row',
                                             alignItems: 'center',
                                             gap: 6,
-                                            backgroundColor: colors.primary,
+                                            backgroundColor: '#f03782',
                                             padding: 15,
                                             borderRadius: 12,
                                             marginTop: 8,

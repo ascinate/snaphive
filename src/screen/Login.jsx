@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableWithoutFeedback, TouchableHighlight, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, TouchableWithoutFeedback, TouchableHighlight, Alert, useWindowDimensions } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { loginUser } from "../API/API";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,13 +9,16 @@ import ThemeButton from '../components/ThemeButton';
 import CustomText from '../components/CustomText';
 import PrivacyPolicyModal from '../components/PrivacyPolicyModal'; //
 const logo = require("../../assets/logo.png");
+// svg
+import Igoogle from "../../assets/Igoogle.svg";
+import Iapple from "../../assets/apple2.svg";
 
 const Login = ({ navigation }) => {
-
+    const { width, height } = useWindowDimensions();
     const [userID, setUserID] = useState('');
     const [password, setPassword] = useState('');
 
-const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+    const [showPrivacyModal, setShowPrivacyModal] = useState(false);
     const isValidEmail = (text) => /\S+@\S+\.\S+/.test(text);
     const isValidPhone = (text) => /^[0-9]{10,15}$/.test(text);
 
@@ -89,9 +92,78 @@ const [showPrivacyModal, setShowPrivacyModal] = useState(false);
             <ThemeButton
                 text="Login →"
                 onPress={(handleContinue)}
-                style={{ width: "100%", marginTop: 20 }}
+                style={{ width: "100%", marginTop: 15 }}
             />
 
+
+
+            <CustomText weight='medium' style={[styles.description, { position: 'absolute', bottom: 20, textAlign: 'center', fontSize: 14 }]}>
+                By continuing I accept Selfso's Terms of Use
+                and
+                <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
+                    <CustomText weight='medium' style={[styles.continueTxt, { fontWeight: 600, textDecorationLine: "underline", color: "#000000ff" }]}> Privacy Policy</CustomText>
+                </TouchableWithoutFeedback>
+            </CustomText>
+            <PrivacyPolicyModal
+                visible={showPrivacyModal}
+                onClose={() => setShowPrivacyModal(false)}
+            />
+            {/* Continue with Google */}
+            <TouchableWithoutFeedback>
+                <View style={[styles.outlineBtn, { paddingVertical: height * 0.02 }]}>
+                    <View style={styles.iconContainer}>
+                        <Igoogle width={width * 0.06} height={width * 0.06} />
+                    </View>
+                    <CustomText weight='bold'
+                        style={[
+                            styles.continueTxt,
+                            {
+                                fontSize: width * 0.03,
+                                fontFamily: 'Montserrat-Medium',
+                                fontWeight: '500',
+                                color: '#000',
+                            },
+                        ]}
+                    >
+                        Continue with Google
+                    </CustomText>
+                </View>
+            </TouchableWithoutFeedback>
+
+            {/* Continue with Apple */}
+            <TouchableWithoutFeedback>
+                <View
+                    style={[
+                        styles.outlineBtn,
+                        {
+                            paddingVertical: height * 0.02,
+                            backgroundColor: '#000000',
+                            marginTop: 15,
+                            marginBottom: 8,
+                            borderWidth: 1,
+                            borderColor: '#000',
+                        }
+                    ]}
+                >
+                    <View style={styles.iconContainer}>
+                        <Iapple width={width * 0.06} height={width * 0.06} />
+                    </View>
+                    <CustomText
+                        style={[
+                            styles.continueTxt,
+                            {
+                                fontSize: width * 0.03,
+                                fontFamily: 'Montserrat-Medium',
+                                fontWeight: '600',
+                                color: '#fff', // White text
+                            },
+                        ]}
+                    >
+                        Continue with Apple
+                    </CustomText>
+                </View>
+            </TouchableWithoutFeedback>
+            
 
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                 <CustomText weight='medium' style={{ color: '#000000ff' }}>Don’t have an account ?  </CustomText>
@@ -101,19 +173,6 @@ const [showPrivacyModal, setShowPrivacyModal] = useState(false);
                     </TouchableWithoutFeedback>
                 </TouchableWithoutFeedback>
             </View>
-
-
-            <CustomText weight='medium' style={[styles.description, { position: 'absolute', bottom: 20, textAlign: 'center', fontSize: 14 }]}>
-                By continuing I accept Selfso's Terms of Use
-                and
-    <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
-                    <CustomText weight='medium' style={[styles.continueTxt, { fontWeight: 600, textDecorationLine: "underline", color: "#000000ff" }]}> Privacy Policy</CustomText>
-                </TouchableWithoutFeedback>
-            </CustomText>
-    <PrivacyPolicyModal
-      visible={showPrivacyModal}
-      onClose={() => setShowPrivacyModal(false)}
-    />
         </SafeAreaProvider>
     );
 };
@@ -145,6 +204,25 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingVertical: 16,
         fontSize: 16,
+    },
+    outlineBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderRadius: 12,
+        width: '100%',
+
+        position: 'relative',
+    },
+    iconContainer: {
+        position: 'absolute',
+        left: 22,
+    },
+    orLine: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
 });

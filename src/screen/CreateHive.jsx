@@ -25,6 +25,7 @@ const CreateHive = ({ navigation, route }) => {
     const [uploadedImage, setUploadedImage] = useState(null);
     const [hiveName, setHiveName] = useState("");
 
+  const [selectedOption, setSelectedOption] = useState('enable')
 
     const [hiveDescription, setHiveDescription] = useState("");
     const { addEvent } = useContext(EventContext);
@@ -314,6 +315,48 @@ const CreateHive = ({ navigation, route }) => {
                                 </TouchableOpacity> */}
 
                                 <TouchableOpacity
+                                    style={{
+                                        flexDirection: 'row',
+                                        backgroundColor: '#FFF0CF',
+                                        borderRadius: 12,
+                                        padding: 16,
+                                        marginTop: 8,
+                                        marginBottom: 10,
+                                    }}
+                                    onPress={() => setUploadType('acknowledge')}
+                                    activeOpacity={0.7}
+                                >
+                                    <View >
+                                        <View style={{
+                                            height: 20,
+                                            width: 20,
+                                            borderRadius: 10,
+                                            borderWidth: 2,
+                                            borderColor: uploadType === 'acknowledge' ? '#EC4899' : '#D1D5DB',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}>
+                                            {uploadType === 'acknowledge' && (
+                                                <View style={{
+                                                    height: 10,
+                                                    width: 10,
+                                                    borderRadius: 5,
+                                                    backgroundColor: '#EC4899',
+                                                }} />
+                                            )}
+                                        </View>
+                                    </View>
+
+                                    <View style={{ flex: 1, marginLeft: 12 }}>
+                                        <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>
+                                            I understand that I am responsible for all media automatically uploaded
+                                            to this Hive. Members will be able to upload photos and videos without
+                                            my approval.
+                                        </CustomText>
+                                    </View>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
                                     style={styles.privacy}
                                     onPress={() => setUploadType('approval')}
                                     activeOpacity={0.7}
@@ -344,49 +387,9 @@ const CreateHive = ({ navigation, route }) => {
                                     </View>
                                 </TouchableOpacity>
 
-                           
-                                    <TouchableOpacity
-                                        style={{
-                                            flexDirection: 'row',
-                                            backgroundColor: '#FFF0CF',
-                                            borderRadius: 12,
-                                            padding: 16,
-                                            marginTop: 8,
-                                            marginBottom: 10,
-                                        }}
-                                        // onPress={() => setUploadType('acknowledge')}
-                                        activeOpacity={0.7}
-                                    >
-                                        <View >
-                                            <View style={{
-                                                height: 20,
-                                                width: 20,
-                                                borderRadius: 10,
-                                                borderWidth: 2,
-                                                borderColor: uploadType === 'acknowledge' ? '#EC4899' : '#D1D5DB',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }}>
-                                                {uploadType === 'acknowledge' && (
-                                                    <View style={{
-                                                        height: 10,
-                                                        width: 10,
-                                                        borderRadius: 5,
-                                                        backgroundColor: '#EC4899',
-                                                    }} />
-                                                )}
-                                            </View>
-                                        </View>
 
-                                        <View style={{ flex: 1, marginLeft: 12 }}>
-                                            <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>
-                                                I understand that I am responsible for all media automatically uploaded
-                                                to this Hive. Members will be able to upload photos and videos without
-                                                my approval.
-                                            </CustomText>
-                                        </View>
-                                    </TouchableOpacity>
-                       
+
+
 
                             </View>
                             <View style={{ marginBottom: 12, }}>
@@ -436,6 +439,33 @@ const CreateHive = ({ navigation, route }) => {
                                                         setStartDate(selectedDate);
                                                     }}
                                                     onCancel={() => setOpenStartDate(false)}
+                                                />
+                                            </View>
+
+                                            {/* Event End Date */}
+                                            <View style={{ marginTop: 20 }}>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                                                    <CalendarOff width={16} />
+                                                    <CustomText weight="semiBold" color="#374151">Event End Date</CustomText>
+                                                </View>
+                                                <TouchableOpacity onPress={() => setOpenEndDate(true)}>
+                                                    <TextInput
+                                                        placeholder="Select Date"
+                                                        value={formatDate(endDate)}
+                                                        editable={false}
+                                                        style={styles.input}
+                                                    />
+                                                </TouchableOpacity>
+                                                <DatePicker
+                                                    modal
+                                                    mode="date"
+                                                    open={openEndDate}
+                                                    date={endDate}
+                                                    onConfirm={(selectedDate) => {
+                                                        setOpenEndDate(false);
+                                                        setEndDate(selectedDate);
+                                                    }}
+                                                    onCancel={() => setOpenEndDate(false)}
                                                 />
                                             </View>
 
@@ -496,32 +526,7 @@ const CreateHive = ({ navigation, route }) => {
                                                 </View>
                                             </View>
 
-                                            {/* Event End Date */}
-                                            <View style={{ marginTop: 20 }}>
-                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
-                                                    <CalendarOff width={16} />
-                                                    <CustomText weight="semiBold" color="#374151">Event End Date</CustomText>
-                                                </View>
-                                                <TouchableOpacity onPress={() => setOpenEndDate(true)}>
-                                                    <TextInput
-                                                        placeholder="Select Date"
-                                                        value={formatDate(endDate)}
-                                                        editable={false}
-                                                        style={styles.input}
-                                                    />
-                                                </TouchableOpacity>
-                                                <DatePicker
-                                                    modal
-                                                    mode="date"
-                                                    open={openEndDate}
-                                                    date={endDate}
-                                                    onConfirm={(selectedDate) => {
-                                                        setOpenEndDate(false);
-                                                        setEndDate(selectedDate);
-                                                    }}
-                                                    onCancel={() => setOpenEndDate(false)}
-                                                />
-                                            </View>
+
                                         </View>
                                     )}
                                 </View>
@@ -529,36 +534,82 @@ const CreateHive = ({ navigation, route }) => {
 
 
 
-                                <View style={[styles.radiobuttonContainer, { borderColor: '#5AAF9A', backgroundColor: '#F0FCF9', }]}>
+              <View style={[styles.radiobuttonContainer, { borderColor: '#5AAF9A', backgroundColor: '#F0FCF9' }]}>
 
-                                    <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 12 }}>
-                                        <Shield color='#5B0064' />
-                                        <CustomText weight='bold' style={{ fontSize: 16, }}>Messaging & Comments</CustomText>
-                                    </View>
-                                    <View style={styles.privacy}>
+      <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 12 }}>
+        <Shield color='#5B0064' />
+        <CustomText weight='bold' style={{ fontSize: 16 }}>Messaging & Comments</CustomText>
+      </View>
 
-                                        <View style={{ flex: 1, marginLeft: 12 }}>
-                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Enable Messaging</CustomText>
-                                            <CustomText weight='medium' style={{ color: '#374151' }}>Allow members to post messages and comment on photos</CustomText>
-                                        </View>
-                                    </View>
+      {/* Enable Messaging */}
+      <TouchableOpacity style={styles.privacy} onPress={() => setSelectedOption('enable')}>
+        {/* Radio Button */}
+        <View style={{
+          height: 18,
+          width: 18,
+          borderRadius: 10,
+          borderWidth: 2,
+          borderColor: selectedOption === 'enable' ? '#5AAF9A' : '#9CA3AF',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {selectedOption === 'enable' && (
+            <View style={{
+              height: 10,
+              width: 10,
+              borderRadius: 6,
+              backgroundColor: '#5AAF9A'
+            }} />
+          )}
+        </View>
 
-                                    <View style={styles.privacy}>
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <CustomText weight='bold' style={{ fontSize: 16 }}>Enable Messaging</CustomText>
+          <CustomText weight='medium' style={{ color: '#374151' }}>
+            Allow members to post messages and comment on photos
+          </CustomText>
+        </View>
+      </TouchableOpacity>
 
-                                        <View style={{ flex: 1, marginLeft: 12 }}>
-                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Admin Message Control</CustomText>
-                                            <CustomText weight='medium' style={{ color: '#374151' }}>Allow admin to remove messages posted by members</CustomText>
-                                        </View>
-                                    </View>
+      {/* Admin Message Control */}
+      <TouchableOpacity style={styles.privacy} onPress={() => setSelectedOption('admin')}>
+        {/* Radio Button */}
+        <View style={{
+          height: 18,
+          width: 18,
+          borderRadius: 10,
+          borderWidth: 2,
+          borderColor: selectedOption === 'admin' ? '#5AAF9A' : '#9CA3AF',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {selectedOption === 'admin' && (
+            <View style={{
+              height: 10,
+              width: 10,
+              borderRadius: 6,
+              backgroundColor: '#5AAF9A'
+            }} />
+          )}
+        </View>
 
-                                    <View style={[styles.privacy, { backgroundColor: 'transparent', borderColor: '#5AAF9A', }]}>
-                                        <Info color='#5AAF9A' />
-                                        <View style={{ flex: 1, marginLeft: 12 }}>
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <CustomText weight='bold' style={{ fontSize: 16 }}>Admin Message Control</CustomText>
+          <CustomText weight='medium' style={{ color: '#374151' }}>
+            Allow admin to remove member messages
+          </CustomText>
+        </View>
+      </TouchableOpacity>
 
-                                            <CustomText weight='medium' style={{ color: '#5AAF9A' }}>Members will be able to react with emojis and post comments on photos and in the general chat.</CustomText>
-                                        </View>
-                                    </View>
-                                </View>
+      <View style={[styles.privacy, { backgroundColor: 'transparent', borderColor: '#5AAF9A' }]}>
+        <Info color='#5AAF9A' />
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <CustomText weight='medium' style={{ color: '#5AAF9A' }}>
+            Members will be able to react with emojis and comments.
+          </CustomText>
+        </View>
+      </View>
+    </View>
 
 
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>

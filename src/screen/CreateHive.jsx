@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Animated, Text, TextInput, TouchableWithoutFeedback, Switch, Keyboard } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, Platform, Animated, Text, TextInput, TouchableWithoutFeedback, Switch, Keyboard } from 'react-native';
 import { navigate } from '../navigation/RootNavigation';
-import { Sparkles, Users, FileImage, Clock5, RotateCwSquare, Image, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff, Plus, Upload, CalendarDays, Shield, Info } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, RotateCwSquare, Image as LucidImage, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff, Plus, Upload, CalendarDays, Shield, Info } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
@@ -18,6 +18,9 @@ import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
 // assets
 const hero = require('../../assets/hero.png');
 const picnic1 = require('../../assets/picnic1.jpg');
+const picnic2 = require("../../assets/picnic2.jpg");
+const picnic3 = require("../../assets/picnic3.jpg");
+const picnic4 = require("../../assets/picnic4.jpg");
 const { width, height } = Dimensions.get('window');
 
 const CreateHive = ({ navigation, route }) => {
@@ -25,7 +28,7 @@ const CreateHive = ({ navigation, route }) => {
     const [uploadedImage, setUploadedImage] = useState(null);
     const [hiveName, setHiveName] = useState("");
 
-  const [selectedOption, setSelectedOption] = useState('enable')
+    const [selectedOption, setSelectedOption] = useState('enable')
 
     const [hiveDescription, setHiveDescription] = useState("");
     const { addEvent } = useContext(EventContext);
@@ -89,7 +92,10 @@ const CreateHive = ({ navigation, route }) => {
         }
 
         const newEvent = {
-            img: { uri: uploadedImage },
+            img: typeof uploadedImage === 'string'
+                ? { uri: uploadedImage }
+                : uploadedImage,
+
             title: hiveName,
             description: hiveDescription || 'No description',
             count: '0 Photos',
@@ -236,7 +242,10 @@ const CreateHive = ({ navigation, route }) => {
                                     {uploadedImage ? (
                                         <View style={{ width: '100%', height: '100%', borderRadius: 8, overflow: 'hidden' }}>
                                             <Animated.Image
-                                                source={{ uri: uploadedImage }}
+                                                source={typeof uploadedImage === 'string'
+                                                    ? { uri: uploadedImage }
+                                                    : uploadedImage}
+
                                                 style={{ width: '100%', height: '100%' }}
                                                 resizeMode="cover"
                                             />
@@ -250,9 +259,53 @@ const CreateHive = ({ navigation, route }) => {
                                     )}
                                 </View>
                             </TouchableWithoutFeedback>
-                            <CustomText weight="medium" style={{ marginBottom: 4, color: colors.textGray, marginTop: 16, marginBottom: 24 }}>
+
+
+                            <CustomText weight="medium" style={{ marginBottom: 15, color: colors.textGray, marginTop: 16, }}>
                                 Or choose from stock options based on event type
                             </CustomText>
+                            <View style={styles.imageGrid}>
+                                <TouchableOpacity
+                                    style={styles.imageContainer}
+                                    onPress={() => setUploadedImage(picnic1)}
+                                    activeOpacity={0.7}
+                                >
+                                    <Image source={picnic1} style={styles.image} />
+                                    <View style={styles.overlay}>
+                                        <Text style={styles.imageText}>Corporate</Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.imageContainer} onPress={() => setUploadedImage(picnic2)}>
+
+                                    <Image source={picnic2} style={styles.image} />
+                                    <View style={styles.overlay}>
+                                        <Text style={styles.imageText}>Birthday party</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.imageContainer} onPress={() => setUploadedImage(picnic3)}>
+
+                                    <Image source={picnic3} style={styles.image} />
+                                    <View style={styles.overlay}>
+                                        <Text style={styles.imageText}>Wedding</Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.imageContainer} onPress={() => setUploadedImage(picnic4)}>
+
+                                    <Image source={picnic4} style={styles.image} />
+                                    <View style={styles.overlay}>
+                                        <Text style={styles.imageText}>Reunion</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.imageContainer} onPress={() => setUploadedImage(picnic1)}>
+
+                                    <Image source={picnic1} style={styles.image} />
+                                    <View style={styles.overlay}>
+                                        <Text style={styles.imageText}>Others</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
 
                             <View style={{ marginBottom: 16 }}>
                                 <CustomText weight="bold" style={{ marginBottom: 4, color: '#374151' }}>
@@ -534,82 +587,82 @@ const CreateHive = ({ navigation, route }) => {
 
 
 
-              <View style={[styles.radiobuttonContainer, { borderColor: '#5AAF9A', backgroundColor: '#F0FCF9' }]}>
+                                <View style={[styles.radiobuttonContainer, { borderColor: '#5AAF9A', backgroundColor: '#F0FCF9' }]}>
 
-      <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 12 }}>
-        <Shield color='#5B0064' />
-        <CustomText weight='bold' style={{ fontSize: 16 }}>Messaging & Comments</CustomText>
-      </View>
+                                    <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 12 }}>
+                                        <Shield color='#5B0064' />
+                                        <CustomText weight='bold' style={{ fontSize: 16 }}>Messaging & Comments</CustomText>
+                                    </View>
 
-      {/* Enable Messaging */}
-      <TouchableOpacity style={styles.privacy} onPress={() => setSelectedOption('enable')}>
-        {/* Radio Button */}
-        <View style={{
-          height: 18,
-          width: 18,
-          borderRadius: 10,
-          borderWidth: 2,
-          borderColor: selectedOption === 'enable' ? '#5AAF9A' : '#9CA3AF',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          {selectedOption === 'enable' && (
-            <View style={{
-              height: 10,
-              width: 10,
-              borderRadius: 6,
-              backgroundColor: '#5AAF9A'
-            }} />
-          )}
-        </View>
+                                    {/* Enable Messaging */}
+                                    <TouchableOpacity style={styles.privacy} onPress={() => setSelectedOption('enable')}>
+                                        {/* Radio Button */}
+                                        <View style={{
+                                            height: 18,
+                                            width: 18,
+                                            borderRadius: 10,
+                                            borderWidth: 2,
+                                            borderColor: selectedOption === 'enable' ? '#5AAF9A' : '#9CA3AF',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            {selectedOption === 'enable' && (
+                                                <View style={{
+                                                    height: 10,
+                                                    width: 10,
+                                                    borderRadius: 6,
+                                                    backgroundColor: '#5AAF9A'
+                                                }} />
+                                            )}
+                                        </View>
 
-        <View style={{ flex: 1, marginLeft: 12 }}>
-          <CustomText weight='bold' style={{ fontSize: 16 }}>Enable Messaging</CustomText>
-          <CustomText weight='medium' style={{ color: '#374151' }}>
-            Allow members to post messages and comment on photos
-          </CustomText>
-        </View>
-      </TouchableOpacity>
+                                        <View style={{ flex: 1, marginLeft: 12 }}>
+                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Enable Messaging</CustomText>
+                                            <CustomText weight='medium' style={{ color: '#374151' }}>
+                                                Allow members to post messages and comment on photos
+                                            </CustomText>
+                                        </View>
+                                    </TouchableOpacity>
 
-      {/* Admin Message Control */}
-      <TouchableOpacity style={styles.privacy} onPress={() => setSelectedOption('admin')}>
-        {/* Radio Button */}
-        <View style={{
-          height: 18,
-          width: 18,
-          borderRadius: 10,
-          borderWidth: 2,
-          borderColor: selectedOption === 'admin' ? '#5AAF9A' : '#9CA3AF',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          {selectedOption === 'admin' && (
-            <View style={{
-              height: 10,
-              width: 10,
-              borderRadius: 6,
-              backgroundColor: '#5AAF9A'
-            }} />
-          )}
-        </View>
+                                    {/* Admin Message Control */}
+                                    <TouchableOpacity style={styles.privacy} onPress={() => setSelectedOption('admin')}>
+                                        {/* Radio Button */}
+                                        <View style={{
+                                            height: 18,
+                                            width: 18,
+                                            borderRadius: 10,
+                                            borderWidth: 2,
+                                            borderColor: selectedOption === 'admin' ? '#5AAF9A' : '#9CA3AF',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            {selectedOption === 'admin' && (
+                                                <View style={{
+                                                    height: 10,
+                                                    width: 10,
+                                                    borderRadius: 6,
+                                                    backgroundColor: '#5AAF9A'
+                                                }} />
+                                            )}
+                                        </View>
 
-        <View style={{ flex: 1, marginLeft: 12 }}>
-          <CustomText weight='bold' style={{ fontSize: 16 }}>Admin Message Control</CustomText>
-          <CustomText weight='medium' style={{ color: '#374151' }}>
-            Allow admin to remove member messages
-          </CustomText>
-        </View>
-      </TouchableOpacity>
+                                        <View style={{ flex: 1, marginLeft: 12 }}>
+                                            <CustomText weight='bold' style={{ fontSize: 16 }}>Admin Message Control</CustomText>
+                                            <CustomText weight='medium' style={{ color: '#374151' }}>
+                                                Allow admin to remove member messages
+                                            </CustomText>
+                                        </View>
+                                    </TouchableOpacity>
 
-      <View style={[styles.privacy, { backgroundColor: 'transparent', borderColor: '#5AAF9A' }]}>
-        <Info color='#5AAF9A' />
-        <View style={{ flex: 1, marginLeft: 12 }}>
-          <CustomText weight='medium' style={{ color: '#5AAF9A' }}>
-            Members will be able to react with emojis and comments.
-          </CustomText>
-        </View>
-      </View>
-    </View>
+                                    <View style={[styles.privacy, { backgroundColor: 'transparent', borderColor: '#5AAF9A' }]}>
+                                        <Info color='#5AAF9A' />
+                                        <View style={{ flex: 1, marginLeft: 12 }}>
+                                            <CustomText weight='medium' style={{ color: '#5AAF9A' }}>
+                                                Members will be able to react with emojis and comments.
+                                            </CustomText>
+                                        </View>
+                                    </View>
+                                </View>
 
 
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -705,10 +758,7 @@ const styles = StyleSheet.create({
     privacyContainer: {
         backgroundColor: '#ffffff',
         borderRadius: 12,
-
         marginVertical: 30,
-
-
     },
     privacy: {
         flexDirection: 'row',
@@ -792,7 +842,39 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 15,
         marginBottom: 16,
-    }
+    },
+
+    // Stock image
+    imageGrid: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        gap: 10,
+        marginBottom: 20,
+    },
+    imageContainer: {
+        position: "relative",
+        width: 165,
+        height: 100,
+        marginBottom: 10,
+    },
+    image: {
+        width: "100%",
+        height: "100%",
+        borderRadius: 8,
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: "rgba(0,0,0,0.3)",
+        borderRadius: 8,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    imageText: {
+        color: "#fff",
+        fontSize: 16,
+        fontWeight: "600",
+    },
 });
 
 export default CreateHive;

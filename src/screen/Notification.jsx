@@ -17,7 +17,6 @@ const NotificationScreen = ({ navigation }) => {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <TopNav />
-
         <ScrollView style={styles.scrollContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <BackNavigator width={20} height={20} style={{ marginTop: 10 }} />

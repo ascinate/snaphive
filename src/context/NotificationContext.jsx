@@ -16,12 +16,11 @@ export const NotificationProvider = ({ children }) => {
                 { id: 1, name: "Demola Aoki", time: "4hrs", image: dp, iconType: "album" },
                 { id: 2, name: "Quency Demola", time: "4hrs", image: dp2, iconType: "folder" },
                 { id: 3, name: "Quency Demola", time: "4hrs", image: dp2, iconType: "folder" },
-                { id: 4, name: "Quency Demola", time: "4hrs", image: dp2, iconType: "folder" },
+
             ];
 
             setNotifications(data);
 
-            // ✅ If user hasn’t opened Notification page yet, show count
             if (!hasOpenedNotificationPage) {
                 setUnreadCount(data.length);
             }
@@ -29,16 +28,15 @@ export const NotificationProvider = ({ children }) => {
 
         fetchNotifications();
 
-        // simulate new data every 10s (like real-time updates)
         const interval = setInterval(fetchNotifications, 10000);
 
         return () => clearInterval(interval);
     }, [hasOpenedNotificationPage]);
 
-    // when user opens Notification screen
+
     const markAllAsRead = () => {
         setUnreadCount(0);
-        setHasOpenedNotificationPage(true); // remember user saw them
+        setHasOpenedNotificationPage(true); 
     };
 
     return (

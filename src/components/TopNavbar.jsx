@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useNotification } from "../context/NotificationContext";
 import MaskedView from "@react-native-masked-view/masked-view";
 const logo = require("../../assets/snaphive-logo.png");
-
+import { colors } from '../Theme/theme';
 import { Bell } from "lucide-react-native";
 import LinearGradient from "react-native-linear-gradient";
 import CustomText from "./CustomText";
@@ -27,20 +27,11 @@ const TopNav = () => {
         <Bell width={28} height={28} />
         {unreadCount > 0 && (
 
-          <LinearGradient
-            colors={[
-              '#a131d3', '#b128c4', '#bd22b5', '#c61fa7', '#cc2199',
-              '#d71f8c', '#df227f', '#e52a73', '#ef3462', '#f44250',
-              '#f5533d', '#f36529',
-            ]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+          <View
             style={styles.badge}
           >
-
             <Text style={styles.badgeText}>{unreadCount}</Text>
-          </LinearGradient>
-
+          </View>
         )}
       </TouchableOpacity>
     </View>
@@ -84,6 +75,7 @@ const styles = StyleSheet.create({
     minWidth: 18,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: colors.primary
   },
   badgeText: {
     color: "#fff",

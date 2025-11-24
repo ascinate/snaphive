@@ -390,18 +390,18 @@ const Home = ({ navigation, route }) => {
                       key={index}
                       style={{ width: '48%' }}
                       onPress={() =>
-        navigation.navigate('FolderLayout', {
-          image: item.img,
-          folderName: item.title,
-          date: item.createdAt,
-          owner: 'Pritam',
-          photos: item.photos,
-          eventTitle: item.title,
-          eventDescription: item.description,
-          eventEndTime: item.endTime,
-          eventExpiryDate: item.expiryDate,
-        })
-      }
+                        navigation.navigate('FolderLayout', {
+                          image: item.img,
+                          folderName: item.title,
+                          date: item.createdAt,
+                          owner: 'Pritam',
+                          photos: item.photos,
+                          eventTitle: item.title,
+                          eventDescription: item.description,
+                          eventEndTime: item.endTime,
+                          eventExpiryDate: item.expiryDate,
+                        })
+                      }
                     >
                       <View style={[styles.eventCard,]}>
                         <Image source={item.img} style={styles.eventImage} />
@@ -498,7 +498,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-    backgroundColor: "#fff",
+    backgroundColor: "#FAFAF9",
   },
   heroSection: {
     justifyContent: 'center',
@@ -708,11 +708,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: 12,
     marginBottom: 16,
-    shadowColor: '#000',
+    shadowColor: '#7a7979',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOpacity: 0.20,
+    shadowRadius: 6,
+    elevation: 6,
   },
 
 
@@ -744,7 +744,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
 
-  eventTimeText: { 
+  eventTimeText: {
     fontSize: 12,
     color: '#6B7280',
     paddingRight: 4,

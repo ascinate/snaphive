@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Animated, TextInput } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Platform, Animated, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { RefreshControl } from 'react-native';
-import { Sparkles, Users, FileImage, Clock5, ImagePlus, MoveRight, Plus, FolderOpen, CalendarDays, Search } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, ImagePlus, MoveRight, Plus, FolderOpen, CalendarDays, Search, EllipsisVertical, Share2 } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { EventContext } from '../context/EventContext';
 import { colors } from '../Theme/theme';
@@ -404,8 +404,19 @@ const Home = ({ navigation, route }) => {
                       }
                     >
                       <View style={[styles.eventCard,]}>
+
                         <Image source={item.img} style={styles.eventImage} />
 
+                        <TouchableWithoutFeedback     onPress={() => navigation.navigate('InviteMember')}>
+                          <View style={{
+
+                            position: 'absolute', right: 18, top: 20, padding: 8,
+                            borderRadius: 50,
+                            backgroundColor: "rgba(255,255,255,0.7)",
+                          }}>
+                            <Share2 size={14} color='#2e2e2eff'/>
+                          </View>
+                        </TouchableWithoutFeedback>
                         <View style={styles.eventInfo}>
                           <CustomText weight="bold" style={styles.eventTitle}>
                             {item.title}

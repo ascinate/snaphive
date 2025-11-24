@@ -679,8 +679,8 @@ const CreateHive = ({ navigation, route }) => {
                                     <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
                                         <View style={{ paddingHorizontal: 20 }}>
                                             <CustomText weight="medium" style={{ color: '#646464' }}>
-                                                I have read the Content Responsibility &
-                                                <CustomText weight="bold" style={{ textDecorationLine: 'underline' }}> Privacy Policy </CustomText>
+                                                I have read the 
+                                                <CustomText weight="bold" style={{ textDecorationLine: 'underline'}}> Content Responsibility & Privacy Policy </CustomText>
                                                 and agree that I am responsible for all content uploaded to my event hive.
                                             </CustomText>
                                         </View>

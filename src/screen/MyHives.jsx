@@ -93,9 +93,9 @@ const MyHives = ({ navigation, route }) => {
 
                     <View style={styles.row}>
                         <View style={styles.cardWrap}>
-                            <ImageBackground
-                                style={styles.dashCard}
-                                source={require("../../assets/background.png")}
+                            <View
+                                style={[styles.dashCard,{backgroundColor: '#f7a481'}]}
+
                             >
                                 <View>
                                     <CustomText weight="bold" style={styles.cardText}>
@@ -105,13 +105,13 @@ const MyHives = ({ navigation, route }) => {
                                         Total Hives
                                     </CustomText>
                                 </View>
-                            </ImageBackground>
+                            </View>
                         </View>
 
                         <View style={styles.cardWrap}>
-                            <ImageBackground
-                                style={styles.dashCard}
-                                source={require("../../assets/background.png")}
+                            <View
+                               style={[styles.dashCard,{backgroundColor: '#cc4faa'}]}
+          
                             >
                                 <View>
                                     <CustomText weight="bold" style={styles.cardText}>
@@ -121,7 +121,7 @@ const MyHives = ({ navigation, route }) => {
                                         Photos
                                     </CustomText>
                                 </View>
-                            </ImageBackground>
+                            </View>
                         </View>
                     </View>
 

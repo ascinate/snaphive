@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, Platform, Animated, Text, TextInput, TouchableWithoutFeedback, Switch, Keyboard } from 'react-native';
 import { navigate } from '../navigation/RootNavigation';
-import { Sparkles, Users, FileImage, Clock5, RotateCwSquare, Image as LucidImage, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff, Plus, Upload, CalendarDays, Shield, Info } from 'lucide-react-native';
+import { Sparkles, Users, FileImage, Clock5, RotateCwSquare, Image as LucidImage, LockOpen, Lock, Calendar, Timer, TimerOff, CalendarOff, Plus, Upload, CalendarDays, Shield, Info, Check, BadgeInfo } from 'lucide-react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { EventContext } from '../context/EventContext';
@@ -335,7 +335,7 @@ const CreateHive = ({ navigation, route }) => {
                                     <Shield color='#5B0064' />
                                     <CustomText weight='bold' style={{ fontSize: 16, }}>Media Upload Settings</CustomText>
                                 </View>
-                                {/* <TouchableOpacity
+                                <TouchableOpacity
                                     style={styles.privacy}
                                     onPress={() => setUploadType('automatic')}
                                     activeOpacity={0.7}
@@ -365,49 +365,35 @@ const CreateHive = ({ navigation, route }) => {
                                         <CustomText weight='bold' style={{ fontSize: 16 }}>Automatic Upload</CustomText>
                                         <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>All media is uploaded instantly. Only select if you trust your group and the content they'll share</CustomText>
                                     </View>
-                                </TouchableOpacity> */}
-
-                                <TouchableOpacity
-                                    style={{
-                                        flexDirection: 'row',
-                                        backgroundColor: '#FFF0CF',
-                                        borderRadius: 12,
-                                        padding: 16,
-                                        marginTop: 8,
-                                        marginBottom: 10,
-                                    }}
-                                    onPress={() => setUploadType('acknowledge')}
-                                    activeOpacity={0.7}
-                                >
-                                    <View >
-                                        <View style={{
-                                            height: 20,
-                                            width: 20,
-                                            borderRadius: 10,
-                                            borderWidth: 2,
-                                            borderColor: uploadType === 'acknowledge' ? '#EC4899' : '#D1D5DB',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                        }}>
-                                            {uploadType === 'acknowledge' && (
-                                                <View style={{
-                                                    height: 10,
-                                                    width: 10,
-                                                    borderRadius: 5,
-                                                    backgroundColor: '#EC4899',
-                                                }} />
-                                            )}
-                                        </View>
-                                    </View>
-
-                                    <View style={{ flex: 1, marginLeft: 12 }}>
-                                        <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>
-                                            I understand that I am responsible for all media automatically uploaded
-                                            to this Hive. Members will be able to upload photos and videos without
-                                            my approval.
-                                        </CustomText>
-                                    </View>
                                 </TouchableOpacity>
+
+                                {uploadType !== 'approval' && (
+    <View
+        style={{
+            flexDirection: 'row',
+            backgroundColor: '#FFF0CF',
+            borderRadius: 12,
+            padding: 16,
+            marginTop: 8,
+            marginBottom: 10,
+        }}
+        onPress={() => setUploadType('acknowledge')}
+        activeOpacity={0.7}
+    >
+        <View >
+            <BadgeInfo color="#a1a1a1ff" size={20}/>
+        </View>
+
+        <View style={{ flex: 1, marginLeft: 8 }}>
+            <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>
+                I understand that I am responsible for all media automatically uploaded
+                to this Hive. Members will be able to upload photos and videos without
+                my approval.
+            </CustomText>
+        </View>
+    </View>
+)}
+
 
                                 <TouchableOpacity
                                     style={styles.privacy}

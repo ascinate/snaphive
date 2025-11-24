@@ -94,7 +94,7 @@ const MyHives = ({ navigation, route }) => {
                     <View style={styles.row}>
                         <View style={styles.cardWrap}>
                             <View
-                                style={[styles.dashCard,{backgroundColor: '#f7a481'}]}
+                                style={[styles.dashCard,{backgroundColor: colors.primary}]}
 
                             >
                                 <View>
@@ -195,7 +195,7 @@ const MyHives = ({ navigation, route }) => {
                                     style={{
                                         width: 60,
                                         height: 60,
-                                        backgroundColor: '#fee8a3',
+                                        backgroundColor: '#c2beffff',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         borderRadius: 50,
@@ -213,7 +213,7 @@ const MyHives = ({ navigation, route }) => {
                                             flexDirection: 'row',
                                             alignItems: 'center',
                                             gap: 6,
-                                            backgroundColor: '#f03782',
+                                            backgroundColor: '#f7a481',
                                             padding: 15,
                                             borderRadius: 12,
                                             marginTop: 8,

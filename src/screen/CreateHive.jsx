@@ -35,7 +35,7 @@ const CreateHive = ({ navigation, route }) => {
     const [isEnabled, setIsEnabled] = useState(false);
     const [selected, setSelected] = useState('automatic');
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-    const [uploadType, setUploadType] = useState('automatic');
+    const [uploadType, setUploadType] = useState('');
     const [hiveType, setHiveType] = useState(null);
     const [checked, setChecked] = useState(false);
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
@@ -367,7 +367,7 @@ const CreateHive = ({ navigation, route }) => {
                                     </View>
                                 </TouchableOpacity>
 
-                                {uploadType !== 'approval' && (
+                                {uploadType === 'automatic' && (
     <View
         style={{
             flexDirection: 'row',
@@ -377,15 +377,15 @@ const CreateHive = ({ navigation, route }) => {
             marginTop: 8,
             marginBottom: 10,
         }}
-        onPress={() => setUploadType('acknowledge')}
-        activeOpacity={0.7}
     >
-        <View >
-            <BadgeInfo color="#a1a1a1ff" size={20}/>
+        <View>
+            <BadgeInfo color="#a1a1a1ff" size={20} />
         </View>
 
         <View style={{ flex: 1, marginLeft: 8 }}>
-            <CustomText weight='medium' style={{ color: colors.textGray, fontSize: 12 }}>
+            <CustomText
+                weight='medium'
+                style={{ color: colors.textGray, fontSize: 12 }}>
                 I understand that I am responsible for all media automatically uploaded
                 to this Hive. Members will be able to upload photos and videos without
                 my approval.
@@ -393,6 +393,7 @@ const CreateHive = ({ navigation, route }) => {
         </View>
     </View>
 )}
+
 
 
                                 <TouchableOpacity
@@ -679,8 +680,8 @@ const CreateHive = ({ navigation, route }) => {
                                     <TouchableWithoutFeedback onPress={() => setShowPrivacyModal(true)}>
                                         <View style={{ paddingHorizontal: 20 }}>
                                             <CustomText weight="medium" style={{ color: '#646464' }}>
-                                                I have read the 
-                                                <CustomText weight="bold" style={{ textDecorationLine: 'underline'}}> Content Responsibility & Privacy Policy </CustomText>
+                                                I have read the
+                                                <CustomText weight="bold" style={{ textDecorationLine: 'underline' }}> Content Responsibility & Privacy Policy </CustomText>
                                                 and agree that I am responsible for all content uploaded to my event hive.
                                             </CustomText>
                                         </View>

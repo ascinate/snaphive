@@ -37,6 +37,7 @@ import ScreenLayout from "../components/ScreenLayout";
 import CustomText from "../components/CustomText";
 import SearchBar from "../components/SearchBar";
 import MembersModal from "../components/MembersModal";
+import { colors } from "../Theme/theme";
 
 // Images
 const createEvent = require("../../assets/background.png");
@@ -50,6 +51,7 @@ const dp6 = require("../../assets/dp6.jpg");
 const dp7 = require("../../assets/dp7.jpg");
 const dp8 = require("../../assets/dp8.jpg");
 const picnic1 = require("../../assets/picnic1.jpg");
+
 const FolderLayout = ({ navigation, route }) => {
   const {
     image,
@@ -67,7 +69,7 @@ const FolderLayout = ({ navigation, route }) => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
-  // ADD THESE FORMAT FUNCTIONS:
+
   const formatDisplayDate = (date) => {
     if (!date) return 'N/A';
     const dateObj = date instanceof Date ? date : new Date(date);
@@ -106,7 +108,6 @@ const FolderLayout = ({ navigation, route }) => {
     }
   };
 
-
   const handleUpload = async () => {
     const options = {
       mediaType: "photo",
@@ -134,11 +135,9 @@ const FolderLayout = ({ navigation, route }) => {
     });
   };
 
-
   const members = [
     { id: 1, name: "Demola Aoki", dp: dp },
     { id: 2, name: "Sofia Carrington", dp: dp3 },
-
   ];
 
   return (
@@ -152,24 +151,16 @@ const FolderLayout = ({ navigation, route }) => {
           <EllipsisVertical height={width * 0.04} width={width * 0.04} />
         </TouchableOpacity>
       }
-
-
       OverlayContent={
         <View style={styles.profileOverlay}>
-          {/* REPLACE HARDCODED VALUES WITH DYNAMIC DATA: */}
           <CustomText weight="bold" style={{ color: '#fff', fontSize: width * 0.075 }}>
             {eventTitle || folderName || '2025 Picnic'}
           </CustomText>
           <CustomText weight="medium" style={{ color: '#fff', fontSize: width * 0.035, marginBottom: height * 0.025 }}>
             {eventDescription || 'It is a long established fact that'}
           </CustomText>
-          {/* {eventEndTime && eventExpiryDate && (
-            <CustomText weight="medium" style={{ color: '#ef0000', fontSize: width * 0.03, marginBottom: height * 0.015 }}>
-              {formatDisplayTime(eventEndTime)} - {formatDisplayDate(eventExpiryDate)}
-            </CustomText>
-          )} */}
+          
           <View style={styles.rowBetween}>
-
             <TouchableOpacity
               style={styles.importBtnWhite}
               onPress={handleUpload}
@@ -192,7 +183,6 @@ const FolderLayout = ({ navigation, route }) => {
                 Members (10)
               </CustomText>
             </TouchableOpacity>
-
           </View>
 
           {menuVisible && (
@@ -213,7 +203,6 @@ const FolderLayout = ({ navigation, route }) => {
                 zIndex: 999,
               }}
             >
-              {/* Manage Permissions */}
               <TouchableOpacity
                 onPress={() => {
                   setMenuVisible(false);
@@ -224,10 +213,8 @@ const FolderLayout = ({ navigation, route }) => {
                 <CustomText weight="medium">Manage Permissions</CustomText>
               </TouchableOpacity>
 
-              {/* Divider */}
               <View style={{ height: 1, backgroundColor: '#E5E7EB' }} />
 
-              {/* Invite Member */}
               <TouchableOpacity
                 onPress={() => {
                   setMenuVisible(false);
@@ -239,17 +226,11 @@ const FolderLayout = ({ navigation, route }) => {
               </TouchableOpacity>
             </View>
           )}
-
         </View>
       }
     >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
-      >
-        {/* Content Area */}
+      <View style={styles.scrollContainer}>
         <View style={styles.container}>
-          {/* Upload + Add Member */}
           {/* Tabs */}
           <View style={styles.tabsContainer}>
             {[
@@ -285,7 +266,6 @@ const FolderLayout = ({ navigation, route }) => {
                   <View style={styles.imageWrapperRow}>
                     {uploadedImages.map((uri, index) => {
                       let styleToApply = {};
-                      // Loop positions using modulo 4
                       const pos = index % 4;
 
                       if (pos === 0) styleToApply = styles.imageGridOne;
@@ -303,6 +283,7 @@ const FolderLayout = ({ navigation, route }) => {
                 )}
               </View>
             )}
+
             {selectedTab === "Chat" && (
               <>
                 <SearchBar />
@@ -369,111 +350,69 @@ const FolderLayout = ({ navigation, route }) => {
                         </View>
                       </View>
                     </View>
-
-
                   </TouchableOpacity>
                 </View>
               </>
             )}
+          </ScrollView>
 
-            {selectedTab === "Ai Magic" && (
-              <>
-                <ScrollView >
-                  <View style={styles.messagesContainer}>
-                    {/* Message Box */}
-                    <View style={styles.userTwoMessageBox}>
-                      <View style={styles.messageText}>
-                        <CustomText weight="medium" style={[styles.text, { color: '#ffffffff', fontSize: width * 0.03 }]}>Hey! Turn this photo into a Pixar-style 3D character with a vibrant, futuristic city background — make the colors neon and give the character a confident hero pose!
-                        </CustomText>
-                      </View>
-                      <CustomText weight="medium" style={{ fontSize: width * 0.025 }} >01:00 am</CustomText>
+          {selectedTab === "Ai Magic" && (
+            <View style={styles.aiMagicContainer}>
+              <ScrollView 
+                style={styles.aiMagicScrollView}
+                contentContainerStyle={styles.aiMagicContent}
+                showsVerticalScrollIndicator={false}
+              >
+                <View style={styles.messagesContainer}>
+                  {/* User Message */}
+                  <View style={styles.userTwoMessageBox}>
+                    <View style={styles.messageText}>
+                      <CustomText weight="medium" style={[styles.text, { color: '#3d3d3dff', fontSize: width * 0.03 }]}>
+                        Hey! Turn this photo into a Pixar-style 3D character with a vibrant, futuristic city background — make the colors neon and give the character a confident hero pose!
+                      </CustomText>
                     </View>
-
-                    <View style={styles.userOneMessageBox}>
-                      <View style={styles.messageTextLeft}>
-                        <CustomText weight="medium" style={[styles.textLeft, { color: '#636363', fontSize: width * 0.03 }]}>Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I’m ready when you are!
-                        </CustomText>
-                      </View>
-                      <CustomText weight="medium" style={{ fontSize: width * 0.025 }} >01:00 am</CustomText>
-                    </View>
-
-
+                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
                   </View>
-                </ScrollView>
 
-
-
-                <View style={{
-                  position: 'absolute',
-                  bottom: 10,
-                  left: 0,
-                  right: 0,
-                  paddingHorizontal: 10,
-                }}>
-                  <View style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: 30,
-                    paddingVertical: 10,
-                    paddingHorizontal: 14,
-                    borderWidth: 1,
-                    borderColor: '#E5E7EB',
-                    shadowColor: '#888888ff',
-                    shadowOpacity: 0.08,
-                    shadowOffset: { width: 0, height: 4 },
-                    shadowRadius: 10,
-                    elevation: 1,
-                  }}>
-
-                    <TouchableOpacity style={{ marginRight: 10 }}>
-                      <ImagePlus size={22} color="#6B7280" />
-                    </TouchableOpacity>
-
-
-                    <TextInput
-                      placeholder="Ask anything..."
-                      placeholderTextColor="#9CA3AF"
-                      style={{
-                        flex: 1,
-                        fontSize: 16,
-                        color: '#111827',
-                        paddingHorizontal: 6,
-                      }}
-                    />
-
-                    {/* Send button */}
-                    <TouchableOpacity style={{
-                      backgroundColor: '#DA3C84',
-                      width: 42,
-                      height: 42,
-                      borderRadius: 21,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginLeft: 8,
-                    }}>
-                      <SendHorizonal size={20} color="#FFFFFF" />
-                    </TouchableOpacity>
-
+                  {/* AI Response */}
+                  <View style={styles.userOneMessageBox}>
+                    <View style={styles.messageTextLeft}>
+                      <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
+                        Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!
+                      </CustomText>
+                    </View>
+                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
                   </View>
                 </View>
+              </ScrollView>
 
+              {/* Input Box - Fixed at bottom */}
+              <View style={styles.aiMagicInputContainer}>
+                <View style={styles.aiMagicInputWrapper}>
+                  <TouchableOpacity style={{ marginRight: 10 }}>
+                    <ImagePlus size={22} color="#6B7280" />
+                  </TouchableOpacity>
 
+                  <TextInput
+                    placeholder="Ask anything..."
+                    placeholderTextColor="#9CA3AF"
+                    style={styles.aiMagicInput}
+                  />
 
+                  <TouchableOpacity style={styles.aiMagicSendButton}>
+                    <SendHorizonal size={20} color="#FFFFFF" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          )}
 
-
-              </>
-
-            )}
-          </ScrollView>
           <MembersModal
             visible={modalVisible}
             onClose={() => setModalVisible(false)}
           />
         </View>
-
-
-      </ScrollView>
+      </View>
     </ScreenLayout>
   );
 };
@@ -481,7 +420,7 @@ const FolderLayout = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   scrollContainer: {
     paddingHorizontal: width * 0.05,
-    paddingBottom: height * 0.15,
+    paddingBottom: height * 0.05,
     backgroundColor: "#FAFAF9",
   },
 
@@ -491,7 +430,6 @@ const styles = StyleSheet.create({
 
   profileOverlay: {
     alignItems: "center",
-
   },
 
   rowBetween: {
@@ -643,10 +581,6 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
 
-
-
-
-
   dp: {
     width: width * 0.1275,
     height: width * 0.1275,
@@ -662,9 +596,6 @@ const styles = StyleSheet.create({
     borderColor: '#ffffff',
   },
 
-
-
-
   allMembarShadowWrapper: {
     width: width * 0.15,
     height: width * 0.15,
@@ -679,77 +610,42 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
 
+  aiMagicContainer: {
+    flex: 1,
+    position: 'relative',
 
+    height: height * 0.55,
+  },
+  aiMagicScrollView: {
+    flex: 1,
+  },
+  aiMagicContent: {
+    paddingBottom: height * 0.12,
 
+  },
   messagesContainer: {
     flex: 1,
-    paddingTop: height * 0.0,
   },
   userOneMessageBox: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: width * 0.045,
-    marginBlock: height * 0.02,
+    alignItems: 'flex-end',
+    gap: width * 0.025,
+    marginVertical: height * 0.015,
     maxWidth: '80%',
   },
   userTwoMessageBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: width * 0.045,
-    marginBlock: height * 0.02,
+    flexDirection: 'row-reverse',
+    alignItems: 'flex-end',
+    gap: width * 0.025,
+    marginVertical: height * 0.015,
     maxWidth: '80%',
     alignSelf: 'flex-end',
-    flexDirection: 'row-reverse',
-  },
-  messageDpContainer: {
-    width: width * 0.0875,
-    height: width * 0.0875,
-    borderRadius: width * 0.04375,
-    overflow: 'hidden',
-  },
-  messageDp: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  messageContent: {
-    flex: 1,
-    gap: width * 0.025,
-  },
-  messageImageContainer: {
-    width: width * 0.5375,
-    height: height * 0.15,
-    borderRadius: 12,
-    overflow: 'hidden',
-    backgroundColor: '#f0f0f0',
-  },
-  messageImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  messageImageContainerTwo: {
-    width: width * 0.25,
-    height: height * 0.1125,
-    borderRadius: 12,
-    overflow: 'hidden',
-    backgroundColor: '#f0f0f0',
-  },
-
-  messageImageContainerMore: {
-    width: width * 0.25,
-    height: height * 0.1125,
-    borderRadius: 12,
-    overflow: 'hidden',
-    backgroundColor: '#f0f0f0',
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   messageText: {
     borderRadius: 10,
-    backgroundColor: '#f7a481',
+    backgroundColor: '#fee8a3',
     paddingVertical: height * 0.0137,
-    paddingHorizontal: width * 0.07,
+    paddingHorizontal: width * 0.04,
     maxWidth: width * 0.6625,
     height: 'auto',
     shadowColor: '#acacacff',
@@ -760,9 +656,9 @@ const styles = StyleSheet.create({
   },
   messageTextLeft: {
     borderRadius: 10,
-    backgroundColor: '#fee8a3',
+    backgroundColor: '#cc4faa',
     paddingVertical: height * 0.0137,
-    paddingHorizontal: width * 0.07,
+    paddingHorizontal: width * 0.04,
     maxWidth: width * 0.6625,
     height: 'auto',
     shadowColor: '#acacacff',
@@ -772,33 +668,53 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
   text: {
-    color: '#000000',
-    fontWeight: 600,
+    color: '#ffffff',
+    fontWeight: '600',
   },
   textLeft: {
-    color: '#ffffffff',
-    fontWeight: 600,
+    color: '#636363',
+    fontWeight: '600',
   },
-
-  inputType: {
+  aiMagicInputContainer: {
+    position: 'absolute',
+    bottom: 100,
+    left: 0,
+    right: 0,
+    paddingHorizontal: width * 0.0,
+    paddingBottom: height * 0.015,
+    paddingTop: height * 0.01,
+    backgroundColor: '#FAFAF9',
+  },
+  aiMagicInputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 30,
+    paddingVertical: height * 0.012,
+    paddingHorizontal: width * 0.035,
     borderWidth: 1,
-    borderColor: '#D9D9D9',
-    borderRadius: 50,
-    paddingLeft: width * 0.05,
-    width: width * 0.63,
-    height: width * 0.11
+    borderColor: '#E5E7EB',
+    shadowColor: '#888888ff',
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 10,
+    elevation: 3,
   },
-  voiceMesssage: {
-    position: 'absolute',
-    right: width * 0.1,
-    top: '20%',
+  aiMagicInput: {
+    flex: 1,
+    fontSize: width * 0.04,
+    color: '#111827',
+    paddingHorizontal: width * 0.015,
   },
-  send: {
-    position: 'absolute',
-    right: width * 0.03,
-    top: '22%',
-  }
-
+  aiMagicSendButton: {
+    backgroundColor: '#DA3C84',
+    width: width * 0.105,
+    height: width * 0.105,
+    borderRadius: width * 0.0525,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: width * 0.02,
+  },
 });
 
 export default FolderLayout;

@@ -7,6 +7,7 @@ import {
   Image,
   Text,
   Alert,
+  TextInput,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -18,6 +19,9 @@ import {
   MessagesSquare,
   Share,
   EllipsisVertical,
+  CameraIcon,
+  ImagePlus,
+  SendHorizonal,
 } from "lucide-react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import { Dimensions } from "react-native";
@@ -43,13 +47,13 @@ const dp5 = require("../../assets/dp5.jpg");
 const dp6 = require("../../assets/dp6.jpg");
 const dp7 = require("../../assets/dp7.jpg");
 const dp8 = require("../../assets/dp8.jpg");
-
+const picnic1 = require("../../assets/picnic1.jpg");
 const FolderLayout = ({ navigation, route }) => {
-const { 
-    image, 
-    folderName, 
-    date, 
-    owner, 
+  const {
+    image,
+    folderName,
+    date,
+    owner,
     photos = [],
     eventTitle,
     eventDescription,
@@ -61,7 +65,7 @@ const {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
-    // ADD THESE FORMAT FUNCTIONS:
+  // ADD THESE FORMAT FUNCTIONS:
   const formatDisplayDate = (date) => {
     if (!date) return 'N/A';
     const dateObj = date instanceof Date ? date : new Date(date);
@@ -101,32 +105,32 @@ const {
   };
 
 
-const handleUpload = async () => {
-  const options = {
-    mediaType: "photo",
-    includeBase64: false,
-    quality: 0.8,
-    selectionLimit: 0,   
+  const handleUpload = async () => {
+    const options = {
+      mediaType: "photo",
+      includeBase64: false,
+      quality: 0.8,
+      selectionLimit: 0,
+    };
+
+    launchImageLibrary(options, async (response) => {
+      if (response.didCancel || response.errorCode) return;
+
+      if (response.assets && response.assets.length > 0) {
+        const newUris = response.assets.map(item => item.uri);
+
+        const newImages = [...uploadedImages, ...newUris];
+        setUploadedImages(newImages);
+
+        await AsyncStorage.setItem(
+          `folder_${folderName}`,
+          JSON.stringify(newImages)
+        );
+
+        console.log("Images saved:", newImages.length);
+      }
+    });
   };
-
-  launchImageLibrary(options, async (response) => {
-    if (response.didCancel || response.errorCode) return;
-
-    if (response.assets && response.assets.length > 0) {
-      const newUris = response.assets.map(item => item.uri);
-
-      const newImages = [...uploadedImages, ...newUris];
-      setUploadedImages(newImages);
-
-      await AsyncStorage.setItem(
-        `folder_${folderName}`,
-        JSON.stringify(newImages)
-      );
-
-      console.log("Images saved:", newImages.length);
-    }
-  });
-};
 
 
   const members = [
@@ -150,14 +154,14 @@ const handleUpload = async () => {
 
       OverlayContent={
         <View style={styles.profileOverlay}>
-             {/* REPLACE HARDCODED VALUES WITH DYNAMIC DATA: */}
+          {/* REPLACE HARDCODED VALUES WITH DYNAMIC DATA: */}
           <CustomText weight="bold" style={{ color: '#fff', fontSize: width * 0.075 }}>
             {eventTitle || folderName || '2025 Picnic'}
           </CustomText>
           <CustomText weight="medium" style={{ color: '#fff', fontSize: width * 0.035, marginBottom: height * 0.025 }}>
             {eventDescription || 'It is a long established fact that'}
           </CustomText>
-           {/* {eventEndTime && eventExpiryDate && (
+          {/* {eventEndTime && eventExpiryDate && (
             <CustomText weight="medium" style={{ color: '#ef0000', fontSize: width * 0.03, marginBottom: height * 0.015 }}>
               {formatDisplayTime(eventEndTime)} - {formatDisplayDate(eventExpiryDate)}
             </CustomText>
@@ -172,7 +176,7 @@ const handleUpload = async () => {
                 <Plus color="#DA3C84" size={width * 0.05} />
               </View>
               <CustomText weight="bold" style={{ color: '#DA3C84', fontSize: width * 0.035 }}>
-              My Images
+                My Images
               </CustomText>
             </TouchableOpacity>
             <TouchableOpacity
@@ -249,7 +253,7 @@ const handleUpload = async () => {
             {[
               { label: "Gallery", icon: <Images width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Gallery" ? "#fff" : "#000"} /> },
               { label: "Chat", icon: <Video width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Chat" ? "#fff" : "#000"} /> },
-              { label: "Members", icon: <MessagesSquare width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Members" ? "#fff" : "#000"} /> },
+              { label: "Ai Magic", icon: <MessagesSquare width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Ai Magic" ? "#fff" : "#000"} /> },
             ].map((tab, i) => (
               <TouchableOpacity
                 key={i}
@@ -370,64 +374,57 @@ const handleUpload = async () => {
               </>
             )}
 
-            {selectedTab === "Members" && (
+            {selectedTab === "Ai Magic" && (
               <>
-                <View style={[styles.feedItem, { marginTop: 20 }]}>
-                  <View >
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15, marginBottom: 10 }}>
-                      <Image source={profilePic} style={styles.feedDp} />
-                      <View>
-                        <View>
-                          <CustomText weight="bold">User name</CustomText>
-                          <CustomText weight="medium" style={{ maxWidth: 280, fontSize: 12, color: '#888888' }}>Nov 10 at 06:45 AM</CustomText>
-                        </View>
+                <ScrollView >
+                  <View style={styles.messagesContainer}>
+                    {/* Message Box */}
+                    <View style={styles.userTwoMessageBox}>
+                      <View style={styles.messageText}>
+                        <CustomText weight="medium" style={[styles.text, { color: '#636363', fontSize: width * 0.03 }]}>Hey Tobi, are you join our
+                          new Hive?
 
+                        </CustomText>
+                        <View style={styles.messageArrowRight} />
                       </View>
+                      <CustomText weight="medium" style={{ fontSize: width * 0.025 }} >01:00 am</CustomText>
                     </View>
-                    <View>
-                      <CustomText weight="medium"
-                        numberOfLines={3}
-                        ellipsizeMode="tail"
-                        style={{ maxWidth: 320, fontSize: 12, color: '#888888' }}
-                      >It is a long established fact that a reader will be distracted by the readable content.It is a long established fact.</CustomText>
-                    </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', marginTop: 15, paddingRight: 10 }}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 25, gap: 6 }}>
-                        <SmilePlus size={16} />
-                        <CustomText weight="bold" style={{ fontSize: 12 }}>React</CustomText>
+
+                    <View style={styles.userOneMessageBox}>
+                      <View style={styles.messageTextLeft}>
+                        <CustomText weight="medium" style={[styles.textLeft, { color: '#636363', fontSize: width * 0.03 }]}>Hey Tobi, are you join our
+                          new Hive?
+                        </CustomText>
+                        <View style={styles.messageArrowLeft} />
                       </View>
-                      <CustomText weight="bold" style={{ fontSize: 12 }}>Reply</CustomText>
+                      <CustomText weight="medium" style={{ fontSize: width * 0.025 }} >01:00 am</CustomText>
                     </View>
+
                   </View>
-                </View>
+                </ScrollView>
 
-                <View style={[styles.feedItem, { marginTop: 0 }]}>
-                  <View >
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15, marginBottom: 10 }}>
-                      <Image source={profilePic} style={styles.feedDp} />
-                      <View>
-                        <View>
-                          <CustomText weight="bold">User name</CustomText>
-                          <CustomText weight="medium" style={{ maxWidth: 280, fontSize: 12, color: '#888888' }}>Nov 10 at 06:45 AM</CustomText>
-                        </View>
-
-                      </View>
-                    </View>
-                    <View>
-                      <CustomText weight="medium"
-                        numberOfLines={3}
-                        ellipsizeMode="tail"
-                        style={{ maxWidth: 320, fontSize: 12, color: '#888888' }}
-                      >It is a long established fact that a reader will be distracted by the readable content.It is a long established fact.</CustomText>
-                    </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', marginTop: 15, paddingRight: 10 }}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 25, gap: 6 }}>
-                        <SmilePlus size={16} />
-                        <CustomText weight="bold" style={{ fontSize: 12 }}>React</CustomText>
-                      </View>
-                      <CustomText weight="bold" style={{ fontSize: 12 }}>Reply</CustomText>
-                    </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', position: 'relative', top: 130 }}>
+          
+                  <View style={{ backgroundColor: '#DA3C84', height: width * 0.1, width: width * 0.1, borderRadius: 50, alignItems: 'center', justifyContent: 'center' }}>
+                    <CameraIcon height={width * 0.06} width={width * 0.06} />
                   </View>
+                  <View style={{ position: 'relative' }}>
+                    <TextInput style={styles.inputType} placeholder='Type here..' placeholderTextColor="#AAAAAA" />
+                  </View>
+
+                  <View
+                    style={{
+                      width: width * 0.11,
+                      height: width * 0.11,
+                      backgroundColor: '#DA3C84',
+                      borderRadius: 50,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <SendHorizonal size={width * 0.06} color="#ffffff" />
+                  </View>
+
                 </View>
               </>
 
@@ -609,24 +606,7 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 12,
   },
-  feedItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginBottom: height * 0.025,
-    borderBottomWidth: 1,
-    borderBottomColor: '#EDEDED',
-    paddingVertical: height * 0.0187,
-    paddingHorizontal: width * 0.0325,
-    backgroundColor: '#fff',
-    borderRadius: 6,
-    shadowColor: '#acacacff',
-    shadowOpacity: 0.25,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 12,
-    elevation: 12,
-  },
+
 
 
 
@@ -662,12 +642,152 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 6,
   },
-  feedDp: {
-    width: width * 0.1025,
-    height: width * 0.1025,
-    borderRadius: width * 0.05125,
-    resizeMode: "cover",
+
+
+
+  messagesContainer: {
+    flex: 1,
+    paddingTop: height * 0.0,
   },
+  userOneMessageBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: width * 0.045,
+    marginBlock: height * 0.02,
+    maxWidth: '80%',
+  },
+  userTwoMessageBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: width * 0.045,
+    marginBlock: height * 0.02,
+    maxWidth: '80%',
+    alignSelf: 'flex-end',
+    flexDirection: 'row-reverse',
+  },
+  messageDpContainer: {
+    width: width * 0.0875,
+    height: width * 0.0875,
+    borderRadius: width * 0.04375,
+    overflow: 'hidden',
+  },
+  messageDp: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  messageContent: {
+    flex: 1,
+    gap: width * 0.025,
+  },
+  messageImageContainer: {
+    width: width * 0.5375,
+    height: height * 0.15,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#f0f0f0',
+  },
+  messageImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  messageImageContainerTwo: {
+    width: width * 0.25,
+    height: height * 0.1125,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#f0f0f0',
+  },
+
+  messageImageContainerMore: {
+    width: width * 0.25,
+    height: height * 0.1125,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#f0f0f0',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  messageText: {
+    borderRadius: 10,
+    backgroundColor: '#FFE49A',
+    paddingVertical: height * 0.0137,
+    paddingHorizontal: width * 0.07,
+    maxWidth: width * 0.6625,
+    height: 'auto',
+    shadowColor: '#acacacff',
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 12,
+  },
+  messageTextLeft: {
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    paddingVertical: height * 0.0137,
+    paddingHorizontal: width * 0.07,
+    maxWidth: width * 0.6625,
+    height: 'auto',
+    shadowColor: '#acacacff',
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 12,
+  },
+  text: {
+    color: '#000000',
+    fontWeight: 600,
+  },
+  textLeft: {
+    color: '#ffffffff',
+    fontWeight: 600,
+  },
+  messageArrowRight: {
+    position: 'absolute',
+    right: -5,
+    bottom: 2,
+    width: 0,
+    height: 0,
+    borderTopWidth: 8,
+    borderTopColor: 'transparent',
+    borderBottomWidth: 8,
+    borderBottomColor: 'transparent',
+    borderLeftWidth: 8,
+    borderLeftColor: '#FFE49A',
+  },
+  messageArrowLeft: {
+    position: 'absolute',
+    left: -5,
+    bottom: 2,
+    width: 0,
+    height: 0,
+    borderTopWidth: 8,
+    borderTopColor: 'transparent',
+    borderBottomWidth: 8,
+    borderBottomColor: 'transparent',
+    borderRightWidth: 8,
+    borderRightColor: '#fff',
+  },
+  inputType: {
+    borderWidth: 1,
+    borderColor: '#D9D9D9',
+    borderRadius: 50,
+    paddingLeft: width * 0.05,
+    width: width * 0.63,
+    height: width * 0.11
+  },
+  voiceMesssage: {
+    position: 'absolute',
+    right: width * 0.1,
+    top: '20%',
+  },
+  send: {
+    position: 'absolute',
+    right: width * 0.03,
+    top: '22%',
+  }
+
 });
 
 export default FolderLayout;

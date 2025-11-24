@@ -22,6 +22,8 @@ import {
   CameraIcon,
   ImagePlus,
   SendHorizonal,
+  Send,
+  ImagePlusIcon,
 } from "lucide-react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import { Dimensions } from "react-native";
@@ -381,51 +383,85 @@ const FolderLayout = ({ navigation, route }) => {
                     {/* Message Box */}
                     <View style={styles.userTwoMessageBox}>
                       <View style={styles.messageText}>
-                        <CustomText weight="medium" style={[styles.text, { color: '#636363', fontSize: width * 0.03 }]}>Hey Tobi, are you join our
-                          new Hive?
-
+                        <CustomText weight="medium" style={[styles.text, { color: '#ffffffff', fontSize: width * 0.03 }]}>Hey! Turn this photo into a Pixar-style 3D character with a vibrant, futuristic city background — make the colors neon and give the character a confident hero pose!
                         </CustomText>
-                        <View style={styles.messageArrowRight} />
                       </View>
                       <CustomText weight="medium" style={{ fontSize: width * 0.025 }} >01:00 am</CustomText>
                     </View>
 
                     <View style={styles.userOneMessageBox}>
                       <View style={styles.messageTextLeft}>
-                        <CustomText weight="medium" style={[styles.textLeft, { color: '#636363', fontSize: width * 0.03 }]}>Hey Tobi, are you join our
-                          new Hive?
+                        <CustomText weight="medium" style={[styles.textLeft, { color: '#636363', fontSize: width * 0.03 }]}>Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I’m ready when you are!
                         </CustomText>
-                        <View style={styles.messageArrowLeft} />
                       </View>
                       <CustomText weight="medium" style={{ fontSize: width * 0.025 }} >01:00 am</CustomText>
                     </View>
 
+
                   </View>
                 </ScrollView>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', position: 'relative', top: 130 }}>
-          
-                  <View style={{ backgroundColor: '#DA3C84', height: width * 0.1, width: width * 0.1, borderRadius: 50, alignItems: 'center', justifyContent: 'center' }}>
-                    <CameraIcon height={width * 0.06} width={width * 0.06} />
-                  </View>
-                  <View style={{ position: 'relative' }}>
-                    <TextInput style={styles.inputType} placeholder='Type here..' placeholderTextColor="#AAAAAA" />
-                  </View>
 
-                  <View
-                    style={{
-                      width: width * 0.11,
-                      height: width * 0.11,
+
+                <View style={{
+                  position: 'absolute',
+                  bottom: 10,
+                  left: 0,
+                  right: 0,
+                  paddingHorizontal: 10,
+                }}>
+                  <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: 30,
+                    paddingVertical: 10,
+                    paddingHorizontal: 14,
+                    borderWidth: 1,
+                    borderColor: '#E5E7EB',
+                    shadowColor: '#888888ff',
+                    shadowOpacity: 0.08,
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowRadius: 10,
+                    elevation: 1,
+                  }}>
+
+                    <TouchableOpacity style={{ marginRight: 10 }}>
+                      <ImagePlus size={22} color="#6B7280" />
+                    </TouchableOpacity>
+
+
+                    <TextInput
+                      placeholder="Ask anything..."
+                      placeholderTextColor="#9CA3AF"
+                      style={{
+                        flex: 1,
+                        fontSize: 16,
+                        color: '#111827',
+                        paddingHorizontal: 6,
+                      }}
+                    />
+
+                    {/* Send button */}
+                    <TouchableOpacity style={{
                       backgroundColor: '#DA3C84',
-                      borderRadius: 50,
+                      width: 42,
+                      height: 42,
+                      borderRadius: 21,
                       justifyContent: 'center',
                       alignItems: 'center',
-                    }}
-                  >
-                    <SendHorizonal size={width * 0.06} color="#ffffff" />
-                  </View>
+                      marginLeft: 8,
+                    }}>
+                      <SendHorizonal size={20} color="#FFFFFF" />
+                    </TouchableOpacity>
 
+                  </View>
                 </View>
+
+
+
+
+
               </>
 
             )}
@@ -711,7 +747,7 @@ const styles = StyleSheet.create({
   },
   messageText: {
     borderRadius: 10,
-    backgroundColor: '#FFE49A',
+    backgroundColor: '#f7a481',
     paddingVertical: height * 0.0137,
     paddingHorizontal: width * 0.07,
     maxWidth: width * 0.6625,
@@ -724,7 +760,7 @@ const styles = StyleSheet.create({
   },
   messageTextLeft: {
     borderRadius: 10,
-    backgroundColor: '#fff',
+    backgroundColor: '#fee8a3',
     paddingVertical: height * 0.0137,
     paddingHorizontal: width * 0.07,
     maxWidth: width * 0.6625,
@@ -743,32 +779,7 @@ const styles = StyleSheet.create({
     color: '#ffffffff',
     fontWeight: 600,
   },
-  messageArrowRight: {
-    position: 'absolute',
-    right: -5,
-    bottom: 2,
-    width: 0,
-    height: 0,
-    borderTopWidth: 8,
-    borderTopColor: 'transparent',
-    borderBottomWidth: 8,
-    borderBottomColor: 'transparent',
-    borderLeftWidth: 8,
-    borderLeftColor: '#FFE49A',
-  },
-  messageArrowLeft: {
-    position: 'absolute',
-    left: -5,
-    bottom: 2,
-    width: 0,
-    height: 0,
-    borderTopWidth: 8,
-    borderTopColor: 'transparent',
-    borderBottomWidth: 8,
-    borderBottomColor: 'transparent',
-    borderRightWidth: 8,
-    borderRightColor: '#fff',
-  },
+
   inputType: {
     borderWidth: 1,
     borderColor: '#D9D9D9',

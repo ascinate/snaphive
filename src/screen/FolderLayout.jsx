@@ -159,7 +159,7 @@ const FolderLayout = ({ navigation, route }) => {
           <CustomText weight="medium" style={{ color: '#fff', fontSize: width * 0.035, marginBottom: height * 0.025 }}>
             {eventDescription || 'It is a long established fact that'}
           </CustomText>
-          
+
           <View style={styles.rowBetween}>
             <TouchableOpacity
               style={styles.importBtnWhite}
@@ -255,7 +255,7 @@ const FolderLayout = ({ navigation, route }) => {
 
           <ScrollView
             style={{ flex: 1 }}
-            contentContainerStyle={styles.scrollContainer}
+          
             showsVerticalScrollIndicator={false}
           >
             {selectedTab === "Gallery" && (
@@ -358,7 +358,7 @@ const FolderLayout = ({ navigation, route }) => {
 
           {selectedTab === "Ai Magic" && (
             <View style={styles.aiMagicContainer}>
-              <ScrollView 
+              <ScrollView
                 style={styles.aiMagicScrollView}
                 contentContainerStyle={styles.aiMagicContent}
                 showsVerticalScrollIndicator={false}
@@ -379,6 +379,16 @@ const FolderLayout = ({ navigation, route }) => {
                     <View style={styles.messageTextLeft}>
                       <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
                         Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!
+                      </CustomText>
+                    </View>
+                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
+                  </View>
+
+                  {/* AI Response */}
+                  <View style={styles.userOneMessageBox}>
+                    <View style={styles.messageTextLeft}>
+                      <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
+                        Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!
                       </CustomText>
                     </View>
                     <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
@@ -613,14 +623,13 @@ const styles = StyleSheet.create({
   aiMagicContainer: {
     flex: 1,
     position: 'relative',
-
-    height: height * 0.55,
+    height: 490,
   },
   aiMagicScrollView: {
     flex: 1,
   },
   aiMagicContent: {
-    paddingBottom: height * 0.12,
+    paddingBottom: height * 0.10,
 
   },
   messagesContainer: {
@@ -637,7 +646,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
     alignItems: 'flex-end',
     gap: width * 0.025,
-    marginVertical: height * 0.015,
+    marginVertical: height * 0.010,
     maxWidth: '80%',
     alignSelf: 'flex-end',
   },
@@ -677,13 +686,14 @@ const styles = StyleSheet.create({
   },
   aiMagicInputContainer: {
     position: 'absolute',
-    bottom: 100,
+    bottom: 0,
     left: 0,
     right: 0,
     paddingHorizontal: width * 0.0,
     paddingBottom: height * 0.015,
     paddingTop: height * 0.01,
     backgroundColor: '#FAFAF9',
+
   },
   aiMagicInputWrapper: {
     flexDirection: 'row',

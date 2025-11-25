@@ -623,19 +623,18 @@ const styles = StyleSheet.create({
 
   aiMagicContainer: {
     flex: 1,
-    position: 'relative',
     minHeight: height * 0.52,
     maxHeight: height * 0.52,
   },
-  aiMagicScrollView: {
-    flex: 1,
-  },
+  // aiMagicScrollView: {
+  //   flex: 1,
+  // },
   aiMagicContent: {
     paddingBottom: height * 0.10,
   },
-  messagesContainer: {
-    flex: 1,
-  },
+  // messagesContainer: {
+  //   flex: 1,
+  // },
   userOneMessageBox: {
     flexDirection: 'row',
     alignItems: 'flex-end',

@@ -16,7 +16,7 @@ import {
 } from "lucide-react-native";
 import { Linking } from "react-native";
 import { Share } from "react-native";
-
+import { useLoader } from "../context/LoaderContext";
 // SVGs
 import Pencil from "../../assets/svg/pencil.svg";
 
@@ -31,7 +31,7 @@ const profilePic = require("../../assets/picnic3.jpg");
 
 const Profile = ({ navigation, }) => {
   const [modalVisible, setModalVisible] = useState(false);
-
+    const { showLoader, hideLoader } = useLoader();
   const openStore = () => {
     const playStoreUrl = "https://play.google.com/store/apps/details?id=com.snaphive";
     const appStoreUrl = "https://apps.apple.com/app/id1234567890";
@@ -57,27 +57,22 @@ const Profile = ({ navigation, }) => {
   };
 
 
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.removeItem("token");
-      await AsyncStorage.removeItem("user");
+ const handleLogout = async () => {
+  try {
+    showLoader(); // Show loader FIRST ✔
 
-      Alert.alert("Logout", "You have been logged out.", [
-        {
-          text: "OK",
-          onPress: () => {
-            navigation.reset({
-              index: 0,
-              routes: [{ name: "Landing" }],
-            });
-          },
-        },
-      ]);
-    } catch (err) {
-      Alert.alert("Error", "Failed to logout. Please try again.");
-      console.error("Logout error:", err);
-    }
-  };
+    await AsyncStorage.removeItem("token");
+    await AsyncStorage.removeItem("user");
+
+    navigation.replace("Login"); // Redirect after logout
+  } catch (err) {
+    Alert.alert("Error", "Failed to logout. Please try again.");
+    console.error("Logout error:", err);
+  } finally {
+    hideLoader(); // Hide loader AFTER navigation completes
+  }
+};
+
 
   return (
     <ScreenLayout

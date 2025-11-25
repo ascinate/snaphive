@@ -368,31 +368,31 @@ const CreateHive = ({ navigation, route }) => {
                                 </TouchableOpacity>
 
                                 {uploadType === 'automatic' && (
-    <View
-        style={{
-            flexDirection: 'row',
-            backgroundColor: '#FFF0CF',
-            borderRadius: 12,
-            padding: 16,
-            marginTop: 8,
-            marginBottom: 10,
-        }}
-    >
-        <View>
-            <BadgeInfo color="#a1a1a1ff" size={20} />
-        </View>
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            backgroundColor: '#FFF0CF',
+                                            borderRadius: 12,
+                                            padding: 16,
+                                            marginTop: 8,
+                                            marginBottom: 10,
+                                        }}
+                                    >
+                                        <View>
+                                            <BadgeInfo color="#a1a1a1ff" size={20} />
+                                        </View>
 
-        <View style={{ flex: 1, marginLeft: 8 }}>
-            <CustomText
-                weight='medium'
-                style={{ color: colors.textGray, fontSize: 12 }}>
-                I understand that I am responsible for all media automatically uploaded
-                to this Hive. Members will be able to upload photos and videos without
-                my approval.
-            </CustomText>
-        </View>
-    </View>
-)}
+                                        <View style={{ flex: 1, marginLeft: 8 }}>
+                                            <CustomText
+                                                weight='medium'
+                                                style={{ color: colors.textGray, fontSize: 12 }}>
+                                                I understand that I am responsible for all media automatically uploaded
+                                                to this Hive. Members will be able to upload photos and videos without
+                                                my approval.
+                                            </CustomText>
+                                        </View>
+                                    </View>
+                                )}
 
 
 
@@ -812,7 +812,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 18,
         paddingVertical: 16,
         fontSize: 16,
-        color: '#800b0bff',
+        color: '#800b0b',
     },
     placeholderStyle: {
         color: '#999',
@@ -841,8 +841,8 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         position: "relative",
-        width: 165,
-        height: 100,
+        width: width * 0.38,  // 42% of screen width
+        height: height * 0.12, // 12% of screen height
         marginBottom: 10,
     },
     image: {

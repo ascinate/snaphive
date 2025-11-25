@@ -635,8 +635,8 @@ const styles = StyleSheet.create({
 
   aiMagicContainer: {
     flex: 1,
-    minHeight: height * 0.52,
-    maxHeight: height * 0.52,
+    minHeight: height * 0.460,
+    maxHeight: height * 0.460,
   },
   aiMagicContent: {
     paddingBottom: height * 0.10,

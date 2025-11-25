@@ -19,55 +19,55 @@ const Login = ({ navigation }) => {
     const { width, height } = useWindowDimensions();
     const [userID, setUserID] = useState('');
     const [password, setPassword] = useState('');
-const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
     const isValidEmail = (text) => /\S+@\S+\.\S+/.test(text);
     const isValidPhone = (text) => /^[0-9]{10,15}$/.test(text);
 
-const handleContinue = async () => {
-    if (!userID.trim()) {
-        Alert.alert("Error", "Please enter your email or phone number");
-        return;
-    }
-
-    if (!isValidEmail(userID) && !isValidPhone(userID)) {
-        Alert.alert("Error", "Invalid email or phone number");
-        return;
-    }
-
-    if (!password.trim()) {
-        Alert.alert("Error", "Please enter your password");
-        return;
-    }
-
-    try {
-        showLoader(); // Show Global Loader
-
-        const res = await loginUser({
-            email: userID,
-            password,
-        });
-
-        if (res.data && res.data.token) {
-            await AsyncStorage.setItem("token", res.data.token);
-            await AsyncStorage.setItem("user", JSON.stringify(res.data.user));
-
-            navigation.replace("MyTabs");
-        } else {
-            Alert.alert("Error", "Invalid response from server");
+    const handleContinue = async () => {
+        if (!userID.trim()) {
+            Alert.alert("Error", "Please enter your email or phone number");
+            return;
         }
-    } catch (err) {
-        Alert.alert("Error", err.response?.data?.message || "Login failed");
-    } finally {
-        hideLoader(); // Hide Global Loader
-    }
-};
+
+        if (!isValidEmail(userID) && !isValidPhone(userID)) {
+            Alert.alert("Error", "Invalid email or phone number");
+            return;
+        }
+
+        if (!password.trim()) {
+            Alert.alert("Error", "Please enter your password");
+            return;
+        }
+
+        try {
+            showLoader(); // Show Global Loader
+
+            const res = await loginUser({
+                email: userID,
+                password,
+            });
+
+            if (res.data && res.data.token) {
+                await AsyncStorage.setItem("token", res.data.token);
+                await AsyncStorage.setItem("user", JSON.stringify(res.data.user));
+
+                navigation.replace("MyTabs");
+            } else {
+                Alert.alert("Error", "Invalid response from server");
+            }
+        } catch (err) {
+            Alert.alert("Error", err.response?.data?.message || "Login failed");
+        } finally {
+            hideLoader(); // Hide Global Loader
+        }
+    };
 
 
 
     return (
-<SafeAreaProvider style={[styles.container, {height: '100%', width: '100%'}]}>
+        <SafeAreaProvider style={[styles.container, { height: '100%', width: '100%' }]}>
 
             <Logo />
             <CustomText weight='medium' style={[styles.description, { paddingInline: 32 }]}>
@@ -95,13 +95,13 @@ const handleContinue = async () => {
             </View>
 
 
-<ThemeButton
-    text={loading ? "" : "Login →"}
-    onPress={handleContinue}
-    style={{ width: "100%", marginTop: 15 }}
->
+            <ThemeButton
+                text={loading ? "" : "Login →"}
+                onPress={handleContinue}
+                style={{ width: "100%", marginTop: 15 }}
+            >
 
-</ThemeButton>
+            </ThemeButton>
 
 
 
@@ -172,7 +172,7 @@ const handleContinue = async () => {
                     </CustomText>
                 </View>
             </TouchableWithoutFeedback>
-            
+
 
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                 <CustomText weight='medium' style={{ color: '#000000ff' }}>Don’t have an account ?  </CustomText>

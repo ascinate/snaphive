@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+
 // components
 import { registerUser } from "../API/API";
 import CustomText from '../components/CustomText';
@@ -26,8 +27,10 @@ const Signup = ({ navigation }) => {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
 
+
   const isValidEmail = (text) => /\S+@\S+\.\S+/.test(text);
   const isValidPhone = (text) => /^[0-9]{10,15}$/.test(text);
+
 
   const handleContinue = () => {
     if (!userID.trim()) {
@@ -35,15 +38,18 @@ const Signup = ({ navigation }) => {
       return;
     }
 
+
     if (!isValidEmail(userID) && !isValidPhone(userID)) {
       Alert.alert("Create account guide", "Please enter a valid email or phone number");
       return;
     }
 
+
     if (!password.trim()) {
       Alert.alert("Create account guide", "Please create a password");
       return;
     }
+
 
     registerUser({
       name: userID.split("@")[0],
@@ -66,26 +72,24 @@ const Signup = ({ navigation }) => {
       });
   };
   return (
-    <SafeAreaProvider style={[styles.container, { padding: width * 0.05 }]}>
+    <SafeAreaProvider style={[styles.container, { padding: 20 }]}>
+
 
       <Logo />
 
+
       {/* Description */}
-      <CustomText weight='medium' style={[styles.description, { fontSize: width * 0.04, paddingInline: 32 }]}>
+      <CustomText weight='medium' style={[styles.description, { paddingInline: 32 }]}>
         Automatically share photos taken by members of your group
       </CustomText>
 
+
       {/* Email or Phone Field */}
-      <View style={{ width: '100%', marginTop: 36 }}>
+      <View style={{ width: '100%', marginTop: 20 }}>
+
 
         <TextInput
-          style={[
-            styles.input,
-            {
-              fontSize: width * 0.04,
-              paddingVertical: height * 0.018,
-            },
-          ]}
+          style={styles.input}
           value={userID}
           onChangeText={setUserID}
           placeholder='Enter your email or phone number'
@@ -94,22 +98,18 @@ const Signup = ({ navigation }) => {
         />
       </View>
 
+
       {/* Password Field */}
-      <View style={{ width: '100%', marginTop: 16 }}>
+      <View style={{ width: '100%', marginTop: 20 }}>
         <TextInput
-          style={[
-            styles.input,
-            {
-              fontSize: width * 0.04,
-              paddingVertical: height * 0.018,
-            },
-          ]}
+          style={styles.input}
           value={password}
           onChangeText={setPassword}
           placeholder='Create your password'
           secureTextEntry={true}
         />
       </View>
+
 
       {/* Continue Button */}
       <ThemeButton
@@ -118,12 +118,14 @@ const Signup = ({ navigation }) => {
         style={{ width: '100%', marginTop: 20 }}
       />
 
+
       {/* OR line */}
       <View style={styles.orLine}>
         <View style={[styles.line, { width: width * 0.35 }]} />
-        <CustomText weight='medium' style={[styles.text, { fontSize: width * 0.04 }]}>Or</CustomText>
+        <CustomText weight='medium' style={[styles.text, { fontSize: 16 }]}>Or</CustomText>
         <View style={[styles.line, { width: width * 0.35 }]} />
       </View>
+
 
       {/* Continue with Google */}
       <TouchableWithoutFeedback>
@@ -146,6 +148,7 @@ const Signup = ({ navigation }) => {
           </CustomText>
         </View>
       </TouchableWithoutFeedback>
+
 
       {/* Continue with Apple */}
       <TouchableWithoutFeedback>
@@ -180,6 +183,7 @@ const Signup = ({ navigation }) => {
         </View>
       </TouchableWithoutFeedback>
 
+
       {/* Already a user */}
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         <CustomText weight='medium' style={{}}>Already have an account ? </CustomText>
@@ -194,7 +198,9 @@ const Signup = ({ navigation }) => {
         </TouchableWithoutFeedback>
       </View>
 
+
       {/* Terms & Privacy */}
+
 
       <CustomText weight='medium' style={[styles.description, { position: 'absolute', bottom: 20, textAlign: 'center', fontSize: 14 }]}>
         By continuing I accept Selfso's Terms of Use and
@@ -207,7 +213,6 @@ const Signup = ({ navigation }) => {
                 fontWeight: '600',
                 textDecorationLine: 'underline',
                 color: '#000',
-                fontSize: width * 0.035,
               },
             ]}
           >
@@ -223,6 +228,7 @@ const Signup = ({ navigation }) => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -231,21 +237,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   description: {
+    fontSize: 16,
     color: '#646464',
     textAlign: 'center',
     width: '100%',
-
   },
   input: {
     width: '100%',
     borderColor: '#ccc',
-
     borderWidth: 1,
     borderRadius: 16,
-    paddingHorizontal: 14,
+    paddingHorizontal: 10,
     paddingVertical: 21,
+    fontSize: 16,
+    textAlign: 'left',
     paddingLeft: 27,
-
   },
   outlineBtn: {
     flexDirection: 'row',
@@ -275,5 +281,6 @@ const styles = StyleSheet.create({
     color: '#000',
   },
 });
+
 
 export default Signup;

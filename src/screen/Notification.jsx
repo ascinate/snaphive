@@ -57,9 +57,9 @@ const NotificationScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
   scrollContainer: { paddingHorizontal: 20, paddingVertical: 10 },
-  badge: { backgroundColor: "gray", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 5 },
+  badge: { backgroundColor: "gray", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 25 },
   badgeText: { color: "white", fontSize: 14, fontWeight: "600" },
-  badgeActive: { backgroundColor: "#DA3C84", borderRadius: 12 },
+  badgeActive: { backgroundColor: "#DA3C84", borderRadius: 25 },
   chatList: { marginBottom: 20 },
   chatListItem: {
     flexDirection: "row",

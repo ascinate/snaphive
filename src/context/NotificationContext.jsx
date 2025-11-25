@@ -1,7 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 
 const NotificationContext = createContext();
-
 export const NotificationProvider = ({ children }) => {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
@@ -15,12 +14,8 @@ export const NotificationProvider = ({ children }) => {
             const data = [
                 { id: 1, name: "Demola Aoki", time: "4hrs", image: dp, iconType: "album" },
                 { id: 2, name: "Quency Demola", time: "4hrs", image: dp2, iconType: "folder" },
-                { id: 3, name: "Quency Demola", time: "4hrs", image: dp2, iconType: "folder" },
-
             ];
-
             setNotifications(data);
-
             if (!hasOpenedNotificationPage) {
                 setUnreadCount(data.length);
             }

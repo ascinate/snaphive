@@ -189,12 +189,12 @@ const FolderLayout = ({ navigation, route }) => {
             <View
               style={{
                 position: 'absolute',
-                top: 25,
-                right: -5,
+                top: height * 0.03,
+                right: -width * 0.01,
                 backgroundColor: '#fff',
-                paddingVertical: 10,
-                borderRadius: 10,
-                width: 180,
+                paddingVertical: height * 0.012,
+                borderRadius: width * 0.025,
+                width: width * 0.45,
                 elevation: 10,
                 shadowColor: '#000',
                 shadowOpacity: 0.2,
@@ -208,7 +208,7 @@ const FolderLayout = ({ navigation, route }) => {
                   setMenuVisible(false);
                   navigation.navigate("ManagePermissions");
                 }}
-                style={{ paddingVertical: 12, paddingHorizontal: 16 }}
+                style={{ paddingVertical: height * 0.015, paddingHorizontal: width * 0.04 }}
               >
                 <CustomText weight="medium">Manage Permissions</CustomText>
               </TouchableOpacity>
@@ -220,7 +220,7 @@ const FolderLayout = ({ navigation, route }) => {
                   setMenuVisible(false);
                   navigation.navigate("InviteMember");
                 }}
-                style={{ paddingVertical: 12, paddingHorizontal: 16 }}
+                style={{ paddingVertical: height * 0.015, paddingHorizontal: width * 0.04 }}
               >
                 <CustomText weight="medium">Invite Member</CustomText>
               </TouchableOpacity>
@@ -399,8 +399,8 @@ const FolderLayout = ({ navigation, route }) => {
               {/* Input Box - Fixed at bottom */}
               <View style={styles.aiMagicInputContainer}>
                 <View style={styles.aiMagicInputWrapper}>
-                  <TouchableOpacity style={{ marginRight: 10 }}>
-                    <ImagePlus size={22} color="#6B7280" />
+                  <TouchableOpacity style={{ marginRight: width * 0.025 }}>
+                    <ImagePlus size={width * 0.055} color="#6B7280" />
                   </TouchableOpacity>
 
                   <TextInput
@@ -410,7 +410,7 @@ const FolderLayout = ({ navigation, route }) => {
                   />
 
                   <TouchableOpacity style={styles.aiMagicSendButton}>
-                    <SendHorizonal size={20} color="#FFFFFF" />
+                    <SendHorizonal size={width * 0.05} color="#FFFFFF" />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -429,6 +429,7 @@ const FolderLayout = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   scrollContainer: {
+     flex: 1, 
     paddingHorizontal: width * 0.05,
     paddingBottom: height * 0.05,
     backgroundColor: "#FAFAF9",
@@ -464,7 +465,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
     marginTop: height * 0.025,
-    borderRadius: 40,
+    borderRadius: width * 0.1,
     paddingVertical: height * 0.01,
   },
   tabButton: {
@@ -475,7 +476,7 @@ const styles = StyleSheet.create({
     paddingVertical: height * 0.0075,
     borderWidth: 1,
     borderColor: '#D0CACA',
-    borderRadius: 4,
+    borderRadius: width * 0.01,
   },
   tabButtonActive: {
     backgroundColor: "#DA3C84",
@@ -518,7 +519,7 @@ const styles = StyleSheet.create({
   imageGridOne: {
     width: '48%',
     height: height * 0.2,
-    borderRadius: 10,
+    borderRadius: width * 0.025,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
     marginBottom: height * 0.0187,
@@ -526,7 +527,7 @@ const styles = StyleSheet.create({
   imageGridTwo: {
     width: '48%',
     height: height * 0.3,
-    borderRadius: 10,
+    borderRadius: width * 0.025,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
     marginBottom: height * 0.0187,
@@ -534,7 +535,7 @@ const styles = StyleSheet.create({
   imageGridThree: {
     width: '48%',
     height: height * 0.3,
-    borderRadius: 10,
+    borderRadius: width * 0.025,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
     marginBottom: height * 0.0187,
@@ -543,7 +544,7 @@ const styles = StyleSheet.create({
   imageGridFour: {
     width: '48%',
     height: height * 0.2,
-    borderRadius: 10,
+    borderRadius: width * 0.025,
     overflow: 'hidden',
     backgroundColor: '#e5e7eb',
     marginBottom: height * 0.0187,
@@ -566,7 +567,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingVertical: height * 0.012,
     paddingHorizontal: width * 0.050,
-    borderRadius: 14,
+    borderRadius: width * 0.035,
     marginVertical: height * 0.0125,
   },
   chatList: {
@@ -583,7 +584,7 @@ const styles = StyleSheet.create({
     paddingVertical: height * 0.0187,
     paddingHorizontal: width * 0.03,
     backgroundColor: '#fff',
-    borderRadius: 6,
+    borderRadius: width * 0.015,
     shadowColor: '#acacacff',
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 4 },
@@ -609,7 +610,7 @@ const styles = StyleSheet.create({
   allMembarShadowWrapper: {
     width: width * 0.15,
     height: width * 0.15,
-    borderRadius: 50,
+    borderRadius: width * 0.075,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
@@ -623,14 +624,14 @@ const styles = StyleSheet.create({
   aiMagicContainer: {
     flex: 1,
     position: 'relative',
-    height: 490,
+    minHeight: height * 0.52,
+    maxHeight: height * 0.52,
   },
   aiMagicScrollView: {
     flex: 1,
   },
   aiMagicContent: {
     paddingBottom: height * 0.10,
-
   },
   messagesContainer: {
     flex: 1,
@@ -651,7 +652,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   messageText: {
-    borderRadius: 10,
+    borderRadius: width * 0.025,
     backgroundColor: '#fee8a3',
     paddingVertical: height * 0.0137,
     paddingHorizontal: width * 0.04,
@@ -664,7 +665,7 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
   messageTextLeft: {
-    borderRadius: 10,
+    borderRadius: width * 0.025,
     backgroundColor: '#cc4faa',
     paddingVertical: height * 0.0137,
     paddingHorizontal: width * 0.04,
@@ -689,17 +690,16 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    paddingHorizontal: width * 0.0,
+    paddingHorizontal: 0,
     paddingBottom: height * 0.015,
     paddingTop: height * 0.01,
     backgroundColor: '#FAFAF9',
-
   },
   aiMagicInputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderRadius: 30,
+    borderRadius: width * 0.075,
     paddingVertical: height * 0.012,
     paddingHorizontal: width * 0.035,
     borderWidth: 1,

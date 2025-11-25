@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableWithoutFeedback, TouchableHighlight, Alert, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, TouchableWithoutFeedback, TouchableHighlight, Alert, useWindowDimensions, ActivityIndicator } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { loginUser } from "../API/API";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,49 +17,51 @@ const Login = ({ navigation }) => {
     const { width, height } = useWindowDimensions();
     const [userID, setUserID] = useState('');
     const [password, setPassword] = useState('');
+const [loading, setLoading] = useState(false);
 
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
     const isValidEmail = (text) => /\S+@\S+\.\S+/.test(text);
     const isValidPhone = (text) => /^[0-9]{10,15}$/.test(text);
 
-    const handleContinue = async () => {
-        if (!userID.trim()) {
-            Alert.alert("Error", "Please enter your email or phone number");
-            return;
+const handleContinue = async () => {
+    if (!userID.trim()) {
+        Alert.alert("Error", "Please enter your email or phone number");
+        return;
+    }
+
+    if (!isValidEmail(userID) && !isValidPhone(userID)) {
+        Alert.alert("Error", "Please enter your password");
+        return;
+    }
+
+    if (!password.trim()) {
+        Alert.alert("login guide", "Please create a password");
+        return;
+    }
+
+    try {
+        setLoading(true); // <-- Start loading
+
+        const res = await loginUser({
+            email: userID,
+            password,
+        });
+
+        if (res.data && res.data.token) {
+            await AsyncStorage.setItem('token', res.data.token);
+            await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
+
+            navigation.replace("MyTabs"); // Navigate after success
+        } else {
+            Alert.alert("Error", "Invalid response from server");
         }
+    } catch (err) {
+        Alert.alert("Error", err.response?.data?.message || "Login failed");
+    } finally {
+        setLoading(false); // <-- Stop loading
+    }
+};
 
-        if (!isValidEmail(userID) && !isValidPhone(userID)) {
-            Alert.alert("Error", "Please enter your password");
-            return;
-        }
-
-        if (!password.trim()) {
-            Alert.alert("login guide", "Please create a password");
-            return;
-        }
-
-        try {
-            const res = await loginUser({
-                email: userID,
-                password,
-            });
-
-            console.log("Login Response:", res.data);
-
-            if (res.data && res.data.token) {
-                await AsyncStorage.setItem('token', res.data.token);
-                await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
-                Alert.alert("Success", "Login successful", [
-                    { text: "OK", onPress: () => navigation.navigate("MyTabs") },
-                ]);
-            } else {
-                Alert.alert("Error", "Invalid response from server");
-            }
-        } catch (err) {
-            console.log("Login Error:", err.response?.data || err.message);
-            Alert.alert("Error", err.response?.data?.message || "Login failed");
-        }
-    };
 
     return (
         <SafeAreaProvider style={styles.container}>
@@ -89,11 +91,14 @@ const Login = ({ navigation }) => {
             </View>
 
 
-            <ThemeButton
-                text="Login →"
-                onPress={(handleContinue)}
-                style={{ width: "100%", marginTop: 15 }}
-            />
+<ThemeButton
+    text={loading ? "" : "Login →"}
+    onPress={handleContinue}
+    style={{ width: "100%", marginTop: 15 }}
+>
+    {loading && <ActivityIndicator size="small" color="#fff" />}
+</ThemeButton>
+
 
 
 

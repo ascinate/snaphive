@@ -59,17 +59,17 @@ const Profile = ({ navigation, }) => {
 
  const handleLogout = async () => {
   try {
-    showLoader(); // Show loader FIRST ✔
+    showLoader(); 
 
     await AsyncStorage.removeItem("token");
     await AsyncStorage.removeItem("user");
 
-    navigation.replace("Login"); // Redirect after logout
+    navigation.replace("Login"); 
   } catch (err) {
     Alert.alert("Error", "Failed to logout. Please try again.");
     console.error("Logout error:", err);
   } finally {
-    hideLoader(); // Hide loader AFTER navigation completes
+    hideLoader(); 
   }
 };
 

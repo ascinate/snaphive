@@ -255,7 +255,7 @@ const FolderLayout = ({ navigation, route }) => {
 
           <ScrollView
             style={{ flex: 1 }}
-          
+
             showsVerticalScrollIndicator={false}
           >
             {selectedTab === "Gallery" && (
@@ -429,7 +429,7 @@ const FolderLayout = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-     flex: 1, 
+    flex: 1,
     paddingHorizontal: width * 0.05,
     paddingBottom: height * 0.05,
     backgroundColor: "#FAFAF9",
@@ -516,6 +516,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
   },
+
   imageGridOne: {
     width: '48%',
     height: height * 0.2,
@@ -699,7 +700,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: width * 0.075,
-    paddingVertical: height * 0.012,
+    paddingVertical: height * 0.010,
     paddingHorizontal: width * 0.035,
     borderWidth: 1,
     borderColor: '#E5E7EB',

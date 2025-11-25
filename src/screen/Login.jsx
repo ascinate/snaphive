@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableWithoutFeedback, Tou
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { loginUser } from "../API/API";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useLoader } from "../context/LoaderContext";
 
 import Logo from '../components/Logo';
 import ThemeButton from '../components/ThemeButton';
@@ -14,6 +15,7 @@ import Igoogle from "../../assets/Igoogle.svg";
 import Iapple from "../../assets/apple2.svg";
 
 const Login = ({ navigation }) => {
+    const { showLoader, hideLoader } = useLoader();
     const { width, height } = useWindowDimensions();
     const [userID, setUserID] = useState('');
     const [password, setPassword] = useState('');
@@ -30,17 +32,17 @@ const handleContinue = async () => {
     }
 
     if (!isValidEmail(userID) && !isValidPhone(userID)) {
-        Alert.alert("Error", "Please enter your password");
+        Alert.alert("Error", "Invalid email or phone number");
         return;
     }
 
     if (!password.trim()) {
-        Alert.alert("login guide", "Please create a password");
+        Alert.alert("Error", "Please enter your password");
         return;
     }
 
     try {
-        setLoading(true); // <-- Start loading
+        showLoader(); // Show Global Loader
 
         const res = await loginUser({
             email: userID,
@@ -48,23 +50,25 @@ const handleContinue = async () => {
         });
 
         if (res.data && res.data.token) {
-            await AsyncStorage.setItem('token', res.data.token);
-            await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
+            await AsyncStorage.setItem("token", res.data.token);
+            await AsyncStorage.setItem("user", JSON.stringify(res.data.user));
 
-            navigation.replace("MyTabs"); // Navigate after success
+            navigation.replace("MyTabs");
         } else {
             Alert.alert("Error", "Invalid response from server");
         }
     } catch (err) {
         Alert.alert("Error", err.response?.data?.message || "Login failed");
     } finally {
-        setLoading(false); // <-- Stop loading
+        hideLoader(); // Hide Global Loader
     }
 };
 
 
+
     return (
-        <SafeAreaProvider style={styles.container}>
+<SafeAreaProvider style={[styles.container, {height: '100%', width: '100%'}]}>
+
             <Logo />
             <CustomText weight='medium' style={[styles.description, { paddingInline: 32 }]}>
                 Login to your account in Snaphive to start Photo and video share
@@ -96,7 +100,7 @@ const handleContinue = async () => {
     onPress={handleContinue}
     style={{ width: "100%", marginTop: 15 }}
 >
-    {loading && <ActivityIndicator size="small" color="#fff" />}
+
 </ThemeButton>
 
 
@@ -178,6 +182,10 @@ const handleContinue = async () => {
                     </TouchableWithoutFeedback>
                 </TouchableWithoutFeedback>
             </View>
+
+
+
+
         </SafeAreaProvider>
     );
 };
@@ -229,6 +237,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+
+
+
+
 
 });
 

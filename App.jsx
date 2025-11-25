@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { navigationRef } from "./src/navigation/RootNavigation";
 import { NotificationProvider } from "./src/context/NotificationContext";
 import { EventProvider } from "./src/context/EventContext";
+import { LoaderProvider } from "./src/context/LoaderContext";
 
 // Screens
 import Landing from "./src/screen/Landing";
@@ -61,7 +62,7 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <SafeAreaProvider>
-
+   <LoaderProvider>
       <NotificationProvider>
         <EventProvider>
           <NavigationContainer ref={navigationRef}>
@@ -115,7 +116,9 @@ const App = () => {
           </NavigationContainer>
         </EventProvider>
       </NotificationProvider>
+      </LoaderProvider>
     </SafeAreaProvider>
+
   );
 };
 

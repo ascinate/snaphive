@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     StyleSheet,
 } from "react-native";
+import { colors } from "../Theme/theme";
 
 const PremiumModal = ({ visible, onClose, beforeImage, afterImage }) => {
     return (
@@ -205,14 +206,14 @@ const styles = StyleSheet.create({
         marginTop: 2,
     },
     freeTrialButton: {
-        backgroundColor: "#FFD700",
+        backgroundColor: colors.primary,
         width: "100%",
         paddingVertical: 14,
         borderRadius: 8,
         alignItems: "center",
     },
     freeTrialText: {
-        color: "#000",
+        color: "#ffffff",
         fontSize: 15,
         fontWeight: "700",
     },

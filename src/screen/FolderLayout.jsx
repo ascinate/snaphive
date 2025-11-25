@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
   ScrollView,
@@ -38,6 +38,7 @@ import CustomText from "../components/CustomText";
 import SearchBar from "../components/SearchBar";
 import MembersModal from "../components/MembersModal";
 import { colors } from "../Theme/theme";
+import { EventContext } from '../context/EventContext';
 
 // Images
 const createEvent = require("../../assets/background.png");
@@ -69,6 +70,7 @@ const FolderLayout = ({ navigation, route }) => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
+  const { events, setEvents } = useContext(EventContext);
 
   const formatDisplayDate = (date) => {
     if (!date) return 'N/A';
@@ -128,6 +130,15 @@ const FolderLayout = ({ navigation, route }) => {
         await AsyncStorage.setItem(
           `folder_${folderName}`,
           JSON.stringify(newImages)
+        );
+
+        // UPDATE THE EVENT IN CONTEXT
+        setEvents(prevEvents => 
+          prevEvents.map(event => 
+            event.title === eventTitle 
+              ? { ...event, photos: newImages }
+              : event
+          )
         );
 
         console.log("Images saved:", newImages.length);
@@ -627,15 +638,9 @@ const styles = StyleSheet.create({
     minHeight: height * 0.52,
     maxHeight: height * 0.52,
   },
-  // aiMagicScrollView: {
-  //   flex: 1,
-  // },
   aiMagicContent: {
     paddingBottom: height * 0.10,
   },
-  // messagesContainer: {
-  //   flex: 1,
-  // },
   userOneMessageBox: {
     flexDirection: 'row',
     alignItems: 'flex-end',

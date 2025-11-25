@@ -26,6 +26,8 @@ import CustomText from "../components/CustomText";
 import PremiumModal from "../components/PremiumModal";
 
 // Images
+const beforeImage = require("../../assets/selfie.jpg");
+const afterImage = require("../../assets/dp3.jpg");
 const createEvent = require("../../assets/background.png");
 const profilePic = require("../../assets/picnic3.jpg");
 
@@ -226,6 +228,8 @@ const Profile = ({ navigation, }) => {
         <PremiumModal
           visible={modalVisible}
           onClose={() => setModalVisible(false)}
+                  beforeImage={beforeImage}
+                afterImage={afterImage}
         />
       </ScrollView>
     </ScreenLayout>

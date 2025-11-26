@@ -90,7 +90,6 @@ const CreateHive = ({ navigation, route }) => {
             return;
         }
 
-
         if (isEnabled) {
             if (!startDate || !startTime || !endTime || !endDate) {
                 alert('Please fill all date and time fields for temporary event');
@@ -131,7 +130,7 @@ const CreateHive = ({ navigation, route }) => {
         setHiveType(null);
         navigation.goBack();
     };
-    
+
     const handleChange = (text) => {
         let formatted = text.replace(/[^0-9]/g, '');
         if (formatted.length > 2 && formatted.length <= 4)

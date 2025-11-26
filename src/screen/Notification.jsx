@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, TouchableHighlight } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useNotification } from "../context/NotificationContext"; 
+import { useNotification } from "../context/NotificationContext";
 import TopNav from "../components/TopNavbar";
 import BackNavigator from "../../assets/svg/backNavigator.svg";
 import CreateAlbum from "../../assets/svg/createAlbum.svg";
@@ -11,7 +11,7 @@ import CreateFolder from "../../assets/svg/createFolder.svg";
 const NotificationScreen = ({ navigation }) => {
   const { notifications, markAllAsRead } = useNotification();
   useEffect(() => {
-    markAllAsRead(); 
+    markAllAsRead();
   }, []);
   return (
     <SafeAreaProvider>
@@ -29,25 +29,33 @@ const NotificationScreen = ({ navigation }) => {
             </View>
           </View>
 
-          <View style={styles.chatList}>
-            {notifications.map((item) => (
-              <View key={item.id} style={styles.chatListItem}>
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 15 }}>
-                  <Image source={item.image} style={styles.dp} />
-                  <View>
-                    <Text style={{ fontSize: 15, fontWeight: "500" }}>{item.name}</Text>
-                    <Text style={{ color: "#A8A8A8", fontSize: 12 }}>{item.time}</Text>
-                  </View>
-                </View>
-
-                {item.iconType === "album" ? (
-                  <CreateAlbum width={30} height={30} />
-                ) : (
-                  <CreateFolder width={30} height={30} />
-                )}
-              </View>
-            ))}
+<View style={styles.chatList}>
+  {notifications.map((item) => (
+    <TouchableOpacity
+      key={item.id}
+      activeOpacity={0.7}
+      onPress={() => console.log("Pressed:", item.id)}
+      style={{ borderRadius: 10 }}
+    >
+      <View style={styles.chatListItem}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 15 }}>
+          <Image source={item.image} style={styles.dp} />
+          <View>
+            <Text style={{ fontSize: 15, fontWeight: "500" }}>{item.name}</Text>
+            <Text style={{ color: "#A8A8A8", fontSize: 12 }}>{item.time}</Text>
           </View>
+        </View>
+
+        {item.iconType === "album" ? (
+          <CreateAlbum width={30} height={30} />
+        ) : (
+          <CreateFolder width={30} height={30} />
+        )}
+      </View>
+    </TouchableOpacity>
+  ))}
+</View>
+
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>

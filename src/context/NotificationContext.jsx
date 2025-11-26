@@ -14,24 +14,22 @@ export const NotificationProvider = ({ children }) => {
             const data = [
                 { id: 1, name: "Demola Aoki", time: "4hrs", image: dp, iconType: "album" },
                 { id: 2, name: "Quency Demola", time: "4hrs", image: dp2, iconType: "folder" },
+                { id: 3, name: "Quency Demola", time: "4hrs", image: dp2, iconType: "folder" },
             ];
             setNotifications(data);
             if (!hasOpenedNotificationPage) {
                 setUnreadCount(data.length);
             }
         };
-
         fetchNotifications();
-
         const interval = setInterval(fetchNotifications, 10000);
-
         return () => clearInterval(interval);
     }, [hasOpenedNotificationPage]);
 
 
     const markAllAsRead = () => {
         setUnreadCount(0);
-        setHasOpenedNotificationPage(true); 
+        setHasOpenedNotificationPage(true);
     };
 
     return (

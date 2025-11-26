@@ -51,7 +51,7 @@ import CreateHive from './src/screen/CreateHive'
 import FolderLayout from './src/screen/FolderLayout'
 import MyHives from './src/screen/MyHives'
 import FolderStockPhotos from './src/screen/FolderStockPhotos'
-
+import AutoCreateHive from './src/screen/AutoCreateHive'
 
 // Demo camera UI
 import ClickPhotoTwo from "./src/screen/ClickPhotoTwo";
@@ -62,60 +62,61 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <SafeAreaProvider>
-   <LoaderProvider>
-      <NotificationProvider>
-        <EventProvider>
-          <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="Landing" component={Landing} />
-              <Stack.Screen name="Signup" component={Signup} />
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="OTP" component={OTP} />
-              <Stack.Screen name="MyTabs" component={MyTabs} />
-              <Stack.Screen name="PhotoFolder" component={PhotoFolder} />
-              <Stack.Screen name="CreateAlbum" component={CreateAlbum} />
-              <Stack.Screen name="CreateFolder" component={CreateFolder} />
-              <Stack.Screen name="Folder" component={Folder} />
-              <Stack.Screen name="AddExpenseBlock" component={AddExpenseBlock} />
-              <Stack.Screen name="AddNote" component={AddNote} />
-              <Stack.Screen name="NewPage" component={NewPage} />
-              <Stack.Screen name="Home" component={MyTabs} />
-              <Stack.Screen name="CreateHive" component={CreateHive} />
-              <Stack.Screen name="PhotoShare" component={PhotoShare} />
-              <Stack.Screen name="AddMember" component={AddMember} />
-              <Stack.Screen name="Notification" component={Notification} />
-              <Stack.Screen name="Camera" component={Camera} />
-              <Stack.Screen name="Subscribe" component={Subscribe} />
-              <Stack.Screen name="CreateEvent" component={CreateEvent} />
-              <Stack.Screen name="CreateEventTwo" component={CreateEventTwo} />
-              <Stack.Screen name="CreateEventThree" component={CreateEventThree} />
-              <Stack.Screen name="CreateEventFour" component={CreateEventFour} />
-              <Stack.Screen name="CreateEventFive" component={CreateEventFive} />
-              <Stack.Screen name="InviteMember" component={InviteMember} />
-              <Stack.Screen name="ClickPhoto" component={ClickPhoto} />
-              <Stack.Screen name="FolderTitle" component={FolderTitle} />
-              <Stack.Screen name="QRcode" component={QRcode} />
-              <Stack.Screen name="Locking" component={Locking} />
-              <Stack.Screen name="MemberShare" component={MemberShare} />
-              <Stack.Screen name="YourOpinion" component={YourOpinion} />
-              <Stack.Screen name="ContactUs" component={ContactUs} />
-              <Stack.Screen name="InviteHiveMember" component={InviteHiveMember} />
-              <Stack.Screen name="ManagePermissions" component={ManagePermissions} />
-              <Stack.Screen name="Language" component={Language} />
-              <Stack.Screen name="MyFriend" component={MyFriend} />
-              <Stack.Screen name="EditProfile" component={EditProfile} />
-              <Stack.Screen name="Chat" component={Chat} />
-              <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-              <Stack.Screen name="NewPassword" component={NewPassword} />
-              <Stack.Screen name="ClickPhotoTwo" component={ClickPhotoTwo} />
-              <Stack.Screen name="ClickPhotoThree" component={ClickPhotoThree} />
-              <Stack.Screen name="FolderLayout" component={FolderLayout} />
-              <Stack.Screen name="MyHives" component={MyHives} />
-              <Stack.Screen name="FolderStockPhotos" component={FolderStockPhotos} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </EventProvider>
-      </NotificationProvider>
+      <LoaderProvider>
+        <NotificationProvider>
+          <EventProvider>
+            <NavigationContainer ref={navigationRef}>
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Landing" component={Landing} />
+                <Stack.Screen name="Signup" component={Signup} />
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="OTP" component={OTP} />
+                <Stack.Screen name="MyTabs" component={MyTabs} />
+                <Stack.Screen name="PhotoFolder" component={PhotoFolder} />
+                <Stack.Screen name="CreateAlbum" component={CreateAlbum} />
+                <Stack.Screen name="CreateFolder" component={CreateFolder} />
+                <Stack.Screen name="Folder" component={Folder} />
+                <Stack.Screen name="AddExpenseBlock" component={AddExpenseBlock} />
+                <Stack.Screen name="AddNote" component={AddNote} />
+                <Stack.Screen name="NewPage" component={NewPage} />
+                <Stack.Screen name="Home" component={MyTabs} />
+                <Stack.Screen name="CreateHive" component={CreateHive} />
+                <Stack.Screen name="PhotoShare" component={PhotoShare} />
+                <Stack.Screen name="AddMember" component={AddMember} />
+                <Stack.Screen name="Notification" component={Notification} />
+                <Stack.Screen name="Camera" component={Camera} />
+                <Stack.Screen name="Subscribe" component={Subscribe} />
+                <Stack.Screen name="CreateEvent" component={CreateEvent} />
+                <Stack.Screen name="CreateEventTwo" component={CreateEventTwo} />
+                <Stack.Screen name="CreateEventThree" component={CreateEventThree} />
+                <Stack.Screen name="CreateEventFour" component={CreateEventFour} />
+                <Stack.Screen name="CreateEventFive" component={CreateEventFive} />
+                <Stack.Screen name="InviteMember" component={InviteMember} />
+                <Stack.Screen name="ClickPhoto" component={ClickPhoto} />
+                <Stack.Screen name="FolderTitle" component={FolderTitle} />
+                <Stack.Screen name="QRcode" component={QRcode} />
+                <Stack.Screen name="Locking" component={Locking} />
+                <Stack.Screen name="MemberShare" component={MemberShare} />
+                <Stack.Screen name="YourOpinion" component={YourOpinion} />
+                <Stack.Screen name="ContactUs" component={ContactUs} />
+                <Stack.Screen name="InviteHiveMember" component={InviteHiveMember} />
+                <Stack.Screen name="ManagePermissions" component={ManagePermissions} />
+                <Stack.Screen name="Language" component={Language} />
+                <Stack.Screen name="MyFriend" component={MyFriend} />
+                <Stack.Screen name="EditProfile" component={EditProfile} />
+                <Stack.Screen name="Chat" component={Chat} />
+                <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+                <Stack.Screen name="NewPassword" component={NewPassword} />
+                <Stack.Screen name="ClickPhotoTwo" component={ClickPhotoTwo} />
+                <Stack.Screen name="ClickPhotoThree" component={ClickPhotoThree} />
+                <Stack.Screen name="FolderLayout" component={FolderLayout} />
+                <Stack.Screen name="MyHives" component={MyHives} />
+                <Stack.Screen name="FolderStockPhotos" component={FolderStockPhotos} />
+                <Stack.Screen name="AutoCreateHive" component={AutoCreateHive} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </EventProvider>
+        </NotificationProvider>
       </LoaderProvider>
     </SafeAreaProvider>
 

@@ -12,7 +12,7 @@ export const NotificationProvider = ({ children }) => {
             const dp2 = require("../../assets/dp2.webp");
 
             const data = [
-                { id: 1, name: "Demola Aoki", time: "4hrs", image: dp, iconType: "album" },
+                { id: 1, name: "Recenly you click 5 photos ", time: "4hrs", image: dp, iconType: "album" },
                 { id: 2, name: "Quency Demola", time: "4hrs", image: dp2, iconType: "folder" },
                 { id: 3, name: "Quency Demola", time: "4hrs", image: dp2, iconType: "folder" },
             ];

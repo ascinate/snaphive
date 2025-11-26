@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
     paddingHorizontal: width * 0.05,
-    paddingBottom: height * 0.05,
+    paddingBottom: height * 0.10,
     backgroundColor: "#FAFAF9",
   },
 
@@ -728,6 +728,8 @@ height: height * 0.47
     alignItems: 'center',
     marginLeft: width * 0.02,
   },
+
+
 });
 
 export default FolderLayout;

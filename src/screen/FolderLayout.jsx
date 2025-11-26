@@ -133,9 +133,9 @@ const FolderLayout = ({ navigation, route }) => {
         );
 
         // UPDATE THE EVENT IN CONTEXT
-        setEvents(prevEvents =>
-          prevEvents.map(event =>
-            event.title === eventTitle
+        setEvents(prevEvents => 
+          prevEvents.map(event => 
+            event.title === eventTitle 
               ? { ...event, photos: newImages }
               : event
           )
@@ -264,7 +264,7 @@ const FolderLayout = ({ navigation, route }) => {
             ))}
           </View>
 
-          <View
+          <ScrollView
             style={{ flex: 1 }}
 
             showsVerticalScrollIndicator={false}
@@ -362,178 +362,71 @@ const FolderLayout = ({ navigation, route }) => {
                       </View>
                     </View>
                   </TouchableOpacity>
-
-
-
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate("Chat")}
-                  >
-                    <View style={styles.shadowWrapper}>
-                      <View style={styles.chatListItem}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: width * 0.0375 }}>
-                          <Image source={profilePic} style={styles.dp} />
-                          <View>
-                            <CustomText weight="bold">User name</CustomText>
-                            <CustomText weight="medium"
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                              style={{ maxWidth: width * 0.4, fontSize: width * 0.03, color: '#888888' }}
-                            >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
-                          </View>
-                        </View>
-                        <View style={{ alignItems: 'flex-end', minWidth: width * 0.15 }}>
-                          <CustomText weight="medium" style={{ fontSize: width * 0.03 }}>5 Hours ago</CustomText>
-                          <View style={{
-                            backgroundColor: '#FF0800',
-                            width: width * 0.05,
-                            height: width * 0.05,
-                            borderRadius: width * 0.025,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginTop: height * 0.0075
-                          }}>
-                            <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate("Chat")}
-                  >
-                    <View style={styles.shadowWrapper}>
-                      <View style={styles.chatListItem}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: width * 0.0375 }}>
-                          <Image source={profilePic} style={styles.dp} />
-                          <View>
-                            <CustomText weight="bold">User name</CustomText>
-                            <CustomText weight="medium"
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                              style={{ maxWidth: width * 0.4, fontSize: width * 0.03, color: '#888888' }}
-                            >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
-                          </View>
-                        </View>
-                        <View style={{ alignItems: 'flex-end', minWidth: width * 0.15 }}>
-                          <CustomText weight="medium" style={{ fontSize: width * 0.03 }}>5 Hours ago</CustomText>
-                          <View style={{
-                            backgroundColor: '#FF0800',
-                            width: width * 0.05,
-                            height: width * 0.05,
-                            borderRadius: width * 0.025,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginTop: height * 0.0075
-                          }}>
-                            <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-
-
-
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate("Chat")}
-                  >
-                    <View style={styles.shadowWrapper}>
-                      <View style={styles.chatListItem}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: width * 0.0375 }}>
-                          <Image source={profilePic} style={styles.dp} />
-                          <View>
-                            <CustomText weight="bold">User name</CustomText>
-                            <CustomText weight="medium"
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                              style={{ maxWidth: width * 0.4, fontSize: width * 0.03, color: '#888888' }}
-                            >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
-                          </View>
-                        </View>
-                        <View style={{ alignItems: 'flex-end', minWidth: width * 0.15 }}>
-                          <CustomText weight="medium" style={{ fontSize: width * 0.03 }}>5 Hours ago</CustomText>
-                          <View style={{
-                            backgroundColor: '#FF0800',
-                            width: width * 0.05,
-                            height: width * 0.05,
-                            borderRadius: width * 0.025,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginTop: height * 0.0075
-                          }}>
-                            <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
                 </View>
               </>
             )}
+          </ScrollView>
 
-            {selectedTab === "Ai Magic" && (
-              <View style={styles.aiMagicContainer}>
-                <ScrollView
-                  style={styles.aiMagicScrollView}
-                  contentContainerStyle={styles.aiMagicContent}
-                  showsVerticalScrollIndicator={false}
-                >
-                  <View style={styles.messagesContainer}>
-                    {/* User Message */}
-                    <View style={styles.userTwoMessageBox}>
-                      <View style={styles.messageText}>
-                        <CustomText weight="medium" style={[styles.text, { color: '#3d3d3dff', fontSize: width * 0.03 }]}>
-                          Hey! Turn this photo into a Pixar-style 3D character with a vibrant, futuristic city background — make the colors neon and give the character a confident hero pose!
-                        </CustomText>
-                      </View>
-                      <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
+          {selectedTab === "Ai Magic" && (
+            <View style={styles.aiMagicContainer}>
+              <ScrollView
+                style={styles.aiMagicScrollView}
+                contentContainerStyle={styles.aiMagicContent}
+                showsVerticalScrollIndicator={false}
+              >
+                <View style={styles.messagesContainer}>
+                  {/* User Message */}
+                  <View style={styles.userTwoMessageBox}>
+                    <View style={styles.messageText}>
+                      <CustomText weight="medium" style={[styles.text, { color: '#3d3d3dff', fontSize: width * 0.03 }]}>
+                        Hey! Turn this photo into a Pixar-style 3D character with a vibrant, futuristic city background — make the colors neon and give the character a confident hero pose!
+                      </CustomText>
                     </View>
-
-                    {/* AI Response */}
-                    <View style={styles.userOneMessageBox}>
-                      <View style={styles.messageTextLeft}>
-                        <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
-                          Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!
-                        </CustomText>
-                      </View>
-                      <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
-                    </View>
-
-                    {/* AI Response */}
-                    <View style={styles.userOneMessageBox}>
-                      <View style={styles.messageTextLeft}>
-                        <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
-                          Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!
-                        </CustomText>
-                      </View>
-                      <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
-                    </View>
+                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
                   </View>
-                </ScrollView>
 
-                {/* Input Box - Fixed at bottom */}
-                <View style={styles.aiMagicInputContainer}>
-                  <View style={styles.aiMagicInputWrapper}>
-                    <TouchableOpacity style={{ marginRight: width * 0.025 }}>
-                      <ImagePlus size={width * 0.055} color="#6B7280" />
-                    </TouchableOpacity>
+                  {/* AI Response */}
+                  <View style={styles.userOneMessageBox}>
+                    <View style={styles.messageTextLeft}>
+                      <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
+                        Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!
+                      </CustomText>
+                    </View>
+                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
+                  </View>
 
-                    <TextInput
-                      placeholder="Ask anything..."
-                      placeholderTextColor="#9CA3AF"
-                      style={styles.aiMagicInput}
-                    />
-
-                    <TouchableOpacity style={styles.aiMagicSendButton}>
-                      <SendHorizonal size={width * 0.05} color="#FFFFFF" />
-                    </TouchableOpacity>
+                  {/* AI Response */}
+                  <View style={styles.userOneMessageBox}>
+                    <View style={styles.messageTextLeft}>
+                      <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
+                        Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!
+                      </CustomText>
+                    </View>
+                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
                   </View>
                 </View>
+              </ScrollView>
+
+              {/* Input Box - Fixed at bottom */}
+              <View style={styles.aiMagicInputContainer}>
+                <View style={styles.aiMagicInputWrapper}>
+                  <TouchableOpacity style={{ marginRight: width * 0.025 }}>
+                    <ImagePlus size={width * 0.055} color="#6B7280" />
+                  </TouchableOpacity>
+
+                  <TextInput
+                    placeholder="Ask anything..."
+                    placeholderTextColor="#9CA3AF"
+                    style={styles.aiMagicInput}
+                  />
+
+                  <TouchableOpacity style={styles.aiMagicSendButton}>
+                    <SendHorizonal size={width * 0.05} color="#FFFFFF" />
+                  </TouchableOpacity>
+                </View>
               </View>
-            )}
-          </View>
-
-
+            </View>
+          )}
 
           <MembersModal
             visible={modalVisible}
@@ -549,7 +442,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
     paddingHorizontal: width * 0.05,
-    paddingBottom: height * 0.10,
+    paddingBottom: height * 0.05,
     backgroundColor: "#FAFAF9",
   },
 
@@ -582,7 +475,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    marginTop: height * 0.016,
+    marginTop: height * 0.025,
     borderRadius: width * 0.1,
     paddingVertical: height * 0.01,
   },
@@ -741,10 +634,9 @@ const styles = StyleSheet.create({
   },
 
   aiMagicContainer: {
-
-    height: height * 0.48
-
-
+    flex: 1,
+    minHeight: height * 0.460,
+    maxHeight: height * 0.460,
   },
   aiMagicContent: {
     paddingBottom: height * 0.10,

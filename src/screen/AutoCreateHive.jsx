@@ -10,7 +10,6 @@ import {
   Platform,
   ActivityIndicator,
   Alert,
-  AppState,
 } from 'react-native';
 import React, { useState, useEffect, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -19,102 +18,156 @@ import { useFocusEffect } from '@react-navigation/native';
 import TopNav from '../components/TopNavbar';
 import ThemeButton from '../components/ThemeButton';
 import { colors } from '../Theme/theme';
+import eventBus from '../utils/eventBus';
 
 const { width, height } = Dimensions.get('window');
 
 const AutoCreateHive = ({ navigation }) => {
-  const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [hasPermission, setHasPermission] = useState(false);
-  const [selectedImages, setSelectedImages] = useState([]);
 
-  const requestPermissions = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const apiLevel = Platform.Version;
-        if (apiLevel >= 33) {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
-          );
-          return granted === PermissionsAndroid.RESULTS.GRANTED;
-        } else {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
-          );
-          return granted === PermissionsAndroid.RESULTS.GRANTED;
-        }
-      } catch (err) {
-        console.warn(err);
-        return false;
-      }
-    }
-    return true;
-  };
+// 1️⃣ ALL useStates at top
+const [images, setImages] = useState([]);
+const [loading, setLoading] = useState(true);
+const [hasPermission, setHasPermission] = useState(false);
+const [selectedImages, setSelectedImages] = useState([]);
 
-  // 🔥 Load only camera photos based on filename pattern
-  const loadPhotos = async () => {
+console.log("🔵 AutoCreateHive component rendered");
+
+// 3️⃣ Permission Request
+const requestPermissions = async () => {
+  console.log("🟡 requestPermissions called");
+  if (Platform.OS === 'android') {
     try {
-      setLoading(true);
+      const apiLevel = Platform.Version;
+      if (apiLevel >= 33) {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
+        );
+        console.log("🟢 Permission result (API 33+):", granted);
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } else {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+        );
+        console.log("🟢 Permission result (API <33):", granted);
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      }
+    } catch (err) {
+      console.warn("❌ Permission error:", err);
+      return false;
+    }
+  }
+  console.log("🟢 iOS - permission granted by default");
+  return true;
+};
 
-      const photos = await CameraRoll.getPhotos({
-        first: 999999,
-        assetType: 'Photos',
-        include: ['filename', 'imageSize', 'playableDuration'],
-      });
+// 4️⃣ Load only Camera Photos
+const loadPhotos = useCallback(async () => {
+  try {
+    setLoading(true);
 
-      const cameraPhotos = photos.edges
-        .filter(edge => {
-          const name = edge.node.image.filename?.toLowerCase() || '';
-          return (
-            name.startsWith('img_') ||
-            name.startsWith('pxl_') ||
-            name.startsWith('camera') ||
-            name.match(/^img-\d+/)
-          );
-        })
-        .map(edge => ({
-          uri: edge.node.image.uri,
-          timestamp: edge.node.timestamp,
-        }));
+    const photos = await CameraRoll.getPhotos({
+      first: 999999,
+      assetType: 'Photos',
+      include: ['filename', 'imageSize', 'playableDurity'],
+    });
 
-      cameraPhotos.sort((a, b) => b.timestamp - a.timestamp);
+    // 🚨 SHOW ALERT WITH PHOTO INFO
+    const first5 = photos.edges.slice(0, 5);
+    const photoInfo = first5.map((edge, i) => 
+      `${i}: ${edge.node.image.filename}`
+    ).join('\n');
+    
+    Alert.alert(
+      'Photo Debug Info',
+      `Total: ${photos.edges.length}\n\nFirst 5:\n${photoInfo}`,
+      [
+        {
+          text: 'Copy to Clipboard',
+          onPress: () => {
+            // Show detailed info for first 2 photos
+            const detailed = photos.edges.slice(0, 2).map((edge, i) => 
+              `${i}:\nFile: ${edge.node.image.filename}\nURI: ${edge.node.image.uri}`
+            ).join('\n\n');
+            
+            Alert.alert('Photo Details', detailed);
+          }
+        },
+        { text: 'OK' }
+      ]
+    );
 
-      setImages(cameraPhotos);
-      setLoading(false);
-    } catch (error) {
-      console.log('Error loading photos:', error);
+    // TEMPORARILY SHOW ALL PHOTOS (no filter)
+    const allPhotos = photos.edges
+      .map(edge => ({
+        uri: edge.node.image.uri,
+        timestamp: edge.node.timestamp,
+        filename: edge.node.image.filename,
+      }))
+      .sort((a, b) => b.timestamp - a.timestamp);
+
+    setImages(allPhotos);
+    setLoading(false);
+
+  } catch (error) {
+    Alert.alert('Error', error.message);
+    setLoading(false);
+  }
+}, []);
+
+// 2️⃣ Event Listener Hook
+useEffect(() => {
+  console.log("🎧 Setting up event listener");
+
+  const listener = (data) => {
+    console.log("🔔 EVENT RECEIVED: photo_saved", data);
+    console.log("🔔 Calling loadPhotos from event...");
+    loadPhotos();
+  };
+
+  const subscription = eventBus.addListener("photo_saved", listener);
+  console.log("🎧 Event listener registered");
+
+  return () => {
+    console.log("🎧 Removing event listener");
+    subscription.remove();
+  };
+}, [loadPhotos]);
+
+
+// 5️⃣ Initial load
+useEffect(() => {
+  console.log("🚀 Initial load useEffect triggered");
+  
+  const init = async () => {
+    console.log("🚀 Running init...");
+    const permission = await requestPermissions();
+    console.log("🚀 Permission result:", permission);
+    setHasPermission(permission);
+    
+    if (permission) {
+      console.log("🚀 Permission granted, loading photos...");
+      loadPhotos();
+    } else {
+      console.log("🚀 Permission denied, stopping...");
       setLoading(false);
     }
   };
 
-  // Initial Load
-  useEffect(() => {
-    const init = async () => {
-      const permission = await requestPermissions();
-      setHasPermission(permission);
-      if (permission) loadPhotos();
-      else setLoading(false);
-    };
-    init();
-  }, []);
+  init();
+}, []);
 
-  // 🔥 Live reload when app returns to foreground (detect new photos)
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', state => {
-      if (state === 'active' && hasPermission) {
-        loadPhotos(); // Auto refresh on re-open
-      }
-    });
-    return () => subscription.remove();
-  }, [hasPermission]);
+// 6️⃣ Reload every time screen is focused
+useFocusEffect(
+  useCallback(() => {
+    console.log("👁️ Screen focused, hasPermission:", hasPermission);
+    if (hasPermission) {
+      console.log("👁️ Reloading photos on focus...");
+      loadPhotos();
+    }
+  }, [hasPermission, loadPhotos])
+);
 
-  // Reload when returning to this screen
-  useFocusEffect(
-    useCallback(() => {
-      if (hasPermission) loadPhotos();
-    }, [hasPermission])
-  );
-
+  // 7️⃣ EARLY RETURNS (AFTER ALL HOOKS)
   if (loading) {
     return (
       <SafeAreaView style={styles.safeArea}>
@@ -148,6 +201,7 @@ const AutoCreateHive = ({ navigation }) => {
     );
   }
 
+  // 8️⃣ UI RETURN (NO HOOKS BELOW)
   return (
     <SafeAreaView style={styles.safeArea}>
       <TopNav />

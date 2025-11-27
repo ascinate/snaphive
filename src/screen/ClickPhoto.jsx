@@ -11,6 +11,7 @@ import TopNav from '../components/TopNavbar';
 import PhotoEditMenu from '../components/PhotoEditMenu';
 import PhotoEditOriginalvsEnhanced from '../components/PhotoEditOriginalvsEnhanced';
 import PhotoEditSideIcons from '../components/PhotoEditSideIcons';
+import eventBus from '../utils/eventBus';   // ← Add at top of file
 
 // SVG icons
 import Gallery from '../../assets/svg/gallery.svg';
@@ -88,27 +89,37 @@ const ClickPhoto = ({ navigation }) => {
             return null;
         }
     };
+const takePhoto = async () => {
+  if (cameraRef.current) {
+    try {
+      console.log("📷 Taking photo...");
 
-    const takePhoto = async () => {
-        if (cameraRef.current) {
-            try {
-                const photo = await cameraRef.current.takePhoto({
-                    qualityPrioritization: 'balanced',
-                    flash: 'off',
-                });
+      const timestamp = Date.now();
+      const filename = `SNAPHIVE_${timestamp}.jpg`;
 
-                const photoPath = Platform.OS === 'ios' ? photo.path : `file://${photo.path}`;
-                const photoUri = `file://${photo.path}`;
-                setPhoto(photoUri);
-                setOriginalPhoto(photoUri);
-                setShowCamera(false);
-                await savePhotoToGallery(photoPath);
-            } catch (error) {
-                console.error('Failed to take photo:', error);
-                Alert.alert('Error', 'Failed to capture photo');
-            }
-        }
-    };
+      const photo = await cameraRef.current.takePhoto({
+        qualityPrioritization: 'balanced',
+        flash: 'off',
+      });
+
+      const photoPath = Platform.OS === 'ios' ? photo.path : `file://${photo.path}`;
+      const photoUri = `file://${photo.path}`;
+
+      setPhoto(photoUri);
+      setOriginalPhoto(photoUri);
+      setShowCamera(false);
+
+      console.log("💾 Saving photo to gallery...");
+      const savedUri = await savePhotoToGallery(photoPath);
+
+      console.log("📢 EMITTING EVENT: photo_saved", savedUri);
+      eventBus.emit("photo_saved", { uri: savedUri, filename });
+
+    } catch (error) {
+      console.error('❌ Failed to take photo:', error);
+    }
+  }
+};
 
     
     const retakePhoto = () => {

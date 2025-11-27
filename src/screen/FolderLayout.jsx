@@ -99,16 +99,34 @@ const FolderLayout = ({ navigation, route }) => {
     loadSavedImages();
   }, []);
 
-  const loadSavedImages = async () => {
-    try {
-      const saved = await AsyncStorage.getItem(`folder_${folderName}`);
-      if (saved) {
-        setUploadedImages(JSON.parse(saved));
-      }
-    } catch (e) {
-      console.log("Failed to load images", e);
+const loadSavedImages = async () => {
+  try {
+    // First, try to load from AsyncStorage
+    const saved = await AsyncStorage.getItem(`folder_${folderName}`);
+    
+    if (saved) {
+      const savedPhotos = JSON.parse(saved);
+      setUploadedImages(savedPhotos);
+      console.log('Loaded from storage:', savedPhotos.length);
+    } 
+    // If no saved photos but we have photos from route params, use those
+    else if (photos && photos.length > 0) {
+      setUploadedImages(photos);
+      // Save them to AsyncStorage for persistence
+      await AsyncStorage.setItem(
+        `folder_${folderName}`,
+        JSON.stringify(photos)
+      );
+      console.log('Loaded from route params:', photos.length);
     }
-  };
+  } catch (e) {
+    console.log("Failed to load images", e);
+    // Fallback to route params if storage fails
+    if (photos && photos.length > 0) {
+      setUploadedImages(photos);
+    }
+  }
+};
 
   const handleUpload = async () => {
     const options = {

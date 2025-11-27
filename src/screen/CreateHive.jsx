@@ -74,62 +74,77 @@ const CreateHive = ({ navigation, route }) => {
         { label: 'Invite Only', value: '1' },
         { label: 'Public', value: '2' },
     ];
-    const handleCreateHive = () => {
-        if (!hiveName.trim()) {
-            alert('Please enter a hive name');
-            return;
-        }
+    useEffect(() => {
+  if (route?.params?.cameraPhotos) {
+    console.log('Received camera photos:', route.params.cameraPhotos.length);
+  }
+}, [route?.params?.cameraPhotos]);
 
-        if (!uploadedImage) {
-            alert('Please upload a cover image');
-            return;
-        }
 
-        if (!checked) {
-            alert("Please accept the Content Responsibility & Privacy Policy.");
-            return;
-        }
+const handleCreateHive = () => {
+  if (!hiveName.trim()) {
+    alert('Please enter a hive name');
+    return;
+  }
 
-        if (isEnabled) {
-            if (!startDate || !startTime || !endTime || !endDate) {
-                alert('Please fill all date and time fields for temporary event');
-                console.log("DateTimePicker:", DateTimePicker);
+  if (!uploadedImage) {
+    alert('Please upload a cover image');
+    return;
+  }
 
-                return;
+  if (!checked) {
+    alert("Please accept the Content Responsibility & Privacy Policy.");
+    return;
+  }
 
-            }
-        }
+  if (isEnabled) {
+    if (!startDate || !startTime || !endTime || !endDate) {
+      alert('Please fill all date and time fields for temporary event');
+      return;
+    }
+  }
 
-        const newEvent = {
-            img: typeof uploadedImage === 'string'
-                ? { uri: uploadedImage }
-                : uploadedImage,
+  // Get camera photos from route params
+  const cameraPhotos = route?.params?.cameraPhotos || [];
+  
+  // Convert camera photos to the format needed for uploadedImages
+  const photoUris = cameraPhotos.map(photo => photo.uri);
 
-            title: hiveName,
-            description: hiveDescription || 'No description',
-            count: '0 Photos',
-            photos: [],
-            createdAt: new Date().toISOString(),
-            isTemporary: isEnabled,
-            eventDate: startDate,
-            startTime: startTime,
-            endTime: endTime,
-            expiryDate: endDate,
-            hiveType: hiveType,
-        };
+  const newEvent = {
+    img: typeof uploadedImage === 'string'
+      ? { uri: uploadedImage }
+      : uploadedImage,
+    title: hiveName,
+    description: hiveDescription || 'No description',
+    count: `${photoUris.length} Photos`, // Update count
+    photos: photoUris, // Add the photos array HERE
+    createdAt: new Date().toISOString(),
+    isTemporary: isEnabled,
+    eventDate: startDate,
+    startTime: startTime,
+    endTime: endTime,
+    expiryDate: endDate,
+    hiveType: hiveType,
+  };
 
-        addEvent(newEvent);
-        setUploadedImage(null);
-        setHiveName("");
-        setHiveDescription("");
-        setStartDate(new Date());
-        setStartTime(new Date());
-        setEndTime(new Date());
-        setEndDate(new Date());
-        setIsEnabled(false);
-        setHiveType(null);
-        navigation.goBack();
-    };
+  addEvent(newEvent);
+  
+  setUploadedImage(null);
+  setHiveName("");
+  setHiveDescription("");
+  setStartDate(new Date());
+  setStartTime(new Date());
+  setEndTime(new Date());
+  setEndDate(new Date());
+  setIsEnabled(false);
+  setHiveType(null);
+  
+  // Navigate to Home and reset navigation stack
+  navigation.reset({
+    index: 0,
+    routes: [{ name: 'Home' }],
+  });
+};
 
     const handleChange = (text) => {
         let formatted = text.replace(/[^0-9]/g, '');

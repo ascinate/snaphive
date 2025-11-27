@@ -216,7 +216,13 @@ const loadPhotos = useCallback(async () => {
         </View>
       </ScrollView>
 
-      <ThemeButton style={styles.continueBtn} text="Next →" />
+<ThemeButton 
+  style={styles.continueBtn} 
+  text="Next →" 
+  onPress={() => navigation.navigate('CreateHive', { 
+    cameraPhotos: images // Pass the images array
+  })}
+/>
     </SafeAreaView>
   );
 };

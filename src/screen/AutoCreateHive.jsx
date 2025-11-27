@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -9,9 +10,7 @@ import {
   PermissionsAndroid,
   Platform,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
-import React, { useState, useEffect, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { useFocusEffect } from '@react-navigation/native';
@@ -23,169 +22,137 @@ import eventBus from '../utils/eventBus';
 const { width, height } = Dimensions.get('window');
 
 const AutoCreateHive = ({ navigation }) => {
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [hasPermission, setHasPermission] = useState(false);
 
-// 1️⃣ ALL useStates at top
-const [images, setImages] = useState([]);
-const [loading, setLoading] = useState(true);
-const [hasPermission, setHasPermission] = useState(false);
-const [selectedImages, setSelectedImages] = useState([]);
-
-console.log("🔵 AutoCreateHive component rendered");
-
-// 3️⃣ Permission Request
-const requestPermissions = async () => {
-  console.log("🟡 requestPermissions called");
-  if (Platform.OS === 'android') {
-    try {
+  // ────────────────────────────────────────────────
+  // PERMISSIONS
+  // ────────────────────────────────────────────────
+  const requestPermissions = async () => {
+    if (Platform.OS === 'android') {
       const apiLevel = Platform.Version;
+
       if (apiLevel >= 33) {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
         );
-        console.log("🟢 Permission result (API 33+):", granted);
         return granted === PermissionsAndroid.RESULTS.GRANTED;
       } else {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
         );
-        console.log("🟢 Permission result (API <33):", granted);
         return granted === PermissionsAndroid.RESULTS.GRANTED;
       }
-    } catch (err) {
-      console.warn("❌ Permission error:", err);
-      return false;
     }
-  }
-  console.log("🟢 iOS - permission granted by default");
-  return true;
-};
 
-// 4️⃣ Load only Camera Photos
-const loadPhotos = useCallback(async () => {
-  try {
-    setLoading(true);
-
-    const photos = await CameraRoll.getPhotos({
-      first: 999999,
-      assetType: 'Photos',
-      include: ['filename', 'imageSize', 'playableDurity'],
-    });
-
-    // 🚨 SHOW ALERT WITH PHOTO INFO
-    const first5 = photos.edges.slice(0, 5);
-    const photoInfo = first5.map((edge, i) => 
-      `${i}: ${edge.node.image.filename}`
-    ).join('\n');
-    
-    Alert.alert(
-      'Photo Debug Info',
-      `Total: ${photos.edges.length}\n\nFirst 5:\n${photoInfo}`,
-      [
-        {
-          text: 'Copy to Clipboard',
-          onPress: () => {
-            // Show detailed info for first 2 photos
-            const detailed = photos.edges.slice(0, 2).map((edge, i) => 
-              `${i}:\nFile: ${edge.node.image.filename}\nURI: ${edge.node.image.uri}`
-            ).join('\n\n');
-            
-            Alert.alert('Photo Details', detailed);
-          }
-        },
-        { text: 'OK' }
-      ]
-    );
-
-    // TEMPORARILY SHOW ALL PHOTOS (no filter)
-    const allPhotos = photos.edges
-      .map(edge => ({
-        uri: edge.node.image.uri,
-        timestamp: edge.node.timestamp,
-        filename: edge.node.image.filename,
-      }))
-      .sort((a, b) => b.timestamp - a.timestamp);
-
-    setImages(allPhotos);
-    setLoading(false);
-
-  } catch (error) {
-    Alert.alert('Error', error.message);
-    setLoading(false);
-  }
-}, []);
-
-// 2️⃣ Event Listener Hook
-useEffect(() => {
-  console.log("🎧 Setting up event listener");
-
-  const listener = (data) => {
-    console.log("🔔 EVENT RECEIVED: photo_saved", data);
-    console.log("🔔 Calling loadPhotos from event...");
-    loadPhotos();
+    return true; // iOS auto-granted
   };
 
-  const subscription = eventBus.addListener("photo_saved", listener);
-  console.log("🎧 Event listener registered");
+  // ────────────────────────────────────────────────
+  // LOAD ONLY CAMERA ROLL PHOTOS (FROM DEVICE CAMERA APP)
+  // ────────────────────────────────────────────────
+  const loadPhotos = useCallback(async () => {
+    try {
+      setLoading(true);
 
-  return () => {
-    console.log("🎧 Removing event listener");
-    subscription.remove();
-  };
-}, [loadPhotos]);
+      const params = {
+        first: 5000,
+        assetType: 'Photos',
+        include: ['filename'],
+      };
 
+      // Filter to camera roll album
+      if (Platform.OS === 'ios') {
+        params.groupTypes = 'SavedPhotos';
+      } else {
+        // On Android, filter by 'Camera' album (default camera saves here)
+        params.groupName = 'Camera';
+      }
 
-// 5️⃣ Initial load
-useEffect(() => {
-  console.log("🚀 Initial load useEffect triggered");
-  
-  const init = async () => {
-    console.log("🚀 Running init...");
-    const permission = await requestPermissions();
-    console.log("🚀 Permission result:", permission);
-    setHasPermission(permission);
-    
-    if (permission) {
-      console.log("🚀 Permission granted, loading photos...");
-      loadPhotos();
-    } else {
-      console.log("🚀 Permission denied, stopping...");
+      const photos = await CameraRoll.getPhotos(params);
+
+      // Map to required format (no additional filtering needed for camera source)
+      const cameraPhotos = photos.edges
+        .map(edge => ({
+          uri: edge.node.image.uri,
+          timestamp: edge.node.timestamp,
+          filename: edge.node.image.filename,
+        }))
+        .sort((a, b) => b.timestamp - a.timestamp);
+
+      setImages(cameraPhotos);
+
+    } catch (error) {
+      console.log("Error loading gallery:", error);
+    } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  init();
-}, []);
-
-// 6️⃣ Reload every time screen is focused
-useFocusEffect(
-  useCallback(() => {
-    console.log("👁️ Screen focused, hasPermission:", hasPermission);
-    if (hasPermission) {
-      console.log("👁️ Reloading photos on focus...");
+  // ────────────────────────────────────────────────
+  // EVENT LISTENER (OPTIONAL: REMOVE IF NOT NEEDED FOR DEFAULT CAMERA)
+  // ────────────────────────────────────────────────
+  useEffect(() => {
+    const listener = (data) => {
+      console.log("📸 New photo detected → refreshing gallery", data);
       loadPhotos();
-    }
-  }, [hasPermission, loadPhotos])
-);
+    };
 
-  // 7️⃣ EARLY RETURNS (AFTER ALL HOOKS)
+    const subscription = eventBus.addListener("photo_saved", listener);
+
+    return () => subscription.remove();
+  }, [loadPhotos]);
+
+  // ────────────────────────────────────────────────
+  // INITIAL LOAD
+  // ────────────────────────────────────────────────
+  useEffect(() => {
+    const init = async () => {
+      const permission = await requestPermissions();
+      setHasPermission(permission);
+
+      if (permission) loadPhotos();
+      else setLoading(false);
+    };
+
+    init();
+  }, []);
+
+  // ────────────────────────────────────────────────
+  // RELOAD ON SCREEN FOCUS
+  // ────────────────────────────────────────────────
+  useFocusEffect(
+    useCallback(() => {
+      if (hasPermission) loadPhotos();
+    }, [hasPermission, loadPhotos])
+  );
+
+  // ────────────────────────────────────────────────
+  // LOADING UI
+  // ────────────────────────────────────────────────
   if (loading) {
     return (
       <SafeAreaView style={styles.safeArea}>
         <TopNav />
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#000" />
+          <ActivityIndicator size="large" />
           <Text style={styles.loadingText}>Loading photos...</Text>
         </View>
       </SafeAreaView>
     );
   }
 
+  // ────────────────────────────────────────────────
+  // PERMISSION DENIED UI
+  // ────────────────────────────────────────────────
   if (!hasPermission) {
     return (
       <SafeAreaView style={styles.safeArea}>
         <TopNav />
         <View style={styles.loadingContainer}>
           <Text style={styles.errorText}>Permission denied</Text>
+
           <TouchableOpacity
             style={styles.retryButton}
             onPress={async () => {
@@ -201,22 +168,22 @@ useFocusEffect(
     );
   }
 
-  // 8️⃣ UI RETURN (NO HOOKS BELOW)
+  // ────────────────────────────────────────────────
+  // MAIN GALLERY UI
+  // ────────────────────────────────────────────────
   return (
     <SafeAreaView style={styles.safeArea}>
       <TopNav />
 
       <ScrollView
-        contentContainerStyle={[styles.container, { paddingBottom: height * 0.12 }]}
+        contentContainerStyle={[styles.container, { paddingBottom: 80 }]}
         showsVerticalScrollIndicator={false}
       >
+        {/* HEADER */}
         <View style={styles.headerRow}>
-          <View>
-            <Text style={styles.selectedText}>
-              Camera Images ({images.length})
-            </Text>
-            <Text>Selected ({selectedImages.length})</Text>
-          </View>
+          <Text style={styles.selectedText}>
+            Camera Photos ({images.length})
+          </Text>
 
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <View style={styles.cancelButton}>
@@ -225,112 +192,102 @@ useFocusEffect(
           </TouchableOpacity>
         </View>
 
-        {images.length > 0 ? (
-          <View style={styles.gridContainer}>
-            {images.map((img, index) => (
-              <TouchableOpacity
-                key={img.uri}
-                onPress={() =>
-                  setSelectedImages(prev =>
-                    prev.some(i => i.uri === img.uri)
-                      ? prev.filter(i => i.uri !== img.uri)
-                      : [...prev, img]
-                  )
-                }
-                style={[
-                  styles.imgContainer,
-                  {
-                    marginRight: (index + 1) % 3 === 0 ? 0 : width * 0.015,
-                    borderWidth: 4,
-                    borderColor: selectedImages.some(i => i.uri === img.uri)
-                      ? '#007AFF'
-                      : 'transparent',
-                  },
-                ]}
-              >
-                <Image source={{ uri: img.uri }} style={styles.img} />
-              </TouchableOpacity>
-            ))}
-          </View>
-        ) : (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No camera photos found</Text>
-          </View>
-        )}
+        {/* GRID */}
+        <View style={styles.gridContainer}>
+          {images.map((img, index) => (
+            <View
+              key={img.uri}
+              style={[
+                styles.imgContainer,
+                { marginRight: (index + 1) % 3 === 0 ? 0 : width * 0.015 },
+              ]}
+            >
+              <Image source={{ uri: img.uri }} style={styles.img} />
+            </View>
+          ))}
+        </View>
       </ScrollView>
 
-      <ThemeButton style={styles.continueBtn} text={`Next →`} />
+      <ThemeButton style={styles.continueBtn} text="Next →" />
     </SafeAreaView>
   );
 };
 
+// ────────────────────────────────────────────────
+// STYLES
+// ────────────────────────────────────────────────
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#fff' },
+
   container: {
     paddingHorizontal: width * 0.03,
     paddingVertical: height * 0.02,
-    flexGrow: 1,
   },
+
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%',
     marginBottom: height * 0.02,
-    alignItems: 'center',
   },
+
   selectedText: {
     fontWeight: '600',
     fontSize: width * 0.045,
     color: '#000',
   },
+
   cancelButton: {
     backgroundColor: colors.primary,
     paddingHorizontal: width * 0.05,
     paddingVertical: height * 0.01,
     borderRadius: 6,
   },
+
   cancelText: {
     color: '#FFF',
     fontSize: width * 0.04,
     fontWeight: '500',
   },
+
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'flex-start',
   },
+
   imgContainer: {
     width: (width - width * 0.09) / 3,
     height: (width - width * 0.09) / 3,
     marginBottom: width * 0.015,
-    marginRight: width * 0.015,
     borderRadius: 8,
     overflow: 'hidden',
     backgroundColor: '#f5f5f5',
   },
-  img: { width: '100%', height: '100%', resizeMode: 'cover' },
+
+  img: { width: '100%', height: '100%' },
+
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { marginTop: 10, fontSize: width * 0.04, color: '#666' },
-  errorText: { fontSize: width * 0.045, color: '#ff0000', marginBottom: 20 },
+
+  loadingText: { marginTop: 10, fontSize: width * 0.04 },
+
+  errorText: { fontSize: width * 0.045, marginBottom: 20 },
+
   retryButton: {
     backgroundColor: '#000',
     paddingHorizontal: width * 0.08,
     paddingVertical: height * 0.015,
     borderRadius: 8,
   },
+
   retryButtonText: {
     color: '#fff',
-    fontSize: width * 0.04,
     fontWeight: '600',
   },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: height * 0.1,
+
+  continueBtn: {
+    width: '85%',
+    alignSelf: 'center',
+    marginBottom: 10,
   },
-  emptyText: { fontSize: width * 0.045, color: '#666' },
-  continueBtn: { width: '85%', alignSelf: 'center' },
 });
 
 export default AutoCreateHive;

@@ -52,43 +52,51 @@ const AutoCreateHive = ({ navigation }) => {
   // ────────────────────────────────────────────────
   // LOAD ONLY CAMERA ROLL PHOTOS (FROM DEVICE CAMERA APP)
   // ────────────────────────────────────────────────
-  const loadPhotos = useCallback(async () => {
-    try {
-      setLoading(true);
+const loadPhotos = useCallback(async () => {
+  try {
+    setLoading(true);
 
-      const params = {
-        first: 5000,
-        assetType: 'Photos',
-        include: ['filename'],
-      };
+    const params = {
+      first: 5000,
+      assetType: 'Photos',
+      include: ['filename', 'timestamp'],
+    };
 
-      // Filter to camera roll album
-      if (Platform.OS === 'ios') {
-        params.groupTypes = 'SavedPhotos';
-      } else {
-        // On Android, filter by 'Camera' album (default camera saves here)
-        params.groupName = 'Camera';
-      }
-
-      const photos = await CameraRoll.getPhotos(params);
-
-      // Map to required format (no additional filtering needed for camera source)
-      const cameraPhotos = photos.edges
-        .map(edge => ({
-          uri: edge.node.image.uri,
-          timestamp: edge.node.timestamp,
-          filename: edge.node.image.filename,
-        }))
-        .sort((a, b) => b.timestamp - a.timestamp);
-
-      setImages(cameraPhotos);
-
-    } catch (error) {
-      console.log("Error loading gallery:", error);
-    } finally {
-      setLoading(false);
+    if (Platform.OS === 'ios') {
+      params.groupTypes = 'SavedPhotos';
+    } else {
+      params.groupName = 'Camera';
     }
-  }, []);
+
+    const photos = await CameraRoll.getPhotos(params);
+
+    // Today’s date at 00:00
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const cameraPhotos = photos.edges
+      .map(edge => ({
+        uri: edge.node.image.uri,
+        timestamp: edge.node.timestamp,
+        filename: edge.node.image.filename,
+      }))
+      .filter(photo => {
+        const d = new Date(photo.timestamp * 1000); 
+        d.setHours(0, 0, 0, 0);
+
+        return d.getTime() === today.getTime(); // only today's photos
+      })
+      .sort((a, b) => b.timestamp - a.timestamp);
+
+    setImages(cameraPhotos);
+
+  } catch (error) {
+    console.log("Error loading gallery:", error);
+  } finally {
+    setLoading(false);
+  }
+}, []);
+
 
   // ────────────────────────────────────────────────
   // EVENT LISTENER (OPTIONAL: REMOVE IF NOT NEEDED FOR DEFAULT CAMERA)

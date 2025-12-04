@@ -10,6 +10,9 @@ import TopNav from '../components/TopNavbar';
 import CustomText from '../components/CustomText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ImageBackground } from "react-native";
+
+import axios from "axios";
+
 // assets
 const hero = require('../../assets/hero.png');
 const picnic1 = require('../../assets/picnic1.jpg');
@@ -24,6 +27,8 @@ const Home = ({ navigation, route }) => {
   const opacityAnim = useRef(new Animated.Value(1)).current;
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState(null);
+
+  const [hives, setHives] = useState(null);
 
   // ADD THESE TWO FUNCTIONS HERE - RIGHT AFTER useState DECLARATIONS
   // Format date → DD/MM/YYYY
@@ -163,10 +168,50 @@ const Home = ({ navigation, route }) => {
   };
 
   // Filter events based on search query
-  const filteredEvents = events.filter(event =>
-    event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (event.description && event.description.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const filteredHives = hives
+    ? hives.filter(hive =>
+      hive.hiveName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      hive.description?.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    : [];
+
+
+
+
+  useEffect(() => {
+    const fetchHives = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+
+        if (!token) {
+          console.log("No auth token found. Please login first.");
+          return;
+        }
+
+        const res = await axios.get(
+          "https://snaphive-node.vercel.app/api/hives",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setHives(res.data.hives);
+        console.log("User Hives:", res.data.hives);
+
+      } catch (err) {
+        console.error("Error loading hives:", err.response?.data || err);
+      }
+    };
+
+    fetchHives();
+  }, []);
+
+
+
+
+
 
   return (
     <SafeAreaProvider>
@@ -384,53 +429,63 @@ const Home = ({ navigation, route }) => {
                   marginTop: 16,
                 }}
               >
-                {filteredEvents.length > 0 ? (
-                  filteredEvents.map((item, index) => (
+                {filteredHives.length > 0 ? (
+                  filteredHives.map((item, index) => (
                     <TouchableOpacity
                       key={index}
-                      style={{ width: '48%' }}
+                      style={{ width: "48%" }}
                       onPress={() =>
-                        navigation.navigate('FolderLayout', {
-                          image: item.img,
-                          folderName: item.title,
+                        navigation.navigate("FolderLayout", {
+                          image: { uri: item.coverImage },
+                          folderName: item.hiveName,
                           date: item.createdAt,
-                          owner: 'Pritam',
-                          photos: item.photos,
-                          eventTitle: item.title,
+                          owner: user?.name,
+                          photos: item.photos || [],
+                          eventTitle: item.hiveName,
                           eventDescription: item.description,
                           eventEndTime: item.endTime,
                           eventExpiryDate: item.expiryDate,
                         })
                       }
                     >
-                      <View style={[styles.eventCard,]}>
+                      <View style={[styles.eventCard]}>
+                        <Image
+                          source={{ uri: item.coverImage }}
+                          style={styles.eventImage}
+                        />
 
-                        <Image source={item.img} style={styles.eventImage} />
-
-                        <TouchableWithoutFeedback     onPress={() => navigation.navigate('InviteMember')}>
-                          <View style={{
-
-                            position: 'absolute', right: 18, top: 20, padding: 8,
-                            borderRadius: 50,
-                            backgroundColor: "rgba(255,255,255,0.7)",
-                          }}>
-                            <Share2 size={14} color='#2e2e2eff'/>
+                        <TouchableWithoutFeedback
+                          onPress={() => navigation.navigate("InviteMember")}
+                        >
+                          <View
+                            style={{
+                              position: "absolute",
+                              right: 18,
+                              top: 20,
+                              padding: 8,
+                              borderRadius: 50,
+                              backgroundColor: "rgba(255,255,255,0.7)",
+                            }}
+                          >
+                            <Share2 size={14} color="#2e2e2eff" />
                           </View>
                         </TouchableWithoutFeedback>
+
                         <View style={styles.eventInfo}>
                           <CustomText weight="bold" style={styles.eventTitle}>
-                            {item.title}
+                            {item.hiveName}
                           </CustomText>
 
                           <View style={styles.eventTimeRow}>
                             <CalendarDays width={16} height={16} color="#F98935" />
                             <CustomText weight="medium" style={styles.eventTimeText}>
-                              {formatDisplayTime(item.endTime)} - {formatDisplayDate(item.expiryDate)}
+                              {formatDisplayTime(item.endTime)} -{" "}
+                              {formatDisplayDate(item.expiryDate)}
                             </CustomText>
                           </View>
 
                           <CustomText weight="medium" style={styles.eventDescription}>
-                            {item.description || 'No description'}
+                            {item.description || "No description"}
                           </CustomText>
 
                           <View style={styles.memberRow}>
@@ -451,7 +506,6 @@ const Home = ({ navigation, route }) => {
                         </View>
                       </View>
                     </TouchableOpacity>
-
                   ))
                 ) : (
 

@@ -16,6 +16,8 @@ import ThemeButton from '../components/ThemeButton';
 import { colors } from '../Theme/theme';
 import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // assets
 const hero = require('../../assets/hero.png');
 const picnic1 = require('../../assets/picnic1.jpg');
@@ -75,76 +77,86 @@ const CreateHive = ({ navigation, route }) => {
         { label: 'Public', value: '2' },
     ];
     useEffect(() => {
-  if (route?.params?.cameraPhotos) {
-    console.log('Received camera photos:', route.params.cameraPhotos.length);
-  }
-}, [route?.params?.cameraPhotos]);
+        if (route?.params?.cameraPhotos) {
+            console.log('Received camera photos:', route.params.cameraPhotos.length);
+        }
+    }, [route?.params?.cameraPhotos]);
 
 
-const handleCreateHive = () => {
-  if (!hiveName.trim()) {
-    alert('Please enter a hive name');
-    return;
-  }
+    const handleCreateHive = async () => {
+        try {
+            if (!hiveName.trim()) {
+                alert("Hive name is required");
+                return;
+            }
 
-  if (!uploadedImage) {
-    alert('Please upload a cover image');
-    return;
-  }
+            if (!uploadedImage) {
+                alert("Please upload a cover image");
+                return;
+            }
 
-  if (!checked) {
-    alert("Please accept the Content Responsibility & Privacy Policy.");
-    return;
-  }
+            if (!checked) {
+                alert("Please accept the privacy policy");
+                return;
+            }
 
-  if (isEnabled) {
-    if (!startDate || !startTime || !endTime || !endDate) {
-      alert('Please fill all date and time fields for temporary event');
-      return;
-    }
-  }
+            // Prepare normal fields
+            const payload = {
+                hiveName,
+                description: hiveDescription || "No description",
+                privacyMode: uploadType,
+                isTemporary: isEnabled,
+                eventDate: isEnabled ? formatAPIDate(startDate) : "",
+                startTime: isEnabled ? formatAPITime(startTime) : "",
+                endTime: isEnabled ? formatAPITime(endTime) : "",
+                expiryDate: isEnabled ? formatAPIDate(endDate) : "",
+            };
 
-  // Get camera photos from route params
-  const cameraPhotos = route?.params?.cameraPhotos || [];
-  
-  // Convert camera photos to the format needed for uploadedImages
-  const photoUris = cameraPhotos.map(photo => photo.uri);
+            const formData = new FormData();
+            for (let key in payload) {
+                formData.append(key, payload[key]);
+            }
 
-  const newEvent = {
-    img: typeof uploadedImage === 'string'
-      ? { uri: uploadedImage }
-      : uploadedImage,
-    title: hiveName,
-    description: hiveDescription || 'No description',
-    count: `${photoUris.length} Photos`, // Update count
-    photos: photoUris, // Add the photos array HERE
-    createdAt: new Date().toISOString(),
-    isTemporary: isEnabled,
-    eventDate: startDate,
-    startTime: startTime,
-    endTime: endTime,
-    expiryDate: endDate,
-    hiveType: hiveType,
-  };
+            // Attach image file
+            formData.append("coverImage", {
+                uri: uploadedImage,
+                name: "cover.jpg",
+                type: "image/jpeg"
+            });
 
-  addEvent(newEvent);
-  
-  setUploadedImage(null);
-  setHiveName("");
-  setHiveDescription("");
-  setStartDate(new Date());
-  setStartTime(new Date());
-  setEndTime(new Date());
-  setEndDate(new Date());
-  setIsEnabled(false);
-  setHiveType(null);
-  
-  // Navigate to Home and reset navigation stack
-  navigation.reset({
-    index: 0,
-    routes: [{ name: 'Home' }],
-  });
-};
+            const token = await AsyncStorage.getItem("token");
+
+            const response = await fetch("https://snaphive-node.vercel.app/api/hives", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data"
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+            console.log("Create Hive result:", result);
+
+            if (!response.ok) {
+                alert(result.message || "Error creating hive");
+                return;
+            }
+
+            alert("Hive created successfully!");
+
+            navigation.reset({
+                index: 0,
+                routes: [{ name: "Home" }],
+            });
+
+        } catch (error) {
+            console.log("Create Hive Error:", error);
+            alert("Something went wrong!");
+        }
+    };
+
+
 
     const handleChange = (text) => {
         let formatted = text.replace(/[^0-9]/g, '');

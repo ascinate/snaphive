@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   ScrollView,
@@ -8,6 +8,7 @@ import {
   Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { launchImageLibrary } from "react-native-image-picker";
 import {
   ChevronRight, Crown, Languages, LogOut, Share2,
   QrCode,
@@ -33,7 +34,7 @@ const profilePic = require("../../assets/picnic3.jpg");
 
 const Profile = ({ navigation, }) => {
   const [modalVisible, setModalVisible] = useState(false);
-    const { showLoader, hideLoader } = useLoader();
+  const { showLoader, hideLoader } = useLoader();
   const openStore = () => {
     const playStoreUrl = "https://play.google.com/store/apps/details?id=com.snaphive";
     const appStoreUrl = "https://apps.apple.com/app/id1234567890";
@@ -44,6 +45,17 @@ const Profile = ({ navigation, }) => {
       Alert.alert("Error", "Unable to open the store")
     );
   };
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const data = await AsyncStorage.getItem("user");
+      if (data) {
+        setUser(JSON.parse(data));
+      }
+    })();
+  }, []);
 
   const shareApp = async () => {
     try {
@@ -59,29 +71,29 @@ const Profile = ({ navigation, }) => {
   };
 
 
- const handleLogout = async () => {
-  try {
-    showLoader(); 
+  const handleLogout = async () => {
+    try {
+      showLoader();
 
-    await AsyncStorage.removeItem("token");
-    await AsyncStorage.removeItem("user");
+      await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("user");
 
-    navigation.replace("Login"); 
-  } catch (err) {
-    Alert.alert("Error", "Failed to logout. Please try again.");
-    console.error("Logout error:", err);
-  } finally {
-    hideLoader(); 
-  }
-};
+      navigation.replace("Login");
+    } catch (err) {
+      Alert.alert("Error", "Failed to logout. Please try again.");
+      console.error("Logout error:", err);
+    } finally {
+      hideLoader();
+    }
+  };
 
 
   return (
     <ScreenLayout
       navigation={navigation}
       image={createEvent}
-      folderName="Janifer Danis"
-      date="+91 1841 510 1450"
+      folderName={user?.name || "User"}
+      date={user?.email || "No Email"}
       RightIcon={
         <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
           <Pencil height={16} width={16} />
@@ -90,13 +102,21 @@ const Profile = ({ navigation, }) => {
 
       OverlayContent={
         <View style={styles.profileOverlay}>
-          <Image source={profilePic} style={styles.profileImage} />
+          <Image
+            source={
+              user?.profileImage
+                ? { uri: user.profileImage }
+                : require("../../assets/profile.jpg")
+            }
+            style={styles.profileImage}
+          />
           <View>
             <CustomText weight="bold" style={styles.profileName}>
-              Janifer Danis
+              {user?.name || "User Name"}
             </CustomText>
+
             <CustomText style={styles.profileNumber}>
-              +91 1841 510 1450
+              {user?.email || "No Email"}
             </CustomText>
           </View>
         </View>
@@ -228,8 +248,8 @@ const Profile = ({ navigation, }) => {
         <PremiumModal
           visible={modalVisible}
           onClose={() => setModalVisible(false)}
-                  beforeImage={beforeImage}
-                afterImage={afterImage}
+          beforeImage={beforeImage}
+          afterImage={afterImage}
         />
       </ScrollView>
     </ScreenLayout>
@@ -283,6 +303,7 @@ const styles = StyleSheet.create({
     borderColor: "#fff",
   },
   profileName: {
+    textAlign: "center",
     color: "#fff",
     fontSize: 20,
   },

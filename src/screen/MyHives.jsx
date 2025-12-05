@@ -40,15 +40,8 @@ const { width, height } = Dimensions.get('window');
 
 const MyHives = ({ navigation, route }) => {
     const [refreshing, setRefreshing] = useState(false);
-    const { events, setEvents } = useContext(EventContext);
+    const { hives } = useContext(EventContext);
 
-    const onRefresh = useCallback(() => {
-        setRefreshing(true);
-        setTimeout(() => {
-            setEvents(prev => [...prev]);
-            setRefreshing(false);
-        }, 1000);
-    }, [setEvents]);
 
     return (
         <SafeAreaProvider>
@@ -59,7 +52,7 @@ const MyHives = ({ navigation, route }) => {
                     style={styles.container}
                     showsVerticalScrollIndicator={false}
                     refreshControl={
-                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        <RefreshControl refreshing={refreshing} />
                     }>
                     {/* Header Section */}
 
@@ -85,7 +78,7 @@ const MyHives = ({ navigation, route }) => {
                                 placeholder="Search hive..."
                                 placeholderTextColor="#9CA3AF"
                             />
-                            
+
                         </View>
                     </View>
 
@@ -94,12 +87,13 @@ const MyHives = ({ navigation, route }) => {
                     <View style={styles.row}>
                         <View style={styles.cardWrap}>
                             <View
-                                style={[styles.dashCard,{backgroundColor: colors.primary}]}
+                                style={[styles.dashCard, { backgroundColor: colors.primary }]}
 
                             >
                                 <View>
                                     <CustomText weight="bold" style={styles.cardText}>
-                                        {events.length}
+                                        {hives.length}
+
                                     </CustomText>
                                     <CustomText weight="medium" style={{ color: '#fff' }}>
                                         Total Hives
@@ -110,12 +104,13 @@ const MyHives = ({ navigation, route }) => {
 
                         <View style={styles.cardWrap}>
                             <View
-                               style={[styles.dashCard,{backgroundColor: '#cc4faa'}]}
-          
+                                style={[styles.dashCard, { backgroundColor: '#cc4faa' }]}
+
                             >
                                 <View>
                                     <CustomText weight="bold" style={styles.cardText}>
-                                        {events.reduce((total, event) => total + (event.photos?.length || 0), 0)}
+                                        {hives.reduce((total, hive) => total + (hive.photos?.length || 0), 0)}
+
                                     </CustomText>
                                     <CustomText weight="medium" style={{ color: '#fff' }}>
                                         Photos
@@ -134,54 +129,54 @@ const MyHives = ({ navigation, route }) => {
 
                     {/* Event Row Section */}
                     <View style={{ marginTop: 20, paddingBottom: 100 }}>
-                        {events.length > 0 ? (
-                            events.map((item, index) => (
+                        {hives && hives.length > 0 ? (
+                            hives.map((item, index) => (
                                 <TouchableOpacity
                                     key={index}
                                     onPress={() =>
-                                        navigation.navigate('FolderLayout', {
-                                            image: item.img,
-                                            folderName: item.title,
+                                        navigation.navigate("FolderLayout", {
+                                            image: { uri: item.coverImage },
+                                            folderName: item.hiveName,
                                             date: item.createdAt,
-                                            owner: "Pritam",
-                                            photos: item.photos,
+                                            owner: item.ownerName,
+                                            photos: item.photos || [],
                                         })
                                     }
                                 >
                                     <View style={styles.eventRow}>
-                                        <Image source={item.img} style={styles.eventImg} />
-                                        <View style={{ flex: 1, marginLeft: width * 0.03 }}>
+                                        <Image
+                                            source={{ uri: item.coverImage }}
+                                            style={styles.eventImg}
+                                        />
+
+                                        <View style={{ flex: 1, marginLeft: 10 }}>
                                             <CustomText weight="bold" style={styles.eventTitle}>
-                                                {item.title}
+                                                {item.hiveName}
                                             </CustomText>
+
                                             <CustomText weight="medium" style={styles.mtop}>
-                                                {item.description || 'No description'}
+                                                {item.description || "No description"}
                                             </CustomText>
-                                            <View style={{ flexDirection: 'row', gap: 20, marginTop: 6 }}>
-                                                <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+
+                                            <View style={{ flexDirection: "row", gap: 20, marginTop: 6 }}>
+                                                <View style={{ flexDirection: "row", gap: 4, alignItems: "center" }}>
                                                     <Users width={14} height={14} color="#6B7280" />
-                                                    <CustomText style={{ color: '#6B7280' }}>1</CustomText>
+                                                    <CustomText style={{ color: "#6B7280" }}>1</CustomText>
                                                 </View>
 
-                                                <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                                                <View style={{ flexDirection: "row", gap: 4, alignItems: "center" }}>
                                                     <FileImage width={14} height={14} color="#6B7280" />
-                                                    <CustomText style={{ color: '#6B7280' }}>{item.count}</CustomText>
+                                                    <CustomText style={{ color: "#6B7280" }}>
+                                                        {item.photos?.length || 0}
+                                                    </CustomText>
                                                 </View>
-
-                                                {item.isTemporary && (
-                                                    <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                                                        <Clock5 width={14} height={14} color="#ea580c" />
-                                                        <CustomText style={{ color: '#ea580c' }}>
-                                                            {item.expiryDate}
-                                                        </CustomText>
-                                                    </View>
-                                                )}
                                             </View>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
                             ))
                         ) : (
+
                             <View
                                 style={{
                                     alignItems: 'center',

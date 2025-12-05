@@ -28,7 +28,8 @@ const Home = ({ navigation, route }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState(null);
 
-  const [hives, setHives] = useState(null);
+const { hives, setHives } = useContext(EventContext);
+
 
   // ADD THESE TWO FUNCTIONS HERE - RIGHT AFTER useState DECLARATIONS
   // Format date → DD/MM/YYYY
@@ -197,7 +198,9 @@ const Home = ({ navigation, route }) => {
           }
         );
 
-        setHives(res.data.hives);
+  setHives(res.data.hives);       // keep local useState if you want
+setEvents(res.data.hives);      // ALSO push hives into EventContext
+
         console.log("User Hives:", res.data.hives);
 
       } catch (err) {

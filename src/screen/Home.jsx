@@ -101,6 +101,8 @@ const { hives, setHives } = useContext(EventContext);
     );
   }, [setEvents]);
 
+  
+
   useEffect(() => {
     // Run immediately when component mounts
     removeExpiredEvents();
@@ -442,6 +444,7 @@ setEvents(res.data.hives);      // ALSO push hives into EventContext
                           image: { uri: item.coverImage },
                           folderName: item.hiveName,
                           date: item.createdAt,
+                          hiveId: item._id,
                           owner: user?.name,
                           photos: item.photos || [],
                           eventTitle: item.hiveName,

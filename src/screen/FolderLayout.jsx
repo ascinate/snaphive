@@ -29,6 +29,9 @@ import { launchImageLibrary } from "react-native-image-picker";
 import { Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
 
+
+import axios from "axios";
+
 // SVGs
 import QR from "../../assets/svg/qr.svg";
 
@@ -58,6 +61,7 @@ const FolderLayout = ({ navigation, route }) => {
     image,
     folderName,
     date,
+    hiveId,
     owner,
     photos = [],
     eventTitle,
@@ -71,6 +75,59 @@ const FolderLayout = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const { events, setEvents } = useContext(EventContext);
+
+  console.log("hive id:" + hiveId);
+
+  useEffect(() => {
+    const fetchHive = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+
+        if (!token) {
+          console.log("No auth token found. Please login first.");
+          return;
+        }
+
+        const res = await axios.get(
+          `https://snaphive-node.vercel.app/api/hives/${hiveId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log("Fetched Hive Response:", res.data);
+
+        // Hive object is inside res.data.data
+        const hive = res.data.data;
+
+        console.log("Hive Object:", hive);
+
+        const photosFromAPI = hive.images || [];
+
+        console.log("Hive Photos:", photosFromAPI);
+
+        setUploadedImages(photosFromAPI);
+
+      } catch (err) {
+        console.error(
+          "Error fetching hive:",
+          err.response?.data || err.message || err
+        );
+      }
+    };
+
+    if (hiveId) {
+      fetchHive();
+    }
+  }, [hiveId]);
+
+
+
+
+
+
 
   const formatDisplayDate = (date) => {
     if (!date) return 'N/A';
@@ -95,74 +152,118 @@ const FolderLayout = ({ navigation, route }) => {
     return `${hours}:${minutes} ${ampm}`;
   };
 
-  useEffect(() => {
-    loadSavedImages();
-  }, []);
+  // useEffect(() => {
+  //   loadSavedImages();
+  // }, []);
 
-const loadSavedImages = async () => {
-  try {
-    // First, try to load from AsyncStorage
-    const saved = await AsyncStorage.getItem(`folder_${folderName}`);
-    
-    if (saved) {
-      const savedPhotos = JSON.parse(saved);
-      setUploadedImages(savedPhotos);
-      console.log('Loaded from storage:', savedPhotos.length);
-    } 
-    // If no saved photos but we have photos from route params, use those
-    else if (photos && photos.length > 0) {
-      setUploadedImages(photos);
-      // Save them to AsyncStorage for persistence
-      await AsyncStorage.setItem(
-        `folder_${folderName}`,
-        JSON.stringify(photos)
-      );
-      console.log('Loaded from route params:', photos.length);
-    }
-  } catch (e) {
-    console.log("Failed to load images", e);
-    // Fallback to route params if storage fails
-    if (photos && photos.length > 0) {
-      setUploadedImages(photos);
-    }
-  }
-};
+  const loadSavedImages = async () => {
+    try {
+      // First, try to load from AsyncStorage
+      const saved = await AsyncStorage.getItem(`folder_${folderName}`);
 
-  const handleUpload = async () => {
-    const options = {
-      mediaType: "photo",
-      includeBase64: false,
-      quality: 0.8,
-      selectionLimit: 0,
-    };
-
-    launchImageLibrary(options, async (response) => {
-      if (response.didCancel || response.errorCode) return;
-
-      if (response.assets && response.assets.length > 0) {
-        const newUris = response.assets.map(item => item.uri);
-
-        const newImages = [...uploadedImages, ...newUris];
-        setUploadedImages(newImages);
-
+      if (saved) {
+        const savedPhotos = JSON.parse(saved);
+        setUploadedImages(savedPhotos);
+        console.log('Loaded from storage:', savedPhotos.length);
+      }
+      // If no saved photos but we have photos from route params, use those
+      else if (photos && photos.length > 0) {
+        setUploadedImages(photos);
+        // Save them to AsyncStorage for persistence
         await AsyncStorage.setItem(
           `folder_${folderName}`,
-          JSON.stringify(newImages)
+          JSON.stringify(photos)
         );
-
-        // UPDATE THE EVENT IN CONTEXT
-        setEvents(prevEvents => 
-          prevEvents.map(event => 
-            event.title === eventTitle 
-              ? { ...event, photos: newImages }
-              : event
-          )
-        );
-
-        console.log("Images saved:", newImages.length);
+        console.log('Loaded from route params:', photos.length);
       }
-    });
+    } catch (e) {
+      console.log("Failed to load images", e);
+      // Fallback to route params if storage fails
+      if (photos && photos.length > 0) {
+        setUploadedImages(photos);
+      }
+    }
   };
+
+const handleUpload = async () => {
+  const options = {
+    mediaType: "photo",
+    includeBase64: false,
+    quality: 0.5, // Reduced quality to avoid large file sizes
+    selectionLimit: 0, // multi-image enabled
+    maxWidth: 1920, // Add max width constraint
+    maxHeight: 1920, // Add max height constraint
+  };
+
+  launchImageLibrary(options, async (response) => {
+    if (response.didCancel || response.errorCode) return;
+    if (!response.assets || response.assets.length === 0) return;
+
+    try {
+      const token = await AsyncStorage.getItem("token");
+
+      if (!token) {
+        console.log("No auth token found");
+        Alert.alert("Error", "Authentication token not found. Please login again.");
+        return;
+      }
+
+      // Create FormData with proper structure
+      let formData = new FormData();
+
+      response.assets.forEach((img, index) => {
+        const file = {
+          uri: img.uri,
+          type: img.type || 'image/jpeg', // Fallback to jpeg if type is undefined
+          name: img.fileName || `image_${Date.now()}_${index}.jpg`,
+        };
+        
+        // Append each image
+        formData.append("images", file);
+      });
+
+      console.log("Uploading images:", response.assets.length);
+
+      const res = await axios.post(
+        `https://snaphive-node.vercel.app/api/hives/${hiveId}/images`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+          timeout: 60000, // 60 second timeout
+        }
+      );
+
+      console.log("Upload Response:", res.data);
+
+      const updatedImages = res.data.images;
+      setUploadedImages(updatedImages);
+      
+      Alert.alert("Success", `${response.assets.length} image(s) uploaded successfully!`);
+
+    } catch (error) {
+      console.log("Upload Error:", error.response?.data || error.message);
+      
+      // Better error handling
+      if (error.response) {
+        // Server responded with error
+        if (error.response.status === 403) {
+          Alert.alert("Upload Failed", "Permission denied. Please check your authentication or try again.");
+        } else if (error.response.status === 413) {
+          Alert.alert("Upload Failed", "Images too large. Please select smaller images or fewer images at once.");
+        } else {
+          Alert.alert("Upload Failed", error.response.data?.message || "Something went wrong. Please try again.");
+        }
+      } else if (error.code === 'ECONNABORTED') {
+        Alert.alert("Upload Failed", "Upload timeout. Please check your internet connection and try again.");
+      } else {
+        Alert.alert("Upload Failed", "Network error. Please check your internet connection.");
+      }
+    }
+  });
+};
 
   const members = [
     { id: 1, name: "Demola Aoki", dp: dp },
@@ -652,7 +753,7 @@ const styles = StyleSheet.create({
   },
 
   aiMagicContainer: {
-height: height * 0.47
+    height: height * 0.47
   },
   aiMagicContent: {
     paddingBottom: height * 0.10,

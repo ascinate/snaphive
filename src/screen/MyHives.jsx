@@ -137,7 +137,7 @@ const MyHives = ({ navigation, route }) => {
                                         navigation.navigate("FolderLayout", {
                                             image: { uri: item.coverImage },
                                             folderName: item.hiveName,
-                                            
+                                                     hiveId: item._id,
                                             date: item.createdAt,
                                             owner: item.ownerName,
                                             photos: item.photos || [],

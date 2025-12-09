@@ -52,7 +52,7 @@ import FolderLayout from './src/screen/FolderLayout'
 import MyHives from './src/screen/MyHives'
 import FolderStockPhotos from './src/screen/FolderStockPhotos'
 import AutoCreateHive from './src/screen/AutoCreateHive'
-
+import PendingRequest from './src/screen/PendingRequest'
 // Demo camera UI
 import ClickPhotoTwo from "./src/screen/ClickPhotoTwo";
 import ClickPhotoThree from "./src/screen/ClickPhotoThree";
@@ -113,6 +113,7 @@ const App = () => {
                 <Stack.Screen name="MyHives" component={MyHives} />
                 <Stack.Screen name="FolderStockPhotos" component={FolderStockPhotos} />
                 <Stack.Screen name="AutoCreateHive" component={AutoCreateHive} />
+                              <Stack.Screen name="PendingRequest" component={PendingRequest} />
               </Stack.Navigator>
             </NavigationContainer>
           </EventProvider>

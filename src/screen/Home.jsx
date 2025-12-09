@@ -28,7 +28,7 @@ const Home = ({ navigation, route }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState(null);
 
-const { hives, setHives } = useContext(EventContext);
+  const { hives, setHives } = useContext(EventContext);
 
 
   // ADD THESE TWO FUNCTIONS HERE - RIGHT AFTER useState DECLARATIONS
@@ -101,7 +101,7 @@ const { hives, setHives } = useContext(EventContext);
     );
   }, [setEvents]);
 
-  
+
 
   useEffect(() => {
     // Run immediately when component mounts
@@ -200,8 +200,8 @@ const { hives, setHives } = useContext(EventContext);
           }
         );
 
-  setHives(res.data.hives);       // keep local useState if you want
-setEvents(res.data.hives);      // ALSO push hives into EventContext
+        setHives(res.data.hives);       // keep local useState if you want
+        setEvents(res.data.hives);      // ALSO push hives into EventContext
 
         console.log("User Hives:", res.data.hives);
 

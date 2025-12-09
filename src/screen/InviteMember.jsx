@@ -24,7 +24,7 @@ const flag4 = require("../../assets/flag4.png");
 // Images
 const createEvent = require("../../assets/background.png");
 const profilePic = require("../../assets/picnic3.jpg");
-const ContactUs = ({ navigation, route }) => {
+const InviteMember = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("English");
@@ -412,4 +412,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ContactUs;
+export default InviteMember;

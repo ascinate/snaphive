@@ -185,85 +185,85 @@ const FolderLayout = ({ navigation, route }) => {
     }
   };
 
-const handleUpload = async () => {
-  const options = {
-    mediaType: "photo",
-    includeBase64: false,
-    quality: 0.5, // Reduced quality to avoid large file sizes
-    selectionLimit: 0, // multi-image enabled
-    maxWidth: 1920, // Add max width constraint
-    maxHeight: 1920, // Add max height constraint
-  };
+  const handleUpload = async () => {
+    const options = {
+      mediaType: "photo",
+      includeBase64: false,
+      quality: 0.5, // Reduced quality to avoid large file sizes
+      selectionLimit: 0, // multi-image enabled
+      maxWidth: 1920, // Add max width constraint
+      maxHeight: 1920, // Add max height constraint
+    };
 
-  launchImageLibrary(options, async (response) => {
-    if (response.didCancel || response.errorCode) return;
-    if (!response.assets || response.assets.length === 0) return;
+    launchImageLibrary(options, async (response) => {
+      if (response.didCancel || response.errorCode) return;
+      if (!response.assets || response.assets.length === 0) return;
 
-    try {
-      const token = await AsyncStorage.getItem("token");
+      try {
+        const token = await AsyncStorage.getItem("token");
 
-      if (!token) {
-        console.log("No auth token found");
-        Alert.alert("Error", "Authentication token not found. Please login again.");
-        return;
-      }
-
-      // Create FormData with proper structure
-      let formData = new FormData();
-
-      response.assets.forEach((img, index) => {
-        const file = {
-          uri: img.uri,
-          type: img.type || 'image/jpeg', // Fallback to jpeg if type is undefined
-          name: img.fileName || `image_${Date.now()}_${index}.jpg`,
-        };
-        
-        // Append each image
-        formData.append("images", file);
-      });
-
-      console.log("Uploading images:", response.assets.length);
-
-      const res = await axios.post(
-        `https://snaphive-node.vercel.app/api/hives/${hiveId}/images`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-          timeout: 60000, // 60 second timeout
+        if (!token) {
+          console.log("No auth token found");
+          Alert.alert("Error", "Authentication token not found. Please login again.");
+          return;
         }
-      );
 
-      console.log("Upload Response:", res.data);
+        // Create FormData with proper structure
+        let formData = new FormData();
 
-      const updatedImages = res.data.images;
-      setUploadedImages(updatedImages);
-      
-      Alert.alert("Success", `${response.assets.length} image(s) uploaded successfully!`);
+        response.assets.forEach((img, index) => {
+          const file = {
+            uri: img.uri,
+            type: img.type || 'image/jpeg', // Fallback to jpeg if type is undefined
+            name: img.fileName || `image_${Date.now()}_${index}.jpg`,
+          };
 
-    } catch (error) {
-      console.log("Upload Error:", error.response?.data || error.message);
-      
-      // Better error handling
-      if (error.response) {
-        // Server responded with error
-        if (error.response.status === 403) {
-          Alert.alert("Upload Failed", "Permission denied. Please check your authentication or try again.");
-        } else if (error.response.status === 413) {
-          Alert.alert("Upload Failed", "Images too large. Please select smaller images or fewer images at once.");
+          // Append each image
+          formData.append("images", file);
+        });
+
+        console.log("Uploading images:", response.assets.length);
+
+        const res = await axios.post(
+          `https://snaphive-node.vercel.app/api/hives/${hiveId}/images`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+            timeout: 60000, // 60 second timeout
+          }
+        );
+
+        console.log("Upload Response:", res.data);
+
+        const updatedImages = res.data.images;
+        setUploadedImages(updatedImages);
+
+        Alert.alert("Success", `${response.assets.length} image(s) uploaded successfully!`);
+
+      } catch (error) {
+        console.log("Upload Error:", error.response?.data || error.message);
+
+        // Better error handling
+        if (error.response) {
+          // Server responded with error
+          if (error.response.status === 403) {
+            Alert.alert("Upload Failed", "Permission denied. Please check your authentication or try again.");
+          } else if (error.response.status === 413) {
+            Alert.alert("Upload Failed", "Images too large. Please select smaller images or fewer images at once.");
+          } else {
+            Alert.alert("Upload Failed", error.response.data?.message || "Something went wrong. Please try again.");
+          }
+        } else if (error.code === 'ECONNABORTED') {
+          Alert.alert("Upload Failed", "Upload timeout. Please check your internet connection and try again.");
         } else {
-          Alert.alert("Upload Failed", error.response.data?.message || "Something went wrong. Please try again.");
+          Alert.alert("Upload Failed", "Network error. Please check your internet connection.");
         }
-      } else if (error.code === 'ECONNABORTED') {
-        Alert.alert("Upload Failed", "Upload timeout. Please check your internet connection and try again.");
-      } else {
-        Alert.alert("Upload Failed", "Network error. Please check your internet connection.");
       }
-    }
-  });
-};
+    });
+  };
 
   const members = [
     { id: 1, name: "Demola Aoki", dp: dp },
@@ -354,7 +354,23 @@ const handleUpload = async () => {
               >
                 <CustomText weight="medium">Invite Member</CustomText>
               </TouchableOpacity>
+
+
+              <View style={{ height: 1, backgroundColor: '#E5E7EB' }} />
+
+              <TouchableOpacity
+                onPress={() => {
+                  setMenuVisible(false);
+                  navigation.navigate("PendingRequest");
+                }}
+                style={{ paddingVertical: height * 0.015, paddingHorizontal: width * 0.04 }}
+              >
+                <CustomText weight="medium">Pending Request</CustomText>
+              </TouchableOpacity>
+
             </View>
+
+
           )}
         </View>
       }
@@ -385,9 +401,7 @@ const handleUpload = async () => {
 
           <ScrollView
             style={{ flex: 1 }}
-
-            showsVerticalScrollIndicator={false}
-          >
+            showsVerticalScrollIndicator={false}>
             {selectedTab === "Gallery" && (
               <View style={styles.grid}>
                 {uploadedImages.length === 0 ? (

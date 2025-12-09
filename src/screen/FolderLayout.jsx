@@ -100,7 +100,7 @@ useEffect(() => {
 
       setUploadedImages(photosFromAPI);
 
-      // ✅ UPDATE EVENT CONTEXT WHEN FETCHING
+
       setEvents((prevEvents) => 
         prevEvents.map((event) => 
           event.hiveId === hiveId 
@@ -108,7 +108,6 @@ useEffect(() => {
             : event
         )
       );
-
     } catch (err) {
       console.error("Error fetching hive:", err.response?.data || err.message || err);
     }
@@ -228,7 +227,6 @@ const handleUpload = async () => {
       const updatedImages = res.data.images;
       setUploadedImages(updatedImages);
 
-      // ✅ UPDATE THE EVENT CONTEXT - Use 'images' not 'photos'
       setEvents((prevEvents) => 
         prevEvents.map((event) => 
           event._id === hiveId 
@@ -362,6 +360,19 @@ const handleUpload = async () => {
                 style={{ paddingVertical: height * 0.015, paddingHorizontal: width * 0.04 }}
               >
                 <CustomText weight="medium">Pending Request</CustomText>
+              </TouchableOpacity>
+
+
+              <View style={{ height: 1, backgroundColor: '#E5E7EB' }} />
+
+              <TouchableOpacity
+                onPress={() => {
+                  setMenuVisible(false);
+                  navigation.navigate("MemberStatus", { hiveId });
+                }}
+                style={{ paddingVertical: height * 0.015, paddingHorizontal: width * 0.04 }}
+              >
+                <CustomText weight="medium">Status</CustomText>
               </TouchableOpacity>
 
             </View>

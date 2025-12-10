@@ -82,78 +82,78 @@ const CreateHive = ({ navigation, route }) => {
         }
     }, [route?.params?.cameraPhotos]);
 
-const handleCreateHive = async () => {
-    try {
-        if (!hiveName.trim()) {
-            alert("Hive name is required");
-            return;
+    const handleCreateHive = async () => {
+        try {
+            if (!hiveName.trim()) {
+                alert("Hive name is required");
+                return;
+            }
+
+            if (!uploadedImage) {
+                alert("Please upload a cover image");
+                return;
+            }
+
+            if (!checked) {
+                alert("Please accept the privacy policy");
+                return;
+            }
+
+            showLoader(); // 👉 SHOW LOADER BEFORE STARTING API
+
+            const payload = {
+                hiveName,
+                description: hiveDescription || "No description",
+                privacyMode: uploadType,
+                isTemporary: isEnabled,
+                eventDate: isEnabled ? formatAPIDate(startDate) : "",
+                startTime: isEnabled ? formatAPITime(startTime) : "",
+                endTime: isEnabled ? formatAPITime(endTime) : "",
+                expiryDate: isEnabled ? formatAPIDate(endDate) : "",
+            };
+
+            const formData = new FormData();
+            Object.keys(payload).forEach(key => formData.append(key, payload[key]));
+
+            formData.append("coverImage", {
+                uri: uploadedImage,
+                name: "cover.jpg",
+                type: "image/jpeg",
+            });
+
+            const token = await AsyncStorage.getItem("token");
+
+            const response = await fetch("https://snaphive-node.vercel.app/api/hives", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data"
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+            console.log("Create Hive result:", result);
+
+            if (!response.ok) {
+                alert(result.message || "Error creating hive");
+                return;
+            }
+
+            alert("Hive created successfully!");
+
+            navigation.reset({
+                index: 0,
+                routes: [{ name: "Home" }],
+            });
+
+        } catch (error) {
+            console.log("Create Hive Error:", error);
+            alert("Something went wrong!");
+        } finally {
+            hideLoader();  // 👉 ALWAYS hide loader at the end
         }
-
-        if (!uploadedImage) {
-            alert("Please upload a cover image");
-            return;
-        }
-
-        if (!checked) {
-            alert("Please accept the privacy policy");
-            return;
-        }
-
-        showLoader(); // 👉 SHOW LOADER BEFORE STARTING API
-
-        const payload = {
-            hiveName,
-            description: hiveDescription || "No description",
-            privacyMode: uploadType,
-            isTemporary: isEnabled,
-            eventDate: isEnabled ? formatAPIDate(startDate) : "",
-            startTime: isEnabled ? formatAPITime(startTime) : "",
-            endTime: isEnabled ? formatAPITime(endTime) : "",
-            expiryDate: isEnabled ? formatAPIDate(endDate) : "",
-        };
-
-        const formData = new FormData();
-        Object.keys(payload).forEach(key => formData.append(key, payload[key]));
-
-        formData.append("coverImage", {
-            uri: uploadedImage,
-            name: "cover.jpg",
-            type: "image/jpeg",
-        });
-
-        const token = await AsyncStorage.getItem("token");
-
-        const response = await fetch("https://snaphive-node.vercel.app/api/hives", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "multipart/form-data"
-            },
-            body: formData
-        });
-
-        const result = await response.json();
-        console.log("Create Hive result:", result);
-
-        if (!response.ok) {
-            alert(result.message || "Error creating hive");
-            return;
-        }
-
-        alert("Hive created successfully!");
-
-        navigation.reset({
-            index: 0,
-            routes: [{ name: "Home" }],
-        });
-
-    } catch (error) {
-        console.log("Create Hive Error:", error);
-        alert("Something went wrong!");
-    } finally {
-        hideLoader();  // 👉 ALWAYS hide loader at the end
-    }
-};
+    };
 
 
 
@@ -252,25 +252,43 @@ const handleCreateHive = async () => {
                                 />
                             </View>
 
-                            <CustomText weight='bold' style={{ marginBottom: 4, color: '#374151' }}>Cover Image</CustomText>
+                            <CustomText weight='bold' style={{ marginBottom: 0, color: '#374151' }}>Cover Image</CustomText>
+                   
 
+                            <CustomText weight='mediumItalic' style={{ marginBottom: 8, color: '#777777ff', fontSize: 12 }}>( Only images under 2MB are allowed. Larger files will be rejected. )</CustomText>
                             <TouchableWithoutFeedback onPress={() => {
-                                const options = {
-                                    mediaType: "photo",
-                                    quality: 1,
-                                };
+  const options = {
+    mediaType: "photo",
+    quality: 1,
+    includeExtra: true,
+};
 
-                                launchImageLibrary(options, (response) => {
-                                    if (response.didCancel) {
-                                        console.log("User cancelled image picker");
-                                    } else if (response.errorCode) {
-                                        console.log("ImagePicker Error: ", response.errorMessage);
-                                    } else if (response.assets && response.assets.length > 0) {
-                                        const selectedImage = response.assets[0];
-                                        console.log("Selected image:", selectedImage.uri);
-                                        setUploadedImage(selectedImage.uri);
-                                    }
-                                });
+launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+        console.log("User cancelled image picker");
+        return;
+    }
+
+    if (response.errorCode) {
+        console.log("ImagePicker Error: ", response.errorMessage);
+        return;
+    }
+
+    if (response.assets && response.assets.length > 0) {
+        const selectedImage = response.assets[0];
+
+        console.log("PICKED FILE INFO:", selectedImage);
+
+        // 🔥 2MB CHECK
+        if (selectedImage.fileSize && selectedImage.fileSize > 2 * 1024 * 1024) {
+            alert("This image is larger than 2MB. Please choose a smaller file.");
+            return;
+        }
+
+        setUploadedImage(selectedImage.uri);
+    }
+});
+
                             }}>
                                 <View style={styles.uploadContainer}>
                                     {uploadedImage ? (

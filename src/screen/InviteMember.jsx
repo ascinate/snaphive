@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { View, TextInput, StyleSheet, Text, TouchableOpacity, Image, ScrollView, Dimensions } from "react-native";
-import FolderLayout from "./FolderLayout";
-import Swtich from "../components/Swtich";
 import QR from "../../assets/svg/qr.svg";
 import Pencil from "../../assets/svg/pencil.svg";
 import People from "../../assets/svg/people.svg";
@@ -12,39 +11,82 @@ import CustomText from "../components/CustomText";
 import ScreenLayout from "../components/ScreenLayout";
 import { Check, CopyIcon, Link, QrCode, Share2, Users } from "lucide-react-native";
 import QRCodeModal from "../components/QRCodeModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const { width, height } = Dimensions.get('window');
-
-const folderImage = require("../../assets/folderImage.png");
+const { width, height } = Dimensions.get("window");
 
 const flag1 = require("../../assets/flag1.png");
 const flag2 = require("../../assets/flag2.png");
 const flag3 = require("../../assets/flag3.png");
 const flag4 = require("../../assets/flag4.png");
-// Images
+
 const createEvent = require("../../assets/background.png");
-const profilePic = require("../../assets/picnic3.jpg");
+
 const InviteMember = ({ navigation, route }) => {
+  const hiveId = route.params?.hiveId;
+  console.log("Hive ID in InviteMember:", hiveId);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("English");
   const [copied, setCopied] = useState(false);
-  const { folderName, date, owner } = route.params || {
-    folderName: "Untitled Folder",
-    date: "Unknown Date",
-    owner: "NA",
-  };
-
-  const languages = [
-    { name: "English", flag: flag1 },
-    { name: "Spanish", flag: flag2 },
-    { name: "French", flag: flag3 },
-    { name: "German", flag: flag4 },
-  ];
+  const [triggerInvite, setTriggerInvite] = useState(false);
 
   const handleCopy = () => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  // -------------------------------
+  // USE EFFECT FOR INVITATION API
+  // -------------------------------
+  useEffect(() => {
+    if (!triggerInvite) return;
+
+    const inviteMember = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+
+        if (!token) {
+          alert("No token found. Please log in again.");
+          setTriggerInvite(false);
+          return;
+        }
+
+        console.log("Sending invite to:", email);
+        console.log("Hive ID:", hiveId);
+
+        const response = await axios.post(
+          `https://snaphive-node.vercel.app/api/hives/${hiveId}/invite`,
+          { email },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log("Invite Response:", response.data);
+        alert("Invitation sent successfully!");
+      } catch (error) {
+        console.log("Invite Error:", error.response?.data || error);
+        alert(error.response?.data?.message || "Failed to send invitation.");
+      }
+
+      setTriggerInvite(false);
+    };
+
+    inviteMember();
+  }, [triggerInvite]);
+
+  // -------------------------------
+  // SEND INVITE CLICK HANDLER
+  // -------------------------------
+  const sendInvite = () => {
+    if (!email) {
+      alert("Please enter an email");
+      return;
+    }
+    setTriggerInvite(true);
   };
 
   return (
@@ -53,28 +95,23 @@ const InviteMember = ({ navigation, route }) => {
       image={createEvent}
       folderName="Janifer Danis"
       date="+91 1841 510 1450"
-
-
       OverlayContent={
         <View style={styles.profileOverlay}>
-{/* 
-          <View style={styles.headerIconWrapper}>
-            <Users color="#DA3C84" size={32} />
-          </View> */}
           <View>
-            <CustomText weight="bold" style={{ fontSize: 24, color: '#FFFFFF', textAlign: 'center' }}>
+            <CustomText weight="bold" style={{ fontSize: 24, color: "#FFFFFF", textAlign: "center" }}>
               Invite Member
             </CustomText>
-            <CustomText weight="medium" style={{ fontSize: 14, color: '#FFFFFF', textAlign: 'center', opacity: 0.9, marginTop: 6 }}>
+            <CustomText
+              weight="medium"
+              style={{ fontSize: 14, color: "#FFFFFF", textAlign: "center", opacity: 0.9, marginTop: 6 }}
+            >
               Share this hive with friends
             </CustomText>
           </View>
         </View>
       }
     >
-
-
-      <ScrollView style={{ paddingHorizontal: 24, paddingTop: 30, backgroundColor: '#FAFAF9', paddingBottom: 40 }}>
+      <ScrollView style={{ paddingHorizontal: 24, paddingTop: 30, backgroundColor: "#FAFAF9", paddingBottom: 40 }}>
 
         {/* Info Card */}
         <View style={styles.infoCard}>
@@ -86,21 +123,23 @@ const InviteMember = ({ navigation, route }) => {
           </CustomText>
         </View>
 
-        {/* Code Section - Enhanced */}
+        {/* Invitation Code */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View>
-              <CustomText weight="bold" style={styles.sectionTitle}>Invitation Code</CustomText>
-              <CustomText weight="medium" style={styles.sectionSubtitle}>Share this code with members</CustomText>
+              <CustomText weight="bold" style={styles.sectionTitle}>
+                Invitation Code
+              </CustomText>
+              <CustomText weight="medium" style={styles.sectionSubtitle}>
+                Share this code with members
+              </CustomText>
             </View>
-            <TouchableOpacity 
-              style={[styles.copyButton, copied && styles.copyButtonActive]}
-              onPress={handleCopy}
-            >
+
+            <TouchableOpacity style={[styles.copyButton, copied && styles.copyButtonActive]} onPress={handleCopy}>
               {copied ? (
                 <>
                   <Check width={16} height={16} color="#10B981" />
-                  <Text style={[styles.copyButtonText, { color: '#10B981' }]}>Copied!</Text>
+                  <Text style={[styles.copyButtonText, { color: "#10B981" }]}>Copied!</Text>
                 </>
               ) : (
                 <>
@@ -110,48 +149,58 @@ const InviteMember = ({ navigation, route }) => {
               )}
             </TouchableOpacity>
           </View>
+
           <View style={styles.codeBox}>
             <Text style={styles.codeText}>23G2VUJ</Text>
           </View>
         </View>
 
-        {/* Quick Share Section - Enhanced */}
+        {/* Quick Share */}
         <View style={styles.quickShareSection}>
-          <CustomText weight="bold" style={styles.quickShareTitle}>Quick Share</CustomText>
+          <CustomText weight="bold" style={styles.quickShareTitle}>
+            Quick Share
+          </CustomText>
+
           <View style={styles.quickShareButtons}>
             <TouchableOpacity style={styles.shareButton}>
               <View style={styles.shareIconWrapper}>
                 <Link width={20} height={20} color="#DA3C84" />
               </View>
-              <CustomText weight="bold" style={styles.shareButtonText}>Copy Link</CustomText>
+              <CustomText weight="bold" style={styles.shareButtonText}>
+                Copy Link
+              </CustomText>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.shareButton}
-              onPress={() => setModalVisible(true)}
-            >
+            <TouchableOpacity style={styles.shareButton} onPress={() => setModalVisible(true)}>
               <View style={styles.shareIconWrapper}>
                 <QrCode width={20} height={20} color="#DA3C84" />
               </View>
-              <CustomText weight="bold" style={styles.shareButtonText}>QR Code</CustomText>
+              <CustomText weight="bold" style={styles.shareButtonText}>
+                QR Code
+              </CustomText>
             </TouchableOpacity>
           </View>
         </View>
 
-
+        {/* Divider */}
         <View style={styles.orLine}>
           <View style={styles.line} />
-          <CustomText weight="medium" style={styles.orText}>Or invite via email</CustomText>
+          <CustomText weight="medium" style={styles.orText}>
+            Or invite via email
+          </CustomText>
           <View style={styles.line} />
         </View>
 
-        {/* Email Input Section - Enhanced */}
+        {/* Email Input */}
         <View style={styles.emailSection}>
-          <CustomText weight="bold" style={styles.emailLabel}>Email Address</CustomText>
+          <CustomText weight="bold" style={styles.emailLabel}>
+            Email Address
+          </CustomText>
+
           <View style={styles.inputWrapper}>
             <Mail width={20} height={20} color="#9CA3AF" />
-            <TextInput 
-              style={styles.inviteMember} 
+            <TextInput
+              style={styles.inviteMember}
               placeholder="example@gmail.com"
               placeholderTextColor="#9CA3AF"
               value={email}
@@ -162,23 +211,21 @@ const InviteMember = ({ navigation, route }) => {
           </View>
         </View>
 
-        {/* Buttons */}
+        {/* Button */}
         <View style={styles.buttonRow}>
-          <ThemeButton
-            text="Send Invitation"
-            onPress={() => navigation.navigate("MyTabs")}
-            style={{ width: "100%", margin: 0 }}
-          />
+          <ThemeButton text="Send Invitation" onPress={sendInvite} style={{ width: "100%", margin: 0 }} />
         </View>
 
-        {/* Bottom spacing */}
         <View style={{ height: 40 }} />
       </ScrollView>
-      <QRCodeModal visible={modalVisible} onClose={() => setModalVisible(false)} />
 
+      <QRCodeModal visible={modalVisible} onClose={() => setModalVisible(false)} />
     </ScreenLayout>
   );
 };
+
+
+
 
 const styles = StyleSheet.create({
   scrollContainer: {

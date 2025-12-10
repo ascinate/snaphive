@@ -82,7 +82,7 @@ const CreateHive = ({ navigation, route }) => {
         }
     }, [route?.params?.cameraPhotos]);
 
-    const handleCreateHive = async () => {
+const handleCreateHive = async () => {
         try {
             if (!hiveName.trim()) {
                 alert("Hive name is required");
@@ -99,7 +99,7 @@ const CreateHive = ({ navigation, route }) => {
                 return;
             }
 
-            showLoader(); // 👉 SHOW LOADER BEFORE STARTING API
+            showLoader();
 
             const payload = {
                 hiveName,
@@ -114,9 +114,13 @@ const CreateHive = ({ navigation, route }) => {
 
             const formData = new FormData();
             Object.keys(payload).forEach(key => formData.append(key, payload[key]));
+            let imageUri = uploadedImage;
+            if (typeof uploadedImage === 'number') {
+                imageUri = Image.resolveAssetSource(uploadedImage).uri;
+            }
 
             formData.append("coverImage", {
-                uri: uploadedImage,
+                uri: imageUri,
                 name: "cover.jpg",
                 type: "image/jpeg",
             });
@@ -151,10 +155,9 @@ const CreateHive = ({ navigation, route }) => {
             console.log("Create Hive Error:", error);
             alert("Something went wrong!");
         } finally {
-            hideLoader();  // 👉 ALWAYS hide loader at the end
+            hideLoader(); 
         }
     };
-
 
 
 
@@ -279,7 +282,6 @@ const CreateHive = ({ navigation, route }) => {
 
                                         console.log("PICKED FILE INFO:", selectedImage);
 
-                                        // 🔥 2MB CHECK
                                         if (selectedImage.fileSize && selectedImage.fileSize > 1 * 1024 * 1024) {
                                             alert("This image is larger than 1MB. Please choose a smaller file.");
                                             return;

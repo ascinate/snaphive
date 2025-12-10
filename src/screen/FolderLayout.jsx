@@ -77,46 +77,46 @@ const FolderLayout = ({ navigation, route }) => {
   const { events, setEvents } = useContext(EventContext);
 
   console.log("hive id:" + hiveId);
-useEffect(() => {
-  const fetchHive = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      if (!token) {
-        console.log("No auth token found. Please login first.");
-        return;
-      }
-
-      const res = await axios.get(
-        `https://snaphive-node.vercel.app/api/hives/${hiveId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+  useEffect(() => {
+    const fetchHive = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.log("No auth token found. Please login first.");
+          return;
         }
-      );
 
-      const hive = res.data.data;
-      const photosFromAPI = hive.images || [];
+        const res = await axios.get(
+          `https://snaphive-node.vercel.app/api/hives/${hiveId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-      setUploadedImages(photosFromAPI);
+        const hive = res.data.data;
+        const photosFromAPI = hive.images || [];
+
+        setUploadedImages(photosFromAPI);
 
 
-      setEvents((prevEvents) => 
-        prevEvents.map((event) => 
-          event.hiveId === hiveId 
-            ? { ...event, photos: photosFromAPI }
-            : event
-        )
-      );
-    } catch (err) {
-      console.error("Error fetching hive:", err.response?.data || err.message || err);
+        setEvents((prevEvents) =>
+          prevEvents.map((event) =>
+            event.hiveId === hiveId
+              ? { ...event, photos: photosFromAPI }
+              : event
+          )
+        );
+      } catch (err) {
+        console.error("Error fetching hive:", err.response?.data || err.message || err);
+      }
+    };
+
+    if (hiveId) {
+      fetchHive();
     }
-  };
-
-  if (hiveId) {
-    fetchHive();
-  }
-}, [hiveId, setEvents]);
+  }, [hiveId, setEvents]);
 
 
   const formatDisplayDate = (date) => {
@@ -174,90 +174,90 @@ useEffect(() => {
       }
     }
   };
-const handleUpload = async () => {
-  const options = {
-    mediaType: "photo",
-    includeBase64: false,
-    quality: 0.5,
-    selectionLimit: 0,
-    maxWidth: 1920,
-    maxHeight: 1920,
-  };
+  const handleUpload = async () => {
+    const options = {
+      mediaType: "photo",
+      includeBase64: false,
+      quality: 0.5,
+      selectionLimit: 0,
+      maxWidth: 1920,
+      maxHeight: 1920,
+    };
 
-  launchImageLibrary(options, async (response) => {
-    if (response.didCancel || response.errorCode) return;
-    if (!response.assets || response.assets.length === 0) return;
+    launchImageLibrary(options, async (response) => {
+      if (response.didCancel || response.errorCode) return;
+      if (!response.assets || response.assets.length === 0) return;
 
-    try {
-      const token = await AsyncStorage.getItem("token");
+      try {
+        const token = await AsyncStorage.getItem("token");
 
-      if (!token) {
-        console.log("No auth token found");
-        Alert.alert("Error", "Authentication token not found. Please login again.");
-        return;
-      }
-
-      let formData = new FormData();
-
-      response.assets.forEach((img, index) => {
-        const file = {
-          uri: img.uri,
-          type: img.type || 'image/jpeg',
-          name: img.fileName || `image_${Date.now()}_${index}.jpg`,
-        };
-        formData.append("images", file);
-      });
-
-      console.log("Uploading images:", response.assets.length);
-
-      const res = await axios.post(
-        `https://snaphive-node.vercel.app/api/hives/${hiveId}/images`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-          timeout: 60000,
+        if (!token) {
+          console.log("No auth token found");
+          Alert.alert("Error", "Authentication token not found. Please login again.");
+          return;
         }
-      );
 
-      console.log("Upload Response:", res.data);
+        let formData = new FormData();
 
-      const updatedImages = res.data.images;
-      setUploadedImages(updatedImages);
+        response.assets.forEach((img, index) => {
+          const file = {
+            uri: img.uri,
+            type: img.type || 'image/jpeg',
+            name: img.fileName || `image_${Date.now()}_${index}.jpg`,
+          };
+          formData.append("images", file);
+        });
 
-      setEvents((prevEvents) => 
-        prevEvents.map((event) => 
-          event._id === hiveId 
-            ? { ...event, images: updatedImages }
-            : event
-        )
-      );
+        console.log("Uploading images:", response.assets.length);
 
-      console.log(`Updated context for hive ${hiveId} with ${updatedImages.length} images`);
+        const res = await axios.post(
+          `https://snaphive-node.vercel.app/api/hives/${hiveId}/images`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+            timeout: 60000,
+          }
+        );
 
-      Alert.alert("Success", `${response.assets.length} image(s) uploaded successfully!`);
+        console.log("Upload Response:", res.data);
 
-    } catch (error) {
-      console.log("Upload Error:", error.response?.data || error.message);
+        const updatedImages = res.data.images;
+        setUploadedImages(updatedImages);
 
-      if (error.response) {
-        if (error.response.status === 403) {
-          Alert.alert("Upload Failed", "Permission denied. Please check your authentication or try again.");
-        } else if (error.response.status === 413) {
-          Alert.alert("Upload Failed", "Images too large. Please select smaller images or fewer images at once.");
+        setEvents((prevEvents) =>
+          prevEvents.map((event) =>
+            event._id === hiveId
+              ? { ...event, images: updatedImages }
+              : event
+          )
+        );
+
+        console.log(`Updated context for hive ${hiveId} with ${updatedImages.length} images`);
+
+        Alert.alert("Success", `${response.assets.length} image(s) uploaded successfully!`);
+
+      } catch (error) {
+        console.log("Upload Error:", error.response?.data || error.message);
+
+        if (error.response) {
+          if (error.response.status === 403) {
+            Alert.alert("Upload Failed", "Permission denied. Please check your authentication or try again.");
+          } else if (error.response.status === 413) {
+            Alert.alert("Upload Failed", "Images too large. Please select smaller images or fewer images at once.");
+          } else {
+            Alert.alert("Upload Failed", error.response.data?.message || "Something went wrong. Please try again.");
+          }
+        } else if (error.code === 'ECONNABORTED') {
+          Alert.alert("Upload Failed", "Upload timeout. Please check your internet connection and try again.");
         } else {
-          Alert.alert("Upload Failed", error.response.data?.message || "Something went wrong. Please try again.");
+          Alert.alert("Upload Failed", "Network error. Please check your internet connection.");
         }
-      } else if (error.code === 'ECONNABORTED') {
-        Alert.alert("Upload Failed", "Upload timeout. Please check your internet connection and try again.");
-      } else {
-        Alert.alert("Upload Failed", "Network error. Please check your internet connection.");
       }
-    }
-  });
-};
+    });
+  };
 
   const members = [
     { id: 1, name: "Demola Aoki", dp: dp },
@@ -340,10 +340,11 @@ const handleUpload = async () => {
               <View style={{ height: 1, backgroundColor: '#E5E7EB' }} />
 
               <TouchableOpacity
-                onPress={() => {
-                  setMenuVisible(false);
-                  navigation.navigate("InviteMember");
-                }}
+                onPress={() =>
+                  navigation.navigate("InviteMember", {
+                    hiveId: hiveId,
+                  })
+                }
                 style={{ paddingVertical: height * 0.015, paddingHorizontal: width * 0.04 }}
               >
                 <CustomText weight="medium">Invite Member</CustomText>

@@ -384,39 +384,37 @@ const Home = ({ navigation, route }) => {
               </View>
 
 
-              <View style={styles.dashCard}>
-                <View
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <View
-                    style={{
-                      backgroundColor: '#B674F9',
-                      borderRadius: 8,
-                      padding: 10,
-                      marginBottom: 6,
-                    }}
-                  >
-                    <Users color="#ffffff" />
-                  </View>
+<View style={styles.dashCard}>
+  <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+    
+    <View
+      style={{
+        backgroundColor: '#B674F9',
+        borderRadius: 8,
+        padding: 10,
+        marginBottom: 6,
+      }}
+    >
+      <Users color="#ffffff" />
+    </View>
 
-                  <CustomText
-                    weight="bold"
-                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]}
-                  >
-                    1
-                  </CustomText>
+    <CustomText
+      weight="bold"
+      style={[styles.cardText, { color: '#000000', textAlign: 'center' }]}
+    >
+      {hives.reduce((total, hive) => total + (hive.members?.length || 0), 0)}
+    </CustomText>
 
-                  <CustomText
-                    weight="medium"
-                    style={[styles.dashText, { textAlign: 'center' }]}
-                  >
-                    Member
-                  </CustomText>
-                </View>
-              </View>
+    <CustomText
+      weight="medium"
+      style={[styles.dashText, { textAlign: 'center' }]}
+    >
+      Members
+    </CustomText>
+
+  </View>
+</View>
+
             </View>
 
 
@@ -510,7 +508,7 @@ const Home = ({ navigation, route }) => {
                             </View>
 
                             <CustomText weight="bold" style={{ marginLeft: 20 }}>
-                              +10 Members
+                              {item.members.length} Members
                             </CustomText>
                           </View>
                         </View>

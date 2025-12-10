@@ -295,7 +295,7 @@ const fetchHive = async () => {
                 <Users color="#ffffff" size={width * 0.05} />
               </View>
               <CustomText weight="bold" style={{ color: '#ffffff', fontSize: width * 0.035 }}>
-                Members (10)
+                Members
               </CustomText>
             </TouchableOpacity>
           </View>

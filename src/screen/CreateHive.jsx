@@ -253,41 +253,41 @@ const CreateHive = ({ navigation, route }) => {
                             </View>
 
                             <CustomText weight='bold' style={{ marginBottom: 0, color: '#374151' }}>Cover Image</CustomText>
-                   
 
-                            <CustomText weight='mediumItalic' style={{ marginBottom: 8, color: '#777777ff', fontSize: 12 }}>( Only images under 2MB are allowed. Larger files will be rejected. )</CustomText>
+
+                            <CustomText weight='mediumItalic' style={{ marginBottom: 8, color: '#777777ff', fontSize: 12 }}>( Only images under 1MB are allowed. Larger files will be rejected. )</CustomText>
                             <TouchableWithoutFeedback onPress={() => {
-  const options = {
-    mediaType: "photo",
-    quality: 1,
-    includeExtra: true,
-};
+                                const options = {
+                                    mediaType: "photo",
+                                    quality: 1,
+                                    includeExtra: true,
+                                };
 
-launchImageLibrary(options, (response) => {
-    if (response.didCancel) {
-        console.log("User cancelled image picker");
-        return;
-    }
+                                launchImageLibrary(options, (response) => {
+                                    if (response.didCancel) {
+                                        console.log("User cancelled image picker");
+                                        return;
+                                    }
 
-    if (response.errorCode) {
-        console.log("ImagePicker Error: ", response.errorMessage);
-        return;
-    }
+                                    if (response.errorCode) {
+                                        console.log("ImagePicker Error: ", response.errorMessage);
+                                        return;
+                                    }
 
-    if (response.assets && response.assets.length > 0) {
-        const selectedImage = response.assets[0];
+                                    if (response.assets && response.assets.length > 0) {
+                                        const selectedImage = response.assets[0];
 
-        console.log("PICKED FILE INFO:", selectedImage);
+                                        console.log("PICKED FILE INFO:", selectedImage);
 
-        // 🔥 2MB CHECK
-        if (selectedImage.fileSize && selectedImage.fileSize > 2 * 1024 * 1024) {
-            alert("This image is larger than 2MB. Please choose a smaller file.");
-            return;
-        }
+                                        // 🔥 2MB CHECK
+                                        if (selectedImage.fileSize && selectedImage.fileSize > 1 * 1024 * 1024) {
+                                            alert("This image is larger than 1MB. Please choose a smaller file.");
+                                            return;
+                                        }
 
-        setUploadedImage(selectedImage.uri);
-    }
-});
+                                        setUploadedImage(selectedImage.uri);
+                                    }
+                                });
 
                             }}>
                                 <View style={styles.uploadContainer}>

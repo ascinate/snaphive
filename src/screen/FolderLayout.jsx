@@ -74,44 +74,35 @@ const FolderLayout = ({ navigation, route }) => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
+  const [membersList, setMembersList] = useState([]);
+
   const { events, setEvents } = useContext(EventContext);
 
   console.log("hive id:" + hiveId);
   useEffect(() => {
-    const fetchHive = async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
-        if (!token) {
-          console.log("No auth token found. Please login first.");
-          return;
-        }
+const fetchHive = async () => {
+  try {
+    const token = await AsyncStorage.getItem("token");
+    if (!token) return;
 
-        const res = await axios.get(
-          `https://snaphive-node.vercel.app/api/hives/${hiveId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+    const res = await axios.get(
+      `https://snaphive-node.vercel.app/api/hives/${hiveId}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-        const hive = res.data.data;
-        const photosFromAPI = hive.images || [];
+    const hive = res.data.data;
 
-        setUploadedImages(photosFromAPI);
+    // PHOTOS
+    setUploadedImages(hive.images || []);
 
+    // ⭐ SET MEMBERS LIST
+    setMembersList(hive.members || []);
 
-        setEvents((prevEvents) =>
-          prevEvents.map((event) =>
-            event.hiveId === hiveId
-              ? { ...event, photos: photosFromAPI }
-              : event
-          )
-        );
-      } catch (err) {
-        console.error("Error fetching hive:", err.response?.data || err.message || err);
-      }
-    };
+  } catch (err) {
+    console.error("Error fetching hive:", err);
+  }
+};
+
 
     if (hiveId) {
       fetchHive();
@@ -569,10 +560,12 @@ const FolderLayout = ({ navigation, route }) => {
             </View>
           )}
 
-          <MembersModal
-            visible={modalVisible}
-            onClose={() => setModalVisible(false)}
-          />
+<MembersModal
+  visible={modalVisible}
+  onClose={() => setModalVisible(false)}
+  members={membersList}
+/>
+
         </View>
       </View>
     </ScreenLayout>

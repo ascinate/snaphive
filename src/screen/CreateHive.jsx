@@ -8,7 +8,7 @@ import { EventContext } from '../context/EventContext';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import { useLoader } from "../context/LoaderContext";
 // components
 import TopNav from '../components/TopNavbar';
 import CustomText from '../components/CustomText';
@@ -27,7 +27,7 @@ const picnic4 = require("../../assets/picnic4.jpg");
 const { width, height } = Dimensions.get('window');
 
 const CreateHive = ({ navigation, route }) => {
-
+    const { showLoader, hideLoader } = useLoader();
     const [uploadedImage, setUploadedImage] = useState(null);
     const [hiveName, setHiveName] = useState("");
 
@@ -82,79 +82,79 @@ const CreateHive = ({ navigation, route }) => {
         }
     }, [route?.params?.cameraPhotos]);
 
-
-    const handleCreateHive = async () => {
-        try {
-            if (!hiveName.trim()) {
-                alert("Hive name is required");
-                return;
-            }
-
-            if (!uploadedImage) {
-                alert("Please upload a cover image");
-                return;
-            }
-
-            if (!checked) {
-                alert("Please accept the privacy policy");
-                return;
-            }
-
-            // Prepare normal fields
-            const payload = {
-                hiveName,
-                description: hiveDescription || "No description",
-                privacyMode: uploadType,
-                isTemporary: isEnabled,
-                eventDate: isEnabled ? formatAPIDate(startDate) : "",
-                startTime: isEnabled ? formatAPITime(startTime) : "",
-                endTime: isEnabled ? formatAPITime(endTime) : "",
-                expiryDate: isEnabled ? formatAPIDate(endDate) : "",
-            };
-
-            const formData = new FormData();
-            for (let key in payload) {
-                formData.append(key, payload[key]);
-            }
-
-            // Attach image file
-            formData.append("coverImage", {
-                uri: uploadedImage,
-                name: "cover.jpg",
-                type: "image/jpeg"
-            });
-
-            const token = await AsyncStorage.getItem("token");
-
-            const response = await fetch("https://snaphive-node.vercel.app/api/hives", {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "multipart/form-data"
-                },
-                body: formData
-            });
-
-            const result = await response.json();
-            console.log("Create Hive result:", result);
-
-            if (!response.ok) {
-                alert(result.message || "Error creating hive");
-                return;
-            }
-
-            alert("Hive created successfully!");
-
-            navigation.reset({
-                index: 0,
-                routes: [{ name: "Home" }],
-            });
-
-        } catch (error) {
-            console.log("Create Hive Error:", error);
-            alert("Something went wrong!");
+const handleCreateHive = async () => {
+    try {
+        if (!hiveName.trim()) {
+            alert("Hive name is required");
+            return;
         }
-    };
+
+        if (!uploadedImage) {
+            alert("Please upload a cover image");
+            return;
+        }
+
+        if (!checked) {
+            alert("Please accept the privacy policy");
+            return;
+        }
+
+        showLoader(); // 👉 SHOW LOADER BEFORE STARTING API
+
+        const payload = {
+            hiveName,
+            description: hiveDescription || "No description",
+            privacyMode: uploadType,
+            isTemporary: isEnabled,
+            eventDate: isEnabled ? formatAPIDate(startDate) : "",
+            startTime: isEnabled ? formatAPITime(startTime) : "",
+            endTime: isEnabled ? formatAPITime(endTime) : "",
+            expiryDate: isEnabled ? formatAPIDate(endDate) : "",
+        };
+
+        const formData = new FormData();
+        Object.keys(payload).forEach(key => formData.append(key, payload[key]));
+
+        formData.append("coverImage", {
+            uri: uploadedImage,
+            name: "cover.jpg",
+            type: "image/jpeg",
+        });
+
+        const token = await AsyncStorage.getItem("token");
+
+        const response = await fetch("https://snaphive-node.vercel.app/api/hives", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "multipart/form-data"
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+        console.log("Create Hive result:", result);
+
+        if (!response.ok) {
+            alert(result.message || "Error creating hive");
+            return;
+        }
+
+        alert("Hive created successfully!");
+
+        navigation.reset({
+            index: 0,
+            routes: [{ name: "Home" }],
+        });
+
+    } catch (error) {
+        console.log("Create Hive Error:", error);
+        alert("Something went wrong!");
+    } finally {
+        hideLoader();  // 👉 ALWAYS hide loader at the end
+    }
+};
+
 
 
 

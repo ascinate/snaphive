@@ -200,8 +200,8 @@ const Home = ({ navigation, route }) => {
           }
         );
 
-        setHives(res.data.hives);       // keep local useState if you want
-        setEvents(res.data.hives);      // ALSO push hives into EventContext
+        setHives(res.data.hives);  
+        setEvents(res.data.hives);
 
         console.log("User Hives:", res.data.hives);
 
@@ -367,11 +367,11 @@ const Home = ({ navigation, route }) => {
                     weight="bold"
                     style={[styles.cardText, { color: '#000000', textAlign: 'center' }]} // center text
                   >
-           {events.reduce((total, event) => {
-  // Check both 'images' (from API) and 'photos' (legacy/local)
-  const imageCount = event.images?.length || event.photos?.length || 0;
-  return total + imageCount;
-}, 0)}
+                    {events.reduce((total, event) => {
+                      // Check both 'images' (from API) and 'photos' (legacy/local)
+                      const imageCount = event.images?.length || event.photos?.length || 0;
+                      return total + imageCount;
+                    }, 0)}
                   </CustomText>
 
                   <CustomText

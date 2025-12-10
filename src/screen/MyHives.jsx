@@ -109,7 +109,11 @@ const MyHives = ({ navigation, route }) => {
                             >
                                 <View>
                                     <CustomText weight="bold" style={styles.cardText}>
-                                        {hives.reduce((total, hive) => total + (hive.photos?.length || 0), 0)}
+                                        {hives.reduce((total, event) => {
+                                            // Check both 'images' (from API) and 'photos' (legacy/local)
+                                            const imageCount = event.images?.length || event.photos?.length || 0;
+                                            return total + imageCount;
+                                        }, 0)}
 
                                     </CustomText>
                                     <CustomText weight="medium" style={{ color: '#fff' }}>
@@ -119,11 +123,6 @@ const MyHives = ({ navigation, route }) => {
                             </View>
                         </View>
                     </View>
-
-
-
-
-
 
                     {/* Example Event Row */}
 

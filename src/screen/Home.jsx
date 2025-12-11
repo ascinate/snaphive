@@ -80,48 +80,83 @@ const Home = ({ navigation, route }) => {
 
   // REMOVE the old parseExpiryDate function completely
   // REPLACE the removeExpiredEvents function with this:
-  const removeExpiredEvents = useCallback(() => {
-    const now = new Date();
+// REPLACE the removeExpiredEvents function in Home.jsx with this:
 
-    setEvents(prevEvents =>
-      prevEvents.filter(event => {
-        // Keep non-temporary events
-        if (!event.isTemporary) return true;
+const removeExpiredEvents = useCallback(() => {
+  const now = new Date();
 
-        // Keep events without expiry date (safety)
-        if (!event.expiryDate) return true;
+  // Update both hives and events
+  setHives(prevHives =>
+    prevHives.filter(hive => {
+      // Keep non-temporary hives
+      if (!hive.isTemporary) return true;
 
-        // Convert to Date object if it's not already
-        const expiryDate = event.expiryDate instanceof Date
-          ? new Date(event.expiryDate)
-          : new Date(event.expiryDate);
+      // Keep hives without expiry date (safety)
+      if (!hive.expiryDate) return true;
 
-        // If we have endTime, combine it with expiry date
-        if (event.endTime) {
-          const endTimeObj = event.endTime instanceof Date
-            ? event.endTime
-            : new Date(event.endTime);
+      // Parse the expiry date from API format (YYYY-MM-DD)
+      const expiryDate = new Date(hive.expiryDate);
 
-          expiryDate.setHours(endTimeObj.getHours());
-          expiryDate.setMinutes(endTimeObj.getMinutes());
-          expiryDate.setSeconds(endTimeObj.getSeconds());
-        } else {
-          // If no end time, set to end of day
-          expiryDate.setHours(23, 59, 59, 999);
+      // If we have endTime, parse and combine it
+      if (hive.endTime) {
+        // Parse time from API format (e.g., "11:09 pm")
+        const timeStr = hive.endTime.toLowerCase();
+        const [time, period] = timeStr.split(' ');
+        const [hours, minutes] = time.split(':').map(Number);
+        
+        let hour24 = hours;
+        if (period === 'pm' && hours !== 12) {
+          hour24 = hours + 12;
+        } else if (period === 'am' && hours === 12) {
+          hour24 = 0;
         }
 
-        // Check if event has expired
-        const hasExpired = expiryDate < now;
+        expiryDate.setHours(hour24, minutes, 0, 0);
+      } else {
+        // If no end time, set to end of day
+        expiryDate.setHours(23, 59, 59, 999);
+      }
 
-        if (hasExpired) {
-          console.log(`Removing expired event: ${event.title}, expired at: ${expiryDate.toISOString()}`);
+      // Check if hive has expired
+      const hasExpired = expiryDate < now;
+
+      if (hasExpired) {
+        console.log(`Removing expired hive: ${hive.hiveName}, expired at: ${expiryDate.toISOString()}`);
+      }
+
+      return !hasExpired;
+    })
+  );
+
+  // Also update events state to keep them in sync
+  setEvents(prevEvents =>
+    prevEvents.filter(event => {
+      if (!event.isTemporary) return true;
+      if (!event.expiryDate) return true;
+
+      const expiryDate = new Date(event.expiryDate);
+
+      if (event.endTime) {
+        const timeStr = event.endTime.toLowerCase();
+        const [time, period] = timeStr.split(' ');
+        const [hours, minutes] = time.split(':').map(Number);
+        
+        let hour24 = hours;
+        if (period === 'pm' && hours !== 12) {
+          hour24 = hours + 12;
+        } else if (period === 'am' && hours === 12) {
+          hour24 = 0;
         }
 
-        return !hasExpired;
-      })
-    );
-  }, [setEvents]);
+        expiryDate.setHours(hour24, minutes, 0, 0);
+      } else {
+        expiryDate.setHours(23, 59, 59, 999);
+      }
 
+      return expiryDate >= now;
+    })
+  );
+}, [setHives, setEvents]);
 
 
   useEffect(() => {

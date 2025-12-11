@@ -76,6 +76,36 @@ const CreateHive = ({ navigation, route }) => {
         { label: 'Invite Only', value: '1' },
         { label: 'Public', value: '2' },
     ];
+
+
+
+    // Convert JS Date → API format YYYY-MM-DD
+const formatAPIDate = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+};
+
+
+// Convert JS Date → API format HH:mm AM/PM (12-hour format)
+const formatAPITime = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    let hours = d.getHours();
+    let minutes = d.getMinutes();
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    
+    hours = hours % 12;
+    hours = hours ? hours : 12; // Convert 0 to 12
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    
+    return `${hours}:${minutes} ${ampm}`;
+};
+
+
     useEffect(() => {
         if (route?.params?.cameraPhotos) {
             console.log('Received camera photos:', route.params.cameraPhotos.length);
@@ -113,6 +143,8 @@ const isCreateDisabled =
 
             const formData = new FormData();
             Object.keys(payload).forEach(key => formData.append(key, payload[key]));
+          
+              console.log('payload:', payload);
             let imageUri = uploadedImage;
             if (typeof uploadedImage === 'number') {
                 imageUri = Image.resolveAssetSource(uploadedImage).uri;

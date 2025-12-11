@@ -43,18 +43,39 @@ const Home = ({ navigation, route }) => {
   };
 
   // Format time → HH:MM AM/PM
-  const formatDisplayTime = (date) => {
-    if (!date) return 'N/A';
-    const dateObj = date instanceof Date ? date : new Date(date);
-    let hours = dateObj.getHours();
-    let minutes = dateObj.getMinutes();
-    let ampm = hours >= 12 ? 'PM' : 'AM';
+  const formatDisplayTime = (time) => {
+    if (!time) return 'N/A';
 
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
+    // If it's already a formatted string like "12:09 pm", return it as is
+    if (typeof time === 'string') {
+      // Check if it already contains AM/PM
+      if (time.toLowerCase().includes('am') || time.toLowerCase().includes('pm')) {
+        return time;
+      }
+    }
 
-    return `${hours}:${minutes} ${ampm}`;
+    // If it's a Date object or valid date string, format it
+    try {
+      const dateObj = time instanceof Date ? time : new Date(time);
+
+      // Check if date is valid
+      if (isNaN(dateObj.getTime())) {
+        return typeof time === 'string' ? time : 'N/A';
+      }
+
+      let hours = dateObj.getHours();
+      let minutes = dateObj.getMinutes();
+      let ampm = hours >= 12 ? 'PM' : 'AM';
+
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+
+      return `${hours}:${minutes} ${ampm}`;
+    } catch (error) {
+      // If conversion fails, return the original value or N/A
+      return typeof time === 'string' ? time : 'N/A';
+    }
   };
 
   // REMOVE the old parseExpiryDate function completely
@@ -200,7 +221,7 @@ const Home = ({ navigation, route }) => {
           }
         );
 
-        setHives(res.data.hives);  
+        setHives(res.data.hives);
         setEvents(res.data.hives);
 
         console.log("User Hives:", res.data.hives);
@@ -384,36 +405,36 @@ const Home = ({ navigation, route }) => {
               </View>
 
 
-<View style={styles.dashCard}>
-  <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-    
-    <View
-      style={{
-        backgroundColor: '#B674F9',
-        borderRadius: 8,
-        padding: 10,
-        marginBottom: 6,
-      }}
-    >
-      <Users color="#ffffff" />
-    </View>
+              <View style={styles.dashCard}>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
 
-    <CustomText
-      weight="bold"
-      style={[styles.cardText, { color: '#000000', textAlign: 'center' }]}
-    >
-      {hives.reduce((total, hive) => total + (hive.members?.length || 0), 0)}
-    </CustomText>
+                  <View
+                    style={{
+                      backgroundColor: '#B674F9',
+                      borderRadius: 8,
+                      padding: 10,
+                      marginBottom: 6,
+                    }}
+                  >
+                    <Users color="#ffffff" />
+                  </View>
 
-    <CustomText
-      weight="medium"
-      style={[styles.dashText, { textAlign: 'center' }]}
-    >
-      Members
-    </CustomText>
+                  <CustomText
+                    weight="bold"
+                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]}
+                  >
+                    {hives.reduce((total, hive) => total + (hive.members?.length || 0), 0)}
+                  </CustomText>
 
-  </View>
-</View>
+                  <CustomText
+                    weight="medium"
+                    style={[styles.dashText, { textAlign: 'center' }]}
+                  >
+                    Members
+                  </CustomText>
+
+                </View>
+              </View>
 
             </View>
 
@@ -503,7 +524,7 @@ const Home = ({ navigation, route }) => {
 
                             <View style={styles.memberBadge}>
                               <CustomText weight="bold" style={styles.memberCount}>
-                                10+
+                                +
                               </CustomText>
                             </View>
 

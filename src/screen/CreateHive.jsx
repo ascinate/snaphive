@@ -81,23 +81,23 @@ const CreateHive = ({ navigation, route }) => {
             console.log('Received camera photos:', route.params.cameraPhotos.length);
         }
     }, [route?.params?.cameraPhotos]);
+    
+const isCreateDisabled =
+    !hiveName.trim() ||
+    !uploadedImage ||
+    !checked ||
+    !uploadType ||
+    !hiveType;   // 🔥 NEW VALIDATION
 
-const handleCreateHive = async () => {
+
+    const handleCreateHive = async () => {
         try {
-            if (!hiveName.trim()) {
-                alert("Hive name is required");
-                return;
-            }
+       if (isCreateDisabled) {
+            alert("Please complete all required fields (Hive name, cover image, privacy policy)");
+            return;
+        }
 
-            if (!uploadedImage) {
-                alert("Please upload a cover image");
-                return;
-            }
 
-            if (!checked) {
-                alert("Please accept the privacy policy");
-                return;
-            }
 
             showLoader();
 
@@ -155,7 +155,7 @@ const handleCreateHive = async () => {
             console.log("Create Hive Error:", error);
             alert("Something went wrong!");
         } finally {
-            hideLoader(); 
+            hideLoader();
         }
     };
 
@@ -848,7 +848,13 @@ const handleCreateHive = async () => {
                                     <ThemeButton
                                         text="Create Hive"
                                         onPress={handleCreateHive}
-                                        style={{ width: "100%" }}
+                                        style={{
+                                            width: "100%",
+                                          opacity: isCreateDisabled ? 0.5 : 1, 
+                                        }}
+                           disabled={isCreateDisabled}
+
+
                                     />
                                 </View>
                             </View>

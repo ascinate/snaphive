@@ -80,34 +80,39 @@ const FolderLayout = ({ navigation, route }) => {
 
   console.log("hive id:" + hiveId);
   useEffect(() => {
-const fetchHive = async () => {
-  try {
-    const token = await AsyncStorage.getItem("token");
-    if (!token) return;
+    const fetchHive = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        if (!token) return;
 
-    const res = await axios.get(
-      `https://snaphive-node.vercel.app/api/hives/${hiveId}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+        const res = await axios.get(
+          `https://snaphive-node.vercel.app/api/hives/${hiveId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-    const hive = res.data.data;
+        const hive = res.data.data;
 
-    // PHOTOS
-    setUploadedImages(hive.images || []);
+        // PHOTOS
+        setUploadedImages(hive.images || []);
 
-    // ⭐ SET MEMBERS LIST
-    setMembersList(hive.members || []);
+        // ⭐ SET MEMBERS LIST
+        setMembersList(hive.members || []);
 
-  } catch (err) {
-    console.error("Error fetching hive:", err);
-  }
-};
+      } catch (err) {
+        console.error("Error fetching hive:", err);
+      }
+    };
 
 
     if (hiveId) {
       fetchHive();
     }
   }, [hiveId, setEvents]);
+
+
+
+
+
 
 
   const formatDisplayDate = (date) => {
@@ -519,13 +524,14 @@ const fetchHive = async () => {
 
                   {/* AI Response */}
                   <View style={styles.userOneMessageBox}>
-                    <View style={styles.messageTextLeft}>
-                      <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
-                        Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!
-                      </CustomText>
+                    <View style={styles.ImageTextLeft}>
+                      <Image source={picnic1} style={styles.msgImage} />
                     </View>
-                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
+                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
+                      01:00 am
+                    </CustomText>
                   </View>
+
 
                   {/* AI Response */}
                   <View style={styles.userOneMessageBox}>
@@ -560,11 +566,11 @@ const fetchHive = async () => {
             </View>
           )}
 
-<MembersModal
-  visible={modalVisible}
-  onClose={() => setModalVisible(false)}
-  members={membersList}
-/>
+          <MembersModal
+            visible={modalVisible}
+            onClose={() => setModalVisible(false)}
+            members={membersList}
+          />
 
         </View>
       </View>
@@ -814,6 +820,26 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 12,
   },
+  ImageTextLeft: {
+    borderWidth: 5,
+    borderColor: '#cc4faa',
+    borderRadius: width * 0.025,
+    overflow: 'hidden',
+    width: width * 0.55,
+    height: height * 0.2,
+    shadowColor: '#acacacff',
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 12,
+  },
+
+  msgImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+
   text: {
     color: '#ffffff',
     fontWeight: '600',

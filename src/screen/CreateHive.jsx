@@ -81,7 +81,6 @@ const CreateHive = ({ navigation, route }) => {
             console.log('Received camera photos:', route.params.cameraPhotos.length);
         }
     }, [route?.params?.cameraPhotos]);
-    
 const isCreateDisabled =
     !hiveName.trim() ||
     !uploadedImage ||

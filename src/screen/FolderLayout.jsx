@@ -67,7 +67,8 @@ const FolderLayout = ({ navigation, route }) => {
     eventTitle,
     eventDescription,
     eventEndTime,
-    eventExpiryDate
+    eventExpiryDate,
+      membersCount = 0, 
   } = route.params || {};
 
   const [selectedTab, setSelectedTab] = useState("Gallery");
@@ -292,17 +293,16 @@ const FolderLayout = ({ navigation, route }) => {
                 My Images
               </CustomText>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.importBtnWhite, { backgroundColor: '#000000ff' }]}
-              onPress={() => setModalVisible(true)}
-            >
-              <View>
-                <Users color="#ffffff" size={width * 0.05} />
-              </View>
-              <CustomText weight="bold" style={{ color: '#ffffff', fontSize: width * 0.035 }}>
-                Members
-              </CustomText>
-            </TouchableOpacity>
+  <TouchableOpacity
+  style={[styles.importBtnWhite, { backgroundColor: '#000000ff' }]}
+  onPress={() => setModalVisible(true)}
+>
+  <Users color="#ffffff" size={width * 0.05} />
+  <CustomText weight="bold" style={{ color: '#ffffff', fontSize: width * 0.035 }}>
+    {membersCount} Members
+  </CustomText>
+</TouchableOpacity>
+
           </View>
 
           {menuVisible && (

@@ -474,6 +474,7 @@ const Home = ({ navigation, route }) => {
                           eventDescription: item.description,
                           eventEndTime: item.endTime,
                           eventExpiryDate: item.expiryDate,
+                           membersCount: item.members?.length || 0,
                         })
                       }
                     >

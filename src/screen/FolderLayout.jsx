@@ -78,7 +78,8 @@ const FolderLayout = ({ navigation, route }) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [membersList, setMembersList] = useState([]);
   const [aiMessages, setAiMessages] = useState([]);
-
+  const [messages, setMessages] = useState([]);
+  const [textMessage, setTextMessage] = useState("");
   const { showLoader, hideLoader } = useLoader();
 
   const { events, setEvents } = useContext(EventContext);
@@ -257,27 +258,41 @@ const FolderLayout = ({ navigation, route }) => {
   ];
 
 
+// AI MAGIC — PICK IMAGE & SHOW IN CHAT
+const handleAiImagePick = () => {
+  launchImageLibrary({ mediaType: "photo", quality: 0.8 }, (response) => {
+    if (response.didCancel || !response.assets) return;
 
-  const handleAiImagePick = () => {
-    launchImageLibrary(
-      { mediaType: "photo", quality: 1 },
-      (response) => {
-        if (response.didCancel || !response.assets) return;
+    const imageUri = response.assets[0].uri;
 
-        const imageUri = response.assets[0].uri;
+    const newMessage = {
+      id: Date.now(),
+      type: "image",
+      uri: imageUri,
+      time: "01:00 am",
+    };
 
-        const newMessage = {
-          id: Date.now(),
-          type: "image",
-          uri: imageUri,
-          time: "01:00 am",
-        };
+    setAiMessages((prev) => [...prev, newMessage]);
+  });
+};
 
-        setAiMessages((prev) => [...prev, newMessage]);
-      }
-    );
+// AI MAGIC — SEND TEXT MESSAGE
+const handleAiTextSend = () => {
+  if (!textMessage.trim()) return;
+
+  const newMessage = {
+    id: Date.now(),
+    type: "text",
+    text: textMessage,
+    time: "01:00 am",
   };
 
+  setAiMessages((prev) => [...prev, newMessage]);
+  setTextMessage(""); // Clear input
+};
+
+
+  
 
   return (
     <ScreenLayout
@@ -525,54 +540,96 @@ const FolderLayout = ({ navigation, route }) => {
                   contentContainerStyle={styles.aiMagicContent}
                   showsVerticalScrollIndicator={false}
                 >
-                  <View style={styles.messagesContainer}>
-                    {/* User Message */}
-                    <View style={styles.userTwoMessageBox}>
-                      <View style={styles.messageText}>
-                        <CustomText weight="medium" style={[styles.text, { color: '#3d3d3dff', fontSize: width * 0.03 }]}>
-                          Hey! Turn this photo into a Pixar-style 3D character with a vibrant, futuristic city background — make the colors neon and give the character a confident hero pose!
-                        </CustomText>
-                      </View>
-                      <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
-                    </View>
+          <View style={styles.messagesContainer}>
 
-                    {/* AI Response */}
-                    <View style={styles.userOneMessageBox}>
-                      <View style={styles.ImageTextLeft}>
-                        <Image source={picnic1} style={styles.msgImage} />
-                      </View>
-                      <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
-                        01:00 am
-                      </CustomText>
-                    </View>
+  {/* ----  STATIC USER MESSAGE ---- */}
+  <View style={styles.userTwoMessageBox}>
+    <View style={styles.messageText}>
+      <CustomText weight="medium" style={[styles.text, { color: '#3d3d3dff', fontSize: width * 0.03 }]}>
+        Hey! Turn this photo into a Pixar-style 3D character with a futuristic neon city!
+      </CustomText>
+    </View>
+    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
+  </View>
+
+  {/* ---- STATIC AI IMAGE ---- */}
+  <View style={styles.userOneMessageBox}>
+    <View style={styles.ImageTextLeft}>
+      <Image source={picnic1} style={styles.msgImage} />
+    </View>
+    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
+      01:00 am
+    </CustomText>
+  </View>
+
+  {/* ---- STATIC AI TEXT ---- */}
+  <View style={styles.userOneMessageBox}>
+    <View style={styles.messageTextLeft}>
+      <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
+        Sure! Upload your image — I can turn it into Pixar, Anime, Cyberpunk, Cartoon or Realistic styles!
+      </CustomText>
+    </View>
+    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
+  </View>
+
+  {/* ---- DYNAMIC AI MESSAGES (IMAGES USER UPLOADED) ---- */}
+{aiMessages.map((msg) => (
+  <View key={msg.id} style={styles.userTwoMessageBox}>
+
+    {/* IF IMAGE */}
+    {msg.type === "image" && (
+      <View style={styles.ImageTextLeft}>
+        <Image source={{ uri: msg.uri }} style={styles.msgImage} />
+      </View>
+    )}
+
+    {/* IF TEXT */}
+    {msg.type === "text" && (
+      <View style={styles.messageText}>
+        <CustomText weight="medium" style={[styles.text, { color: '#3d3d3dff', fontSize: width * 0.03 }]}>
+          {msg.text}
+        </CustomText>
+      </View>
+    )}
+
+    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
+      {msg.time}
+    </CustomText>
+  </View>
+))}
 
 
-                    {/* AI Response */}
-                    <View style={styles.userOneMessageBox}>
-                      <View style={styles.messageTextLeft}>
-                        <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
-                          Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!
-                        </CustomText>
-                      </View>
-                      <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
-                    </View>
-                  </View>
+</View>
+
                 </ScrollView>
 
                 {/* Input Box - Fixed at bottom */}
                 <View style={styles.aiMagicInputContainer}>
                   <View style={styles.aiMagicInputWrapper}>
-                    <TouchableOpacity style={{ marginRight: width * 0.025 }}>
-                      <ImagePlus size={width * 0.055} color="#6B7280" />
-                    </TouchableOpacity>
-                    <TextInput
-                      placeholder="Ask anything..."
-                      placeholderTextColor="#9CA3AF"
-                      style={styles.aiMagicInput}
-                    />
-                    <TouchableOpacity style={styles.aiMagicSendButton}>
-                      <SendHorizonal size={width * 0.05} color="#FFFFFF" />
-                    </TouchableOpacity>
+<TouchableOpacity
+  style={{ marginRight: width * 0.025 }}
+  onPress={handleAiImagePick}
+>
+  <ImagePlus size={width * 0.055} color="#6B7280" />
+</TouchableOpacity>
+
+
+
+<TextInput
+  placeholder="Ask anything..."
+  placeholderTextColor="#9CA3AF"
+  style={styles.aiMagicInput}
+  value={textMessage}
+  onChangeText={setTextMessage}
+/>
+
+     <TouchableOpacity
+  style={styles.aiMagicSendButton}
+  onPress={handleAiTextSend}
+>
+  <SendHorizonal size={width * 0.05} color="#FFFFFF" />
+</TouchableOpacity>
+
                   </View>
                 </View>
               </View>

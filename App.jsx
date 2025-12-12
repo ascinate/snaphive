@@ -6,7 +6,11 @@ import { navigationRef } from "./src/navigation/RootNavigation";
 import { NotificationProvider } from "./src/context/NotificationContext";
 import { EventProvider } from "./src/context/EventContext";
 import { LoaderProvider } from "./src/context/LoaderContext";
-import './src/i18n';
+import i18n from "./src/i18n";
+import { I18nextProvider } from "react-i18next";
+
+
+
 // Screens
 import Landing from "./src/screen/Landing";
 import Signup from "./src/screen/Signup";
@@ -66,6 +70,7 @@ const App = () => {
       <LoaderProvider>
         <NotificationProvider>
           <EventProvider>
+            <I18nextProvider i18n={i18n}>
             <NavigationContainer ref={navigationRef}>
               <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Landing" component={Landing} />
@@ -118,6 +123,7 @@ const App = () => {
                                  <Stack.Screen name="MemberStatus" component={MemberStatus} />
               </Stack.Navigator>
             </NavigationContainer>
+            </I18nextProvider>
           </EventProvider>
         </NotificationProvider>
       </LoaderProvider>

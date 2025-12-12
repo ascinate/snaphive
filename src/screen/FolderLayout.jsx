@@ -68,7 +68,7 @@ const FolderLayout = ({ navigation, route }) => {
     eventDescription,
     eventEndTime,
     eventExpiryDate,
-      membersCount = 0, 
+    membersCount = 0,
   } = route.params || {};
 
   const [selectedTab, setSelectedTab] = useState("Gallery");
@@ -76,6 +76,7 @@ const FolderLayout = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [membersList, setMembersList] = useState([]);
+  const [aiMessages, setAiMessages] = useState([]);
 
   const { events, setEvents } = useContext(EventContext);
 
@@ -261,6 +262,29 @@ const FolderLayout = ({ navigation, route }) => {
     { id: 2, name: "Sofia Carrington", dp: dp3 },
   ];
 
+
+
+  const handleAiImagePick = () => {
+    launchImageLibrary(
+      { mediaType: "photo", quality: 1 },
+      (response) => {
+        if (response.didCancel || !response.assets) return;
+
+        const imageUri = response.assets[0].uri;
+
+        const newMessage = {
+          id: Date.now(),
+          type: "image",
+          uri: imageUri,
+          time: "01:00 am",
+        };
+
+        setAiMessages((prev) => [...prev, newMessage]);
+      }
+    );
+  };
+
+
   return (
     <ScreenLayout
       navigation={navigation}
@@ -293,15 +317,15 @@ const FolderLayout = ({ navigation, route }) => {
                 My Images
               </CustomText>
             </TouchableOpacity>
-  <TouchableOpacity
-  style={[styles.importBtnWhite, { backgroundColor: '#000000ff' }]}
-  onPress={() => setModalVisible(true)}
->
-  <Users color="#ffffff" size={width * 0.05} />
-  <CustomText weight="bold" style={{ color: '#ffffff', fontSize: width * 0.035 }}>
-    {membersCount} Members
-  </CustomText>
-</TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.importBtnWhite, { backgroundColor: '#000000ff' }]}
+              onPress={() => setModalVisible(true)}
+            >
+              <Users color="#ffffff" size={width * 0.05} />
+              <CustomText weight="bold" style={{ color: '#ffffff', fontSize: width * 0.035 }}>
+                {membersCount} Members
+              </CustomText>
+            </TouchableOpacity>
 
           </View>
 
@@ -551,13 +575,11 @@ const FolderLayout = ({ navigation, route }) => {
                   <TouchableOpacity style={{ marginRight: width * 0.025 }}>
                     <ImagePlus size={width * 0.055} color="#6B7280" />
                   </TouchableOpacity>
-
                   <TextInput
                     placeholder="Ask anything..."
                     placeholderTextColor="#9CA3AF"
                     style={styles.aiMagicInput}
                   />
-
                   <TouchableOpacity style={styles.aiMagicSendButton}>
                     <SendHorizonal size={width * 0.05} color="#FFFFFF" />
                   </TouchableOpacity>
@@ -850,7 +872,7 @@ const styles = StyleSheet.create({
   },
   aiMagicInputContainer: {
     position: 'absolute',
-    bottom: 0,
+    bottom: -10,
     left: 0,
     right: 0,
     paddingHorizontal: 0,
@@ -863,7 +885,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: width * 0.075,
-    paddingVertical: height * 0.010,
+    paddingVertical: height * 0.008,
     paddingHorizontal: width * 0.035,
     borderWidth: 1,
     borderColor: '#E5E7EB',

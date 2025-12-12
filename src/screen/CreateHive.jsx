@@ -30,9 +30,7 @@ const CreateHive = ({ navigation, route }) => {
     const { showLoader, hideLoader } = useLoader();
     const [uploadedImage, setUploadedImage] = useState(null);
     const [hiveName, setHiveName] = useState("");
-
     const [selectedOption, setSelectedOption] = useState('enable')
-
     const [hiveDescription, setHiveDescription] = useState("");
     const { addEvent } = useContext(EventContext);
     const [isEnabled, setIsEnabled] = useState(false);
@@ -42,12 +40,10 @@ const CreateHive = ({ navigation, route }) => {
     const [hiveType, setHiveType] = useState(null);
     const [checked, setChecked] = useState(false);
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
-
     const [startDate, setStartDate] = useState(new Date());
     const [startTime, setStartTime] = useState(new Date());
     const [endTime, setEndTime] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
-
     const [openStartDate, setOpenStartDate] = useState(false);
     const [openStartTime, setOpenStartTime] = useState(false);
     const [openEndTime, setOpenEndTime] = useState(false);
@@ -80,30 +76,30 @@ const CreateHive = ({ navigation, route }) => {
 
 
     // Convert JS Date → API format YYYY-MM-DD
-const formatAPIDate = (date) => {
-    if (!date) return "";
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-};
+    const formatAPIDate = (date) => {
+        if (!date) return "";
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    };
 
 
-// Convert JS Date → API format HH:mm AM/PM (12-hour format)
-const formatAPITime = (date) => {
-    if (!date) return "";
-    const d = new Date(date);
-    let hours = d.getHours();
-    let minutes = d.getMinutes();
-    const ampm = hours >= 12 ? 'pm' : 'am';
-    
-    hours = hours % 12;
-    hours = hours ? hours : 12; // Convert 0 to 12
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    
-    return `${hours}:${minutes} ${ampm}`;
-};
+    // Convert JS Date → API format HH:mm AM/PM (12-hour format)
+    const formatAPITime = (date) => {
+        if (!date) return "";
+        const d = new Date(date);
+        let hours = d.getHours();
+        let minutes = d.getMinutes();
+        const ampm = hours >= 12 ? 'pm' : 'am';
+
+        hours = hours % 12;
+        hours = hours ? hours : 12; // Convert 0 to 12
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+
+        return `${hours}:${minutes} ${ampm}`;
+    };
 
 
     useEffect(() => {
@@ -111,20 +107,20 @@ const formatAPITime = (date) => {
             console.log('Received camera photos:', route.params.cameraPhotos.length);
         }
     }, [route?.params?.cameraPhotos]);
-const isCreateDisabled =
-    !hiveName.trim() ||
-    !uploadedImage ||
-    !checked ||
-    !uploadType ||
-    !hiveType;   // 🔥 NEW VALIDATION
+    const isCreateDisabled =
+        !hiveName.trim() ||
+        !uploadedImage ||
+        !checked ||
+        !uploadType ||
+        !hiveType;   // 🔥 NEW VALIDATION
 
 
     const handleCreateHive = async () => {
         try {
-       if (isCreateDisabled) {
-            alert("Please complete all required fields (Hive name, cover image, privacy policy)");
-            return;
-        }
+            if (isCreateDisabled) {
+                alert("Please complete all required fields (Hive name, cover image, privacy policy)");
+                return;
+            }
 
 
 
@@ -143,13 +139,44 @@ const isCreateDisabled =
 
             const formData = new FormData();
             Object.keys(payload).forEach(key => formData.append(key, payload[key]));
-          
-              console.log('payload:', payload);
+
+            console.log('payload:', payload);
             let imageUri = uploadedImage;
             if (typeof uploadedImage === 'number') {
-                imageUri = Image.resolveAssetSource(uploadedImage).uri;
-            }
+                const resolved = Image.resolveAssetSource(uploadedImage);
+                imageUri = resolved.uri;
 
+                try {
+                    if (typeof uploadedImage === 'number') {
+                        const resolved = Image.resolveAssetSource(uploadedImage);
+                        imageUri = resolved?.uri || uploadedImage;
+                    }
+
+                    // On Android bundled assets may not be accessible via the resolved uri.
+                    // Try to copy the asset to a temp file using react-native-fs if available.
+                    if (Platform.OS === 'android' && imageUri && !imageUri.startsWith('file://') && !imageUri.startsWith('http')) {
+                        let RNFS = null;
+                        try { RNFS = require('react-native-fs'); } catch (e) { RNFS = null; console.log('react-native-fs not installed'); }
+                        if (RNFS && RNFS.copyFileAssets) {
+                            try {
+                                const assetPath = imageUri.replace(/^asset:\/\/+/, '');
+                                const dest = `${RNFS.CachesDirectoryPath}/cover_${Date.now()}.jpg`;
+                                await RNFS.copyFileAssets(assetPath, dest);
+                                imageUri = `file://${dest}`;
+                            } catch (e) {
+                                console.log('Failed to copy asset to temp file:', e);
+                            }
+                        } else {
+                            console.log('RNFS copy not available, imageUri:', imageUri);
+                        }
+                    }
+                } catch (e) {
+                    console.log('Error resolving image uri', e);
+                }
+
+                console.log('Final cover image uri:', imageUri);
+
+            }
             formData.append("coverImage", {
                 uri: imageUri,
                 name: "cover.jpg",
@@ -162,7 +189,7 @@ const isCreateDisabled =
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`,
-                    "Content-Type": "multipart/form-data"
+
                 },
                 body: formData
             });
@@ -881,9 +908,9 @@ const isCreateDisabled =
                                         onPress={handleCreateHive}
                                         style={{
                                             width: "100%",
-                                          opacity: isCreateDisabled ? 0.5 : 1, 
+                                            opacity: isCreateDisabled ? 0.5 : 1,
                                         }}
-                           disabled={isCreateDisabled}
+                                        disabled={isCreateDisabled}
 
 
                                     />

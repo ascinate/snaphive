@@ -24,6 +24,7 @@ const ScreenLayout = ({
 }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+
       <View style={styles.imageWrapper}>
         {/* Background Image */}
         <Image source={image} style={styles.folderImage} />

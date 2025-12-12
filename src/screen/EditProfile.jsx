@@ -194,7 +194,7 @@ const EditScreen = ({ navigation, }) => {
             style={styles.input}
             value={lastName}
             onChangeText={setLastName}
-            placeholder="e.g. Jennifer"
+            placeholder="e.g. Janifer (optinoal)"
             placeholderTextColor="#999"
           />
         </View>

@@ -8,6 +8,7 @@ import {
   Text,
   Alert,
   TextInput,
+  TouchableWithoutFeedback,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -28,7 +29,7 @@ import {
 import { launchImageLibrary } from "react-native-image-picker";
 import { Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
-
+import { useLoader } from "../context/LoaderContext";
 
 import axios from "axios";
 
@@ -78,6 +79,8 @@ const FolderLayout = ({ navigation, route }) => {
   const [membersList, setMembersList] = useState([]);
   const [aiMessages, setAiMessages] = useState([]);
 
+  const { showLoader, hideLoader } = useLoader();
+
   const { events, setEvents } = useContext(EventContext);
 
   console.log("hive id:" + hiveId);
@@ -110,11 +113,6 @@ const FolderLayout = ({ navigation, route }) => {
       fetchHive();
     }
   }, [hiveId, setEvents]);
-
-
-
-
-
 
 
   const formatDisplayDate = (date) => {
@@ -186,11 +184,13 @@ const FolderLayout = ({ navigation, route }) => {
       if (response.didCancel || response.errorCode) return;
       if (!response.assets || response.assets.length === 0) return;
 
+      showLoader(); // 🔥 Show loader before starting upload
+
       try {
         const token = await AsyncStorage.getItem("token");
 
         if (!token) {
-          console.log("No auth token found");
+          hideLoader();
           Alert.alert("Error", "Authentication token not found. Please login again.");
           return;
         }
@@ -200,13 +200,11 @@ const FolderLayout = ({ navigation, route }) => {
         response.assets.forEach((img, index) => {
           const file = {
             uri: img.uri,
-            type: img.type || 'image/jpeg',
+            type: img.type || "image/jpeg",
             name: img.fileName || `image_${Date.now()}_${index}.jpg`,
           };
           formData.append("images", file);
         });
-
-        console.log("Uploading images:", response.assets.length);
 
         const res = await axios.post(
           `https://snaphive-node.vercel.app/api/hives/${hiveId}/images`,
@@ -220,42 +218,38 @@ const FolderLayout = ({ navigation, route }) => {
           }
         );
 
-        console.log("Upload Response:", res.data);
-
         const updatedImages = res.data.images;
         setUploadedImages(updatedImages);
 
         setEvents((prevEvents) =>
           prevEvents.map((event) =>
-            event._id === hiveId
-              ? { ...event, images: updatedImages }
-              : event
+            event._id === hiveId ? { ...event, images: updatedImages } : event
           )
         );
 
-        console.log(`Updated context for hive ${hiveId} with ${updatedImages.length} images`);
-
         Alert.alert("Success", `${response.assets.length} image(s) uploaded successfully!`);
-
       } catch (error) {
         console.log("Upload Error:", error.response?.data || error.message);
 
         if (error.response) {
           if (error.response.status === 403) {
-            Alert.alert("Upload Failed", "Permission denied. Please check your authentication or try again.");
+            Alert.alert("Upload Failed", "Permission denied.");
           } else if (error.response.status === 413) {
-            Alert.alert("Upload Failed", "Images too large. Please select smaller images or fewer images at once.");
+            Alert.alert("Upload Failed", "Images too large.");
           } else {
-            Alert.alert("Upload Failed", error.response.data?.message || "Something went wrong. Please try again.");
+            Alert.alert("Upload Failed", error.response.data?.message || "Something went wrong.");
           }
-        } else if (error.code === 'ECONNABORTED') {
-          Alert.alert("Upload Failed", "Upload timeout. Please check your internet connection and try again.");
+        } else if (error.code === "ECONNABORTED") {
+          Alert.alert("Upload Failed", "Upload timeout. Check your internet connection.");
         } else {
-          Alert.alert("Upload Failed", "Network error. Please check your internet connection.");
+          Alert.alert("Upload Failed", "Network error.");
         }
+      } finally {
+        hideLoader(); // 🔥 Always hide loader at the end
       }
     });
   };
+
 
   const members = [
     { id: 1, name: "Demola Aoki", dp: dp },
@@ -323,10 +317,9 @@ const FolderLayout = ({ navigation, route }) => {
             >
               <Users color="#ffffff" size={width * 0.05} />
               <CustomText weight="bold" style={{ color: '#ffffff', fontSize: width * 0.035 }}>
-                {membersCount} Members
+                {membersList.length} Members
               </CustomText>
             </TouchableOpacity>
-
           </View>
 
           {menuVisible && (
@@ -383,7 +376,6 @@ const FolderLayout = ({ navigation, route }) => {
                 <CustomText weight="medium">Pending Request</CustomText>
               </TouchableOpacity>
 
-
               <View style={{ height: 1, backgroundColor: '#E5E7EB' }} />
 
               <TouchableOpacity
@@ -395,207 +387,206 @@ const FolderLayout = ({ navigation, route }) => {
               >
                 <CustomText weight="medium">Status</CustomText>
               </TouchableOpacity>
-
             </View>
-
-
           )}
         </View>
       }
-    >
-      <View style={styles.scrollContainer}>
-        <View style={styles.container}>
-          {/* Tabs */}
-          <View style={styles.tabsContainer}>
-            {[
-              { label: "Gallery", icon: <Images width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Gallery" ? "#fff" : "#000"} /> },
-              { label: "Chat", icon: <Video width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Chat" ? "#fff" : "#000"} /> },
-              { label: "Ai Magic", icon: <MessagesSquare width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Ai Magic" ? "#fff" : "#000"} /> },
-            ].map((tab, i) => (
-              <TouchableOpacity
-                key={i}
-                style={[styles.tabButton, selectedTab === tab.label && styles.tabButtonActive]}
-                onPress={() => setSelectedTab(tab.label)}
-              >
-                {tab.icon}
-                <Text
-                  style={[styles.tabText, selectedTab === tab.label && styles.tabTextActive]}
+      onPress={() => setMenuVisible(!menuVisible)} >
+
+        <View style={styles.scrollContainer}>
+          <View style={styles.container}>
+            {/* Tabs */}
+            <View style={styles.tabsContainer}>
+              {[
+                { label: "Gallery", icon: <Images width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Gallery" ? "#fff" : "#000"} /> },
+                { label: "Chat", icon: <Video width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Chat" ? "#fff" : "#000"} /> },
+                { label: "Ai Magic", icon: <MessagesSquare width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Ai Magic" ? "#fff" : "#000"} /> },
+              ].map((tab, i) => (
+                <TouchableOpacity
+                  key={i}
+                  style={[styles.tabButton, selectedTab === tab.label && styles.tabButtonActive]}
+                  onPress={() => setSelectedTab(tab.label)}
                 >
-                  {tab.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-
-          <ScrollView
-            style={{ flex: 1 }}
-            showsVerticalScrollIndicator={false}>
-            {selectedTab === "Gallery" && (
-              <View style={styles.grid}>
-                {uploadedImages.length === 0 ? (
-                  <Text style={styles.infoText}>No photos</Text>
-                ) : (
-                  <View style={styles.imageWrapperRow}>
-                    {uploadedImages.map((uri, index) => {
-                      let styleToApply = {};
-                      const pos = index % 4;
-
-                      if (pos === 0) styleToApply = styles.imageGridOne;
-                      else if (pos === 1) styleToApply = styles.imageGridTwo;
-                      else if (pos === 2) styleToApply = styles.imageGridThree;
-                      else if (pos === 3) styleToApply = styles.imageGridFour;
-
-                      return (
-                        <View key={`uploaded-${index}`} style={styleToApply}>
-                          <Image source={{ uri }} style={styles.photo} />
-                        </View>
-                      );
-                    })}
-                  </View>
-                )}
-              </View>
-            )}
-
-            {selectedTab === "Chat" && (
-              <>
-                <SearchBar />
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{ flexDirection: 'row', gap: width * 0.025, paddingHorizontal: width * 0.0375, paddingVertical: height * 0.0125 }}>
-                  <View style={styles.allMembarShadowWrapper}>
-                    <Image source={profilePic} style={styles.allMembarDp} />
-                  </View>
-                  <View style={styles.allMembarShadowWrapper}>
-                    <Image source={profilePic} style={styles.allMembarDp} />
-                  </View>
-                  <View style={styles.allMembarShadowWrapper}>
-                    <Image source={profilePic} style={styles.allMembarDp} />
-                  </View>
-                  <View style={styles.allMembarShadowWrapper}>
-                    <Image source={profilePic} style={styles.allMembarDp} />
-                  </View>
-                  <View style={styles.allMembarShadowWrapper}>
-                    <Image source={profilePic} style={styles.allMembarDp} />
-                  </View>
-                  <View style={styles.allMembarShadowWrapper}>
-                    <Image source={profilePic} style={styles.allMembarDp} />
-                  </View>
-                  <View style={styles.allMembarShadowWrapper}>
-                    <Image source={profilePic} style={styles.allMembarDp} />
-                  </View>
-                  <View style={styles.allMembarShadowWrapper}>
-                    <Image source={profilePic} style={styles.allMembarDp} />
-                  </View>
-                </ScrollView>
-
-                <View style={styles.chatList}>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate("Chat")}
+                  {tab.icon}
+                  <Text
+                    style={[styles.tabText, selectedTab === tab.label && styles.tabTextActive]}
                   >
-                    <View style={styles.shadowWrapper}>
-                      <View style={styles.chatListItem}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: width * 0.0375 }}>
-                          <Image source={profilePic} style={styles.dp} />
-                          <View>
-                            <CustomText weight="bold">User name</CustomText>
-                            <CustomText weight="medium"
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                              style={{ maxWidth: width * 0.4, fontSize: width * 0.03, color: '#888888' }}
-                            >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
+                    {tab.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <ScrollView
+              style={{ flex: 1 }}
+              showsVerticalScrollIndicator={false}>
+              {selectedTab === "Gallery" && (
+                <View style={styles.grid}>
+                  {uploadedImages.length === 0 ? (
+                    <Text style={styles.infoText}>No photos</Text>
+                  ) : (
+                    <View style={styles.imageWrapperRow}>
+                      {uploadedImages.map((uri, index) => {
+                        let styleToApply = {};
+                        const pos = index % 4;
+
+                        if (pos === 0) styleToApply = styles.imageGridOne;
+                        else if (pos === 1) styleToApply = styles.imageGridTwo;
+                        else if (pos === 2) styleToApply = styles.imageGridThree;
+                        else if (pos === 3) styleToApply = styles.imageGridFour;
+
+                        return (
+                          <View key={`uploaded-${index}`} style={styleToApply}>
+                            <Image source={{ uri }} style={styles.photo} />
                           </View>
-                        </View>
-                        <View style={{ alignItems: 'flex-end', minWidth: width * 0.15 }}>
-                          <CustomText weight="medium" style={{ fontSize: width * 0.03 }}>5 Hours ago</CustomText>
-                          <View style={{
-                            backgroundColor: '#FF0800',
-                            width: width * 0.05,
-                            height: width * 0.05,
-                            borderRadius: width * 0.025,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginTop: height * 0.0075
-                          }}>
-                            <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
+                        );
+                      })}
+                    </View>
+                  )}
+                </View>
+              )}
+
+              {selectedTab === "Chat" && (
+                <>
+                  <SearchBar />
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{ flexDirection: 'row', gap: width * 0.025, paddingHorizontal: width * 0.0375, paddingVertical: height * 0.0125 }}>
+                    <View style={styles.allMembarShadowWrapper}>
+                      <Image source={profilePic} style={styles.allMembarDp} />
+                    </View>
+                    <View style={styles.allMembarShadowWrapper}>
+                      <Image source={profilePic} style={styles.allMembarDp} />
+                    </View>
+                    <View style={styles.allMembarShadowWrapper}>
+                      <Image source={profilePic} style={styles.allMembarDp} />
+                    </View>
+                    <View style={styles.allMembarShadowWrapper}>
+                      <Image source={profilePic} style={styles.allMembarDp} />
+                    </View>
+                    <View style={styles.allMembarShadowWrapper}>
+                      <Image source={profilePic} style={styles.allMembarDp} />
+                    </View>
+                    <View style={styles.allMembarShadowWrapper}>
+                      <Image source={profilePic} style={styles.allMembarDp} />
+                    </View>
+                    <View style={styles.allMembarShadowWrapper}>
+                      <Image source={profilePic} style={styles.allMembarDp} />
+                    </View>
+                    <View style={styles.allMembarShadowWrapper}>
+                      <Image source={profilePic} style={styles.allMembarDp} />
+                    </View>
+                  </ScrollView>
+
+                  <View style={styles.chatList}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate("Chat")}
+                    >
+                      <View style={styles.shadowWrapper}>
+                        <View style={styles.chatListItem}>
+                          <View style={{ flexDirection: 'row', alignItems: 'center', gap: width * 0.0375 }}>
+                            <Image source={profilePic} style={styles.dp} />
+                            <View>
+                              <CustomText weight="bold">User name</CustomText>
+                              <CustomText weight="medium"
+                                numberOfLines={1}
+                                ellipsizeMode="tail"
+                                style={{ maxWidth: width * 0.4, fontSize: width * 0.03, color: '#888888' }}
+                              >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
+                            </View>
+                          </View>
+                          <View style={{ alignItems: 'flex-end', minWidth: width * 0.15 }}>
+                            <CustomText weight="medium" style={{ fontSize: width * 0.03 }}>5 Hours ago</CustomText>
+                            <View style={{
+                              backgroundColor: '#FF0800',
+                              width: width * 0.05,
+                              height: width * 0.05,
+                              borderRadius: width * 0.025,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              marginTop: height * 0.0075
+                            }}>
+                              <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
+                            </View>
                           </View>
                         </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </>
-            )}
-          </ScrollView>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              )}
+            </ScrollView>
 
-          {selectedTab === "Ai Magic" && (
-            <View style={styles.aiMagicContainer}>
-              <ScrollView
-                style={styles.aiMagicScrollView}
-                contentContainerStyle={styles.aiMagicContent}
-                showsVerticalScrollIndicator={false}
-              >
-                <View style={styles.messagesContainer}>
-                  {/* User Message */}
-                  <View style={styles.userTwoMessageBox}>
-                    <View style={styles.messageText}>
-                      <CustomText weight="medium" style={[styles.text, { color: '#3d3d3dff', fontSize: width * 0.03 }]}>
-                        Hey! Turn this photo into a Pixar-style 3D character with a vibrant, futuristic city background — make the colors neon and give the character a confident hero pose!
+            {selectedTab === "Ai Magic" && (
+              <View style={styles.aiMagicContainer}>
+                <ScrollView
+                  style={styles.aiMagicScrollView}
+                  contentContainerStyle={styles.aiMagicContent}
+                  showsVerticalScrollIndicator={false}
+                >
+                  <View style={styles.messagesContainer}>
+                    {/* User Message */}
+                    <View style={styles.userTwoMessageBox}>
+                      <View style={styles.messageText}>
+                        <CustomText weight="medium" style={[styles.text, { color: '#3d3d3dff', fontSize: width * 0.03 }]}>
+                          Hey! Turn this photo into a Pixar-style 3D character with a vibrant, futuristic city background — make the colors neon and give the character a confident hero pose!
+                        </CustomText>
+                      </View>
+                      <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
+                    </View>
+
+                    {/* AI Response */}
+                    <View style={styles.userOneMessageBox}>
+                      <View style={styles.ImageTextLeft}>
+                        <Image source={picnic1} style={styles.msgImage} />
+                      </View>
+                      <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
+                        01:00 am
                       </CustomText>
                     </View>
-                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
-                  </View>
 
-                  {/* AI Response */}
-                  <View style={styles.userOneMessageBox}>
-                    <View style={styles.ImageTextLeft}>
-                      <Image source={picnic1} style={styles.msgImage} />
+
+                    {/* AI Response */}
+                    <View style={styles.userOneMessageBox}>
+                      <View style={styles.messageTextLeft}>
+                        <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
+                          Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!
+                        </CustomText>
+                      </View>
+                      <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
                     </View>
-                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
-                      01:00 am
-                    </CustomText>
                   </View>
+                </ScrollView>
 
-
-                  {/* AI Response */}
-                  <View style={styles.userOneMessageBox}>
-                    <View style={styles.messageTextLeft}>
-                      <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
-                        Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!Sure! I can help with that. Just upload your image or describe exactly what style you want — realistic, cartoon, anime, cyberpunk… I'm ready when you are!
-                      </CustomText>
-                    </View>
-                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
+                {/* Input Box - Fixed at bottom */}
+                <View style={styles.aiMagicInputContainer}>
+                  <View style={styles.aiMagicInputWrapper}>
+                    <TouchableOpacity style={{ marginRight: width * 0.025 }}>
+                      <ImagePlus size={width * 0.055} color="#6B7280" />
+                    </TouchableOpacity>
+                    <TextInput
+                      placeholder="Ask anything..."
+                      placeholderTextColor="#9CA3AF"
+                      style={styles.aiMagicInput}
+                    />
+                    <TouchableOpacity style={styles.aiMagicSendButton}>
+                      <SendHorizonal size={width * 0.05} color="#FFFFFF" />
+                    </TouchableOpacity>
                   </View>
-                </View>
-              </ScrollView>
-
-              {/* Input Box - Fixed at bottom */}
-              <View style={styles.aiMagicInputContainer}>
-                <View style={styles.aiMagicInputWrapper}>
-                  <TouchableOpacity style={{ marginRight: width * 0.025 }}>
-                    <ImagePlus size={width * 0.055} color="#6B7280" />
-                  </TouchableOpacity>
-                  <TextInput
-                    placeholder="Ask anything..."
-                    placeholderTextColor="#9CA3AF"
-                    style={styles.aiMagicInput}
-                  />
-                  <TouchableOpacity style={styles.aiMagicSendButton}>
-                    <SendHorizonal size={width * 0.05} color="#FFFFFF" />
-                  </TouchableOpacity>
                 </View>
               </View>
-            </View>
-          )}
+            )}
 
-          <MembersModal
-            visible={modalVisible}
-            onClose={() => setModalVisible(false)}
-            members={membersList}
-          />
+            <MembersModal
+              visible={modalVisible}
+              onClose={() => setModalVisible(false)}
+              members={membersList}
+            />
 
+          </View>
         </View>
-      </View>
+
     </ScreenLayout>
   );
 };

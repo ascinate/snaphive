@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     View,
     Text,
@@ -13,34 +13,56 @@ import { Plus, Trash2, Users } from "lucide-react-native";
 import CustomText from "./CustomText";
 
 const MembersModal = ({ visible, onClose, members = [] }) => {
-    const [email, setEmail] = useState("");
+    const [search, setSearch] = useState("");
+    const [filteredMembers, setFilteredMembers] = useState(members);
+
+    // Reset list when modal opens
+    useEffect(() => {
+        setFilteredMembers(members);
+        setSearch("");
+    }, [members, visible]);
+
+    // Search Function
+    const handleSearch = (text) => {
+        setSearch(text);
+
+        const query = text.toLowerCase();
+
+        const results = members.filter((m) =>
+            m.email?.toLowerCase().includes(query)
+        );
+
+        setFilteredMembers(results);
+    };
 
     return (
         <Modal transparent visible={visible} animationType="fade">
             <View style={styles.overlay}>
                 <View style={styles.modalBox}>
 
+                    {/* Close Button */}
                     <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
                         <CustomText weight="medium" style={styles.closeTxt}>✕</CustomText>
                     </TouchableOpacity>
 
-                    <View style={{ flexDirection: 'row', gap: 12, alignContent: 'center', paddingHorizontal: 10 }}>
+                    {/* Title */}
+                    <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center', paddingHorizontal: 10 }}>
                         <Users color='#DA3C84' size={20} />
                         <CustomText weight="medium" style={styles.title}>Hive Members</CustomText>
                     </View>
 
-                    {/* Invite input */}
+                    {/* Search Input */}
                     <View style={styles.inviteRow}>
                         <TextInput
-                            placeholder="example@gmail.com"
+                            placeholder="Search by email..."
                             placeholderTextColor="#A9A9A9"
-                            value={email}
-                            onChangeText={setEmail}
+                            value={search}
+                            onChangeText={handleSearch}
                             style={styles.input}
                         />
 
                         <TouchableOpacity style={styles.inviteBtn}>
-                            <CustomText weight="medium" style={styles.inviteText}>Invite</CustomText>
+                            <CustomText weight="medium" style={styles.inviteText}>Search</CustomText>
                         </TouchableOpacity>
                     </View>
 
@@ -49,10 +71,12 @@ const MembersModal = ({ visible, onClose, members = [] }) => {
                         style={{ width: "100%", marginTop: 12 }}
                         contentContainerStyle={{ alignItems: "center" }}
                     >
-                        {members.length === 0 ? (
-                            <CustomText style={{ marginTop: 20, color: "#777" }}>No Members Found</CustomText>
+                        {filteredMembers.length === 0 ? (
+                            <CustomText style={{ marginTop: 20, color: "#777" }}>
+                                No Members Found
+                            </CustomText>
                         ) : (
-                            members.map((item, index) => (
+                            filteredMembers.map((item, index) => (
                                 <View key={index} style={styles.card}>
                                     <Image
                                         source={require("../../assets/dp.jpg")}
@@ -61,15 +85,11 @@ const MembersModal = ({ visible, onClose, members = [] }) => {
 
                                     <View style={{ flex: 1 }}>
                                         <CustomText weight="medium" style={styles.name}>
-                                            {/* {item.memberId?.name || "User"} */}
-                                               {item.email}
-                                        </CustomText>
-                                        {/* <CustomText weight="medium" style={styles.email}>
                                             {item.email}
-                                        </CustomText> */}
+                                        </CustomText>
                                     </View>
 
-                                    {/* Status Button */}
+                                    {/* Status Buttons */}
                                     {item.status === "pending" ? (
                                         <TouchableOpacity style={styles.addBtn}>
                                             <Plus size={16} color="#fff" />
@@ -96,6 +116,7 @@ const MembersModal = ({ visible, onClose, members = [] }) => {
 
 export default MembersModal;
 
+// -------------------- STYLES --------------------
 const styles = StyleSheet.create({
     overlay: {
         flex: 1,
@@ -148,7 +169,6 @@ const styles = StyleSheet.create({
     },
     profileImg: { width: 45, height: 45, borderRadius: 40, marginRight: 12 },
     name: { fontSize: 12, color: "#000" },
-    email: { fontSize: 10, color: "#9A9A9A" },
     addBtn: { flexDirection: "row", alignItems: "center", backgroundColor: "#DA3C84", padding: 6, borderRadius: 10 },
     addTxt: { color: "#fff", fontSize: 12, marginLeft: 4 },
     memberBox: { flexDirection: "row", alignItems: "center", gap: 12 },

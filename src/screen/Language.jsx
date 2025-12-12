@@ -11,6 +11,7 @@ import ThemeButton from "../components/ThemeButton";
 import CustomText from "../components/CustomText";
 import ScreenLayout from "../components/ScreenLayout";
 import { Check } from "lucide-react-native";
+import { useTranslation } from 'react-i18next';
 
 const folderImage = require("../../assets/folderImage.png");
 
@@ -21,10 +22,11 @@ const flag4 = require("../../assets/flag4.png");
 // Images
 const createEvent = require("../../assets/background.png");
 const profilePic = require("../../assets/picnic3.jpg");
-const Language = ({ navigation, route }) => {
 
+const Language = ({ navigation, route }) => {
+    const { t, i18n } = useTranslation();
     const [email, setEmail] = useState("");
-    const [selectedLanguage, setSelectedLanguage] = useState("English");
+    const [selectedLanguage, setSelectedLanguage] = useState(i18n.language || "en");
     const { folderName, date, owner } = route.params || {
         folderName: "Untitled Folder",
         date: "Unknown Date",
@@ -32,11 +34,19 @@ const Language = ({ navigation, route }) => {
     };
 
     const languages = [
-        { name: "English", flag: flag1 },
-        { name: "Spanish", flag: flag2 },
-        { name: "French", flag: flag3 },
-        { name: "German", flag: flag4 },
+        { name: "English", flag: flag1, code: "en" },
+        { name: "Spanish", flag: flag2, code: "es" },
+        { name: "French", flag: flag3, code: "fr" },
+        { name: "German", flag: flag4, code: "de" },
     ];
+
+    const handleSaveLanguage = async () => {
+        const selectedLang = languages.find(lang => lang.code === selectedLanguage);
+        if (selectedLang) {
+            await i18n.changeLanguage(selectedLang.code);
+            navigation.navigate("MyTabs");
+        }
+    };
 
     return (
         <ScreenLayout
@@ -44,31 +54,24 @@ const Language = ({ navigation, route }) => {
             image={createEvent}
             folderName="Janifer Danis"
             date="+91 1841 510 1450"
-
-
             OverlayContent={
                 <View style={styles.profileOverlay}>
-
                     <View>
                         <CustomText weight="bold" style={styles.profileName}>
-                            Select Language
+                            {t('selectLanguage')}
                         </CustomText>
-
                     </View>
                 </View>
             }
         >
-
-
             <ScrollView style={{ paddingHorizontal: 20, paddingTop: 40, backgroundColor: '#FAFAF9' }}>
-
                 {languages.map((lang, index) => (
                     <TouchableOpacity
                         key={index}
-                        onPress={() => setSelectedLanguage(lang.name)}
+                        onPress={() => setSelectedLanguage(lang.code)}
                         style={[
                             styles.languageRow,
-                            selectedLanguage === lang.name && { borderColor: "#FFA500", backgroundColor: "#FFF4E0" }
+                            selectedLanguage === lang.code && { borderColor: "#FFA500", backgroundColor: "#FFF4E0" }
                         ]}
                     >
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
@@ -82,12 +85,10 @@ const Language = ({ navigation, route }) => {
                         </View>
 
                         {/* Conditional tick or placeholder */}
-                        {selectedLanguage === lang.name ? (
+                        {selectedLanguage === lang.code ? (
                             <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#E1711C', alignItems: 'center', justifyContent: 'center' }}>
                                 <Check color='#ffffffff' size={16} />
                             </View>
-
-
                         ) : (
                             <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#ffffff', borderWidth: 1, borderColor: '#bebebeff' }} />
                         )}
@@ -96,13 +97,11 @@ const Language = ({ navigation, route }) => {
 
                 {/* Send Button */}
                 <ThemeButton
-                    text="Save"
-                    onPress={() => navigation.navigate("MyTabs")}
+                    text={t('save')}
+                    onPress={handleSaveLanguage}
                     style={{ width: "100%", marginTop: 100 }}
                 />
             </ScrollView>
-
-
         </ScreenLayout>
     );
 };
@@ -166,16 +165,4 @@ const styles = StyleSheet.create({
     },
 });
 
-
 export default Language;
-
-
-
-
-
-
-
-
-
-
-

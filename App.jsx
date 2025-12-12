@@ -6,7 +6,7 @@ import { navigationRef } from "./src/navigation/RootNavigation";
 import { NotificationProvider } from "./src/context/NotificationContext";
 import { EventProvider } from "./src/context/EventContext";
 import { LoaderProvider } from "./src/context/LoaderContext";
-
+import './src/i18n';
 // Screens
 import Landing from "./src/screen/Landing";
 import Signup from "./src/screen/Signup";

@@ -265,31 +265,51 @@ const handleAiImagePick = () => {
 
     const imageUri = response.assets[0].uri;
 
-    const newMessage = {
+    const userImg = {
       id: Date.now(),
       type: "image",
       uri: imageUri,
       time: "01:00 am",
+      side: "user",
     };
 
-    setAiMessages((prev) => [...prev, newMessage]);
+    const aiImg = {
+      id: Date.now() + 1,
+      type: "image",
+      uri: imageUri,
+      time: "01:00 am",
+      side: "ai",
+    };
+
+    setAiMessages((prev) => [...prev, userImg, aiImg]);
   });
 };
+
 
 // AI MAGIC — SEND TEXT MESSAGE
 const handleAiTextSend = () => {
   if (!textMessage.trim()) return;
 
-  const newMessage = {
+  const userMsg = {
     id: Date.now(),
     type: "text",
     text: textMessage,
     time: "01:00 am",
+    side: "user",
   };
 
-  setAiMessages((prev) => [...prev, newMessage]);
-  setTextMessage(""); // Clear input
+  const aiReply = {
+    id: Date.now() + 1,
+    type: "text",
+    text: textMessage, // AI echoes same message
+    time: "01:00 am",
+    side: "ai",
+  };
+
+  setAiMessages((prev) => [...prev, userMsg, aiReply]);
+  setTextMessage("");
 };
+
 
 
   
@@ -574,7 +594,10 @@ const handleAiTextSend = () => {
 
   {/* ---- DYNAMIC AI MESSAGES (IMAGES USER UPLOADED) ---- */}
 {aiMessages.map((msg) => (
-  <View key={msg.id} style={styles.userTwoMessageBox}>
+  <View
+    key={msg.id}
+    style={msg.side === "user" ? styles.userTwoMessageBox : styles.userOneMessageBox}
+  >
 
     {/* IF IMAGE */}
     {msg.type === "image" && (

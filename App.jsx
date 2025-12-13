@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -65,13 +65,30 @@ import ClickPhotoThree from "./src/screen/ClickPhotoThree";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+
+
+  // 🔥 THIS STATE IS THE KEY
+  const [language, setLanguage] = useState(i18n.language);
+
+  useEffect(() => {
+    const onLanguageChange = (lng) => {
+      setLanguage(lng);
+    };
+
+    i18n.on("languageChanged", onLanguageChange);
+
+    return () => {
+      i18n.off("languageChanged", onLanguageChange);
+    };
+  }, []);
+
   return (
     <SafeAreaProvider>
       <LoaderProvider>
         <NotificationProvider>
           <EventProvider>
             <I18nextProvider i18n={i18n}>
-            <NavigationContainer ref={navigationRef}>
+            <NavigationContainer ref={navigationRef} key={language} >
               <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Landing" component={Landing} />
                 <Stack.Screen name="Signup" component={Signup} />

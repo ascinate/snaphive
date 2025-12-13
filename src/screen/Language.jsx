@@ -43,8 +43,9 @@ const Language = ({ navigation, route }) => {
     const handleSaveLanguage = async () => {
         const selectedLang = languages.find(lang => lang.code === selectedLanguage);
         if (selectedLang) {
-            await i18n.changeLanguage(selectedLang.code);
-            navigation.navigate("MyTabs");
+ 
+            await i18n.changeLanguage(selectedLanguage);
+          
         }
     };
 

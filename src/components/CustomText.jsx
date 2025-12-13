@@ -1,6 +1,7 @@
 // src/components/CustomText.js
 import React from 'react';
 import { Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 // Map font weights to your Montserrat font files
 const fontMap = {
@@ -26,8 +27,14 @@ const fontMap = {
 };
 
 const CustomText = ({ style, weight = 'regular', children, ...props }) => {
+  // 🔥 This line makes CustomText re-render on language change
+  const { i18n } = useTranslation();
+
   return (
-    <Text style={[{ fontFamily: fontMap[weight] }, style]} {...props}>
+    <Text
+      {...props}
+      style={[{ fontFamily: fontMap[weight] }, style]}
+    >
       {children}
     </Text>
   );

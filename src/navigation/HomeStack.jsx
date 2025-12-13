@@ -13,7 +13,6 @@ export default function HomeStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeMain" component={Home} />
-      <Stack.Screen name="FolderLayout" component={FolderLayout} />
       <Stack.Screen name="Notification" component={Notification} />
       <Stack.Screen name="InviteMember" component={InviteMember} />
     </Stack.Navigator>

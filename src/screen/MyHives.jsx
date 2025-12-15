@@ -32,7 +32,7 @@ import { ImageBackground } from "react-native";
 // components
 import TopNav from '../components/TopNavbar';
 import CustomText from '../components/CustomText';
-
+import { useTranslation } from 'react-i18next';
 // assets
 const picnic1 = require('../../assets/picnic1.jpg');
 
@@ -41,13 +41,12 @@ const { width, height } = Dimensions.get('window');
 const MyHives = ({ navigation, route }) => {
     const [refreshing, setRefreshing] = useState(false);
     const { hives } = useContext(EventContext);
-
+    const { t, i18n } = useTranslation();
 
     return (
         <SafeAreaProvider>
             <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
                 <TopNav />
-
                 <ScrollView
                     style={styles.container}
                     showsVerticalScrollIndicator={false}
@@ -57,9 +56,9 @@ const MyHives = ({ navigation, route }) => {
                     {/* Header Section */}
 
                     <View style={styles.headerSection}>
-                        <Text style={styles.title}>My Hives</Text>
+                        <CustomText weight="bold" style={styles.title}>{t('myHives')}</CustomText>
                         <CustomText style={styles.subtitle}>
-                            All your shared memories in one place
+                            {t('allSharedMemories')}
                         </CustomText>
                         <View style={{ position: 'relative', justifyContent: 'center' }}>
                             <Search
@@ -75,7 +74,7 @@ const MyHives = ({ navigation, route }) => {
                             />
                             <TextInput
                                 style={[styles.searchInput, { paddingLeft: 38 }]}
-                                placeholder="Search hive..."
+                                placeholder={t('searchHive')}
                                 placeholderTextColor="#9CA3AF"
                             />
 
@@ -96,7 +95,7 @@ const MyHives = ({ navigation, route }) => {
 
                                     </CustomText>
                                     <CustomText weight="medium" style={{ color: '#fff' }}>
-                                        Total Hives
+                                        {t('totalHives')}
                                     </CustomText>
                                 </View>
                             </View>
@@ -117,7 +116,7 @@ const MyHives = ({ navigation, route }) => {
 
                                     </CustomText>
                                     <CustomText weight="medium" style={{ color: '#fff' }}>
-                                        Photos
+                                        {t('photos')}
                                     </CustomText>
                                 </View>
                             </View>
@@ -200,7 +199,7 @@ const MyHives = ({ navigation, route }) => {
                                 </View>
 
                                 <CustomText weight="medium" style={{ color: '#da3c84' }}>
-                                    No hives yet
+                                    {t('noHivesYet')}
                                 </CustomText>
                                 <TouchableOpacity onPress={() => navigation.navigate('CreateHive')}>
                                     <View
@@ -215,7 +214,7 @@ const MyHives = ({ navigation, route }) => {
                                         }}
                                     >
                                         <CustomText weight="bold" style={{ color: '#ffffff' }}>
-                                            Create your first hive
+                                            {t('createYourFirstHive')}
                                         </CustomText>
                                         <CirclePlus color="#ffffff" />
                                     </View>

@@ -30,7 +30,7 @@ import { launchImageLibrary } from "react-native-image-picker";
 import { Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
 import { useLoader } from "../context/LoaderContext";
-
+import { useTranslation } from 'react-i18next';
 import axios from "axios";
 
 // SVGs
@@ -58,6 +58,8 @@ const dp8 = require("../../assets/dp8.jpg");
 const picnic1 = require("../../assets/picnic1.jpg");
 
 const FolderLayout = ({ navigation, route }) => {
+
+  
   const {
     image,
     folderName,
@@ -81,7 +83,7 @@ const FolderLayout = ({ navigation, route }) => {
   const [messages, setMessages] = useState([]);
   const [textMessage, setTextMessage] = useState("");
   const { showLoader, hideLoader } = useLoader();
-
+const { t } = useTranslation();
   const { events, setEvents } = useContext(EventContext);
 
   console.log("hive id:" + hiveId);
@@ -313,8 +315,7 @@ const FolderLayout = ({ navigation, route }) => {
 
 
 
-
-  return (
+return (
     <ScreenLayout
       navigation={navigation}
       image={createEvent}
@@ -343,7 +344,7 @@ const FolderLayout = ({ navigation, route }) => {
                 <Plus color="#DA3C84" size={width * 0.05} />
               </View>
               <CustomText weight="bold" style={{ color: '#DA3C84', fontSize: width * 0.035 }}>
-                My Images
+                {t('myImages')}
               </CustomText>
             </TouchableOpacity>
             <TouchableOpacity
@@ -352,7 +353,7 @@ const FolderLayout = ({ navigation, route }) => {
             >
               <Users color="#ffffff" size={width * 0.05} />
               <CustomText weight="bold" style={{ color: '#ffffff', fontSize: width * 0.035 }}>
-                {membersList.length} Members
+                {membersList.length} {t('members')}
               </CustomText>
             </TouchableOpacity>
           </View>
@@ -382,7 +383,7 @@ const FolderLayout = ({ navigation, route }) => {
                 }}
                 style={{ paddingVertical: height * 0.015, paddingHorizontal: width * 0.04 }}
               >
-                <CustomText weight="medium">Manage Permissions</CustomText>
+                <CustomText weight="medium">{t('managePermissions')}</CustomText>
               </TouchableOpacity>
 
               <View style={{ height: 1, backgroundColor: '#E5E7EB' }} />
@@ -395,7 +396,7 @@ const FolderLayout = ({ navigation, route }) => {
                 }
                 style={{ paddingVertical: height * 0.015, paddingHorizontal: width * 0.04 }}
               >
-                <CustomText weight="medium">Invite Member</CustomText>
+                <CustomText weight="medium">{t('inviteMember')}</CustomText>
               </TouchableOpacity>
 
 
@@ -408,7 +409,7 @@ const FolderLayout = ({ navigation, route }) => {
                 }}
                 style={{ paddingVertical: height * 0.015, paddingHorizontal: width * 0.04 }}
               >
-                <CustomText weight="medium">Pending Request</CustomText>
+                <CustomText weight="medium">{t('pendingRequest')}</CustomText>
               </TouchableOpacity>
 
               <View style={{ height: 1, backgroundColor: '#E5E7EB' }} />
@@ -420,7 +421,7 @@ const FolderLayout = ({ navigation, route }) => {
                 }}
                 style={{ paddingVertical: height * 0.015, paddingHorizontal: width * 0.04 }}
               >
-                <CustomText weight="medium">Status</CustomText>
+                <CustomText weight="medium">{t('status')}</CustomText>
               </TouchableOpacity>
             </View>
           )}
@@ -433,21 +434,22 @@ const FolderLayout = ({ navigation, route }) => {
           {/* Tabs */}
           <View style={styles.tabsContainer}>
             {[
-              { label: "Gallery", icon: <Images width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Gallery" ? "#fff" : "#000"} /> },
-              { label: "Chat", icon: <Video width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Chat" ? "#fff" : "#000"} /> },
-              { label: "Ai Magic", icon: <MessagesSquare width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Ai Magic" ? "#fff" : "#000"} /> },
+              { key: "Gallery", label: t('gallery'), icon: <Images width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Gallery" ? "#fff" : "#000"} /> },
+              { key: "Chat", label: t('chat'), icon: <Video width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Chat" ? "#fff" : "#000"} /> },
+              { key: "AiMagic", label: t('aiMagic'), icon: <MessagesSquare width={width * 0.04} height={width * 0.04} stroke={selectedTab === "AiMagic" ? "#fff" : "#000"} /> },
             ].map((tab, i) => (
               <TouchableOpacity
                 key={i}
-                style={[styles.tabButton, selectedTab === tab.label && styles.tabButtonActive]}
-                onPress={() => setSelectedTab(tab.label)}
+                style={[styles.tabButton, selectedTab === tab.key && styles.tabButtonActive]}
+                onPress={() => setSelectedTab(tab.key)}
               >
                 {tab.icon}
-                <Text
-                  style={[styles.tabText, selectedTab === tab.label && styles.tabTextActive]}
+                <CustomText
+                  weight="medium"
+                  style={[styles.tabText, selectedTab === tab.key && styles.tabTextActive]}
                 >
                   {tab.label}
-                </Text>
+                </CustomText>
               </TouchableOpacity>
             ))}
           </View>
@@ -458,7 +460,7 @@ const FolderLayout = ({ navigation, route }) => {
             {selectedTab === "Gallery" && (
               <View style={styles.grid}>
                 {uploadedImages.length === 0 ? (
-                  <Text style={styles.infoText}>No photos</Text>
+                  <CustomText style={styles.infoText}>{t('noPhotos')}</CustomText>
                 ) : (
                   <View style={styles.imageWrapperRow}>
                     {uploadedImages.map((uri, index) => {
@@ -523,7 +525,7 @@ const FolderLayout = ({ navigation, route }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: width * 0.0375 }}>
                           <Image source={profilePic} style={styles.dp} />
                           <View>
-                            <CustomText weight="bold">User name</CustomText>
+                            <CustomText weight="bold">{t('userName')}</CustomText>
                             <CustomText weight="medium"
                               numberOfLines={1}
                               ellipsizeMode="tail"
@@ -532,7 +534,7 @@ const FolderLayout = ({ navigation, route }) => {
                           </View>
                         </View>
                         <View style={{ alignItems: 'flex-end', minWidth: width * 0.15 }}>
-                          <CustomText weight="medium" style={{ fontSize: width * 0.03 }}>5 Hours ago</CustomText>
+                          <CustomText weight="medium" style={{ fontSize: width * 0.03 }}>5 {t('hoursAgo')}</CustomText>
                           <View style={{
                             backgroundColor: '#FF0800',
                             width: width * 0.05,
@@ -553,7 +555,7 @@ const FolderLayout = ({ navigation, route }) => {
             )}
           </ScrollView>
 
-          {selectedTab === "Ai Magic" && (
+          {selectedTab === "AiMagic" && (
             <View style={styles.aiMagicContainer}>
               <ScrollView
                 style={styles.aiMagicScrollView}
@@ -592,7 +594,6 @@ const FolderLayout = ({ navigation, route }) => {
                     <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
                   </View>
 
-
                   {/* ---- DYNAMIC AI MESSAGES ---- */}
                   {aiMessages.map((msg) => {
                     // USER MESSAGE (RIGHT SIDE)
@@ -605,7 +606,7 @@ const FolderLayout = ({ navigation, route }) => {
                               <Image source={{ uri: msg.uri }} style={styles.msgImage} />
                             </View>
                           )}
-
+                          
                           {/* IF USER TEXT */}
                           {msg.type === "text" && (
                             <View style={styles.messageText}>
@@ -614,14 +615,14 @@ const FolderLayout = ({ navigation, route }) => {
                               </CustomText>
                             </View>
                           )}
-
+                          
                           <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
                             {msg.time}
                           </CustomText>
                         </View>
                       );
                     }
-
+                    
                     // AI MESSAGE (LEFT SIDE)
                     else {
                       return (
@@ -632,7 +633,7 @@ const FolderLayout = ({ navigation, route }) => {
                               <Image source={{ uri: msg.uri }} style={styles.msgImage} />
                             </View>
                           )}
-
+                          
                           {/* IF AI TEXT */}
                           {msg.type === "text" && (
                             <View style={styles.messageTextLeft}>
@@ -641,7 +642,7 @@ const FolderLayout = ({ navigation, route }) => {
                               </CustomText>
                             </View>
                           )}
-
+                          
                           <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
                             {msg.time}
                           </CustomText>
@@ -649,7 +650,6 @@ const FolderLayout = ({ navigation, route }) => {
                       );
                     }
                   })}
-
 
                 </View>
 
@@ -665,10 +665,8 @@ const FolderLayout = ({ navigation, route }) => {
                     <ImagePlus size={width * 0.055} color="#6B7280" />
                   </TouchableOpacity>
 
-
-
                   <TextInput
-                    placeholder="Ask anything..."
+                    placeholder={t('askAnything')}
                     placeholderTextColor="#9CA3AF"
                     style={styles.aiMagicInput}
                     value={textMessage}
@@ -699,7 +697,6 @@ const FolderLayout = ({ navigation, route }) => {
     </ScreenLayout>
   );
 };
-
 const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,

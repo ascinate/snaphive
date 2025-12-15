@@ -20,7 +20,7 @@ import { Share } from "react-native";
 import { useLoader } from "../context/LoaderContext";
 // SVGs
 import Pencil from "../../assets/svg/pencil.svg";
-
+import { useTranslation } from 'react-i18next';
 // Components
 import ScreenLayout from "../components/ScreenLayout";
 import CustomText from "../components/CustomText";
@@ -33,6 +33,7 @@ const createEvent = require("../../assets/background.png");
 const profilePic = require("../../assets/picnic3.jpg");
 
 const Profile = ({ navigation, }) => {
+  const { t, i18n } = useTranslation();
   const [modalVisible, setModalVisible] = useState(false);
   const { showLoader, hideLoader } = useLoader();
   const openStore = () => {
@@ -92,8 +93,8 @@ const Profile = ({ navigation, }) => {
     <ScreenLayout
       navigation={navigation}
       image={createEvent}
-      folderName={user?.name || "User"}
-      date={user?.email || "No Email"}
+folderName={user?.name || t('userName')}
+date={user?.email || t('noEmail')}
       RightIcon={
         <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
           <Pencil height={16} width={16} />
@@ -111,13 +112,13 @@ const Profile = ({ navigation, }) => {
             style={styles.profileImage}
           />
           <View>
-            <CustomText weight="bold" style={styles.profileName}>
-              {user?.name || "User Name"}
-            </CustomText>
+<CustomText weight="bold" style={styles.profileName}>
+  {user?.name || t('userName')}
+</CustomText>
 
-            <CustomText style={styles.profileNumber}>
-              {user?.email || "No Email"}
-            </CustomText>
+<CustomText style={styles.profileNumber}>
+  {user?.email || t('noEmail')}
+</CustomText>
           </View>
         </View>
       }
@@ -129,7 +130,7 @@ const Profile = ({ navigation, }) => {
       >
 
         <CustomText weight="medium" style={styles.category}>
-          Account
+    {t('account')}
         </CustomText>
 
         <TouchableOpacity
@@ -141,17 +142,17 @@ const Profile = ({ navigation, }) => {
           </View>
           <View style={styles.textBox}>
             <CustomText weight="bold" style={styles.title}>
-              Language
+      {t('language')}
             </CustomText>
             <CustomText weight="medium" style={styles.subtitle}>
-              English
+         {t('english')}
             </CustomText>
           </View>
           <ChevronRight color="#B0B0B0" size={18} />
         </TouchableOpacity>
 
         <CustomText weight="medium" style={styles.category}>
-          Benefit
+      {t('benefit')}
         </CustomText>
 
         <TouchableOpacity
@@ -163,10 +164,10 @@ const Profile = ({ navigation, }) => {
           </View>
           <View style={styles.textBox}>
             <CustomText weight="bold" style={styles.title}>
-              Premium
+              {t('premium')}
             </CustomText>
             <CustomText weight="medium" style={styles.subtitle}>
-              Unlock all features
+            {t('unlockAllFeatures')}
             </CustomText>
           </View>
           <ChevronRight color="#B0B0B0" size={18} />
@@ -174,7 +175,7 @@ const Profile = ({ navigation, }) => {
 
 
         <CustomText weight="medium" style={styles.category}>
-          Other
+  {t('other')}
         </CustomText>
 
         <TouchableOpacity
@@ -186,10 +187,10 @@ const Profile = ({ navigation, }) => {
           </View>
           <View style={styles.textBox}>
             <CustomText weight="bold" style={styles.title}>
-              Contact Us
+          {t('contactUs')}
             </CustomText>
             <CustomText weight="medium" style={styles.subtitle}>
-              Get support anytime
+              {t('getSupportAnytime')}
             </CustomText>
           </View>
           <ChevronRight color="#B0B0B0" size={18} />
@@ -204,10 +205,10 @@ const Profile = ({ navigation, }) => {
           </View>
           <View style={styles.textBox}>
             <CustomText weight="bold" style={styles.title}>
-              Give us feedback
+              {t('giveUsFeedback')}
             </CustomText>
             <CustomText weight="medium" style={styles.subtitle}>
-              Love the app? Leave us a review
+        {t('loveTheApp')}
             </CustomText>
           </View>
           <ChevronRight color="#B0B0B0" size={18} />
@@ -222,10 +223,10 @@ const Profile = ({ navigation, }) => {
           </View>
           <View style={styles.textBox}>
             <CustomText weight="bold" style={styles.title}>
-              Share the app
+            {t('shareTheApp')}
             </CustomText>
             <CustomText weight="medium" style={styles.subtitle}>
-              Invite your friends to try Airbum
+          {t('inviteFriends')}
             </CustomText>
           </View>
           <ChevronRight color="#B0B0B0" size={18} />
@@ -240,7 +241,7 @@ const Profile = ({ navigation, }) => {
           </View>
           <View style={styles.textBox}>
             <CustomText weight="bold" style={styles.title}>
-              Logout
+           {t('logout')}
             </CustomText>
           </View>
         </TouchableOpacity>

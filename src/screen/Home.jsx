@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ImageBackground } from "react-native";
 
 import axios from "axios";
+import { useTranslation } from 'react-i18next';
 
 // assets
 const hero = require('../../assets/hero.png');
@@ -30,7 +31,7 @@ const Home = ({ navigation, route }) => {
 
   const { hives, setHives } = useContext(EventContext);
 
-
+  const { t, i18n } = useTranslation();
   // ADD THESE TWO FUNCTIONS HERE - RIGHT AFTER useState DECLARATIONS
   // Format date → DD/MM/YYYY
   const formatDisplayDate = (date) => {
@@ -80,83 +81,83 @@ const Home = ({ navigation, route }) => {
 
   // REMOVE the old parseExpiryDate function completely
   // REPLACE the removeExpiredEvents function with this:
-// REPLACE the removeExpiredEvents function in Home.jsx with this:
+  // REPLACE the removeExpiredEvents function in Home.jsx with this:
 
-const removeExpiredEvents = useCallback(() => {
-  const now = new Date();
+  const removeExpiredEvents = useCallback(() => {
+    const now = new Date();
 
-  // Update both hives and events
-  setHives(prevHives =>
-    prevHives.filter(hive => {
-      // Keep non-temporary hives
-      if (!hive.isTemporary) return true;
+    // Update both hives and events
+    setHives(prevHives =>
+      prevHives.filter(hive => {
+        // Keep non-temporary hives
+        if (!hive.isTemporary) return true;
 
-      // Keep hives without expiry date (safety)
-      if (!hive.expiryDate) return true;
+        // Keep hives without expiry date (safety)
+        if (!hive.expiryDate) return true;
 
-      // Parse the expiry date from API format (YYYY-MM-DD)
-      const expiryDate = new Date(hive.expiryDate);
+        // Parse the expiry date from API format (YYYY-MM-DD)
+        const expiryDate = new Date(hive.expiryDate);
 
-      // If we have endTime, parse and combine it
-      if (hive.endTime) {
-        // Parse time from API format (e.g., "11:09 pm")
-        const timeStr = hive.endTime.toLowerCase();
-        const [time, period] = timeStr.split(' ');
-        const [hours, minutes] = time.split(':').map(Number);
-        
-        let hour24 = hours;
-        if (period === 'pm' && hours !== 12) {
-          hour24 = hours + 12;
-        } else if (period === 'am' && hours === 12) {
-          hour24 = 0;
+        // If we have endTime, parse and combine it
+        if (hive.endTime) {
+          // Parse time from API format (e.g., "11:09 pm")
+          const timeStr = hive.endTime.toLowerCase();
+          const [time, period] = timeStr.split(' ');
+          const [hours, minutes] = time.split(':').map(Number);
+
+          let hour24 = hours;
+          if (period === 'pm' && hours !== 12) {
+            hour24 = hours + 12;
+          } else if (period === 'am' && hours === 12) {
+            hour24 = 0;
+          }
+
+          expiryDate.setHours(hour24, minutes, 0, 0);
+        } else {
+          // If no end time, set to end of day
+          expiryDate.setHours(23, 59, 59, 999);
         }
 
-        expiryDate.setHours(hour24, minutes, 0, 0);
-      } else {
-        // If no end time, set to end of day
-        expiryDate.setHours(23, 59, 59, 999);
-      }
+        // Check if hive has expired
+        const hasExpired = expiryDate < now;
 
-      // Check if hive has expired
-      const hasExpired = expiryDate < now;
-
-      if (hasExpired) {
-        console.log(`Removing expired hive: ${hive.hiveName}, expired at: ${expiryDate.toISOString()}`);
-      }
-
-      return !hasExpired;
-    })
-  );
-
-  // Also update events state to keep them in sync
-  setEvents(prevEvents =>
-    prevEvents.filter(event => {
-      if (!event.isTemporary) return true;
-      if (!event.expiryDate) return true;
-
-      const expiryDate = new Date(event.expiryDate);
-
-      if (event.endTime) {
-        const timeStr = event.endTime.toLowerCase();
-        const [time, period] = timeStr.split(' ');
-        const [hours, minutes] = time.split(':').map(Number);
-        
-        let hour24 = hours;
-        if (period === 'pm' && hours !== 12) {
-          hour24 = hours + 12;
-        } else if (period === 'am' && hours === 12) {
-          hour24 = 0;
+        if (hasExpired) {
+          console.log(`Removing expired hive: ${hive.hiveName}, expired at: ${expiryDate.toISOString()}`);
         }
 
-        expiryDate.setHours(hour24, minutes, 0, 0);
-      } else {
-        expiryDate.setHours(23, 59, 59, 999);
-      }
+        return !hasExpired;
+      })
+    );
 
-      return expiryDate >= now;
-    })
-  );
-}, [setHives, setEvents]);
+    // Also update events state to keep them in sync
+    setEvents(prevEvents =>
+      prevEvents.filter(event => {
+        if (!event.isTemporary) return true;
+        if (!event.expiryDate) return true;
+
+        const expiryDate = new Date(event.expiryDate);
+
+        if (event.endTime) {
+          const timeStr = event.endTime.toLowerCase();
+          const [time, period] = timeStr.split(' ');
+          const [hours, minutes] = time.split(':').map(Number);
+
+          let hour24 = hours;
+          if (period === 'pm' && hours !== 12) {
+            hour24 = hours + 12;
+          } else if (period === 'am' && hours === 12) {
+            hour24 = 0;
+          }
+
+          expiryDate.setHours(hour24, minutes, 0, 0);
+        } else {
+          expiryDate.setHours(23, 59, 59, 999);
+        }
+
+        return expiryDate >= now;
+      })
+    );
+  }, [setHives, setEvents]);
 
 
   useEffect(() => {
@@ -273,7 +274,6 @@ const removeExpiredEvents = useCallback(() => {
 
 
 
-
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#FAFAF9' }}>
@@ -290,7 +290,7 @@ const removeExpiredEvents = useCallback(() => {
           <View style={[styles.searchContainer, { marginHorizontal: width * 0.05 }]}>
             <TextInput
               style={styles.searchInput}
-              placeholder="Search"
+              placeholder={t('search')}
               placeholderTextColor="#9CA3AF"
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -328,19 +328,19 @@ const removeExpiredEvents = useCallback(() => {
                 >
                   <Sparkles color="#ffffff" size={22} />
                   <CustomText weight="medium" style={styles.importHeading}>
-                    Welcome
+                    {t('welcome')}
                   </CustomText>
                   <CustomText weight="bold" style={styles.importHeading}>
-                    {user ? user.name : 'Loading...'}!
+                    {user ? user.name : t('loading')}!
                   </CustomText>
                 </View>
 
                 <CustomText weight="bold" style={[styles.importSub, { textAlign: 'center' }]}>
-                  Capture your moments with hives
+                  {t('captureYourMoments')}
                 </CustomText>
 
                 <CustomText weight="medium" style={[styles.importSubLine, { textAlign: 'center' }]}>
-                  Let the memories flow! ✨
+                  {t('letMemoriesFlow')}
                 </CustomText>
 
                 <TouchableOpacity
@@ -351,7 +351,7 @@ const removeExpiredEvents = useCallback(() => {
                     <Plus color="#DA3C84" size={20} />
                   </View>
                   <CustomText weight="bold" style={{ color: '#DA3C84', fontSize: 14, }}>
-                    Create new hive
+                    {t('createNewHive')}
                   </CustomText>
                 </TouchableOpacity>
               </View>
@@ -396,7 +396,7 @@ const removeExpiredEvents = useCallback(() => {
                     weight="medium"
                     style={[styles.dashText, { textAlign: 'center' }]}
                   >
-                    Total Hives
+                    {t('totalHives')}
                   </CustomText>
                 </View>
               </View>
@@ -421,7 +421,7 @@ const removeExpiredEvents = useCallback(() => {
 
                   <CustomText
                     weight="bold"
-                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]} // center text
+                    style={[styles.cardText, { color: '#000000', textAlign: 'center' }]}
                   >
                     {events.reduce((total, event) => {
                       // Check both 'images' (from API) and 'photos' (legacy/local)
@@ -434,7 +434,7 @@ const removeExpiredEvents = useCallback(() => {
                     weight="medium"
                     style={[styles.dashText, { textAlign: 'center' }]}
                   >
-                    Photos
+                    {t('photos')}
                   </CustomText>
                 </View>
               </View>
@@ -465,7 +465,7 @@ const removeExpiredEvents = useCallback(() => {
                     weight="medium"
                     style={[styles.dashText, { textAlign: 'center' }]}
                   >
-                    Members
+                    {t('members')}
                   </CustomText>
 
                 </View>
@@ -477,10 +477,10 @@ const removeExpiredEvents = useCallback(() => {
             <View style={{ paddingBottom: 100, }}>
               <View style={styles.eventHeader}>
                 <CustomText weight="medium" style={styles.eventSection}>
-                  Your Hives
+                  {t('yourHives')}
                 </CustomText>
                 <CustomText weight="medium" style={{ color: colors.textGray, marginTop: 4 }} >
-                  Manage your photo collections
+                  {t('managePhotoCollections')}
                 </CustomText>
               </View>
 
@@ -509,7 +509,7 @@ const removeExpiredEvents = useCallback(() => {
                           eventDescription: item.description,
                           eventEndTime: item.endTime,
                           eventExpiryDate: item.expiryDate,
-                           membersCount: item.members?.length || 0,
+                          membersCount: item.members?.length || 0,
                         })
                       }
                     >
@@ -565,7 +565,7 @@ const removeExpiredEvents = useCallback(() => {
                             </View>
 
                             <CustomText weight="bold" style={{ marginLeft: 20 }}>
-                              {item.members.length} Members
+                              {item.members.length} {t('members')}
                             </CustomText>
                           </View>
                         </View>
@@ -598,7 +598,7 @@ const removeExpiredEvents = useCallback(() => {
                     </View>
 
                     <CustomText weight="medium" style={{ color: '#6B7280' }}>
-                      {searchQuery ? 'No hives found' : 'No hives yet'}
+                      {searchQuery ? t('noHivesFound') : t('noHivesYet')}
                     </CustomText>
 
                     {!searchQuery && (
@@ -608,7 +608,7 @@ const removeExpiredEvents = useCallback(() => {
                           style={{ color: '#DA3C84' }}
                           onPress={() => navigation.navigate('CreateHive')}
                         >
-                          Create your first hive
+                          {t('createYourFirstHive')}
                         </CustomText>
                         <MoveRight color="#DA3C84" />
                       </View>

@@ -42,7 +42,6 @@ const PhotoShare = ({ navigation, route }) => {
     });
   };
 
-
   // Request permissions
   const requestPermissions = async () => {
     if (Platform.OS === 'android') {

@@ -258,61 +258,61 @@ const FolderLayout = ({ navigation, route }) => {
   ];
 
 
-// AI MAGIC — PICK IMAGE & SHOW IN CHAT
-const handleAiImagePick = () => {
-  launchImageLibrary({ mediaType: "photo", quality: 0.8 }, (response) => {
-    if (response.didCancel || !response.assets) return;
+  // AI MAGIC — PICK IMAGE & SHOW IN CHAT
+  const handleAiImagePick = () => {
+    launchImageLibrary({ mediaType: "photo", quality: 0.8 }, (response) => {
+      if (response.didCancel || !response.assets) return;
 
-    const imageUri = response.assets[0].uri;
+      const imageUri = response.assets[0].uri;
 
-    const userImg = {
+      const userImg = {
+        id: Date.now(),
+        type: "image",
+        uri: imageUri,
+        time: "01:00 am",
+        side: "user",
+      };
+
+      const aiImg = {
+        id: Date.now() + 1,
+        type: "image",
+        uri: imageUri,
+        time: "01:00 am",
+        side: "ai",
+      };
+
+      setAiMessages((prev) => [...prev, userImg, aiImg]);
+    });
+  };
+
+
+  // AI MAGIC — SEND TEXT MESSAGE
+  const handleAiTextSend = () => {
+    if (!textMessage.trim()) return;
+
+    const userMsg = {
       id: Date.now(),
-      type: "image",
-      uri: imageUri,
+      type: "text",
+      text: textMessage,
       time: "01:00 am",
       side: "user",
     };
 
-    const aiImg = {
+    const aiReply = {
       id: Date.now() + 1,
-      type: "image",
-      uri: imageUri,
+      type: "text",
+      text: textMessage, // AI echoes same message
       time: "01:00 am",
       side: "ai",
     };
 
-    setAiMessages((prev) => [...prev, userImg, aiImg]);
-  });
-};
-
-
-// AI MAGIC — SEND TEXT MESSAGE
-const handleAiTextSend = () => {
-  if (!textMessage.trim()) return;
-
-  const userMsg = {
-    id: Date.now(),
-    type: "text",
-    text: textMessage,
-    time: "01:00 am",
-    side: "user",
+    setAiMessages((prev) => [...prev, userMsg, aiReply]);
+    setTextMessage("");
   };
 
-  const aiReply = {
-    id: Date.now() + 1,
-    type: "text",
-    text: textMessage, // AI echoes same message
-    time: "01:00 am",
-    side: "ai",
-  };
-
-  setAiMessages((prev) => [...prev, userMsg, aiReply]);
-  setTextMessage("");
-};
 
 
 
-  
 
   return (
     <ScreenLayout
@@ -428,244 +428,273 @@ const handleAiTextSend = () => {
       }
       onPress={() => setMenuVisible(!menuVisible)} >
 
-        <View style={styles.scrollContainer}>
-          <View style={styles.container}>
-            {/* Tabs */}
-            <View style={styles.tabsContainer}>
-              {[
-                { label: "Gallery", icon: <Images width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Gallery" ? "#fff" : "#000"} /> },
-                { label: "Chat", icon: <Video width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Chat" ? "#fff" : "#000"} /> },
-                { label: "Ai Magic", icon: <MessagesSquare width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Ai Magic" ? "#fff" : "#000"} /> },
-              ].map((tab, i) => (
-                <TouchableOpacity
-                  key={i}
-                  style={[styles.tabButton, selectedTab === tab.label && styles.tabButtonActive]}
-                  onPress={() => setSelectedTab(tab.label)}
+      <View style={styles.scrollContainer}>
+        <View style={styles.container}>
+          {/* Tabs */}
+          <View style={styles.tabsContainer}>
+            {[
+              { label: "Gallery", icon: <Images width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Gallery" ? "#fff" : "#000"} /> },
+              { label: "Chat", icon: <Video width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Chat" ? "#fff" : "#000"} /> },
+              { label: "Ai Magic", icon: <MessagesSquare width={width * 0.04} height={width * 0.04} stroke={selectedTab === "Ai Magic" ? "#fff" : "#000"} /> },
+            ].map((tab, i) => (
+              <TouchableOpacity
+                key={i}
+                style={[styles.tabButton, selectedTab === tab.label && styles.tabButtonActive]}
+                onPress={() => setSelectedTab(tab.label)}
+              >
+                {tab.icon}
+                <Text
+                  style={[styles.tabText, selectedTab === tab.label && styles.tabTextActive]}
                 >
-                  {tab.icon}
-                  <Text
-                    style={[styles.tabText, selectedTab === tab.label && styles.tabTextActive]}
-                  >
-                    {tab.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+                  {tab.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
 
-            <ScrollView
-              style={{ flex: 1 }}
-              showsVerticalScrollIndicator={false}>
-              {selectedTab === "Gallery" && (
-                <View style={styles.grid}>
-                  {uploadedImages.length === 0 ? (
-                    <Text style={styles.infoText}>No photos</Text>
-                  ) : (
-                    <View style={styles.imageWrapperRow}>
-                      {uploadedImages.map((uri, index) => {
-                        let styleToApply = {};
-                        const pos = index % 4;
+          <ScrollView
+            style={{ flex: 1 }}
+            showsVerticalScrollIndicator={false}>
+            {selectedTab === "Gallery" && (
+              <View style={styles.grid}>
+                {uploadedImages.length === 0 ? (
+                  <Text style={styles.infoText}>No photos</Text>
+                ) : (
+                  <View style={styles.imageWrapperRow}>
+                    {uploadedImages.map((uri, index) => {
+                      let styleToApply = {};
+                      const pos = index % 4;
 
-                        if (pos === 0) styleToApply = styles.imageGridOne;
-                        else if (pos === 1) styleToApply = styles.imageGridTwo;
-                        else if (pos === 2) styleToApply = styles.imageGridThree;
-                        else if (pos === 3) styleToApply = styles.imageGridFour;
+                      if (pos === 0) styleToApply = styles.imageGridOne;
+                      else if (pos === 1) styleToApply = styles.imageGridTwo;
+                      else if (pos === 2) styleToApply = styles.imageGridThree;
+                      else if (pos === 3) styleToApply = styles.imageGridFour;
 
-                        return (
-                          <View key={`uploaded-${index}`} style={styleToApply}>
-                            <Image source={{ uri }} style={styles.photo} />
-                          </View>
-                        );
-                      })}
-                    </View>
-                  )}
-                </View>
-              )}
-
-              {selectedTab === "Chat" && (
-                <>
-                  <SearchBar />
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ flexDirection: 'row', gap: width * 0.025, paddingHorizontal: width * 0.0375, paddingVertical: height * 0.0125 }}>
-                    <View style={styles.allMembarShadowWrapper}>
-                      <Image source={profilePic} style={styles.allMembarDp} />
-                    </View>
-                    <View style={styles.allMembarShadowWrapper}>
-                      <Image source={profilePic} style={styles.allMembarDp} />
-                    </View>
-                    <View style={styles.allMembarShadowWrapper}>
-                      <Image source={profilePic} style={styles.allMembarDp} />
-                    </View>
-                    <View style={styles.allMembarShadowWrapper}>
-                      <Image source={profilePic} style={styles.allMembarDp} />
-                    </View>
-                    <View style={styles.allMembarShadowWrapper}>
-                      <Image source={profilePic} style={styles.allMembarDp} />
-                    </View>
-                    <View style={styles.allMembarShadowWrapper}>
-                      <Image source={profilePic} style={styles.allMembarDp} />
-                    </View>
-                    <View style={styles.allMembarShadowWrapper}>
-                      <Image source={profilePic} style={styles.allMembarDp} />
-                    </View>
-                    <View style={styles.allMembarShadowWrapper}>
-                      <Image source={profilePic} style={styles.allMembarDp} />
-                    </View>
-                  </ScrollView>
-
-                  <View style={styles.chatList}>
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate("Chat")}
-                    >
-                      <View style={styles.shadowWrapper}>
-                        <View style={styles.chatListItem}>
-                          <View style={{ flexDirection: 'row', alignItems: 'center', gap: width * 0.0375 }}>
-                            <Image source={profilePic} style={styles.dp} />
-                            <View>
-                              <CustomText weight="bold">User name</CustomText>
-                              <CustomText weight="medium"
-                                numberOfLines={1}
-                                ellipsizeMode="tail"
-                                style={{ maxWidth: width * 0.4, fontSize: width * 0.03, color: '#888888' }}
-                              >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
-                            </View>
-                          </View>
-                          <View style={{ alignItems: 'flex-end', minWidth: width * 0.15 }}>
-                            <CustomText weight="medium" style={{ fontSize: width * 0.03 }}>5 Hours ago</CustomText>
-                            <View style={{
-                              backgroundColor: '#FF0800',
-                              width: width * 0.05,
-                              height: width * 0.05,
-                              borderRadius: width * 0.025,
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              marginTop: height * 0.0075
-                            }}>
-                              <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
-                            </View>
-                          </View>
+                      return (
+                        <View key={`uploaded-${index}`} style={styleToApply}>
+                          <Image source={{ uri }} style={styles.photo} />
                         </View>
-                      </View>
-                    </TouchableOpacity>
+                      );
+                    })}
                   </View>
-                </>
-              )}
-            </ScrollView>
-
-            {selectedTab === "Ai Magic" && (
-              <View style={styles.aiMagicContainer}>
-                <ScrollView
-                  style={styles.aiMagicScrollView}
-                  contentContainerStyle={styles.aiMagicContent}
-                  showsVerticalScrollIndicator={false}
-                >
-          <View style={styles.messagesContainer}>
-
-  {/* ----  STATIC USER MESSAGE ---- */}
-  <View style={styles.userTwoMessageBox}>
-    <View style={styles.messageText}>
-      <CustomText weight="medium" style={[styles.text, { color: '#3d3d3dff', fontSize: width * 0.03 }]}>
-        Hey! Turn this photo into a Pixar-style 3D character with a futuristic neon city!
-      </CustomText>
-    </View>
-    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
-  </View>
-
-  {/* ---- STATIC AI IMAGE ---- */}
-  <View style={styles.userOneMessageBox}>
-    <View style={styles.ImageTextLeft}>
-      <Image source={picnic1} style={styles.msgImage} />
-    </View>
-    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
-      01:00 am
-    </CustomText>
-  </View>
-
-  {/* ---- STATIC AI TEXT ---- */}
-  <View style={styles.userOneMessageBox}>
-    <View style={styles.messageTextLeft}>
-      <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
-        Sure! Upload your image — I can turn it into Pixar, Anime, Cyberpunk, Cartoon or Realistic styles!
-      </CustomText>
-    </View>
-    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
-  </View>
-
-  {/* ---- DYNAMIC AI MESSAGES (IMAGES USER UPLOADED) ---- */}
-{aiMessages.map((msg) => (
-  <View
-    key={msg.id}
-    style={msg.side === "user" ? styles.userTwoMessageBox : styles.userOneMessageBox}
-  >
-
-    {/* IF IMAGE */}
-    {msg.type === "image" && (
-      <View style={styles.ImageTextLeft}>
-        <Image source={{ uri: msg.uri }} style={styles.msgImage} />
-      </View>
-    )}
-
-    {/* IF TEXT */}
-    {msg.type === "text" && (
-      <View style={styles.messageText}>
-        <CustomText weight="medium" style={[styles.text, { color: '#3d3d3dff', fontSize: width * 0.03 }]}>
-          {msg.text}
-        </CustomText>
-      </View>
-    )}
-
-    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
-      {msg.time}
-    </CustomText>
-  </View>
-))}
-
-
-</View>
-
-                </ScrollView>
-
-                {/* Input Box - Fixed at bottom */}
-                <View style={styles.aiMagicInputContainer}>
-                  <View style={styles.aiMagicInputWrapper}>
-<TouchableOpacity
-  style={{ marginRight: width * 0.025 }}
-  onPress={handleAiImagePick}
->
-  <ImagePlus size={width * 0.055} color="#6B7280" />
-</TouchableOpacity>
-
-
-
-<TextInput
-  placeholder="Ask anything..."
-  placeholderTextColor="#9CA3AF"
-  style={styles.aiMagicInput}
-  value={textMessage}
-  onChangeText={setTextMessage}
-/>
-
-     <TouchableOpacity
-  style={styles.aiMagicSendButton}
-  onPress={handleAiTextSend}
->
-  <SendHorizonal size={width * 0.05} color="#FFFFFF" />
-</TouchableOpacity>
-
-                  </View>
-                </View>
+                )}
               </View>
             )}
 
-            <MembersModal
-              visible={modalVisible}
-              onClose={() => setModalVisible(false)}
-              members={membersList}
-            />
+            {selectedTab === "Chat" && (
+              <>
+                <SearchBar />
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{ flexDirection: 'row', gap: width * 0.025, paddingHorizontal: width * 0.0375, paddingVertical: height * 0.0125 }}>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                  <View style={styles.allMembarShadowWrapper}>
+                    <Image source={profilePic} style={styles.allMembarDp} />
+                  </View>
+                </ScrollView>
 
-          </View>
+                <View style={styles.chatList}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Chat")}
+                  >
+                    <View style={styles.shadowWrapper}>
+                      <View style={styles.chatListItem}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: width * 0.0375 }}>
+                          <Image source={profilePic} style={styles.dp} />
+                          <View>
+                            <CustomText weight="bold">User name</CustomText>
+                            <CustomText weight="medium"
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                              style={{ maxWidth: width * 0.4, fontSize: width * 0.03, color: '#888888' }}
+                            >It is a long established fact that a reader will be distracted by the readable content.</CustomText>
+                          </View>
+                        </View>
+                        <View style={{ alignItems: 'flex-end', minWidth: width * 0.15 }}>
+                          <CustomText weight="medium" style={{ fontSize: width * 0.03 }}>5 Hours ago</CustomText>
+                          <View style={{
+                            backgroundColor: '#FF0800',
+                            width: width * 0.05,
+                            height: width * 0.05,
+                            borderRadius: width * 0.025,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: height * 0.0075
+                          }}>
+                            <CustomText weight="medium" style={{ color: '#fff' }}>1</CustomText>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
+          </ScrollView>
+
+          {selectedTab === "Ai Magic" && (
+            <View style={styles.aiMagicContainer}>
+              <ScrollView
+                style={styles.aiMagicScrollView}
+                contentContainerStyle={styles.aiMagicContent}
+                showsVerticalScrollIndicator={false}
+              >
+                <View style={styles.messagesContainer}>
+
+                  {/* ----  STATIC USER MESSAGE ---- */}
+                  <View style={styles.userTwoMessageBox}>
+                    <View style={styles.messageText}>
+                      <CustomText weight="medium" style={[styles.text, { color: '#3d3d3dff', fontSize: width * 0.03 }]}>
+                        Hey! Turn this photo into a Pixar-style 3D character with a futuristic neon city!
+                      </CustomText>
+                    </View>
+                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
+                  </View>
+
+                  {/* ---- STATIC AI IMAGE ---- */}
+                  <View style={styles.userOneMessageBox}>
+                    <View style={styles.ImageTextLeft}>
+                      <Image source={picnic1} style={styles.msgImage} />
+                    </View>
+                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
+                      01:00 am
+                    </CustomText>
+                  </View>
+
+                  {/* ---- STATIC AI TEXT ---- */}
+                  <View style={styles.userOneMessageBox}>
+                    <View style={styles.messageTextLeft}>
+                      <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
+                        Sure! Upload your image — I can turn it into Pixar, Anime, Cyberpunk, Cartoon or Realistic styles!
+                      </CustomText>
+                    </View>
+                    <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>01:00 am</CustomText>
+                  </View>
+
+
+                  {/* ---- DYNAMIC AI MESSAGES ---- */}
+                  {aiMessages.map((msg) => {
+                    // USER MESSAGE (RIGHT SIDE)
+                    if (msg.side === "user") {
+                      return (
+                        <View key={msg.id} style={styles.userTwoMessageBox}>
+                          {/* IF USER IMAGE */}
+                          {msg.type === "image" && (
+                            <View style={styles.ImageTextRight}>
+                              <Image source={{ uri: msg.uri }} style={styles.msgImage} />
+                            </View>
+                          )}
+
+                          {/* IF USER TEXT */}
+                          {msg.type === "text" && (
+                            <View style={styles.messageText}>
+                              <CustomText weight="medium" style={[styles.text, { color: '#3d3d3dff', fontSize: width * 0.03 }]}>
+                                {msg.text}
+                              </CustomText>
+                            </View>
+                          )}
+
+                          <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
+                            {msg.time}
+                          </CustomText>
+                        </View>
+                      );
+                    }
+
+                    // AI MESSAGE (LEFT SIDE)
+                    else {
+                      return (
+                        <View key={msg.id} style={styles.userOneMessageBox}>
+                          {/* IF AI IMAGE */}
+                          {msg.type === "image" && (
+                            <View style={styles.ImageTextLeft}>
+                              <Image source={{ uri: msg.uri }} style={styles.msgImage} />
+                            </View>
+                          )}
+
+                          {/* IF AI TEXT */}
+                          {msg.type === "text" && (
+                            <View style={styles.messageTextLeft}>
+                              <CustomText weight="medium" style={[styles.textLeft, { color: '#ffffffff', fontSize: width * 0.03 }]}>
+                                {msg.text}
+                              </CustomText>
+                            </View>
+                          )}
+
+                          <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
+                            {msg.time}
+                          </CustomText>
+                        </View>
+                      );
+                    }
+                  })}
+
+
+                </View>
+
+              </ScrollView>
+
+              {/* Input Box - Fixed at bottom */}
+              <View style={styles.aiMagicInputContainer}>
+                <View style={styles.aiMagicInputWrapper}>
+                  <TouchableOpacity
+                    style={{ marginRight: width * 0.025 }}
+                    onPress={handleAiImagePick}
+                  >
+                    <ImagePlus size={width * 0.055} color="#6B7280" />
+                  </TouchableOpacity>
+
+
+
+                  <TextInput
+                    placeholder="Ask anything..."
+                    placeholderTextColor="#9CA3AF"
+                    style={styles.aiMagicInput}
+                    value={textMessage}
+                    onChangeText={setTextMessage}
+                  />
+
+                  <TouchableOpacity
+                    style={styles.aiMagicSendButton}
+                    onPress={handleAiTextSend}
+                  >
+                    <SendHorizonal size={width * 0.05} color="#FFFFFF" />
+                  </TouchableOpacity>
+
+                </View>
+              </View>
+            </View>
+          )}
+
+          <MembersModal
+            visible={modalVisible}
+            onClose={() => setModalVisible(false)}
+            members={membersList}
+          />
+
         </View>
+      </View>
 
     </ScreenLayout>
   );
@@ -981,7 +1010,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: width * 0.02,
   },
-
+  ImageTextRight: {
+    borderWidth: 5,
+    borderColor: '#fee8a3',
+    borderRadius: width * 0.025,
+    overflow: 'hidden',
+    width: width * 0.55,
+    height: height * 0.2,
+    shadowColor: '#acacacff',
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 12,
+  },
 
 });
 

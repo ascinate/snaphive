@@ -1,4 +1,4 @@
-// this file is for where my Bottom tab navigation stack is showing different screens
+
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 

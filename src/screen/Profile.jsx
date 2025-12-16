@@ -144,9 +144,9 @@ date={user?.email || t('noEmail')}
             <CustomText weight="bold" style={styles.title}>
       {t('language')}
             </CustomText>
-            <CustomText weight="medium" style={styles.subtitle}>
+            {/* <CustomText weight="medium" style={styles.subtitle}>
          {t('english')}
-            </CustomText>
+            </CustomText> */}
           </View>
           <ChevronRight color="#B0B0B0" size={18} />
         </TouchableOpacity>

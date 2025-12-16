@@ -25,6 +25,7 @@ import {
   SendHorizonal,
   Send,
   ImagePlusIcon,
+  PlusCircle,
 } from "lucide-react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import { Dimensions } from "react-native";
@@ -59,7 +60,7 @@ const picnic1 = require("../../assets/picnic1.jpg");
 
 const FolderLayout = ({ navigation, route }) => {
 
-  
+
   const {
     image,
     folderName,
@@ -82,8 +83,10 @@ const FolderLayout = ({ navigation, route }) => {
   const [aiMessages, setAiMessages] = useState([]);
   const [messages, setMessages] = useState([]);
   const [textMessage, setTextMessage] = useState("");
+  const [showGalleryPicker, setShowGalleryPicker] = useState(false);
+  const [selectedGalleryImage, setSelectedGalleryImage] = useState(null);
   const { showLoader, hideLoader } = useLoader();
-const { t } = useTranslation();
+  const { t } = useTranslation();
   const { events, setEvents } = useContext(EventContext);
 
   console.log("hive id:" + hiveId);
@@ -313,9 +316,38 @@ const { t } = useTranslation();
   };
 
 
+  const handleGalleryImageSelect = (uri) => {
+    setSelectedGalleryImage(uri);
+    setShowGalleryPicker(false);
+
+    // Add selected image to AI chat
+    const userImg = {
+      id: Date.now(),
+      type: "image",
+      uri: uri,
+      time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
+      side: "user",
+    };
+
+    const aiImg = {
+      id: Date.now() + 1,
+      type: "image",
+      uri: uri,
+      time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
+      side: "ai",
+    };
+
+    setAiMessages((prev) => [...prev, userImg, aiImg]);
+  };
 
 
-return (
+
+
+
+
+
+
+  return (
     <ScreenLayout
       navigation={navigation}
       image={createEvent}
@@ -606,7 +638,7 @@ return (
                               <Image source={{ uri: msg.uri }} style={styles.msgImage} />
                             </View>
                           )}
-                          
+
                           {/* IF USER TEXT */}
                           {msg.type === "text" && (
                             <View style={styles.messageText}>
@@ -615,14 +647,14 @@ return (
                               </CustomText>
                             </View>
                           )}
-                          
+
                           <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
                             {msg.time}
                           </CustomText>
                         </View>
                       );
                     }
-                    
+
                     // AI MESSAGE (LEFT SIDE)
                     else {
                       return (
@@ -633,7 +665,7 @@ return (
                               <Image source={{ uri: msg.uri }} style={styles.msgImage} />
                             </View>
                           )}
-                          
+
                           {/* IF AI TEXT */}
                           {msg.type === "text" && (
                             <View style={styles.messageTextLeft}>
@@ -642,7 +674,7 @@ return (
                               </CustomText>
                             </View>
                           )}
-                          
+
                           <CustomText weight="medium" style={{ fontSize: width * 0.025, color: '#888' }}>
                             {msg.time}
                           </CustomText>
@@ -664,6 +696,11 @@ return (
                   >
                     <ImagePlus size={width * 0.055} color="#6B7280" />
                   </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{ marginRight: width * 0.025 }}
+                    onPress={() => setShowGalleryPicker(!showGalleryPicker)}>
+                    <PlusCircle size={width * 0.055} color="#6B7280" />
+                  </TouchableOpacity>
 
                   <TextInput
                     placeholder={t('askAnything')}
@@ -680,6 +717,8 @@ return (
                     <SendHorizonal size={width * 0.05} color="#FFFFFF" />
                   </TouchableOpacity>
 
+
+
                 </View>
               </View>
             </View>
@@ -691,6 +730,45 @@ return (
             members={membersList}
           />
 
+          {showGalleryPicker && (
+            <TouchableWithoutFeedback onPress={() => setShowGalleryPicker(false)}>
+              <View style={styles.galleryPickerOverlay}>
+                <TouchableWithoutFeedback>
+                  <View style={styles.galleryPickerModal}>
+                    <View style={styles.galleryPickerHeader}>
+                      <CustomText weight="bold" style={{ fontSize: width * 0.045 }}>
+                        Select from Gallery
+                      </CustomText>
+                      <TouchableOpacity onPress={() => setShowGalleryPicker(false)}>
+                        <CustomText weight="bold" style={{ fontSize: width * 0.04, color: '#DA3C84' }}>
+                          Cancel
+                        </CustomText>
+                      </TouchableOpacity>
+                    </View>
+
+                    <ScrollView
+                      style={styles.galleryPickerScroll}
+                      showsVerticalScrollIndicator={false}>
+                      {uploadedImages.length === 0 ? (
+                        <Text style={styles.infoText}>No photos available</Text>
+                      ) : (
+                        <View style={styles.galleryPickerGrid}>
+                          {uploadedImages.map((uri, index) => (
+                            <TouchableOpacity
+                              key={`gallery-select-${index}`}
+                              style={styles.galleryPickerImageWrapper}
+                              onPress={() => handleGalleryImageSelect(uri)}>
+                              <Image source={{ uri }} style={styles.galleryPickerImage} />
+                            </TouchableOpacity>
+                          ))}
+                        </View>
+                      )}
+                    </ScrollView>
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+            </TouchableWithoutFeedback>
+          )}
         </View>
       </View>
 
@@ -1019,6 +1097,54 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 12,
     elevation: 12,
+  },
+  galleryPickerOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+    zIndex: 1000,
+  },
+  galleryPickerModal: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: width * 0.05,
+    borderTopRightRadius: width * 0.05,
+    maxHeight: height * 0.7,
+    paddingBottom: height * 0.02,
+  },
+  galleryPickerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: width * 0.05,
+    paddingVertical: height * 0.02,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+  },
+  galleryPickerScroll: {
+    paddingHorizontal: width * 0.05,
+    paddingTop: height * 0.02,
+  },
+  galleryPickerGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    gap: width * 0.025,
+  },
+  galleryPickerImageWrapper: {
+    width: (width * 0.9 - width * 0.1 - width * 0.05) / 3,
+    aspectRatio: 1,
+    borderRadius: width * 0.02,
+    overflow: 'hidden',
+    backgroundColor: '#e5e7eb',
+  },
+  galleryPickerImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
 
 });

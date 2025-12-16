@@ -12,6 +12,7 @@ import ScreenLayout from "../components/ScreenLayout";
 import { Check, CopyIcon, Link, QrCode, Share2, Users } from "lucide-react-native";
 import QRCodeModal from "../components/QRCodeModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useLoader } from "../context/LoaderContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -23,6 +24,8 @@ const flag4 = require("../../assets/flag4.png");
 const createEvent = require("../../assets/background.png");
 
 const InviteMember = ({ navigation, route }) => {
+  const { showLoader, hideLoader } = useLoader();
+
   const hiveId = route.params?.hiveId;
   console.log("Hive ID in InviteMember:", hiveId);
 
@@ -39,44 +42,48 @@ const InviteMember = ({ navigation, route }) => {
   // -------------------------------
   // USE EFFECT FOR INVITATION API
   // -------------------------------
-  useEffect(() => {
-    if (!triggerInvite) return;
+useEffect(() => {
+  if (!triggerInvite) return;
 
-    const inviteMember = async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
+  const inviteMember = async () => {
+    showLoader(); // 🔥 START LOADER
 
-        if (!token) {
-          alert("No token found. Please log in again.");
-          setTriggerInvite(false);
-          return;
-        }
+    try {
+      const token = await AsyncStorage.getItem("token");
 
-        console.log("Sending invite to:", email);
-        console.log("Hive ID:", hiveId);
-
-        const response = await axios.post(
-          `https://snaphive-node.vercel.app/api/hives/${hiveId}/invite`,
-          { email },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        console.log("Invite Response:", response.data);
-        alert("Invitation sent successfully!");
-      } catch (error) {
-        console.log("Invite Error:", error.response?.data || error);
-        alert(error.response?.data?.message || "Failed to send invitation.");
+      if (!token) {
+        alert("No token found. Please log in again.");
+        return;
       }
 
-      setTriggerInvite(false);
-    };
+      console.log("Sending invite to:", email);
+      console.log("Hive ID:", hiveId);
 
-    inviteMember();
-  }, [triggerInvite]);
+      const response = await axios.post(
+        `https://snaphive-node.vercel.app/api/hives/${hiveId}/invite`,
+        { email },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Invite Response:", response.data);
+      alert("Invitation sent successfully!");
+      setEmail(""); // optional UX improvement
+    } catch (error) {
+      console.log("Invite Error:", error.response?.data || error);
+      alert(error.response?.data?.message || "Failed to send invitation.");
+    } finally {
+      hideLoader();       // 🔥 STOP LOADER (always runs)
+      setTriggerInvite(false);
+    }
+  };
+
+  inviteMember();
+}, [triggerInvite]);
+
 
   // -------------------------------
   // SEND INVITE CLICK HANDLER

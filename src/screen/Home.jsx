@@ -503,7 +503,7 @@ const Home = ({ navigation, route }) => {
                           folderName: item.hiveName,
                           date: item.createdAt,
                           hiveId: item._id,
-                          owner: user?.name,
+                          owner: item.user?.name,
                           photos: item.photos || [],
                           eventTitle: item.hiveName,
                           eventDescription: item.description,

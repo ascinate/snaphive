@@ -504,7 +504,7 @@ const Home = ({ navigation, route }) => {
                           date: item.createdAt,
                           hiveId: item._id,
                           owner: item.user?.name,
-                          photos: item.photos || [],
+                          photos: item.images || [],
                           eventTitle: item.hiveName,
                           eventDescription: item.description,
                           eventEndTime: item.endTime,

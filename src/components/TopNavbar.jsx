@@ -16,7 +16,7 @@ const TopNav = () => {
   return (
     <View style={styles.container}>
       <View style={styles.leftSection}>
-        <Image source={logo} style={{ width:100, height: 45, resizeMode: "contain", }} />
+        <Image source={logo} style={{ width: 100, height: 45, resizeMode: "contain", }} />
 
       </View>
 
@@ -31,6 +31,7 @@ const TopNav = () => {
             style={styles.badge}
           >
             <Text style={styles.badgeText}>{unreadCount}</Text>
+            {/* <Image source={require('../assets/logo-sn.png')} style={styles.logo} /> */}
           </View>
         )}
       </TouchableOpacity>
@@ -78,9 +79,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary
   },
   badgeText: {
-    color: "#fff",
+    color: "#000",
     fontSize: 12,
-    fontWeight: "600",
+    fontFamily: 'AnekBangla_Condensed-SemiBold',
   },
 });
 

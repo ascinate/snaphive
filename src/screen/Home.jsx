@@ -11,10 +11,12 @@ import CustomText from '../components/CustomText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ImageBackground } from "react-native";
 
+
 import axios from "axios";
 import { useTranslation } from 'react-i18next';
 
 // assets
+
 const hero = require('../../assets/hero.png');
 const picnic1 = require('../../assets/picnic1.jpg');
 
@@ -275,6 +277,7 @@ const Home = ({ navigation, route }) => {
 
 
   return (
+
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#FAFAF9' }}>
         <TopNav />
@@ -946,6 +949,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
     padding: 0,
+  },
+
+  cm: {
+    fontFamily: 'AnekBangla_Condensed-SemiBold',
+    fontSize: 18,
   },
 
 

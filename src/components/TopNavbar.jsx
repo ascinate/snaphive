@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: "#000",
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: 'AnekBangla_Condensed-SemiBold',
   },
 });
